@@ -79,23 +79,5 @@
     "icon": "paint-brush",
     "description": "content-type-builder.plugin.description"
   },
-  "version": "3.0.0-alpha.24.1",
-  "warnings": [
-    {
-      "code": "ENOTSUP",
-      "required": {
-        "node": ">= 10.0.0",
-        "npm": ">= 6.0.0"
-      },
-      "pkgid": "strapi-plugin-content-type-builder@3.0.0-alpha.24.1"
-    },
-    {
-      "code": "ENOTSUP",
-      "required": {
-        "node": ">= 10.0.0",
-        "npm": ">= 6.0.0"
-      },
-      "pkgid": "strapi-plugin-content-type-builder@3.0.0-alpha.24.1"
-    }
-  ]
+  "version": "3.0.0-alpha.24.1"
 }

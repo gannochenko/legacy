@@ -24,7 +24,7 @@
     "strapi-hook-bookshelf": "3.0.0-alpha.24.1",
     "strapi-hook-knex": "3.0.0-alpha.24.1",
     "knex": "latest",
-    "sqlite3": "latest"
+    "pg": "7.8.1"
   },
   "author": {
     "name": "vagrant",
@@ -40,7 +40,7 @@
   ],
   "strapi": {
     "packageManager": "npm",
-    "uuid": "0567615d-71b5-4ab7-a6ed-3effa79e0657"
+    "uuid": "de3cacf3-962f-45c6-b189-7a256e6033d2"
   },
   "engines": {
     "node": ">= 10.0.0",

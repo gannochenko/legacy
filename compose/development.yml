@@ -15,10 +15,26 @@ services:
     environment:
       - NODE_ENV=development
       - PORT=3000
+#  cms:
+#    image: 'cms:dev'
+#    build:
+#      context: ../app.cms/
+#      dockerfile: docker/development.dockerfile
+#    expose:
+#      - '3000'
+#    ports:
+#      - '3000:3000'
+#    volumes:
+#      - '../app.cms/:/app/'
+#    environment:
+#      - NODE_ENV=development
+#      - PORT=3000
   db:
     image: postgres
     expose:
       - '5432'
+    ports:
+      - '5432:5432'
     environment:
       POSTGRES_DB: legacy
       POSTGRES_USER: root
