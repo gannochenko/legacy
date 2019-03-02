@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import attachGraphQLMiddleware from './apollo';
 
 import attachHomeAPI from '../api/home';
 
@@ -43,14 +44,16 @@ export default class Application {
     }
 
     app.use(helmet());
-    // // turn on JSON parser for REST services
+    // turn on JSON parser for REST services
     app.use(express.json());
-    // // turn on URL-encoded parser for REST services
-    // app.use(
-    //   express.urlencoded({
-    //     extended: true,
-    //   }),
-    // );
+    // turn on URL-encoded parser for REST services
+    app.use(
+      express.urlencoded({
+        extended: true,
+      }),
+    );
+
+    attachGraphQLMiddleware(app);
 
     // write the middleware here
     // app.all('*', (req, res, next) => {
