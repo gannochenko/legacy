@@ -8,15 +8,14 @@ export default (app, params = {}) => {
     const server = new ApolloServer({
         typeDefs,
         resolvers,
-        context:async ({ req, res }) => {
-        },
+        // context: async ({ req, res }) => {
+        // },
         dataSources: () => {
-            // return {
-            //     db: database,
-            // };
+            return {
+            };
         },
         debug: true,
     });
 
-    server.applyMiddleware(app);
+    server.applyMiddleware({ app });
 };

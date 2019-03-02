@@ -21,7 +21,6 @@ module.exports = {
     console.log(JSON.stringify({ level: 'WARNING', message }));
   },
   error: (message, error) => {
-    console.dir(message);
     if (__DEV__) {
       console.log(message);
       console.dir(error);

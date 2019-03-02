@@ -1,8 +1,10 @@
 import { mergeTypes } from 'merge-graphql-schemas';
 
-// import someType from './some-type.graphql';
+import someType from './sample.graphql';
 
 export default mergeTypes(
-    [],
+    [
+        someType,
+    ],
     {all: true}
 );

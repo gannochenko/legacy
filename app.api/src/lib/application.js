@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import attachGraphQLMiddleware from './apollo';
 
+import attachGraphQLMiddleware from './apollo';
 import attachHomeAPI from '../api/home';
 
 export default class Application {
