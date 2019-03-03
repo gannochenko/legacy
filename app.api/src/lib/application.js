@@ -8,6 +8,7 @@ import Cache from './cache';
 import attachGraphQLMiddleware from './apollo';
 import attachHomeAPI from '../api/home';
 import attachConvertAPI from '../api/convert';
+import EntityProvider from './entity-provider';
 
 export default class Application {
     static async make() {
@@ -17,6 +18,7 @@ export default class Application {
         const app = express();
         const settings = new Settings();
         const cache = await Cache.make({ settings });
+        const entityProvider = new EntityProvider();
 
         instance.attachErrorHandler(app);
 
@@ -59,7 +61,7 @@ export default class Application {
             }),
         );
 
-        attachGraphQLMiddleware(app, { cache });
+        attachGraphQLMiddleware(app, { cache, entityProvider });
 
         // write the middleware here
         // app.all('*', (req, res, next) => {
@@ -72,7 +74,7 @@ export default class Application {
         //     next();
         // });
         attachHomeAPI(app, { cache });
-        attachConvertAPI(app, { cache });
+        attachConvertAPI(app, { cache, entityProvider });
 
         instance._express = app;
 

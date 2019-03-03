@@ -2,15 +2,17 @@ import { ApolloServer } from 'apollo-server-express';
 import { renderPlaygroundPage } from '@apollographql/graphql-playground-html';
 import { graphqlExpress } from './graphql-express';
 import accepts from 'accepts';
-
 import { mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
+
+import GQLGenerator from './gql-generator';
+import ResolverGenerator from './resolver-generator';
 
 import typeDefs from '../graphql/types/index';
 import resolvers from '../graphql/resolvers/index';
 
 let server = null;
 
-const getServer = async ({ cache }) => {
+const getServer = async ({ cache, entityProvider }) => {
     if (!server || !(await cache.get('apollo.server.ready'))) {
         console.dir('Creating server');
 
@@ -18,9 +20,13 @@ const getServer = async ({ cache }) => {
             await server.stop();
         }
 
+        const entites = await entityProvider.get();
+        const eGQL = entites.map(entity => GQLGenerator.make(entity));
+        const eResolver = entites.map(entity => ResolverGenerator.make(entity));
+
         server = new ApolloServer({
-            typeDefs: mergeTypes(typeDefs, { all: true }),
-            resolvers: mergeResolvers(resolvers),
+            typeDefs: mergeTypes([...eGQL, ...typeDefs], { all: true }),
+            resolvers: mergeResolvers([...eResolver, ...resolvers]),
             // context: async ({ req, res }) => {
             // },
             dataSources: () => {
@@ -59,7 +65,7 @@ export default (app, params = {}) => {
             }
         }
 
-        const serverInstance = await getServer({ cache });
+        const serverInstance = await getServer(params);
         return graphqlExpress(() => {
             return serverInstance.createGraphQLServerOptions(req, res);
         })(req, res, next);

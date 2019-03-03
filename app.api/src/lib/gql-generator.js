@@ -8,7 +8,7 @@ export default class GQLGenerator {
         entity.schema.forEach(field => {
             tFields.push(`${field.name}: ${this.getType(field)}`);
             iFields.push(
-                `${field.name}: ${this.getType(field)}${
+                `${field.name}: ${this.getType(field, true)}${
                     field.required ? '!' : ''
                 }`,
             );
@@ -58,7 +58,7 @@ type Mutation {
         `;
     }
 
-    static getType({ type, entity, multiple }) {
+    static getType({ type, entity, multiple }, input = false) {
         let gqlType = 'String';
         if (type === String) {
             gqlType = 'String';
@@ -69,7 +69,7 @@ type Mutation {
         } else if (type === Date) {
             gqlType = 'String';
         } else if (type === 'reference') {
-            gqlType = entity;
+            gqlType = input ? `String` : entity;
         }
 
         if (multiple) {
