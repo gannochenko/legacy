@@ -15,9 +15,16 @@ let server = null;
 const getServer = async ({ cache }) => {
     if (!server || !(await cache.get('apollo.server.ready'))) {
         console.dir('Creating server');
+        const flip = (Math.random() * 10) > 5;
+        console.dir(flip);
+
+        if (server) {
+            await server.stop();
+        }
+
         server = new ApolloServer({
-            typeDefs,
-            resolvers,
+            typeDefs: flip ? typeDefs : typeDefsB,
+            resolvers: flip ? resolvers : resolversB,
             // context: async ({ req, res }) => {
             // },
             dataSources: () => {
