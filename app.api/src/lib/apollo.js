@@ -3,8 +3,10 @@ import { renderPlaygroundPage } from '@apollographql/graphql-playground-html';
 import { graphqlExpress } from './graphql-express';
 import accepts from 'accepts';
 
-import resolvers from '../graphql/resolvers/index';
+import { mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
+
 import typeDefs from '../graphql/types/index';
+import resolvers from '../graphql/resolvers/index';
 
 let server = null;
 
@@ -17,8 +19,8 @@ const getServer = async ({ cache }) => {
         }
 
         server = new ApolloServer({
-            typeDefs,
-            resolvers,
+            typeDefs: mergeTypes(typeDefs, { all: true }),
+            resolvers: mergeResolvers(resolvers),
             // context: async ({ req, res }) => {
             // },
             dataSources: () => {
