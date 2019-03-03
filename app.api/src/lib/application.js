@@ -4,10 +4,12 @@ import helmet from 'helmet';
 
 import Settings from './settings/server';
 import Cache from './cache';
+import Connection from './connection';
 
 import attachGraphQLMiddleware from './apollo';
 import attachHomeAPI from '../api/home';
 import attachConvertAPI from '../api/convert';
+import attachSyncAPI from '../api/sync';
 import EntityProvider from './entity-provider';
 
 export default class Application {
@@ -18,6 +20,10 @@ export default class Application {
         const app = express();
         const settings = new Settings();
         const cache = await Cache.make({ settings });
+        const connection = await Connection.make({
+            settings,
+            preConnect: true,
+        });
         const entityProvider = new EntityProvider();
 
         instance.attachErrorHandler(app);
@@ -75,6 +81,7 @@ export default class Application {
         // });
         attachHomeAPI(app, { cache });
         attachConvertAPI(app, { cache, entityProvider });
+        attachSyncAPI(app, { cache, entityProvider, connection });
 
         instance._express = app;
 

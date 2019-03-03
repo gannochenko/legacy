@@ -1,68 +1,69 @@
-version: "3"
+version: '3'
 services:
-  db:
-    image: postgres
-    expose:
-      - "5432"
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_DB: legacy
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: 123
-  db.gui:
-    image: adminer
-    expose:
-      - "8080"
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db
-  cache:
-    build:
-      context: ../infra/cache/
-      dockerfile: Dockerfile
-    expose:
-      - 6379
-    ports:
-      - 6379:6379
-  cache.gui:
-    image: marian/rebrow
-    expose:
-      - 5001
-    ports:
-      - 5001:5001
-    depends_on:
-      - cache
-  placeholder.generator:
-    image: "placeholder.generator:dev"
-    build:
-      context: ../app.placeholder.generator/
-      dockerfile: docker/development.dockerfile
-    expose:
-      - "3000"
-    ports:
-      - "3000:3000"
-    depends_on: []
-    volumes:
-      - "../app.placeholder.generator/:/app/"
-    environment:
-      - NODE_ENV=development
-      - PORT=3000
-  api:
-    image: "api:dev"
-    build:
-      context: ../app.api/
-      dockerfile: docker/development.dockerfile
-    expose:
-      - "4000"
-    ports:
-      - "4000:4000"
-    depends_on:
-      - db
-    volumes:
-      - "../app.api/:/app/"
-    environment:
-      - NODE_ENV=development
-      - PORT=4000
-      - cache.url=redis://cache:6379
+    db:
+        image: postgres
+        expose:
+            - '5432'
+        ports:
+            - '5432:5432'
+        environment:
+            POSTGRES_DB: legacy
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: 123
+    db.gui:
+        image: adminer
+        expose:
+            - '8080'
+        ports:
+            - '8080:8080'
+        depends_on:
+            - db
+    cache:
+        build:
+            context: ../infra/cache/
+            dockerfile: Dockerfile
+        expose:
+            - 6379
+        ports:
+            - 6379:6379
+    cache.gui:
+        image: marian/rebrow
+        expose:
+            - 5001
+        ports:
+            - 5001:5001
+        depends_on:
+            - cache
+    placeholder.generator:
+        image: 'placeholder.generator:dev'
+        build:
+            context: ../app.placeholder.generator/
+            dockerfile: docker/development.dockerfile
+        expose:
+            - '3000'
+        ports:
+            - '3000:3000'
+        depends_on: []
+        volumes:
+            - '../app.placeholder.generator/:/app/'
+        environment:
+            - NODE_ENV=development
+            - PORT=3000
+    api:
+        image: 'api:dev'
+        build:
+            context: ../app.api/
+            dockerfile: docker/development.dockerfile
+        expose:
+            - '4000'
+        ports:
+            - '4000:4000'
+        depends_on:
+            - db
+        volumes:
+            - '../app.api/:/app/'
+        environment:
+            - NODE_ENV=development
+            - PORT=4000
+            - cache.url=redis://cache:6379
+            - db.url=postgres://root:123@db:5432/legacy

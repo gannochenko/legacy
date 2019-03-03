@@ -1,4 +1,5 @@
 import '@babel/polyfill';
+import 'reflect-metadata';
 
 import Application from './lib/application';
 
