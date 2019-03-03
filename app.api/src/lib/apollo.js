@@ -1,35 +1,28 @@
 import { ApolloServer } from 'apollo-server-express';
-import {
-    renderPlaygroundPage,
-} from '@apollographql/graphql-playground-html'
+import { renderPlaygroundPage } from '@apollographql/graphql-playground-html';
 import { graphqlExpress } from './graphql-express';
 import accepts from 'accepts';
 
 import resolvers from '../graphql/resolvers/index';
-import resolversB from '../graphql/resolvers/index-b';
 import typeDefs from '../graphql/types/index';
-import typeDefsB from '../graphql/types/index-b';
 
 let server = null;
 
 const getServer = async ({ cache }) => {
     if (!server || !(await cache.get('apollo.server.ready'))) {
         console.dir('Creating server');
-        const flip = (Math.random() * 10) > 5;
-        console.dir(flip);
 
         if (server) {
             await server.stop();
         }
 
         server = new ApolloServer({
-            typeDefs: flip ? typeDefs : typeDefsB,
-            resolvers: flip ? resolvers : resolversB,
+            typeDefs,
+            resolvers,
             // context: async ({ req, res }) => {
             // },
             dataSources: () => {
-                return {
-                };
+                return {};
             },
             debug: __DEV__,
         });
