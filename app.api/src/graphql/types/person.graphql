@@ -1,3 +1,46 @@
+type PersonResult {
+    errors: [String]
+    code: String!
+    data: Person!
+}
+
+type PersonSearchResult {
+    errors: [String]
+    data: [Person]!
+    limit: Int!
+    offset: Int!
+    count: Int
+}
+
+type Person {
+    code: String
+    full_name: String
+    medals: Int
+    birth_date: String
+    has_pets: Boolean
+}
+
+input IPerson {
+    code: String!
+    full_name: String!
+    medals: Int
+    birth_date: String
+    has_pets: Boolean
+}
+
 type Query {
-    person(id: String!): String
+    personGet(code: String!): Person
+    personFind(
+        filter: String
+        sort: String
+        select: [String]
+        limit: Int
+        offset: Int
+        count: Boolean
+    ): PersonSearchResult
+}
+
+type Mutation {
+    personDelete(code: String!): PersonResult
+    personPut(code: String, data: IPerson!): PersonResult
 }
