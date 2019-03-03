@@ -1,4 +1,5 @@
 import { wrapError } from '../lib/util';
+import GQLGenerator from '../lib/gql-generator';
 
 export default (app, params = {}) => {
     const { cache } = params;
@@ -8,13 +9,6 @@ export default (app, params = {}) => {
             const person = {
                 name: 'Person',
                 schema: [
-                    {
-                        name: 'code',
-                        type: String,
-                        label: 'Code',
-                        required: true,
-                        validate: (value, data) => {},
-                    },
                     {
                         name: 'full_name',
                         type: String,
@@ -44,6 +38,8 @@ export default (app, params = {}) => {
                     {
                         name: 'pets',
                         type: 'reference',
+                        entity: 'Pet',
+                        multiple: true,
                         label: 'Pets',
                         validate: () => {},
                     },
@@ -72,7 +68,11 @@ export default (app, params = {}) => {
 
             // convert schema to graphql
 
-            res.status(200).send('Cache reset');
+            res.status(200).send(
+                `<pre>${GQLGenerator.make(person)}${GQLGenerator.make(
+                    pet,
+                )}</pre>`,
+            );
         }),
     );
 };
