@@ -69,7 +69,8 @@
     "lodash.random": "^3.2.0",
     "apollo-server-express": "^2.4.8",
     "graphql": "^14.0.2",
-    "merge-graphql-schemas": "^1.5.8"
+    "merge-graphql-schemas": "^1.5.8",
+    "redis-tag-cache": "^1.2.1"
   },
   "husky": {
     "hooks": {

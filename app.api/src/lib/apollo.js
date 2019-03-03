@@ -29,7 +29,6 @@ const getServer = () => {
 };
 
 export default (app, params = {}) => {
-    // const { database, context } = params;
     // server.applyMiddleware({ app, cors: false });
 
     app.use('/graphql', async (req, res, next) => {

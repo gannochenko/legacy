@@ -20,13 +20,12 @@ services:
       - db
   cache:
     build:
-      context: ../infra-services/cache/
+      context: ../infra/cache/
       dockerfile: Dockerfile
     expose:
       - 6379
     ports:
       - 6379:6379
-
   cache.gui:
     image: marian/rebrow
     expose:
@@ -66,3 +65,4 @@ services:
     environment:
       - NODE_ENV=development
       - PORT=4000
+      - cache.url=redis://cache:6379

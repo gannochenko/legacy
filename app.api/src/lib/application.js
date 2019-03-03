@@ -2,16 +2,21 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 
+import Settings from './settings/server';
+import Cache from './cache';
+
 import attachGraphQLMiddleware from './apollo';
 import attachHomeAPI from '../api/home';
 
 export default class Application {
   static async make() {
-    // logger.info('Initializing the application');
-
     const instance = new this();
 
+    // pre-init something
     const app = express();
+    const settings = new Settings();
+    const cache = Cache.make({ settings });
+
     instance.attachErrorHandler(app);
 
     const hostname = process.env.HOST || 'localhost';
@@ -53,7 +58,7 @@ export default class Application {
       }),
     );
 
-    attachGraphQLMiddleware(app);
+    attachGraphQLMiddleware(app, { cache });
 
     // write the middleware here
     // app.all('*', (req, res, next) => {
