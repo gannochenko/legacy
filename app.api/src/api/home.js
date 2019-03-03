@@ -1,10 +1,14 @@
 import { wrapError } from '../lib/util';
 
-export default app => {
+export default (app, params = {}) => {
+    const { cache } = params;
   app.get(
     '/',
     wrapError(async (req, res) => {
-      res.status(200).send('Hello from API server');
+
+        await cache.invalidate('apollo');
+
+      res.status(200).send('Cache reset');
     }),
   );
 };

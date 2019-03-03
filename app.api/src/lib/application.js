@@ -70,7 +70,7 @@ export default class Application {
     //     console.dir(req.body);
     //     next();
     // });
-    attachHomeAPI(app);
+    attachHomeAPI(app, { cache });
 
     instance._express = app;
 

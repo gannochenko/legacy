@@ -6,7 +6,9 @@ import { graphqlExpress } from './graphql-express';
 import accepts from 'accepts';
 
 import resolvers from '../graphql/resolvers/index';
+import resolversB from '../graphql/resolvers/index-b';
 import typeDefs from '../graphql/types/index';
+import typeDefsB from '../graphql/types/index-b';
 
 let server = null;
 
@@ -26,8 +28,6 @@ const getServer = async ({ cache }) => {
         });
 
         await cache.set('apollo.server.ready', true, ['apollo']);
-    } else {
-        console.dir('Server is already there');
     }
 
     return server;
