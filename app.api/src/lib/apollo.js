@@ -10,8 +10,9 @@ import typeDefs from '../graphql/types/index';
 
 let server = null;
 
-const getServer = () => {
-    if (!server) {
+const getServer = async ({ cache }) => {
+    if (!server || !(await cache.get('apollo.server.ready'))) {
+        console.dir('Creating server');
         server = new ApolloServer({
             typeDefs,
             resolvers,
@@ -23,6 +24,10 @@ const getServer = () => {
             },
             debug: __DEV__,
         });
+
+        await cache.set('apollo.server.ready', true, ['apollo']);
+    } else {
+        console.dir('Server is already there');
     }
 
     return server;
@@ -30,6 +35,7 @@ const getServer = () => {
 
 export default (app, params = {}) => {
     // server.applyMiddleware({ app, cors: false });
+    const { cache } = params;
 
     app.use('/graphql', async (req, res, next) => {
         if (__DEV__ && req.method === 'GET') {
@@ -50,8 +56,10 @@ export default (app, params = {}) => {
                 return;
             }
         }
+
+        const serverInstance = await getServer({ cache });
         return graphqlExpress(() => {
-            return getServer().createGraphQLServerOptions(req, res);
+            return serverInstance.createGraphQLServerOptions(req, res);
         })(req, res, next);
     });
 };

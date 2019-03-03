@@ -15,7 +15,7 @@ export default class Application {
     // pre-init something
     const app = express();
     const settings = new Settings();
-    const cache = Cache.make({ settings });
+    const cache = await Cache.make({ settings });
 
     instance.attachErrorHandler(app);
 

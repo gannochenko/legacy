@@ -8,22 +8,18 @@ import { injectPassword, decomposeURL } from './util';
 
 export default class Cache {
     static async make(params = {}) {
-        if (!this._instance) {
-            const { settings } = params;
-            if (!settings) {
-                throw new Error('No settings provided');
-            }
-
-            const url = await settings.get('cache.url', null);
-            const password = await settings.get('cache.password', null);
-
-            this._instance = new this({
-                url,
-                password,
-            });
+        const { settings } = params;
+        if (!settings) {
+            throw new Error('No settings provided');
         }
 
-        return this._instance;
+        const url = await settings.get('cache.url', null);
+        const password = await settings.get('cache.password', null);
+
+        return new this({
+            url,
+            password,
+        });
     }
 
     constructor(props = {}) {
