@@ -102,5 +102,10 @@ type Mutation {
 
 ~~~~
 
-https://stackoverflow.com/questions/2486725/postgresql-join-with-array-type-with-array-elements-order-how-to-implement
-https://www.npmjs.com/package/graphql-union-input-type
+* http://www.postgresqltutorial.com/postgresql-data-types/
+* https://stackoverflow.com/questions/2486725/postgresql-join-with-array-type-with-array-elements-order-how-to-implement
+* http://www.postgresqltutorial.com/postgresql-array/
+* https://www.npmjs.com/package/graphql-union-input-type
+
+* https://typeorm.io/#/separating-entity-definition
+
