@@ -80,14 +80,9 @@ export default class Application {
 
     async listen() {
         const port = this._express.get('port');
-        const hostname = this._express.get('host');
 
         return new Promise(resolve => {
             this._server = this._express.listen({ port }, () => {
-                logger.info(
-                    `🚀 Docker monitor is ready at http://${hostname}:${port}`,
-                    !__TEST__,
-                );
                 resolve();
             });
         });
