@@ -54,6 +54,7 @@
     },
     "dependencies": {
         "@babel/polyfill": "^7.2.5",
+        "axios": "^0.18.0",
         "body-parser": "^1.18.3",
         "cors": "^2.8.5",
         "crypto-random-string": "^1.0.0",

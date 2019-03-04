@@ -72,11 +72,12 @@ services:
       context: ../docker-monitor/
       dockerfile: docker/development.dockerfile
     expose:
-      - "2000"
+      - "8000"
     ports:
-      - "2000:2000"
+      - "8000:8000"
     volumes:
       - "../docker-monitor/:/app/"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
     environment:
       - NODE_ENV=development
-      - PORT=4000
+      - PORT=8000

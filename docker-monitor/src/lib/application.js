@@ -52,16 +52,6 @@ export default class Application {
         //   }),
         // );
 
-        // write the middleware here
-        // app.all('*', (req, res, next) => {
-        //     // console.dir(req);
-        //     console.dir('========');
-        //     console.dir(req.method);
-        //     console.dir(req.path);
-        //     console.dir(req.query);
-        //     console.dir(req.body);
-        //     next();
-        // });
         attachHomeAPI(app);
 
         instance._express = app;
