@@ -29,8 +29,12 @@ Choose the containers you would like to be visible and add the block of labels, 
         com.list.name: "Backend"
         com.list.sort: "1"
         com.list.description: "Main server that provides API"
-        com.list.link.endpoint: "GraphQL endpoint:/graphql"
+        com.list.link.1: "GraphQL endpoint___/graphql"
+        com.list.link.2: "Signup___/signup"
+        com.list.link.whatever: "Whatever___/whatever?else=1"
 ~~~~
+
+(`___` is a separator between text and URL)
 
 Make sure that all the containers that were chosen as visible expose some port:
 ~~~~

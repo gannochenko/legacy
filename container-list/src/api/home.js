@@ -51,7 +51,7 @@ export default app => {
                     const links = [];
                     Object.keys(labels).forEach(label => {
                         if (label.startsWith('com.list.link.')) {
-                            const [ description, url ] = labels[label].split(':');
+                            const [ description, url ] = labels[label].split('___');
                             links.push({
                                 description,
                                 url,

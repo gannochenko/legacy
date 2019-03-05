@@ -21,7 +21,6 @@ services:
     labels:
         com.list.name: "Adminer"
         com.list.sort: "2"
-        com.list.link.cache-wipe: "Browse database:/?pgsql=db&username=root&db=legacy&ns=public"
   cache:
     build:
       context: ../infra/cache/
@@ -76,7 +75,7 @@ services:
         com.list.name: "Backend"
         com.list.sort: "1"
         com.list.description: "Main server that provides API"
-        com.list.link.endpoint: "GraphQL endpoint:/graphql"
+        com.list.link.endpoint: "GraphQL endpoint___/graphql"
   container-list:
     image: "container-list:dev"
     build:
