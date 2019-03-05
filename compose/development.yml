@@ -21,6 +21,7 @@ services:
     labels:
         com.list.name: "Adminer"
         com.list.sort: "2"
+        com.list.link.endpoint: "Browse database___/?pgsql=db&username=root&db=legacy&ns=public"
   cache:
     build:
       context: ../infra/cache/
@@ -40,6 +41,7 @@ services:
     labels:
         com.list.name: "Redis GUI"
         com.list.sort: "3"
+        com.list.link.endpoint: "Browse cache___/cache:6379/0/keys/"
   placeholder.generator:
     image: "placeholder.generator:dev"
     build:
@@ -76,18 +78,14 @@ services:
         com.list.sort: "1"
         com.list.description: "Main server that provides API"
         com.list.link.endpoint: "GraphQL endpoint___/graphql"
+
   container-list:
-    image: "container-list:dev"
-    build:
-      context: ../container-list/
-      dockerfile: docker/development.dockerfile
+    image: "awesome1888/container-list"
     expose:
-      - "8000"
+      - "2000"
     ports:
-      - "8000:8000"
+      - "2000:2000"
     volumes:
-      - "../container-list/:/app/"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     environment:
-      - NODE_ENV=development
-      - PORT=8000
+      - PORT=2000
