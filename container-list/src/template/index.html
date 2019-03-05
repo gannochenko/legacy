@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>LALA</title>
+    <title>Docker container list</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
     <style>
         html {
@@ -41,7 +41,7 @@
         }
 
         .main {
-            max-width: 960px;
+            max-width: 1200px;
             padding: 1rem;
             margin: 0 auto;
             height: 100%;
@@ -66,6 +66,10 @@
             flex-shrink: 0;
         }
 
+        .list__item-link {
+            white-space: nowrap;
+        }
+
         .error {
             font-weight: bold;
             color: #b40011;
@@ -88,9 +92,8 @@ volumes:
             <li>
                 The path to the socket <b>on the host system</b> is correct:
                 <ul>
-                    <li>Linux &mdash; /var/run/docker.sock</li>
-                    <li>MacOS &mdash; ???</li>
-                    <li>Windows &mdash; ???</li>
+                    <li>Linux and MacOS  &mdash; /var/run/docker.sock</li>
+                    <li>Windows &mdash; ??? (untested 🤷️‍)</li>
                 </ul>
             </li>
         </ul>
@@ -99,7 +102,7 @@ volumes:
             <% for (var k = 0; k < services.length; k++) { %>
                 <% var service = services[k]; %>
             <div class="list__item">
-                <h4><%= service.name %> (<a href="http://localhost:<%= service.port %>" target="_blank" rel="noreferrer nofollower"><%= service.code %>:<%= service.port %></a>)</h4>
+                <h4><%= service.name %> (<a class="list__item-link" href="http://localhost:<%= service.port %>" target="_blank" rel="noreferrer nofollower"><%= service.code %>:<%= service.port %></a>)</h4>
                 <% if (service.links.length) { %>
                 <div class="url-list">
                     <% for (var l = 0; l < service.links.length; l++) { %>

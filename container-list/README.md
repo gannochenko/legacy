@@ -1,4 +1,4 @@
-# Docker monitor
+# Docker container list
 
 ## Development startup
 
@@ -8,6 +8,39 @@ npm run dev;
 ~~~~
 
 ## Usage
+
+Go to your `compose.yml` and add the container:
+~~~~
+  container-list:
+    image: "awesome1888/container-list"
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    environment:
+      - PORT=8000
+~~~~
+
+Choose the containers you would like to be visible and add the block of labels, like this:
+~~~~
+    labels:
+        com.list.name: "Backend"
+        com.list.sort: "1"
+        com.list.description: "Main server that provides API"
+        com.list.link.endpoint: "GraphQL endpoint:/graphql"
+~~~~
+
+Make sure that all the containers that were chosen as visible expose some port:
+~~~~
+    expose:
+      - "4000"
+    ports:
+      - "4000:4000"
+~~~~
+
+Open `http://localhost:8000` (or whatever the port is) and enjoy.
 
 ## Build and publish
 
