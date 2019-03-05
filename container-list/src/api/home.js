@@ -12,9 +12,16 @@ export default app => {
                 method: 'get',
                 socketPath: '/var/run/docker.sock',
                 url: '/containers/json',
-            });
+            }).catch(() => null);
 
             let list = [];
+
+            if (result === null) {
+                return res.status(500).header('Content-Type', 'text/html').send(ejs.render(template, {
+                    error: 'There is an error occurred while retrieving data from the socket',
+                    services: list,
+                }));
+            }
 
             const data = result.data;
             if (_.iane(data)) {
@@ -65,8 +72,9 @@ export default app => {
 
             list = _.sortBy(list, ['sort']);
 
-            res.status(200).header('Content-Type', 'text/html').send(ejs.render(template, {
+            return res.status(200).header('Content-Type', 'text/html').send(ejs.render(template, {
                 services: list,
+                error: null,
             }));
         }),
     );

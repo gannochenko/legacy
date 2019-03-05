@@ -65,11 +65,36 @@
             margin: 1rem;
             flex-shrink: 0;
         }
+
+        .error {
+            font-weight: bold;
+            color: #b40011;
+        }
     </style>
 </head>
 <body>
     <div class="main">
         <h1>Service list</h1>
+        <% if (error) { %>
+        <div class="error"><%= error %></div>
+        <div>Make sure, that:</div>
+        <ul>
+            <li>Docker daemon socket is accessible as a volume like this:
+                <pre>
+volumes:
+  - "/var/run/docker.sock:/var/run/docker.sock:ro"
+                </pre>
+            </li>
+            <li>
+                The path to the socket <b>on the host system</b> is correct:
+                <ul>
+                    <li>Linux &mdash; /var/run/docker.sock</li>
+                    <li>MacOS &mdash; ???</li>
+                    <li>Windows &mdash; ???</li>
+                </ul>
+            </li>
+        </ul>
+        <% } else { %>
         <div class="list">
             <% for (var k = 0; k < services.length; k++) { %>
                 <% var service = services[k]; %>
@@ -88,6 +113,7 @@
             </div>
             <% } %>
         </div>
+        <% } %>
     </div>
 </body>
 </html>

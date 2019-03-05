@@ -77,17 +77,17 @@ services:
         com.list.sort: "1"
         com.list.description: "Main server that provides API"
         com.list.link.endpoint: "GraphQL endpoint:/graphql"
-  monitor:
-    image: "monitor:dev"
+  container-list:
+    image: "container-list:dev"
     build:
-      context: ../docker-monitor/
+      context: ../container-list/
       dockerfile: docker/development.dockerfile
     expose:
       - "8000"
     ports:
       - "8000:8000"
     volumes:
-      - "../docker-monitor/:/app/"
+      - "../container-list/:/app/"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     environment:
       - NODE_ENV=development
