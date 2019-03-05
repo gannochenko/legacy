@@ -1,20 +1,24 @@
 import { wrapError } from '../lib/util';
 import axios from 'axios';
+import ejs from 'ejs';
+
+import template from '../template/index.html';
 
 export default app => {
     app.get(
         '/',
         wrapError(async (req, res) => {
-
             const result = await axios.request({
                 method: 'get',
                 socketPath: '/var/run/docker.sock',
                 url: '/containers/json',
             });
 
+            let list = [];
+
             const data = result.data;
             if (_.iane(data)) {
-                const list = data.map(container => {
+                list = data.map(container => {
 
                     const ports = container.Ports;
                     if (!_.iane(ports)) {
@@ -31,8 +35,9 @@ export default app => {
                         return null;
                     }
 
+                    const name = labels['com.list.name'];
                     const code = labels['com.docker.compose.service'];
-                    if (!_.isne(code)) {
+                    if (!_.isne(name) || !_.isne(code)) {
                         return null;
                     }
 
@@ -49,17 +54,20 @@ export default app => {
 
                     return {
                         code,
-                        name: labels['com.list.name'] || null,
+                        name,
                         description: labels['com.list.description'] || null,
                         port: publicBind.PublicPort,
                         links,
+                        sort: labels['com.list.sort'] || null,
                     };
                 }).filter(x => !!x);
-
-                console.log(require('util').inspect(list, {depth: 10}));
             }
 
-            res.status(200).header('Content-Type', 'application/json').send(require('util').inspect(result.data, {depth: 10}));
+            list = _.sortBy(list, ['sort']);
+
+            res.status(200).header('Content-Type', 'text/html').send(ejs.render(template, {
+                services: list,
+            }));
         }),
     );
 };

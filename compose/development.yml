@@ -18,6 +18,10 @@ services:
       - "8080:8080"
     depends_on:
       - db
+    labels:
+        com.list.name: "Adminer"
+        com.list.sort: "2"
+        com.list.link.cache-wipe: "Browse database:/?pgsql=db&username=root&db=legacy&ns=public"
   cache:
     build:
       context: ../infra/cache/
@@ -26,7 +30,6 @@ services:
       - 6379
     ports:
       - 6379:6379
-
   cache.gui:
     image: marian/rebrow
     expose:
@@ -35,6 +38,9 @@ services:
       - 5001:5001
     depends_on:
       - cache
+    labels:
+        com.list.name: "Redis GUI"
+        com.list.sort: "3"
   placeholder.generator:
     image: "placeholder.generator:dev"
     build:
@@ -68,9 +74,9 @@ services:
       - PORT=4000
     labels:
         com.list.name: "Backend"
+        com.list.sort: "1"
         com.list.description: "Main server that provides API"
         com.list.link.endpoint: "GraphQL endpoint:/graphql"
-        com.list.link.cache-wipe: "Wipe Redis cache:/cache-wipe"
   monitor:
     image: "monitor:dev"
     build:

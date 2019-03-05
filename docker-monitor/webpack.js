@@ -53,6 +53,10 @@ module.exports = (env, argv) => {
                         },
                     ],
                 },
+                {
+                    test: /\.(txt|html)$/,
+                    use: 'raw-loader',
+                },
             ],
         },
         plugins: [

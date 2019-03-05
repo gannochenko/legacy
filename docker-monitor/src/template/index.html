@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+    <title>LALA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <style>
+        html {
+            font-size: 16px;
+        }
+
+        body {
+            padding: 0 !important;
+            margin: 0 !important;
+            font-weight: 400;
+            font-size: 15px;
+            line-height: 1.8;
+            color: black;
+            font-family: 'Arial', sans-serif;
+            min-width: 20rem;
+            background-color: white;
+        }
+
+        html, body, #root {
+            height: 100vh;
+        }
+
+        * {
+            box-sizing: border-box;
+
+            outline: none;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        *:before, *:after {
+            box-sizing: border-box;
+        }
+
+        h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .main {
+            max-width: 960px;
+            padding: 1rem;
+            margin: 0 auto;
+            height: 100%;
+        }
+
+        .list {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+
+            -webkit-flex-wrap: wrap;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            margin: 0 -1rem;
+        }
+
+        .list__item {
+            width: 30%;
+            margin: 1rem;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <h1>Service list</h1>
+        <div class="list">
+            <% for (var k = 0; k < services.length; k++) { %>
+                <% var service = services[k]; %>
+            <div class="list__item">
+                <h4><%= service.name %> (<a href="http://localhost:<%= service.port %>" target="_blank" rel="noreferrer nofollower"><%= service.code %>:<%= service.port %></a>)</h4>
+                <% if (service.links.length) { %>
+                <div class="url-list">
+                    <% for (var l = 0; l < service.links.length; l++) { %>
+                    <% var link = service.links[l]; %>
+                    <div class="url-list__item">
+                        <a href="http://localhost:<%= service.port %><%= link.url %>" target="_blank" rel="noreferrer nofollower"><%= link.description %></a>
+                    </div>
+                    <% } %>
+                </div>
+                <% } %>
+            </div>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>

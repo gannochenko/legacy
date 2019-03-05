@@ -8,6 +8,7 @@ const random = require('lodash.random');
 // const intersection = require('lodash.intersection');
 const get = require('lodash.get');
 const cloneDeep = require('lodash.clonedeep');
+const sortBy = require('lodash.sortby');
 // const deepFreeze = require('deep-freeze-node');
 // const isEqual = require('lodash.isequal');
 
@@ -32,6 +33,7 @@ module.exports = {
     // isFunction,
     cloneDeep,
     get,
+    sortBy,
     // deepFreeze,
     // union,
     // intersection,
