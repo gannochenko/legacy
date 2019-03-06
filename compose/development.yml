@@ -72,7 +72,7 @@ services:
             - '../app.api/:/app/'
         environment:
             - NODE_ENV=development
-            - PORT=4000
+            - network.port=4000
             - cache.url=redis://cache:6379
             - db.url=postgres://root:123@db:5432/legacy
         labels:

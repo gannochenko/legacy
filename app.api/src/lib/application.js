@@ -28,34 +28,17 @@ export default class Application {
 
         instance.attachErrorHandler(app);
 
-        const hostname = process.env.HOST || 'localhost';
-        const port = process.env.PORT || 3000;
+        const host = await settings.get('network.host', 'localhost');
+        const port = await settings.get('network.port', 3000);
 
-        app.set('host', hostname);
+        app.set('host', host);
         app.set('port', port);
         // // increase the default parse depth of a query string and disable allowPrototypes
         // app.set('query parser', query => {
         //   return qs.parse(query, { allowPrototypes: false, depth: 10 });
         // });
 
-        const corsSettings = process.env.CORS || '';
-        const origins = _.isne(corsSettings)
-            ? corsSettings.split(',').map(x => x.trim())
-            : [];
-        if (_.iane(origins)) {
-            app.use(
-                cors({
-                    origin: (origin, cb) => {
-                        // allow requests with no origin, like mobile apps or curl requests
-                        if (!origin || _.contains(origins, origin)) {
-                            return cb(null, true);
-                        }
-
-                        return cb(new Error(), false); // todo: throw 403
-                    },
-                }),
-            );
-        }
+        this.attachCORS(app, settings);
 
         app.use(helmet());
         // turn on JSON parser for REST services
@@ -105,6 +88,47 @@ export default class Application {
             logger.error('Unhandled exception', err);
             res.send('Nasty error'); // todo: explain here
         });
+    }
+
+    static attachCORS(app, settings) {
+        const parameters = {
+            origin: (origin, cb) => {
+                // allow requests with no origin, like mobile apps or curl requests
+                if (!origin) {
+                    return cb(null, true);
+                }
+
+                // get cors settings on each hit, to be able to change it at the run-time
+                settings
+                    .get('network.cors', null)
+                    .then(corsSettings => {
+                        const origins = _.isne(corsSettings)
+                            ? corsSettings.split(',').map(x => x.trim())
+                            : [];
+
+                        let match = false;
+                        if (_.iane(origins)) {
+                            // we have CORS settings
+                            match = origins.indexOf(origin) >= 0;
+                        }
+
+                        if (match) {
+                            return cb(null, true);
+                        } else {
+                            return cb(new Error('CORS mismatch'), false); // todo: throw 403
+                        }
+                    })
+                    .catch(error => {
+                        logger.error(
+                            'Error occurred when checking CORS',
+                            error,
+                        );
+                        return cb(new Error('CORS error'), false); // todo: throw 500
+                    });
+            },
+        };
+
+        app.use(cors(parameters));
     }
 
     async listen() {
