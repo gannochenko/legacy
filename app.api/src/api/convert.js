@@ -1,4 +1,4 @@
-import { wrapError } from '../lib/util';
+import { wrapError } from 'ew-internals';
 import GQLGenerator from '../lib/gql-generator';
 
 export default (app, params = {}) => {

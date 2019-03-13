@@ -1,11 +1,3 @@
-export const wrapError = fn => async (req, res, next) => {
-  try {
-    await fn(req, res, next);
-  } catch (e) {
-    next(e);
-  }
-};
-
 export const injectPassword = (url, password = null) => {
     if (_.isne(password)) {
         const oUrl = new URL(url);

@@ -95,6 +95,12 @@ export default class DBDiff {
 
             for (let i = 0; i < cTable.columns.length; i++) {
                 const field = cTable.columns[i];
+
+                if (field.name === 'id' || field.name === 'code') {
+                    // don't drop, these are system columns
+                    continue;
+                }
+
                 if (fDel.indexOf(field.name) >= 0) {
                     await qr.dropColumn(cTable.name, field.name);
                 }

@@ -1,4 +1,4 @@
-import { wrapError } from '../lib/util';
+import { wrapError } from 'ew-internals';
 import DBDiff from '../lib/db-diff';
 
 export default (app, params = {}) => {
