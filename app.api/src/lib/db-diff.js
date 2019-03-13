@@ -1,3 +1,7 @@
+import { Table, TableColumn } from 'typeorm';
+
+const TABLE_PREFIX = 'eq_e_';
+
 export default class DBDiff {
     /**
      * So this function calculates a set of commands that are to execute to set the database in sync with data structure
@@ -11,9 +15,8 @@ export default class DBDiff {
             'master',
         );
         // get all entity tables
-        const prefix = ''; // todo: should be eg_entity_
         const eTableNames = (await qr.query(
-            `select * from information_schema.tables where table_schema='public' and table_name like '${prefix}%'`,
+            `select * from information_schema.tables where table_schema='public' and table_name like '${TABLE_PREFIX}%'`,
         )).map(t => t.table_name);
 
         let tables = [];
@@ -21,45 +24,177 @@ export default class DBDiff {
             tables = await qr.getTables(eTableNames);
         }
 
-        console.dir('Tables');
-        tables.forEach(table =>
-            console.log(require('util').inspect(table.columns, { depth: 10 })),
-        );
+        const toCreate = [];
+        const toDrop = [];
+        const toAlter = [];
 
-        // get all entites
+        const have = {};
+        tables.forEach(table => {
+            have[table.name] = table;
+        });
+
         const entities = await entityProvider.get();
-        console.dir('Entities');
-        console.log(require('util').inspect(entities, { depth: 10 }));
+        const willBe = {};
+        entities.forEach(entity => {
+            const table = this.getDDL(entity);
+            willBe[table.name] = table;
+            if (!(table.name in have)) {
+                toCreate.push(table);
+            } else {
+                toAlter.push(table);
+            }
+        });
 
-        // unify the format between a tables and entities:
+        // tables to drop
+        Object.values(have).forEach(table => {
+            if (!(table.name in willBe)) {
+                toDrop.push(table);
+            }
+        });
 
-        // calculate diff:
+        if (_.iane(toCreate)) {
+            for (let i = 0; i < toCreate.length; i++) {
+                await qr.createTable(new Table(toCreate[i]), true);
+            }
+        }
 
-        // tables to be created
-        // // for each reference field create a connection table
+        if (_.iane(toDrop)) {
+            for (let i = 0; i < toDrop.length; i++) {
+                await qr.dropTable(toDrop[i], true);
+            }
+        }
 
-        // tables to be dropped
-        // // for each reference field - don't forget to drop the corresponding connection table
+        // now the "field" level
+        for (let i = 0; i < toAlter.length; i++) {
+            const table = toAlter[i];
+            const cTable = have[table.name];
 
-        // tables to be updated (the most of fun is here)
-        // for each table to update:
+            const tableFNames = Object.keys(
+                table.columns.reduce((result, item) => {
+                    result[item.name] = true;
+                    return result;
+                }, {}),
+            );
 
-        // columns to be added
-        // // for each reference field create a connection table
+            const cTableFNames = Object.keys(
+                cTable.columns.reduce((result, item) => {
+                    result[item.name] = true;
+                    return result;
+                }, {}),
+            );
 
-        // columns to be removed
-        // // for each reference field - don't forget to drop the corresponding connection table
+            const fAdd = _.difference(tableFNames, cTableFNames);
+            const fDel = _.difference(cTableFNames, tableFNames);
 
-        // columns to be updated in terms of type
-        // // if the field was a reference field, but became something else - drop the connection table
-        // // if the field was something else, but became a reference field - add a connection table
-        // // if the field was a reference field, and stays the same, but gets connected to the other entity, then drop one connection table and create another (or should not we?)
+            for (let i = 0; i < table.columns.length; i++) {
+                const field = table.columns[i];
+                if (fAdd.indexOf(field.name) >= 0) {
+                    await qr.addColumn(table.name, new TableColumn(field));
+                }
+            }
 
-        // Thoughts:
-        // the field is not allowed to be renamed, because the field name is it's "unique" id. Besides, there is no typical case for renaming fields, only damn perfectionists do so.
-        // the name of the connection table shall be eg_ref_<entity-name>_<field-name>
-        // in postgres the maximum length of an identifier is 63, so we can allow <entity-name> and <field-name> to be no more than 27 characters long
-        // this is not good. we can replace these identifiers with hashes or meaningless aliases
-        // for the first version I guess I am not going to allow field type change
+            for (let i = 0; i < cTable.columns.length; i++) {
+                const field = cTable.columns[i];
+                if (fDel.indexOf(field.name) >= 0) {
+                    await qr.dropColumn(cTable.name, field.name);
+                }
+            }
+
+            // todo: support altering of fields
+        }
+
+        // console.log(require('util').inspect(toAlter, {depth: 10}));
+        // console.log(require('util').inspect(toDrop, {depth: 10}));
+    }
+
+    static getDDL(entity) {
+        const table = {
+            name: `${TABLE_PREFIX}${entity.name.toLowerCase()}`.substr(0, 63),
+            columns: [],
+        };
+
+        // add two "system" fields: id and code (external code)
+        table.columns.push({
+            isNullable: false,
+            isGenerated: false,
+            isPrimary: true,
+            isUnique: true,
+            isArray: false,
+            length: '',
+            zerofill: false,
+            unsigned: true,
+            name: 'id',
+            type: 'integer',
+        });
+        table.columns.push({
+            isNullable: false,
+            isGenerated: false,
+            isPrimary: false,
+            isUnique: true,
+            isArray: false,
+            length: '300',
+            zerofill: false,
+            unsigned: false,
+            name: 'code',
+            type: 'character varying',
+        });
+
+        entity.schema.forEach(field => {
+            table.columns.push({
+                isNullable: field.required !== true,
+                isGenerated: false,
+                isPrimary: false,
+                isUnique: false,
+                isArray: _.isArray(field.type),
+                length: this.getDDLLength(field),
+                zerofill: false,
+                unsigned: false,
+                name: field.name,
+                type: this.getDDLType(field),
+            });
+        });
+
+        return table;
+    }
+
+    static getDDLType(field) {
+        let type = field.type;
+
+        if (_.isArray(type)) {
+            type = type[0] || String;
+        }
+
+        if (type === 'reference') {
+            return Number; // id
+        }
+
+        if (type === Number) {
+            return 'integer'; // todo: add float support
+        }
+
+        if (type === Boolean) {
+            return 'boolean';
+        }
+
+        if (type === Date) {
+            return 'timestamp without time zone';
+        }
+
+        // the rest - just a string type
+        return 'character varying';
+    }
+
+    static getDDLLength(field) {
+        const type = this.getDDLType(field);
+        if (type === 'character varying') {
+            const length = parseInt(field.length, 10);
+            if (isNaN(length)) {
+                return '255';
+            }
+
+            return length.toString();
+        }
+
+        return '';
     }
 }

@@ -2,7 +2,7 @@ export default class EntityProvider {
     async get() {
         return [
             {
-                name: 'Person',
+                name: 'Important_Person',
                 schema: [
                     {
                         name: 'full_name',
@@ -12,10 +12,10 @@ export default class EntityProvider {
                         validate: () => {},
                     },
                     {
-                        name: 'medals',
-                        type: Number,
-                        label: 'Medals',
-                        default: 0,
+                        name: 'tags',
+                        type: [String],
+                        label: 'Tags',
+                        required: false,
                         validate: () => {},
                     },
                     {

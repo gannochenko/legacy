@@ -42,21 +42,6 @@ services:
             com.list.name: 'Redis GUI'
             com.list.sort: '3'
             com.list.link.endpoint: 'Browse cache___/cache:6379/0/keys/'
-    placeholder.generator:
-        image: 'placeholder.generator:dev'
-        build:
-            context: ../app.placeholder.generator/
-            dockerfile: docker/development.dockerfile
-        expose:
-            - '3000'
-        ports:
-            - '3000:3000'
-        depends_on: []
-        volumes:
-            - '../app.placeholder.generator/:/app/'
-        environment:
-            - NODE_ENV=development
-            - PORT=3000
     api:
         image: 'api:dev'
         build:
