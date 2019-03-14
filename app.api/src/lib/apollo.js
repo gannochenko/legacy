@@ -27,9 +27,9 @@ const getServer = async ({ cache, entityProvider }) => {
             resolvers: mergeResolvers([...eResolver, ...resolvers]),
             // context: async ({ req, res }) => {
             // },
-            dataSources: () => {
-                return {};
-            },
+            // dataSources: () => {
+            //     return {};
+            // },
             debug: __DEV__,
         });
 

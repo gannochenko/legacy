@@ -65,6 +65,7 @@ export default class DBDiff {
         if (_.iane(toCreate)) {
             for (let i = 0; i < toCreate.length; i++) {
                 const table = toCreate[i];
+                console.dir(table);
                 await qr.createTable(new Table(table), true);
                 // await qr.createIndex(table.name, new TableIndex({
                 //     name: `${DB_INDEX_PREFIX}_${md5(table.name)}_code`,
@@ -152,7 +153,7 @@ export default class DBDiff {
             isNullable: false,
             isGenerated: false,
             isPrimary: false,
-            isUnique: false, // will automatically create a unique index
+            isUnique: true, // will automatically create a unique index
             isArray: false,
             length: DB_CODE_COLUMN_LENGTH.toString(),
             zerofill: false,
@@ -187,7 +188,7 @@ export default class DBDiff {
         }
 
         if (type === 'reference') {
-            return Number; // id
+            return 'integer'; // todo: it depends. if the link is multiple, there should be no field at all
         }
 
         if (type === Number) {
