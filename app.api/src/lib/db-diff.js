@@ -1,6 +1,16 @@
-import { Table, TableColumn } from 'typeorm';
+/**
+ * https://typeorm.io/#/migrations
+ */
 
-const TABLE_PREFIX = 'eq_e_';
+import { Table, TableColumn, TableIndex } from 'typeorm';
+// import md5 from 'md5';
+import {
+    DB_TABLE_PREFIX,
+    DB_IDENTIFIER_LENGTH,
+    DB_VARCHAR_DEF_LENGTH,
+    DB_CODE_COLUMN_LENGTH,
+    DB_INDEX_PREFIX,
+} from '../constants';
 
 export default class DBDiff {
     /**
@@ -16,7 +26,7 @@ export default class DBDiff {
         );
         // get all entity tables
         const eTableNames = (await qr.query(
-            `select * from information_schema.tables where table_schema='public' and table_name like '${TABLE_PREFIX}%'`,
+            `select * from information_schema.tables where table_schema='public' and table_name like '${DB_TABLE_PREFIX}%'`,
         )).map(t => t.table_name);
 
         let tables = [];
@@ -54,7 +64,12 @@ export default class DBDiff {
 
         if (_.iane(toCreate)) {
             for (let i = 0; i < toCreate.length; i++) {
-                await qr.createTable(new Table(toCreate[i]), true);
+                const table = toCreate[i];
+                await qr.createTable(new Table(table), true);
+                // await qr.createIndex(table.name, new TableIndex({
+                //     name: `${DB_INDEX_PREFIX}_${md5(table.name)}_code`,
+                //     columnNames: ['code']
+                // }));
             }
         }
 
@@ -108,21 +123,21 @@ export default class DBDiff {
 
             // todo: support altering of fields
         }
-
-        // console.log(require('util').inspect(toAlter, {depth: 10}));
-        // console.log(require('util').inspect(toDrop, {depth: 10}));
     }
 
     static getDDL(entity) {
         const table = {
-            name: `${TABLE_PREFIX}${entity.name.toLowerCase()}`.substr(0, 63),
+            name: `${DB_TABLE_PREFIX}${entity.name.toLowerCase()}`.substr(
+                0,
+                DB_IDENTIFIER_LENGTH,
+            ),
             columns: [],
         };
 
         // add two "system" fields: id and code (external code)
         table.columns.push({
             isNullable: false,
-            isGenerated: false,
+            isGenerated: true,
             isPrimary: true,
             isUnique: true,
             isArray: false,
@@ -131,14 +146,15 @@ export default class DBDiff {
             unsigned: true,
             name: 'id',
             type: 'integer',
+            generated: 'increment',
         });
         table.columns.push({
             isNullable: false,
             isGenerated: false,
             isPrimary: false,
-            isUnique: true,
+            isUnique: false, // will automatically create a unique index
             isArray: false,
-            length: '300',
+            length: DB_CODE_COLUMN_LENGTH.toString(),
             zerofill: false,
             unsigned: false,
             name: 'code',
@@ -195,7 +211,7 @@ export default class DBDiff {
         if (type === 'character varying') {
             const length = parseInt(field.length, 10);
             if (isNaN(length)) {
-                return '255';
+                return DB_VARCHAR_DEF_LENGTH.toString();
             }
 
             return length.toString();

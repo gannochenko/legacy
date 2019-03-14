@@ -1,11 +1,13 @@
+import { convertToCamel } from '../lib/util';
+import SchemaGenerator from './schema-generator';
+
 export default class ResolverGenerator {
     static make(entity) {
-        const name = entity.name;
-        const nameLC = name.toLowerCase();
+        const nameCamel = convertToCamel(entity.name);
 
         return {
             Query: {
-                [`${nameLC}Get`]: async (
+                [`${nameCamel}Get`]: async (
                     source,
                     args,
                     { dataSources },
@@ -21,7 +23,7 @@ export default class ResolverGenerator {
                         has_pets: true,
                     };
                 },
-                [`${nameLC}Find`]: async (
+                [`${nameCamel}Find`]: async (
                     source,
                     args,
                     { dataSources },
@@ -47,13 +49,17 @@ export default class ResolverGenerator {
                 },
             },
             Mutation: {
-                [`${nameLC}Put`]: async (
+                [`${nameCamel}Put`]: async (
                     source,
                     args,
                     { dataSources },
                     state,
                 ) => {
                     const { code, data } = args;
+
+                    const dbEntity = SchemaGenerator.make(entity);
+                    console.dir(dbEntity);
+
                     console.dir('PUT!');
                     return {
                         errors: [],
@@ -68,7 +74,7 @@ export default class ResolverGenerator {
                         },
                     };
                 },
-                [`${nameLC}Delete`]: async (
+                [`${nameCamel}Delete`]: async (
                     source,
                     args,
                     { dataSources },

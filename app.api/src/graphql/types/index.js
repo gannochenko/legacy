@@ -1,3 +1,3 @@
-// import someType from './sample.graphql';
+import errorType from './error.graphql';
 
-export default [];
+export default [errorType];

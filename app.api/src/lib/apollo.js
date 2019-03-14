@@ -14,8 +14,6 @@ let server = null;
 
 const getServer = async ({ cache, entityProvider }) => {
     if (!server || !(await cache.get('apollo.server.ready'))) {
-        console.dir('Creating server');
-
         if (server) {
             await server.stop();
         }

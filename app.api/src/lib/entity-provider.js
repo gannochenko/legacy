@@ -32,9 +32,8 @@ export default class EntityProvider {
                     },
                     {
                         name: 'pets',
-                        type: 'reference',
+                        type: ['reference'],
                         entity: 'Pet',
-                        multiple: true,
                         label: 'Pets',
                         validate: () => {},
                     },

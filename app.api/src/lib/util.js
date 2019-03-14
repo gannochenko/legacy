@@ -1,3 +1,5 @@
+import { camel } from 'naming-style';
+
 export const injectPassword = (url, password = null) => {
     if (_.isne(password)) {
         const oUrl = new URL(url);
@@ -28,4 +30,9 @@ export const decomposeURL = url => {
     }
 
     return parts;
+};
+
+export const convertToCamel = str => {
+    str = camel(str.toLowerCase());
+    return `${str.substr(0, 1).toUpperCase()}${str.substr(1, str.length - 1)}`;
 };
