@@ -61,6 +61,7 @@ services:
             - DEBUG_COLORS=1
             - DEBUG_HIDE_DATE=1
             - network.port=4000
+            - network.cors=http://localhost:4000
             - cache.url=redis://cache:6379
             - db.url=postgres://root:123@db:5432/legacy
         labels:
