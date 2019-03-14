@@ -1,7 +1,8 @@
+import { convertToCamel } from '../lib/util';
+
 export default class GQLGenerator {
     static make(entity) {
-        const name = entity.name;
-        const nameLC = name.toLowerCase();
+        const nameCamel = convertToCamel(entity.name.toLowerCase());
 
         const tFields = [];
         const iFields = [];
@@ -14,51 +15,56 @@ export default class GQLGenerator {
             );
         });
 
-        return `      
-type ${name}Result {
-    errors: [String]
-    code: String!
-    data: ${name}!
+        return `
+type ${nameCamel}Result {
+    errors: [Error]
+    data: ${nameCamel}!
 }
 
-type ${name}SearchResult {
+type ${nameCamel}SearchResult {
     errors: [String]
-    data: [${name}]!
+    data: [${nameCamel}]!
     limit: Int!
     offset: Int!
     count: Int
 }
 
-type ${name} {
+type ${nameCamel} {
     code: String
 ${tFields.map(x => `    ${x}`).join('\n')}
 }
 
-input I${name} {
-    code: String!
+input I${nameCamel} {
+    code: String
 ${iFields.map(x => `    ${x}`).join('\n')}
 }
 
 type Query {
-    ${nameLC}Get(code: String!): ${name}
-    ${nameLC}Find(
+    ${nameCamel}Get(code: String!): ${nameCamel}
+    ${nameCamel}Find(
         filter: String
         sort: String
         select: [String]
         limit: Int
         offset: Int
         count: Boolean
-    ): ${name}SearchResult
+    ): ${nameCamel}SearchResult
 }
 
 type Mutation {
-    ${nameLC}Delete(code: String!): ${name}Result
-    ${nameLC}Put(code: String, data: I${name}!): ${name}Result
-}        
+    ${nameCamel}Delete(code: String!): ${nameCamel}Result
+    ${nameCamel}Put(code: String, data: I${nameCamel}!): ${nameCamel}Result
+}
         `;
     }
 
-    static getType({ type, entity, multiple }, input = false) {
+    static getType({ type, entity }, input = false) {
+        let multiple = false;
+        if (_.isArray(type)) {
+            multiple = true;
+            type = type[0];
+        }
+
         let gqlType = 'String';
         if (type === String) {
             gqlType = 'String';
