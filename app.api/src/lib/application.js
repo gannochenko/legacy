@@ -8,7 +8,6 @@ import ConnectionManager from './connection-manager';
 
 import attachGraphQLMiddleware from './apollo';
 import attachHomeAPI from '../api/home';
-import attachConvertAPI from '../api/convert';
 import attachSyncAPI from '../api/sync';
 import EntityProvider from './entity-provider';
 
@@ -21,7 +20,7 @@ export default class Application {
         const settings = new Settings();
         const cache = await Cache.make({ settings });
         const connectionManager = new ConnectionManager({ settings });
-        const entityProvider = new EntityProvider();
+        const entityConfigurationProvider = new EntityProvider();
 
         // const connection = await Connection.make({
         //     settings,
@@ -52,7 +51,12 @@ export default class Application {
             }),
         );
 
-        attachGraphQLMiddleware(app, { settings, cache, entityProvider });
+        attachGraphQLMiddleware(app, {
+            settings,
+            cache,
+            entityConfigurationProvider,
+            connectionManager,
+        });
 
         // write the middleware here
         // app.all('*', (req, res, next) => {
@@ -65,8 +69,11 @@ export default class Application {
         //     next();
         // });
         attachHomeAPI(app, { cache });
-        attachConvertAPI(app, { cache, entityProvider });
-        attachSyncAPI(app, { cache, entityProvider, connectionManager });
+        attachSyncAPI(app, {
+            cache,
+            entityConfigurationProvider,
+            connectionManager,
+        }); // todo: temporary endpoint
 
         instance._express = app;
 
@@ -79,6 +86,7 @@ export default class Application {
         // catching async unhandled rejections
         process
             .on('unhandledRejection', err => {
+                console.dir(err);
                 logger.error('Unhandled rejection', err);
             })
             .on('uncaughtException', err => {

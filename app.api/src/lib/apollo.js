@@ -6,22 +6,44 @@ import { mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 
 import GQLGenerator from './gql-generator';
 import ResolverGenerator from './resolver-generator';
+import SchemaGenerator from './schema-generator';
 
 import typeDefs from '../graphql/types/index';
 import resolvers from '../graphql/resolvers/index';
 
 let server = null;
 
-const getServer = async ({ cache, entityProvider }) => {
+const getServer = async ({
+    cache,
+    entityConfigurationProvider,
+    connectionManager,
+}) => {
     if (!server || !(await cache.get('apollo.server.ready'))) {
         if (server) {
             await server.stop();
         }
 
-        const entites = await entityProvider.get();
-        const eGQL = entites.map(entity => GQLGenerator.make(entity));
-        const eResolver = entites.map(entity => ResolverGenerator.make(entity));
+        // get entity configuration from the database
+        const entities = await entityConfigurationProvider.get();
+        // turn JSON-s into a real database entities
+        const dbEntities = await SchemaGenerator.make({ entities });
+        // put those entities into a connection
+        const connection = await connectionManager.get({
+            entities: Object.values(dbEntities),
+            preConnect: true,
+        });
+        // create GRAPHQL types
+        const eGQL = entities.map(entity => GQLGenerator.makeOne({ entity }));
+        // create GRAPHQL resolvers
+        const eResolver = entities.map(entity =>
+            ResolverGenerator.makeOne({
+                entity,
+                dbEntity: dbEntities[entity.name],
+                connection,
+            }),
+        );
 
+        // now everything is ready to create the server
         server = new ApolloServer({
             typeDefs: mergeTypes([...eGQL, ...typeDefs], { all: true }),
             resolvers: mergeResolvers([...eResolver, ...resolvers]),
@@ -32,6 +54,8 @@ const getServer = async ({ cache, entityProvider }) => {
             // },
             debug: __DEV__,
         });
+
+        console.dir('Server created');
 
         await cache.set('apollo.server.ready', true, ['apollo']);
     }

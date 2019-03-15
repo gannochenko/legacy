@@ -1,3 +1,5 @@
+import { ENTITY_TYPE_REFERENCE } from '../constants';
+
 export default class EntityProvider {
     async get() {
         return [
@@ -32,7 +34,7 @@ export default class EntityProvider {
                     },
                     {
                         name: 'pets',
-                        type: ['reference'],
+                        type: [ENTITY_TYPE_REFERENCE],
                         entity: 'Pet',
                         label: 'Pets',
                         validate: () => {},

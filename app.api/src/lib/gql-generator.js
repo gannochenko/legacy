@@ -1,7 +1,7 @@
 import { convertToCamel } from '../lib/util';
 
 export default class GQLGenerator {
-    static make(entity) {
+    static makeOne({ entity }) {
         const nameCamel = convertToCamel(entity.name.toLowerCase());
 
         const tFields = [];

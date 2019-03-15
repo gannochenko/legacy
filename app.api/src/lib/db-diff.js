@@ -18,7 +18,7 @@ export default class DBDiff {
      * @returns {Promise<void>}
      */
     static async make(params = {}) {
-        const { entityProvider, connectionManager } = params;
+        const { entityConfigurationProvider, connectionManager } = params;
 
         const qr = (await (await connectionManager.getSimple()).getRaw()).createQueryRunner(
             'master',
@@ -42,7 +42,7 @@ export default class DBDiff {
             have[table.name] = table;
         });
 
-        const entities = await entityProvider.get();
+        const entities = await entityConfigurationProvider.get();
         const willBe = {};
         entities.forEach(entity => {
             const table = this.getDDL(entity);

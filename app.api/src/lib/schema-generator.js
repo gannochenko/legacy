@@ -11,7 +11,15 @@ import {
 } from '../constants';
 
 export default class SchemaGenerator {
-    static make(entity) {
+    static make({ entities }) {
+        const result = {};
+        entities.forEach(entity => {
+            result[entity.name] = this.makeOne(entity);
+        });
+        return result;
+    }
+
+    static makeOne(entity) {
         const columns = {
             id: {
                 primary: true,

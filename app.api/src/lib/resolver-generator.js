@@ -4,7 +4,7 @@ import { convertToCamel } from '../lib/util';
 import SchemaGenerator from './schema-generator';
 
 export default class ResolverGenerator {
-    static make(entity) {
+    static makeOne({ entity, dbEntity, connection }) {
         const nameCamel = convertToCamel(entity.name);
 
         return {
@@ -58,11 +58,15 @@ export default class ResolverGenerator {
                     state,
                 ) => {
                     const { code, data } = args;
-
-                    const dbEntity = SchemaGenerator.make(entity);
                     const repo = getRepository(dbEntity);
 
                     data.code = code;
+
+                    console.dir('saving this:');
+                    console.dir(data);
+                    console.dir('to:');
+                    console.dir(dbEntity);
+
                     const newItem = await repo.save(data);
                     console.dir(newItem);
 
