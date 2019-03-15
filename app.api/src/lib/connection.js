@@ -3,7 +3,7 @@ import { createConnection } from 'typeorm';
 
 export default class Connection {
     static async make(params = {}) {
-        const { settings, preConnect } = params;
+        const { settings, entityProvider } = params;
         if (!settings) {
             throw new Error('No settings provided');
         }
@@ -11,16 +11,13 @@ export default class Connection {
         const url = await settings.get('db.url', null);
         const password = await settings.get('db.password', null);
 
-        const self = new this({
+        if (entityProvider) {
+        }
+
+        return new this({
             url,
             password,
         });
-
-        if (preConnect) {
-            await self.getConnection();
-        }
-
-        return self;
     }
 
     constructor(props = {}) {
@@ -33,7 +30,7 @@ export default class Connection {
         this._url = sUrl;
     }
 
-    async getConnection() {
+    async getRaw() {
         if (!this._connection) {
             this._connection = await createConnection({
                 type: 'postgres',

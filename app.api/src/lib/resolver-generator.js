@@ -1,3 +1,5 @@
+import { getManager, getRepository } from 'typeorm';
+
 import { convertToCamel } from '../lib/util';
 import SchemaGenerator from './schema-generator';
 
@@ -58,7 +60,11 @@ export default class ResolverGenerator {
                     const { code, data } = args;
 
                     const dbEntity = SchemaGenerator.make(entity);
-                    console.dir(dbEntity);
+                    const repo = getRepository(dbEntity);
+
+                    data.code = code;
+                    const newItem = await repo.save(data);
+                    console.dir(newItem);
 
                     console.dir('PUT!');
                     return {

@@ -4,7 +4,7 @@ import helmet from 'helmet';
 
 import { Settings } from 'ew-internals';
 import Cache from './cache';
-import Connection from './connection';
+import ConnectionManager from './connection-manager';
 
 import attachGraphQLMiddleware from './apollo';
 import attachHomeAPI from '../api/home';
@@ -20,11 +20,13 @@ export default class Application {
         const app = express();
         const settings = new Settings();
         const cache = await Cache.make({ settings });
-        const connection = await Connection.make({
-            settings,
-            preConnect: true,
-        });
+        const connectionManager = new ConnectionManager({ settings });
         const entityProvider = new EntityProvider();
+
+        // const connection = await Connection.make({
+        //     settings,
+        //     preConnect: true,
+        // });
 
         instance.attachErrorHandler(app);
 
@@ -50,7 +52,7 @@ export default class Application {
             }),
         );
 
-        attachGraphQLMiddleware(app, { cache, entityProvider });
+        attachGraphQLMiddleware(app, { settings, cache, entityProvider });
 
         // write the middleware here
         // app.all('*', (req, res, next) => {
@@ -64,7 +66,7 @@ export default class Application {
         // });
         attachHomeAPI(app, { cache });
         attachConvertAPI(app, { cache, entityProvider });
-        attachSyncAPI(app, { cache, entityProvider, connection });
+        attachSyncAPI(app, { cache, entityProvider, connectionManager });
 
         instance._express = app;
 

@@ -9,7 +9,6 @@ import {
     DB_IDENTIFIER_LENGTH,
     DB_VARCHAR_DEF_LENGTH,
     DB_CODE_COLUMN_LENGTH,
-    DB_INDEX_PREFIX,
 } from '../constants';
 
 export default class DBDiff {
@@ -19,9 +18,9 @@ export default class DBDiff {
      * @returns {Promise<void>}
      */
     static async make(params = {}) {
-        const { entityProvider, connection } = params;
+        const { entityProvider, connectionManager } = params;
 
-        const qr = (await connection.getConnection()).createQueryRunner(
+        const qr = (await (await connectionManager.getSimple()).getRaw()).createQueryRunner(
             'master',
         );
         // get all entity tables
@@ -65,6 +64,7 @@ export default class DBDiff {
         if (_.iane(toCreate)) {
             for (let i = 0; i < toCreate.length; i++) {
                 const table = toCreate[i];
+                console.dir(table);
                 await qr.createTable(new Table(table), true);
                 // await qr.createIndex(table.name, new TableIndex({
                 //     name: `${DB_INDEX_PREFIX}_${md5(table.name)}_code`,
@@ -127,10 +127,7 @@ export default class DBDiff {
 
     static getDDL(entity) {
         const table = {
-            name: `${DB_TABLE_PREFIX}${entity.name.toLowerCase()}`.substr(
-                0,
-                DB_IDENTIFIER_LENGTH,
-            ),
+            name: this.getTableName(entity),
             columns: [],
         };
 
@@ -152,7 +149,7 @@ export default class DBDiff {
             isNullable: false,
             isGenerated: false,
             isPrimary: false,
-            isUnique: false, // will automatically create a unique index
+            isUnique: true, // will automatically create a unique index
             isArray: false,
             length: DB_CODE_COLUMN_LENGTH.toString(),
             zerofill: false,
@@ -187,7 +184,7 @@ export default class DBDiff {
         }
 
         if (type === 'reference') {
-            return Number; // id
+            return 'integer'; // todo: it depends. if the link is multiple, there should be no field at all
         }
 
         if (type === Number) {
@@ -218,5 +215,12 @@ export default class DBDiff {
         }
 
         return '';
+    }
+
+    static getTableName(entity) {
+        return `${DB_TABLE_PREFIX}${entity.name.toLowerCase()}`.substr(
+            0,
+            DB_IDENTIFIER_LENGTH,
+        );
     }
 }

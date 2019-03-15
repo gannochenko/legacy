@@ -3,7 +3,12 @@
  */
 
 import { EntitySchema } from 'typeorm';
-import { DB_CODE_COLUMN_LENGTH, DB_VARCHAR_DEF_LENGTH } from '../constants';
+import {
+    DB_CODE_COLUMN_LENGTH,
+    DB_VARCHAR_DEF_LENGTH,
+    DB_IDENTIFIER_LENGTH,
+    DB_TABLE_PREFIX,
+} from '../constants';
 
 export default class SchemaGenerator {
     static make(entity) {
@@ -36,7 +41,7 @@ export default class SchemaGenerator {
         });
 
         return new EntitySchema({
-            name: entity.name,
+            name: this.getTableName(entity),
             columns,
         });
     }
@@ -52,5 +57,12 @@ export default class SchemaGenerator {
         }
 
         return null;
+    }
+
+    static getTableName(entity) {
+        return `${DB_TABLE_PREFIX}${entity.name.toLowerCase()}`.substr(
+            0,
+            DB_IDENTIFIER_LENGTH,
+        );
     }
 }

@@ -2,7 +2,7 @@ export default class EntityProvider {
     async get() {
         return [
             {
-                name: 'Important_Person',
+                name: 'important_person',
                 schema: [
                     {
                         name: 'full_name',
@@ -40,7 +40,7 @@ export default class EntityProvider {
                 ],
             },
             {
-                name: 'Pet',
+                name: 'pet',
                 schema: [
                     {
                         name: 'nickname',
