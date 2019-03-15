@@ -62,12 +62,20 @@ export default class ResolverGenerator {
 
                     data.code = code;
 
-                    console.dir('saving this:');
-                    console.dir(data);
-                    console.dir('to:');
-                    console.dir(dbEntity);
+                    const d = {
+                        code: '1',
+                        full_name: '1',
+                        tags: ['11', '22'],
+                    };
 
-                    const newItem = await repo.save(data);
+                    console.dir('saving this:');
+                    console.dir(d);
+                    console.dir('to:');
+                    console.log(
+                        require('util').inspect(dbEntity, { depth: 10 }),
+                    );
+
+                    const newItem = await repo.save(d);
                     console.dir(newItem);
 
                     console.dir('PUT!');

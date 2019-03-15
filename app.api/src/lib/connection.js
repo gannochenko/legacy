@@ -38,6 +38,9 @@ export default class Connection {
 
     async getRaw() {
         if (!this._connection) {
+            console.dir('eee');
+            console.log(require('util').inspect(this._entities, { depth: 10 }));
+
             this._connection = await createConnection({
                 type: 'postgres',
                 url: this._url,

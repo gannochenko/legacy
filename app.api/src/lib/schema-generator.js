@@ -8,6 +8,7 @@ import {
     DB_VARCHAR_DEF_LENGTH,
     DB_IDENTIFIER_LENGTH,
     DB_TABLE_PREFIX,
+    ENTITY_TYPE_REFERENCE,
 } from '../constants';
 
 export default class SchemaGenerator {
@@ -35,9 +36,9 @@ export default class SchemaGenerator {
         };
         entity.schema.forEach(field => {
             const column = {
-                type: field.type,
-                length: 300,
+                type: this.getType(field),
                 nullable: field.required !== true,
+                array: _.isArray(field.type),
             };
 
             const length = this.getLength(field);
@@ -52,6 +53,20 @@ export default class SchemaGenerator {
             name: this.getTableName(entity),
             columns,
         });
+    }
+
+    static getType(field) {
+        let type = field.type;
+
+        if (_.isArray(type)) {
+            type = type[0] || String;
+        }
+
+        if (type === ENTITY_TYPE_REFERENCE) {
+            type = Number;
+        }
+
+        return type;
     }
 
     static getLength(field) {
