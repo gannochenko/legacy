@@ -1,5 +1,4 @@
 import { convertToCamel } from '../lib/util';
-import { ENTITY_TYPE_REFERENCE } from '../constants';
 
 export default class GQLGenerator {
     static makeOne({ entity }) {
@@ -87,7 +86,8 @@ type Mutation {
             gqlType = 'Boolean';
         } else if (type === Date) {
             gqlType = 'String';
-        } else if (type === ENTITY_TYPE_REFERENCE) {
+        } else if (_.isne(type)) {
+            // reference
             gqlType = input ? `String` : entity;
         }
 

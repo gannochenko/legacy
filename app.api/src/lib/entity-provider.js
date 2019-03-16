@@ -1,4 +1,4 @@
-import { ENTITY_TYPE_REFERENCE } from '../constants';
+import { DB_CODE_COLUMN_LENGTH } from '../constants';
 
 export default class EntityProvider {
     async get() {
@@ -11,7 +11,7 @@ export default class EntityProvider {
                         name: 'code',
                         type: String,
                         label: 'Code',
-                        length: 36,
+                        length: DB_CODE_COLUMN_LENGTH,
                         required: true,
                         // inputRequired: false,
                         unique: true,

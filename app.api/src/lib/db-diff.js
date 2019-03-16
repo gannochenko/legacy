@@ -8,8 +8,6 @@ import {
     DB_TABLE_PREFIX,
     DB_IDENTIFIER_LENGTH,
     DB_VARCHAR_DEF_LENGTH,
-    DB_CODE_COLUMN_LENGTH,
-    ENTITY_TYPE_REFERENCE,
 } from '../constants';
 
 export default class DBDiff {
@@ -172,8 +170,9 @@ export default class DBDiff {
             type = type[0] || String;
         }
 
-        if (type === ENTITY_TYPE_REFERENCE) {
-            return 'integer'; // todo: it depends. if the link is multiple, there should be no field at all
+        if (_.isne(type)) {
+            // reference
+            return 'integer';
         }
 
         if (type === Number) {

@@ -8,7 +8,6 @@ import {
     DB_VARCHAR_DEF_LENGTH,
     DB_IDENTIFIER_LENGTH,
     DB_TABLE_PREFIX,
-    ENTITY_TYPE_REFERENCE,
 } from '../constants';
 
 export default class SchemaGenerator {
@@ -62,7 +61,8 @@ export default class SchemaGenerator {
             type = type[0] || String;
         }
 
-        if (type === ENTITY_TYPE_REFERENCE) {
+        if (_.isne(type)) {
+            // reference
             type = Number;
         }
 
