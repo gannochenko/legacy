@@ -19,11 +19,12 @@ First version:
 
 ~~~~
 mutation {
-  ImportantPersonPut(code: "9085719d934c", data: {
+  ImportantPersonPut(data: {
     full_name: "Sergei G"
     tags: ["one", "two"]
     birth_date: "2019-03-16T07:20:29.562Z"
     has_pets: true
+    lucky_numbers: [123, 456]
   }) {
     errors {
       message
@@ -32,6 +33,8 @@ mutation {
       code
       full_name
       birth_date
+      tags
+      lucky_numbers
     }
   }
 }

@@ -74,6 +74,11 @@ export default class ResolverGenerator {
                     data.code = code;
 
                     // validate
+                    const vResult = await Validator.validate(entity, data);
+                    if (_.iane(vResult)) {
+                        // errors
+                    }
+                    console.dir(vResult);
 
                     const item = await repo.save(Object.assign({}, data));
 

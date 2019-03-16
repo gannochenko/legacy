@@ -11,7 +11,7 @@ export default class GQLGenerator {
             tFields.push(`${field.name}: ${this.getType(field)}`);
             iFields.push(
                 `${field.name}: ${this.getType(field, true)}${
-                    this.getRequired(field) ? '!' : ''
+                    false && this.getRequired(field) ? '!' : ''
                 }`,
             );
         });

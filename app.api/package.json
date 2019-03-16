@@ -72,6 +72,7 @@
         "lodash.isobject": "^3.0.2",
         "lodash.isstring": "^4.0.1",
         "lodash.random": "^3.2.0",
+        "lodash.union": "^4.6.0",
         "md5": "^2.2.1",
         "merge-graphql-schemas": "^1.5.8",
         "naming-style": "^1.0.0",

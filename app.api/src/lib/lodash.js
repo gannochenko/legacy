@@ -4,7 +4,7 @@ const isObject = require('lodash.isobject');
 // const random = require('lodash.random');
 // const isNumber = require('lodash.isnumber');
 // const isFunction = require('lodash.isfunction');
-// const union = require('lodash.union');
+const union = require('lodash.union');
 // const intersection = require('lodash.intersection');
 const difference = require('lodash.difference');
 // const get = require('lodash.get');
@@ -34,7 +34,7 @@ module.exports = {
     // cloneDeep,
     // get,
     // deepFreeze,
-    // union,
+    union,
     // intersection,
     difference,
     iane: arg => {
