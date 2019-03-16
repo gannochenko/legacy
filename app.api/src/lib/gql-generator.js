@@ -7,6 +7,7 @@ export default class GQLGenerator {
 
         const tFields = [];
         const iFields = [];
+        const fFields = [];
         entity.schema.forEach(field => {
             tFields.push(`${field.name}: ${this.getType(field)}`);
             iFields.push(
@@ -14,6 +15,7 @@ export default class GQLGenerator {
                     false && this.getRequired(field) ? '!' : ''
                 }`,
             );
+            fFields.push(`${field.name}: IFilterFieldValue`);
         });
 
         return `
@@ -38,10 +40,16 @@ input I${nameCamel} {
 ${iFields.map(x => `    ${x}`).join('\n')}
 }
 
+input I${nameCamel}Filter {
+    SYSLogic: FilterLogic
+    SYSSubFilter: [I${nameCamel}Filter]
+${fFields.map(x => `    ${x}`).join('\n')}
+}
+
 type Query {
     ${nameCamel}Get(code: String!): ${nameCamel}Result
     ${nameCamel}Find(
-        filter: String
+        filter: I${nameCamel}Filter
         sort: String
         select: [String]
         limit: Int

@@ -1,0 +1,23 @@
+enum FilterLogic {
+    AND
+    OR
+    NAND
+    NOR
+}
+
+enum FilterOperator {
+    EQ
+    NE
+    IN
+    NIN
+    GT
+    LT
+    GTE
+    LTE
+}
+
+input IFilterFieldValue {
+    Operation: FilterOperator
+    ValueA: String
+    ValueB: [String]
+}
