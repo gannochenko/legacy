@@ -3,6 +3,7 @@ import uuid from 'uuid/v4';
 
 import { convertToCamel } from './util';
 import Validator from './validator';
+import { ENTITY_TYPE_DATE } from '../constants';
 
 const wrap = async (fn, errors) => {
     try {
@@ -14,6 +15,27 @@ const wrap = async (fn, errors) => {
         });
         logger.error('Internal error', e);
     }
+};
+
+const convertToPlain = (dbItem, entity) => {
+    const plain = {};
+    entity.schema.forEach(field => {
+        if (
+            field.name in dbItem &&
+            typeof dbItem[field.name] !== 'undefined' &&
+            dbItem[field.name] !== null
+        ) {
+            if (field.type === ENTITY_TYPE_DATE) {
+                plain[field.name] = dbItem[field.name].toISOString();
+            } else {
+                plain[field.name] = dbItem[field.name];
+            }
+        } else {
+            plain[field.name] = null;
+        }
+    });
+
+    return plain;
 };
 
 export default class ResolverGenerator {
@@ -28,15 +50,33 @@ export default class ResolverGenerator {
                     { dataSources },
                     state,
                 ) => {
-                    const { code } = args;
-                    return {
-                        code: 'sdfhbdfhda',
-                        full_name: 'Darth Vader',
-                        medals: 2,
-                        birth_date:
-                            'Sun Mar 03 2019 15:06:03 GMT+0100 (Central European Standard Time)',
-                        has_pets: true,
+                    const result = {
+                        errors: [],
+                        data: {},
                     };
+
+                    const { code } = args;
+                    const repo = getRepository(dbEntity);
+
+                    let dbItem = null;
+                    await wrap(async () => {
+                        dbItem = await repo.findOne({
+                            code: code.trim(),
+                        });
+                    }, result.errors);
+
+                    if (!result.errors.length) {
+                        if (!dbItem) {
+                            result.errors.push({
+                                code: 'not_found',
+                                message: 'Element not found',
+                            });
+                        }
+                    }
+
+                    result.data = convertToPlain(dbItem, entity);
+
+                    return result;
                 },
                 [`${nameCamel}Find`]: async (
                     source,
@@ -44,23 +84,26 @@ export default class ResolverGenerator {
                     { dataSources },
                     state,
                 ) => {
-                    const { filter, sort, select, limit, offset } = args;
-
-                    return {
+                    const result = {
                         errors: [],
-                        limit: 1,
-                        offset: 1,
-                        data: [
-                            {
-                                code: 'sdfhbdfhda',
-                                full_name: 'Darth Vader',
-                                medals: 2,
-                                birth_date:
-                                    'Sun Mar 03 2019 15:06:03 GMT+0100 (Central European Standard Time)',
-                                has_pets: true,
-                            },
-                        ],
+                        data: {},
+                        limit: 50,
+                        offset: 0,
                     };
+
+                    const { filter, sort, limit, offset } = args;
+
+                    const repo = getRepository(dbEntity);
+
+                    await wrap(async () => {
+                        result.data = (await repo.find({})).map(item =>
+                            convertToPlain(item, entity),
+                        );
+                    }, result.errors);
+
+                    // result.data = convertToPlain(dbItem, entity);
+
+                    return result;
                 },
             },
             Mutation: {
@@ -115,14 +158,8 @@ export default class ResolverGenerator {
 
                             await repo.save(dbItem);
 
-                            // convert to plain
-                            const plain = {};
-                            entity.schema.forEach(field => {
-                                plain[field.name] = dbItem[field.name] || null;
-                            });
-
                             result.code = code;
-                            result.data = plain;
+                            result.data = convertToPlain(dbItem, entity);
                         }, result.errors);
                     }
 

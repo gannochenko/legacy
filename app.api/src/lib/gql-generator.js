@@ -23,7 +23,7 @@ type ${nameCamel}Result {
 }
 
 type ${nameCamel}SearchResult {
-    errors: [String]
+    errors: [Error]
     data: [${nameCamel}]!
     limit: Int!
     offset: Int!
@@ -39,7 +39,7 @@ ${iFields.map(x => `    ${x}`).join('\n')}
 }
 
 type Query {
-    ${nameCamel}Get(code: String!): ${nameCamel}
+    ${nameCamel}Get(code: String!): ${nameCamel}Result
     ${nameCamel}Find(
         filter: String
         sort: String

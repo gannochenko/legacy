@@ -75,6 +75,44 @@ mutation {
 }
 ~~~~
 
+Get
+~~~~
+query {
+  ImportantPersonGet(code: "117acd7b-12e3-45ae-bea9-5b66504d4705") {
+    errors {
+      code
+      message
+    }
+    data {
+      code
+      full_name
+      birth_date
+      tags
+      lucky_numbers
+    }
+  }
+}
+~~~~
+
+Find
+~~~~
+query {
+  ImportantPersonFind {
+    errors {
+      code
+      message
+    }
+    data {
+      code
+      full_name
+      birth_date
+      tags
+      lucky_numbers
+    }
+  }
+}
+~~~~
+
 ~~~~
 // unify the format between a tables and entities:
 
