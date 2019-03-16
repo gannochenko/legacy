@@ -1,4 +1,5 @@
 import { convertToCamel } from '../lib/util';
+import { ENTITY_TYPE_REFERENCE } from '../constants';
 
 export default class GQLGenerator {
     static makeOne({ entity }) {
@@ -10,7 +11,7 @@ export default class GQLGenerator {
             tFields.push(`${field.name}: ${this.getType(field)}`);
             iFields.push(
                 `${field.name}: ${this.getType(field, true)}${
-                    field.required ? '!' : ''
+                    this.getRequired(field) ? '!' : ''
                 }`,
             );
         });
@@ -30,12 +31,10 @@ type ${nameCamel}SearchResult {
 }
 
 type ${nameCamel} {
-    code: String
 ${tFields.map(x => `    ${x}`).join('\n')}
 }
 
 input I${nameCamel} {
-    code: String
 ${iFields.map(x => `    ${x}`).join('\n')}
 }
 
@@ -74,7 +73,7 @@ type Mutation {
             gqlType = 'Boolean';
         } else if (type === Date) {
             gqlType = 'String';
-        } else if (type === 'reference') {
+        } else if (type === ENTITY_TYPE_REFERENCE) {
             gqlType = input ? `String` : entity;
         }
 
@@ -83,5 +82,13 @@ type Mutation {
         }
 
         return gqlType;
+    }
+
+    static getRequired(field) {
+        if ('inputRequired' in field) {
+            return field.inputRequired;
+        }
+
+        return field.required;
     }
 }

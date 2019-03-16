@@ -146,25 +146,25 @@ export default class DBDiff {
             type: 'integer',
             generated: 'increment',
         });
-        table.columns.push({
-            isNullable: false,
-            isGenerated: false,
-            isPrimary: false,
-            isUnique: true, // will automatically create a unique index
-            isArray: false,
-            length: DB_CODE_COLUMN_LENGTH.toString(),
-            zerofill: false,
-            unsigned: false,
-            name: 'code',
-            type: 'character varying',
-        });
+        // table.columns.push({
+        //     isNullable: false,
+        //     isGenerated: false,
+        //     isPrimary: false,
+        //     isUnique: true, // will automatically create a unique index
+        //     isArray: false,
+        //     length: DB_CODE_COLUMN_LENGTH.toString(),
+        //     zerofill: false,
+        //     unsigned: false,
+        //     name: 'code',
+        //     type: 'character varying',
+        // });
 
         entity.schema.forEach(field => {
             table.columns.push({
                 isNullable: field.required !== true,
                 isGenerated: false,
                 isPrimary: false,
-                isUnique: false,
+                isUnique: field.unique === true,
                 isArray: _.isArray(field.type),
                 length: this.getDDLLength(field),
                 zerofill: false,

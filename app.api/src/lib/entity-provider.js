@@ -7,6 +7,17 @@ export default class EntityProvider {
                 name: 'important_person',
                 schema: [
                     {
+                        // a system field
+                        name: 'code',
+                        type: String,
+                        label: 'Code',
+                        length: 36,
+                        required: true,
+                        inputRequired: false,
+                        unique: true,
+                        validate: () => {},
+                    },
+                    {
                         name: 'full_name',
                         type: String,
                         label: 'Full name',
@@ -18,6 +29,12 @@ export default class EntityProvider {
                         type: [String],
                         label: 'Tags',
                         required: false,
+                        validate: () => {},
+                    },
+                    {
+                        name: 'lucky_numbers',
+                        type: [Number],
+                        label: 'Lucky numbers',
                         validate: () => {},
                     },
                     {
@@ -44,6 +61,17 @@ export default class EntityProvider {
             {
                 name: 'pet',
                 schema: [
+                    {
+                        // a system field
+                        name: 'code',
+                        type: String,
+                        label: 'Code',
+                        length: 36,
+                        required: true,
+                        inputRequired: false,
+                        unique: true,
+                        validate: () => {},
+                    },
                     {
                         name: 'nickname',
                         type: String,

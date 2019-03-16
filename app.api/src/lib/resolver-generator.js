@@ -1,10 +1,11 @@
 import { getManager, getRepository } from 'typeorm';
+import uuid from 'uuid/v4';
 
-import { convertToCamel } from '../lib/util';
-import SchemaGenerator from './schema-generator';
+import { convertToCamel } from './util';
+import Validator from './validator';
 
 export default class ResolverGenerator {
-    static makeOne({ entity, dbEntity, connection }) {
+    static makeOne({ entity, dbEntity }) {
         const nameCamel = convertToCamel(entity.name);
 
         return {
@@ -57,40 +58,35 @@ export default class ResolverGenerator {
                     { dataSources },
                     state,
                 ) => {
-                    const { code, data } = args;
+                    const result = {
+                        errors: [],
+                        code: null,
+                        data: {},
+                    };
+
+                    let { code, data } = args;
                     const repo = getRepository(dbEntity);
 
+                    // no code - auto-generate
+                    if (!code) {
+                        code = uuid();
+                    }
                     data.code = code;
 
-                    const d = {
-                        code: '1',
-                        full_name: '1',
-                        tags: ['11', '22'],
-                    };
+                    // validate
 
-                    console.dir('saving this:');
-                    console.dir(d);
-                    console.dir('to:');
-                    console.log(
-                        require('util').inspect(dbEntity, { depth: 10 }),
-                    );
+                    const item = await repo.save(Object.assign({}, data));
 
-                    const newItem = await repo.save(d);
-                    console.dir(newItem);
+                    // convert to plain
+                    const plain = {};
+                    entity.schema.forEach(field => {
+                        plain[field.name] = item[field.name] || null;
+                    });
 
-                    console.dir('PUT!');
-                    return {
-                        errors: [],
-                        code: 'asdfasdfds',
-                        data: {
-                            code: 'sdfhbdfhda',
-                            full_name: 'Darth Vader',
-                            medals: 2,
-                            birth_date:
-                                'Sun Mar 03 2019 15:06:03 GMT+0100 (Central European Standard Time)',
-                            has_pets: true,
-                        },
-                    };
+                    result.code = item.code;
+                    result.data = plain;
+
+                    return result;
                 },
                 [`${nameCamel}Delete`]: async (
                     source,

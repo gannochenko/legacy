@@ -1,7 +1,7 @@
 import { injectPassword } from './util';
 import { createConnection } from 'typeorm';
 
-// todo: simplify this file, this is too much
+// todo: simplify this file, this is too much, make it stateless
 export default class Connection {
     static async make(params = {}) {
         const { settings, preConnect } = params;
@@ -25,8 +25,9 @@ export default class Connection {
         return self;
     }
 
+    // todo: it makes no sense to use constructor, just return typeorm connection and that is it
     constructor(props = {}) {
-        const { url, password, entities } = props;
+        const { url, password, entities, name } = props;
         const sUrl = injectPassword(url, password);
         if (!_.isne(sUrl)) {
             throw new Error('No setting provided to connect to the database');
@@ -34,14 +35,13 @@ export default class Connection {
 
         this._url = sUrl;
         this._entities = entities;
+        this._name = name;
     }
 
     async getRaw() {
         if (!this._connection) {
-            console.dir('eee');
-            console.log(require('util').inspect(this._entities, { depth: 10 }));
-
             this._connection = await createConnection({
+                name: this._name,
                 type: 'postgres',
                 url: this._url,
                 entities: this._entities || [],
