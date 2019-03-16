@@ -8,6 +8,7 @@ export default class GQLGenerator {
         const tFields = [];
         const iFields = [];
         const fFields = [];
+        const sFields = [];
         entity.schema.forEach(field => {
             tFields.push(`${field.name}: ${this.getType(field)}`);
             iFields.push(
@@ -16,6 +17,7 @@ export default class GQLGenerator {
                 }`,
             );
             fFields.push(`${field.name}: IFilterFieldValue`);
+            sFields.push(`${field.name}: SortOrder`);
         });
 
         return `
@@ -46,11 +48,15 @@ input I${nameCamel}Filter {
 ${fFields.map(x => `    ${x}`).join('\n')}
 }
 
+input I${nameCamel}Sort {
+${sFields.map(x => `    ${x}`).join('\n')}
+}
+
 type Query {
     ${nameCamel}Get(code: String!): ${nameCamel}Result
     ${nameCamel}Find(
         filter: I${nameCamel}Filter
-        sort: String
+        sort: I${nameCamel}Sort
         select: [String]
         limit: Int
         offset: Int

@@ -3,7 +3,7 @@ import uuid from 'uuid/v4';
 
 import { convertToCamel } from './util';
 import Validator from './validator';
-import { ENTITY_TYPE_DATE } from '../constants';
+import { ENTITY_TYPE_DATE, QUERY_FIND_MAX_PAGE_SIZE } from '../constants';
 
 const wrap = async (fn, errors) => {
     try {
@@ -87,18 +87,39 @@ export default class ResolverGenerator {
                     const result = {
                         errors: [],
                         data: {},
-                        limit: 50,
+                        limit: QUERY_FIND_MAX_PAGE_SIZE,
                         offset: 0,
                     };
 
                     const { filter, sort, limit, offset } = args;
 
+                    if (
+                        typeof offset !== 'undefined' &&
+                        offset !== null &&
+                        offset > 0
+                    ) {
+                        result.offset = offset;
+                    }
+                    if (
+                        typeof limit !== 'undefined' &&
+                        limit !== null &&
+                        limit > 0
+                    ) {
+                        result.limit =
+                            limit > QUERY_FIND_MAX_PAGE_SIZE
+                                ? QUERY_FIND_MAX_PAGE_SIZE
+                                : limit;
+                    }
+
                     const repo = getRepository(dbEntity);
 
                     await wrap(async () => {
-                        result.data = (await repo.find({})).map(item =>
-                            convertToPlain(item, entity),
-                        );
+                        result.data = (await repo.find({
+                            where: {},
+                            order: _.ione(sort) ? sort : {},
+                            skip: result.offset,
+                            take: result.limit,
+                        })).map(item => convertToPlain(item, entity));
                     }, result.errors);
 
                     // result.data = convertToPlain(dbItem, entity);

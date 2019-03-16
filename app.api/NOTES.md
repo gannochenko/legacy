@@ -97,7 +97,7 @@ query {
 Find
 ~~~~
 query {
-  ImportantPersonFind {
+  ImportantPersonFind(limit: 2, offset: 3, sort: {full_name: ASC }) {
     errors {
       code
       message
@@ -109,6 +109,9 @@ query {
       tags
       lucky_numbers
     }
+    limit
+    offset
+    count
   }
 }
 ~~~~
