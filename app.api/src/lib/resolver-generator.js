@@ -100,6 +100,7 @@ export default class ResolverGenerator {
                     ) {
                         result.offset = offset;
                     }
+
                     if (
                         typeof limit !== 'undefined' &&
                         limit !== null &&
@@ -115,6 +116,7 @@ export default class ResolverGenerator {
 
                     await wrap(async () => {
                         result.data = (await repo.find({
+                            // select: {},
                             where: {},
                             order: _.ione(sort) ? sort : {},
                             skip: result.offset,

@@ -9,5 +9,5 @@
 * Clever filtering support
 * Support querying of only selected fields in find() and get()
 * Support "count" in find()
-* Support sorting in find()
-* Support limit-offset in find()
+* [DONE] Support sorting in find()
+* [DONE] Support limit-offset in find()

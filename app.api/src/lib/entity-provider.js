@@ -50,10 +50,13 @@ export default class EntityProvider {
                     },
                     {
                         name: 'pets',
-                        type: [ENTITY_TYPE_REFERENCE],
-                        entity: 'Pet',
+                        type: ['pet'],
                         label: 'Pets',
-                        validate: () => {},
+                    },
+                    {
+                        name: 'partner',
+                        type: 'important_person',
+                        label: 'Partner',
                     },
                 ],
             },

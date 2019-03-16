@@ -132,7 +132,7 @@ export default class DBDiff {
             columns: [],
         };
 
-        // add two "system" fields: id and code (external code)
+        // add "system" field: id
         table.columns.push({
             isNullable: false,
             isGenerated: true,
@@ -146,18 +146,6 @@ export default class DBDiff {
             type: 'integer',
             generated: 'increment',
         });
-        // table.columns.push({
-        //     isNullable: false,
-        //     isGenerated: false,
-        //     isPrimary: false,
-        //     isUnique: true, // will automatically create a unique index
-        //     isArray: false,
-        //     length: DB_CODE_COLUMN_LENGTH.toString(),
-        //     zerofill: false,
-        //     unsigned: false,
-        //     name: 'code',
-        //     type: 'character varying',
-        // });
 
         entity.schema.forEach(field => {
             table.columns.push({
