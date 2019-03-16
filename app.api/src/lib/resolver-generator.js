@@ -100,20 +100,28 @@ export default class ResolverGenerator {
                     { dataSources },
                     state,
                 ) => {
-                    const { code } = args;
-                    console.dir('DELETE');
-                    return {
+                    const result = {
                         errors: [],
-                        code: 'asdfasdfds',
-                        data: {
-                            code: 'sdfhbdfhda',
-                            full_name: 'Darth Vader',
-                            medals: 2,
-                            birth_date:
-                                'Sun Mar 03 2019 15:06:03 GMT+0100 (Central European Standard Time)',
-                            has_pets: true,
-                        },
+                        code: null,
+                        data: {},
                     };
+
+                    const { code } = args;
+                    const repo = getRepository(dbEntity);
+
+                    // find
+                    const items = await repo.find({ code });
+                    if (!_.iane(items)) {
+                        result.errors.push({
+                            code: 'not_found',
+                            message: 'Element not found',
+                        });
+                    } else {
+                        const item = items[0];
+                        await repo.delete(repo.getId(item));
+                    }
+
+                    return result;
                 },
             },
         };
