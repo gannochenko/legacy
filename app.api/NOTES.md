@@ -17,6 +17,7 @@ First version:
 * https://github.com/typeorm/typeorm/blob/master/test/functional/database-schema/column-types/postgres/entity/Post.ts
 * http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a003169814.htm
 
+Add:
 ~~~~
 mutation {
   ImportantPersonPut(data: {
@@ -35,6 +36,40 @@ mutation {
       birth_date
       tags
       lucky_numbers
+    }
+  }
+}
+~~~~
+
+Update:
+~~~~
+mutation {
+  ImportantPersonPut(code: "6ff226af-10cf-4057-b693-5bac3299c8f9", data: {
+    full_name: "Mr. Twister"
+  }) {
+    errors {
+      code
+      message
+    }
+    data {
+      code
+      full_name
+      birth_date
+      tags
+      lucky_numbers
+    }
+  }
+}
+~~~~
+
+Delete:
+~~~~
+mutation {
+  ImportantPersonDelete(code: "b211af08-eca0-472d-b64c-b7a0a5a59ba0") {
+    errors {
+      message
+      code
+      subject
     }
   }
 }

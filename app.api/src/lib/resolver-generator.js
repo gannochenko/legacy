@@ -4,6 +4,18 @@ import uuid from 'uuid/v4';
 import { convertToCamel } from './util';
 import Validator from './validator';
 
+const wrap = async (fn, errors) => {
+    try {
+        await fn();
+    } catch (e) {
+        errors.push({
+            code: 'internal',
+            message: __DEV__ ? e.message : 'Internal error',
+        });
+        logger.error('Internal error', e);
+    }
+};
+
 export default class ResolverGenerator {
     static makeOne({ entity, dbEntity }) {
         const nameCamel = convertToCamel(entity.name);
@@ -67,8 +79,10 @@ export default class ResolverGenerator {
                     let { code, data } = args;
                     const repo = getRepository(dbEntity);
 
+                    const isNew = !_.isne(code);
+
                     // no code - auto-generate
-                    if (!code) {
+                    if (!_.isne(code)) {
                         code = uuid();
                     }
                     data.code = code;
@@ -80,16 +94,36 @@ export default class ResolverGenerator {
                     }
 
                     if (!result.errors.length) {
-                        const item = await repo.save(Object.assign({}, data));
+                        await wrap(async () => {
+                            let dbItem = null;
+                            if (isNew) {
+                                dbItem = repo.create(data);
+                            } else {
+                                // find id by code
+                                dbItem = await repo.findOne({
+                                    code: code.trim(),
+                                });
+                                if (!dbItem) {
+                                    result.errors.push({
+                                        code: 'not_found',
+                                        message: 'Element not found',
+                                    });
+                                    return;
+                                }
+                                repo.merge(dbItem, data);
+                            }
 
-                        // convert to plain
-                        const plain = {};
-                        entity.schema.forEach(field => {
-                            plain[field.name] = item[field.name] || null;
-                        });
+                            await repo.save(dbItem);
 
-                        result.code = item.code;
-                        result.data = plain;
+                            // convert to plain
+                            const plain = {};
+                            entity.schema.forEach(field => {
+                                plain[field.name] = dbItem[field.name] || null;
+                            });
+
+                            result.code = code;
+                            result.data = plain;
+                        }, result.errors);
                     }
 
                     return result;
@@ -106,19 +140,29 @@ export default class ResolverGenerator {
                         data: {},
                     };
 
-                    const { code } = args;
-                    const repo = getRepository(dbEntity);
-
-                    // find
-                    const items = await repo.find({ code });
-                    if (!_.iane(items)) {
+                    let { code } = args;
+                    if (!_.isne(code)) {
                         result.errors.push({
-                            code: 'not_found',
-                            message: 'Element not found',
+                            code: 'illegal_code',
+                            message: 'Code is illegal',
                         });
-                    } else {
-                        const item = items[0];
-                        await repo.delete(repo.getId(item));
+                    }
+
+                    if (!result.errors.length) {
+                        const repo = getRepository(dbEntity);
+
+                        const items = await repo.find({ code: code.trim() });
+                        if (!_.iane(items)) {
+                            result.errors.push({
+                                code: 'not_found',
+                                message: 'Element not found',
+                            });
+                        } else {
+                            const item = items[0];
+                            await wrap(async () => {
+                                await repo.delete(repo.getId(item));
+                            }, result.errors);
+                        }
                     }
 
                     return result;

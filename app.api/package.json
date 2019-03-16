@@ -60,7 +60,7 @@
         "body-parser": "^1.18.3",
         "cors": "^2.8.5",
         "debug": "^4.1.1",
-        "ew-internals": "^1.0.3",
+        "ew-internals": "^1.0.4",
         "express": "^4.16.4",
         "graphql": "^14.0.2",
         "helmet": "^3.15.1",
