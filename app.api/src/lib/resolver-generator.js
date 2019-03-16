@@ -76,20 +76,21 @@ export default class ResolverGenerator {
                     // validate
                     const vResult = await Validator.validate(entity, data);
                     if (_.iane(vResult)) {
-                        // errors
+                        result.errors = _.union(result.errors, vResult);
                     }
-                    console.dir(vResult);
 
-                    const item = await repo.save(Object.assign({}, data));
+                    if (!result.errors.length) {
+                        const item = await repo.save(Object.assign({}, data));
 
-                    // convert to plain
-                    const plain = {};
-                    entity.schema.forEach(field => {
-                        plain[field.name] = item[field.name] || null;
-                    });
+                        // convert to plain
+                        const plain = {};
+                        entity.schema.forEach(field => {
+                            plain[field.name] = item[field.name] || null;
+                        });
 
-                    result.code = item.code;
-                    result.data = plain;
+                        result.code = item.code;
+                        result.data = plain;
+                    }
 
                     return result;
                 },
