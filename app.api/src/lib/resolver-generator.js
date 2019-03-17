@@ -38,11 +38,14 @@ const convertToPlain = (dbItem, entity) => {
     return plain;
 };
 
+const makeReferenceResolvers = ({ entity, dbEntity }) => {};
+
 export default class ResolverGenerator {
     static makeOne({ entity, dbEntity }) {
         const nameCamel = convertToCamel(entity.name);
 
         return {
+            // process query - Get and Find
             Query: {
                 [`${nameCamel}Get`]: async (
                     source,
@@ -129,6 +132,7 @@ export default class ResolverGenerator {
                     return result;
                 },
             },
+            // process mutation - Put and Delete
             Mutation: {
                 [`${nameCamel}Put`]: async (
                     source,
@@ -227,6 +231,31 @@ export default class ResolverGenerator {
 
                     return result;
                 },
+            },
+            // process reference traversal
+            [nameCamel]: {
+                // pets: async (
+                //     source,
+                //     args,
+                //     { dataSources },
+                //     state,
+                // ) => {
+                //     console.dir(source); // the parent element
+                //     console.dir(args);
+                //     return [{
+                //         nickname: 'Bobik',
+                //     }];
+                // },
+                // partner: async (
+                //     source,
+                //     args,
+                //     { dataSources },
+                //     state,
+                // ) => {
+                //     return {
+                //         full_name: 'Lalalala',
+                //     };
+                // },
             },
         };
     }

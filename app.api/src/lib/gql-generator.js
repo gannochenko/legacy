@@ -2,14 +2,16 @@ import { convertToCamel } from '../lib/util';
 
 export default class GQLGenerator {
     static makeOne({ entity }) {
-        const nameCamel = this.getName(entity.name);
+        const nameCamel = this.transformName(entity.name);
 
         const tFields = [];
         const iFields = [];
         const fFields = [];
         const sFields = [];
         entity.schema.forEach(field => {
-            tFields.push(`${field.name}: ${this.getType(field)}`);
+            tFields.push(
+                `${this.getQueryFieldName(field)}: ${this.getType(field)}`,
+            );
             iFields.push(
                 `${field.name}: ${this.getType(field, true)}${
                     false && this.getRequired(field) ? '!' : ''
@@ -56,7 +58,6 @@ type Query {
     ${nameCamel}Find(
         filter: I${nameCamel}Filter
         sort: I${nameCamel}Sort
-        select: [String]
         limit: Int
         offset: Int
         count: Boolean
@@ -70,9 +71,10 @@ type Mutation {
         `;
     }
 
-    static getType({ type }, input = false) {
+    static getType(field, input = false) {
+        let { type } = field;
         let multiple = false;
-        if (_.isArray(type)) {
+        if (this.isMultipleField(field)) {
             multiple = true;
             type = type[0];
         }
@@ -87,10 +89,8 @@ type Mutation {
         } else if (type === Date) {
             gqlType = 'String';
         } else if (_.isne(type)) {
-            console.dir('ref');
-            console.dir(type);
             // reference, for input we accept codes, for types - just put type
-            gqlType = input ? `String` : this.getName(type);
+            gqlType = input ? `String` : this.transformName(type);
         }
 
         if (multiple) {
@@ -108,7 +108,34 @@ type Mutation {
         return field.required;
     }
 
-    static getName(entityName) {
+    static transformName(entityName) {
         return convertToCamel(entityName.toLowerCase());
+    }
+
+    static getQueryFieldName(field) {
+        const refName = this.getReferenceFieldName(field);
+        if (refName && this.isMultipleField(field)) {
+            const refEntityName = this.transformName(refName);
+            return `${field.name}(
+                filter: I${refEntityName}Filter
+                sort: I${refEntityName}Sort
+                limit: Int
+                offset: Int
+            )`;
+        }
+
+        return field.name;
+    }
+
+    static getReferenceFieldName(field) {
+        if (this.isMultipleField(field) && _.isne(field.type[0])) {
+            return field.type[0];
+        }
+
+        return _.isne(field.type) ? field.type : null;
+    }
+
+    static isMultipleField(field) {
+        return _.isArray(field.type);
     }
 }
