@@ -55,6 +55,22 @@ mutation {
 }
 ~~~~
 
+~~~~
+mutation {
+  PetPut(data: {
+    nickname: "Viva"
+  }) {
+    errors {
+      message
+    }
+    data {
+      code
+      nickname
+    }
+  }
+}
+~~~~
+
 Update:
 ~~~~
 mutation {
