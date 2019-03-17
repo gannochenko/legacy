@@ -5,41 +5,6 @@ import { convertToCamel } from './util';
 import Validator from './validator';
 import { ENTITY_TYPE_DATE, QUERY_FIND_MAX_PAGE_SIZE } from '../constants';
 
-const wrap = async (fn, errors) => {
-    try {
-        await fn();
-    } catch (e) {
-        errors.push({
-            code: 'internal',
-            message: __DEV__ ? e.message : 'Internal error',
-        });
-        logger.error('Internal error', e);
-    }
-};
-
-const convertToPlain = (dbItem, entity) => {
-    const plain = {};
-    entity.schema.forEach(field => {
-        if (
-            field.name in dbItem &&
-            typeof dbItem[field.name] !== 'undefined' &&
-            dbItem[field.name] !== null
-        ) {
-            if (field.type === ENTITY_TYPE_DATE) {
-                plain[field.name] = dbItem[field.name].toISOString();
-            } else {
-                plain[field.name] = dbItem[field.name];
-            }
-        } else {
-            plain[field.name] = null;
-        }
-    });
-
-    return plain;
-};
-
-const makeReferenceResolvers = ({ entity, dbEntity }) => {};
-
 export default class ResolverGenerator {
     static makeOne({ entity, dbEntity }) {
         const nameCamel = convertToCamel(entity.name);
@@ -62,7 +27,7 @@ export default class ResolverGenerator {
                     const repo = getRepository(dbEntity);
 
                     let dbItem = null;
-                    await wrap(async () => {
+                    await this.wrap(async () => {
                         dbItem = await repo.findOne({
                             code: code.trim(),
                         });
@@ -77,7 +42,7 @@ export default class ResolverGenerator {
                         }
                     }
 
-                    result.data = convertToPlain(dbItem, entity);
+                    result.data = this.convertToPlain(dbItem, entity);
 
                     return result;
                 },
@@ -117,17 +82,15 @@ export default class ResolverGenerator {
 
                     const repo = getRepository(dbEntity);
 
-                    await wrap(async () => {
+                    await this.wrap(async () => {
                         result.data = (await repo.find({
                             // select: {},
                             where: {},
                             order: _.ione(sort) ? sort : {},
                             skip: result.offset,
                             take: result.limit,
-                        })).map(item => convertToPlain(item, entity));
+                        })).map(item => this.convertToPlain(item, entity));
                     }, result.errors);
-
-                    // result.data = convertToPlain(dbItem, entity);
 
                     return result;
                 },
@@ -164,7 +127,7 @@ export default class ResolverGenerator {
                     }
 
                     if (!result.errors.length) {
-                        await wrap(async () => {
+                        await this.wrap(async () => {
                             let dbItem = null;
                             if (isNew) {
                                 dbItem = repo.create(data);
@@ -186,7 +149,7 @@ export default class ResolverGenerator {
                             await repo.save(dbItem);
 
                             result.code = code;
-                            result.data = convertToPlain(dbItem, entity);
+                            result.data = this.convertToPlain(dbItem, entity);
                         }, result.errors);
                     }
 
@@ -223,7 +186,7 @@ export default class ResolverGenerator {
                             });
                         } else {
                             const item = items[0];
-                            await wrap(async () => {
+                            await this.wrap(async () => {
                                 await repo.delete(repo.getId(item));
                             }, result.errors);
                         }
@@ -233,30 +196,67 @@ export default class ResolverGenerator {
                 },
             },
             // process reference traversal
-            [nameCamel]: {
-                // pets: async (
-                //     source,
-                //     args,
-                //     { dataSources },
-                //     state,
-                // ) => {
-                //     console.dir(source); // the parent element
-                //     console.dir(args);
-                //     return [{
-                //         nickname: 'Bobik',
-                //     }];
-                // },
-                // partner: async (
-                //     source,
-                //     args,
-                //     { dataSources },
-                //     state,
-                // ) => {
-                //     return {
-                //         full_name: 'Lalalala',
-                //     };
-                // },
-            },
+            [nameCamel]: this.createReferenceResolvers({ entity, dbEntity }),
         };
+    }
+
+    static createReferenceResolvers({ entity, dbEntity }) {
+        return {
+            // pets: async (
+            //     source,
+            //     args,
+            //     { dataSources },
+            //     state,
+            // ) => {
+            //     console.dir(source); // the parent element
+            //     console.dir(args);
+            //     return [{
+            //         nickname: 'Bobik',
+            //     }];
+            // },
+            // partner: async (
+            //     source,
+            //     args,
+            //     { dataSources },
+            //     state,
+            // ) => {
+            //     return {
+            //         full_name: 'Lalalala',
+            //     };
+            // },
+        };
+    }
+
+    static async wrap(fn, errors) {
+        try {
+            await fn();
+        } catch (e) {
+            errors.push({
+                code: 'internal',
+                message: __DEV__ ? e.message : 'Internal error',
+            });
+            logger.error('Internal error', e);
+        }
+    }
+
+    static convertToPlain(dbItem, entity) {
+        const plain = {};
+        entity.schema.forEach(field => {
+            if (
+                field.name in dbItem &&
+                typeof dbItem[field.name] !== 'undefined' &&
+                dbItem[field.name] !== null
+            ) {
+                if (field.type === ENTITY_TYPE_DATE) {
+                    plain[field.name] = dbItem[field.name].toISOString();
+                } else {
+                    plain[field.name] = dbItem[field.name];
+                }
+            } else {
+                plain[field.name] = null;
+            }
+        });
+
+        return plain;
     }
 }
