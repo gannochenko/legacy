@@ -2,7 +2,7 @@ import { convertToCamel } from '../lib/util';
 
 export default class GQLGenerator {
     static makeOne({ entity }) {
-        const nameCamel = convertToCamel(entity.name.toLowerCase());
+        const nameCamel = this.getName(entity.name);
 
         const tFields = [];
         const iFields = [];
@@ -70,7 +70,7 @@ type Mutation {
         `;
     }
 
-    static getType({ type, entity }, input = false) {
+    static getType({ type }, input = false) {
         let multiple = false;
         if (_.isArray(type)) {
             multiple = true;
@@ -87,8 +87,10 @@ type Mutation {
         } else if (type === Date) {
             gqlType = 'String';
         } else if (_.isne(type)) {
-            // reference
-            gqlType = input ? `String` : entity;
+            console.dir('ref');
+            console.dir(type);
+            // reference, for input we accept codes, for types - just put type
+            gqlType = input ? `String` : this.getName(type);
         }
 
         if (multiple) {
@@ -104,5 +106,9 @@ type Mutation {
         }
 
         return field.required;
+    }
+
+    static getName(entityName) {
+        return convertToCamel(entityName.toLowerCase());
     }
 }

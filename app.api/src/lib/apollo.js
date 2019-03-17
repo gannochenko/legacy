@@ -54,7 +54,6 @@ const getServer = async ({
             // },
             debug: __DEV__,
         });
-
         console.dir('Server created');
 
         await cache.set('apollo.server.ready', true, ['apollo']);
