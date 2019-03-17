@@ -6,27 +6,23 @@ import { mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 
 import GQLGenerator from './gql-generator';
 import ResolverGenerator from './resolver-generator';
-import SchemaGenerator from './schema-generator';
+import EntitySchemaGenerator from './entity-schema-generator';
 
 import typeDefs from '../graphql/types/index';
 import resolvers from '../graphql/resolvers/index';
 
 let server = null;
 
-const getServer = async ({
-    cache,
-    entityConfigurationProvider,
-    connectionManager,
-}) => {
+const getServer = async ({ cache, schemaProvider, connectionManager }) => {
     if (!server || !(await cache.get('apollo.server.ready'))) {
         if (server) {
             await server.stop();
         }
 
         // get entity configuration from the database
-        const entities = await entityConfigurationProvider.get();
+        const entities = await schemaProvider.get();
         // turn JSON-s into a real database entities
-        const dbEntities = await SchemaGenerator.make({ entities });
+        const dbEntities = await EntitySchemaGenerator.make({ entities });
         // put those entities into a connection
         const connection = await connectionManager.get({
             entities: Object.values(dbEntities),

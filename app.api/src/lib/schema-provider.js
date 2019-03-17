@@ -1,6 +1,6 @@
 import { DB_CODE_COLUMN_LENGTH } from '../constants';
 
-export default class EntityProvider {
+export default class SchemaProvider {
     async get() {
         return [
             {

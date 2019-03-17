@@ -9,7 +9,7 @@ import ConnectionManager from './connection-manager';
 import attachGraphQLMiddleware from './apollo';
 import attachHomeAPI from '../api/home';
 import attachSyncAPI from '../api/sync';
-import EntityProvider from './entity-provider';
+import SchemaProvider from './schema-provider';
 
 export default class Application {
     static async make() {
@@ -20,12 +20,7 @@ export default class Application {
         const settings = new Settings();
         const cache = await Cache.make({ settings });
         const connectionManager = new ConnectionManager({ settings });
-        const entityConfigurationProvider = new EntityProvider();
-
-        // const connection = await Connection.make({
-        //     settings,
-        //     preConnect: true,
-        // });
+        const schemaProvider = new SchemaProvider();
 
         instance.attachErrorHandler(app);
 
@@ -54,24 +49,13 @@ export default class Application {
         attachGraphQLMiddleware(app, {
             settings,
             cache,
-            entityConfigurationProvider,
+            schemaProvider,
             connectionManager,
         });
-
-        // write the middleware here
-        // app.all('*', (req, res, next) => {
-        //     // console.dir(req);
-        //     console.dir('========');
-        //     console.dir(req.method);
-        //     console.dir(req.path);
-        //     console.dir(req.query);
-        //     console.dir(req.body);
-        //     next();
-        // });
         attachHomeAPI(app, { cache });
         attachSyncAPI(app, {
             cache,
-            entityConfigurationProvider,
+            schemaProvider,
             connectionManager,
         }); // todo: temporary endpoint
 

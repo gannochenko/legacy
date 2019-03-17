@@ -135,7 +135,7 @@ query {
 Find
 ~~~~
 query {
-  ImportantPersonFind(limit: 3, skip: 1, sort: {full_name: ASC}) {
+  ImportantPersonFind(limit: 10, offset: 0, sort: {full_name: ASC}) {
     errors {
       code
       message
@@ -146,19 +146,15 @@ query {
       lucky_numbers
       partner {
         full_name
-        tags
         code
         partner {
           full_name
+          code
         }
-      }
-      pets(sort: {nickname: ASC}) {
-        nickname
       }
     }
   }
 }
-
 ~~~~
 
 ~~~~

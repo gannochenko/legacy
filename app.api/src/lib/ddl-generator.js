@@ -10,14 +10,14 @@ import {
     DB_VARCHAR_DEF_LENGTH,
 } from '../constants';
 
-export default class DBDiff {
+export default class DDLGenerator {
     /**
      * So this function calculates a set of commands that are to execute to set the database in sync with data structure
      * @param params
      * @returns {Promise<void>}
      */
     static async make(params = {}) {
-        const { entityConfigurationProvider, connectionManager } = params;
+        const { schemaProvider, connectionManager } = params;
 
         const qr = (await (await connectionManager.getSimple()).getRaw()).createQueryRunner(
             'master',
@@ -41,7 +41,7 @@ export default class DBDiff {
             have[table.name] = table;
         });
 
-        const entities = await entityConfigurationProvider.get();
+        const entities = await schemaProvider.get();
         const willBe = {};
         entities.forEach(entity => {
             const table = this.getDDL(entity);

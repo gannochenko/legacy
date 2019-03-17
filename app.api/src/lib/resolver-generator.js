@@ -254,7 +254,7 @@ export default class ResolverGenerator {
             );
             if (!refDBEntity || !entity) {
                 throw new Error(
-                    `Schema is corrupted. No entity under name ${refEntityName}`,
+                    `Schema is corrupted. No entity under name ${refEntityName} found`,
                 );
             }
 

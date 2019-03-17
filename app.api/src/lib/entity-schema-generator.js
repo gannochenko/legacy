@@ -10,7 +10,7 @@ import {
     DB_TABLE_PREFIX,
 } from '../constants';
 
-export default class SchemaGenerator {
+export default class EntitySchemaGenerator {
     static make({ entities }) {
         const result = {};
         entities.forEach(entity => {
@@ -34,6 +34,14 @@ export default class SchemaGenerator {
             },
         };
         entity.schema.forEach(field => {
+            if (
+                this.isMultipleField(field) &&
+                _.isne(this.getReferenceFieldName(field))
+            ) {
+                // we do not create any fields for many-to-may relation
+                return;
+            }
+
             const column = {
                 type: this.getType(field),
                 nullable: field.required !== true,
@@ -87,5 +95,17 @@ export default class SchemaGenerator {
             0,
             DB_IDENTIFIER_LENGTH,
         );
+    }
+
+    static getReferenceFieldName(field) {
+        if (this.isMultipleField(field) && _.isne(field.type[0])) {
+            return field.type[0];
+        }
+
+        return _.isne(field.type) ? field.type : null;
+    }
+
+    static isMultipleField(field) {
+        return _.isArray(field.type);
     }
 }
