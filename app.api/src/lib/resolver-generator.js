@@ -279,9 +279,9 @@ export default class ResolverGenerator {
 
     static createReferenceResolverMultiple(field) {
         return async (source, args, { dataSources }, state) => {
-            // console.dir('Multiple');
-            // console.dir(source); // the parent element
-            // console.dir(args);
+            console.dir('Multiple');
+            console.dir(source); // the parent element
+            console.dir(args);
             return [];
         };
     }

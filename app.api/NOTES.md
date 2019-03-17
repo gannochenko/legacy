@@ -119,6 +119,14 @@ query {
       birth_date
       tags
       lucky_numbers
+      partner {
+        full_name
+        tags
+        code
+        partner {
+          full_name
+        }
+      }
     }
   }
 }
@@ -127,7 +135,7 @@ query {
 Find
 ~~~~
 query {
-  ImportantPersonGet(code: "d8a4b037-073e-4a7d-9ea2-1752426d5496") {
+  ImportantPersonFind(limit: 3, skip: 1, sort: {full_name: ASC}) {
     errors {
       code
       message
@@ -135,8 +143,6 @@ query {
     data {
       code
       full_name
-      birth_date
-      tags
       lucky_numbers
       partner {
         full_name
