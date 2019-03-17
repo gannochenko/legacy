@@ -11,3 +11,4 @@
 * Support "count" in find()
 * [DONE] Support sorting in find()
 * [DONE] Support limit-offset in find()
+* Make code cleaner, remove duplication

@@ -217,38 +217,85 @@ export default class ResolverGenerator {
         };
     }
 
-    static createReferenceResolvers({
-        entity,
-        dbEntity,
-        entities,
-        dbEntities,
-    }) {
-        // get all references
+    static createReferenceResolvers({ ...args }) {
+        const { entity } = args;
+        const resolvers = {};
 
-        return {
-            // pets: async (
-            //     source,
-            //     args,
-            //     { dataSources },
-            //     state,
-            // ) => {
-            //     console.dir(source); // the parent element
-            //     console.dir(args);
-            //     return [{
-            //         nickname: 'Bobik',
-            //     }];
-            // },
-            // partner: async (
-            //     source,
-            //     args,
-            //     { dataSources },
-            //     state,
-            // ) => {
-            //     return {
-            //         full_name: 'Lalalala',
-            //     };
-            // },
+        // get all references
+        const refs = entity.schema
+            .map(field =>
+                this.getReferenceFieldName(field) !== null ? field : null,
+            )
+            .filter(x => x);
+        if (!_.iane(refs)) {
+            return resolvers;
+        }
+
+        refs.forEach(field => {
+            resolvers[field.name] = this.isMultipleField(field)
+                ? this.createReferenceResolverMultiple({ field, ...args })
+                : this.createReferenceResolverSingle({ field, ...args });
+        });
+
+        return resolvers;
+    }
+
+    static createReferenceResolverSingle({ field, entities, dbEntities }) {
+        return async (source, args, { dataSources }, state) => {
+            const refValue = source[field.name];
+            if (typeof refValue === 'undefined' || refValue === null) {
+                return null;
+            }
+
+            const refEntityName = this.getReferenceFieldName(field);
+            const refDBEntity = dbEntities[refEntityName];
+            const entity = entities.find(
+                entity => entity.name === refEntityName,
+            );
+            if (!refDBEntity || !entity) {
+                throw new Error(
+                    `Schema is corrupted. No entity under name ${refEntityName}`,
+                );
+            }
+
+            const repo = getRepository(refDBEntity);
+            const errors = [];
+            let dbItem = null;
+            await this.wrap(async () => {
+                // todo: take "select" into account
+                dbItem = await repo.findOne({
+                    id: refValue,
+                });
+            }, errors);
+
+            if (_.iane(errors)) {
+                // something is wrong
+                return null;
+            }
+
+            return this.convertToPlain(dbItem, entity);
         };
+    }
+
+    static createReferenceResolverMultiple(field) {
+        return async (source, args, { dataSources }, state) => {
+            // console.dir('Multiple');
+            // console.dir(source); // the parent element
+            // console.dir(args);
+            return [];
+        };
+    }
+
+    static getReferenceFieldName(field) {
+        if (this.isMultipleField(field) && _.isne(field.type[0])) {
+            return field.type[0];
+        }
+
+        return _.isne(field.type) ? field.type : null;
+    }
+
+    static isMultipleField(field) {
+        return _.isArray(field.type);
     }
 
     static async wrap(fn, errors) {
