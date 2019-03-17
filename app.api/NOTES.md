@@ -17,6 +17,20 @@ First version:
 * https://github.com/typeorm/typeorm/blob/master/test/functional/database-schema/column-types/postgres/entity/Post.ts
 * http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a003169814.htm
 
+Reference:
+* DDL
+    * single reference (add ref -> add field, remove ref -> remove field)
+        * create index
+    * multiple reference (add ref -> add table, remove ref -> remove table)
+        * create index
+    * should we add constraints?
+* Querying
+    * get/find - add items through resolvers
+    * put - pass codes, not ids
+    * delete
+        * single reference - do noting, just remove the item itself
+        * multiple reference - remove both item and all records in the ref table
+
 Add:
 ~~~~
 mutation {
@@ -36,6 +50,22 @@ mutation {
       birth_date
       tags
       lucky_numbers
+    }
+  }
+}
+~~~~
+
+~~~~
+mutation {
+  PetPut(data: {
+    nickname: "Viva"
+  }) {
+    errors {
+      message
+    }
+    data {
+      code
+      nickname
     }
   }
 }
