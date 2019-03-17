@@ -1,6 +1,10 @@
 import { convertToCamel } from '../lib/util';
 
 export default class GQLGenerator {
+    static make({ entities }) {
+        return entities.map(entity => this.makeOne({ entity }));
+    }
+
     static makeOne({ entity }) {
         const nameCamel = this.transformName(entity.name);
 

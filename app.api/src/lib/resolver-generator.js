@@ -6,8 +6,20 @@ import Validator from './validator';
 import { ENTITY_TYPE_DATE, QUERY_FIND_MAX_PAGE_SIZE } from '../constants';
 
 export default class ResolverGenerator {
-    static makeOne({ entity, dbEntity }) {
+    static make({ entities, dbEntities, connection }) {
+        return entities.map(entity =>
+            ResolverGenerator.makeOne({
+                entity,
+                entities,
+                dbEntities,
+                connection,
+            }),
+        );
+    }
+
+    static makeOne({ entity, entities, dbEntities }) {
         const nameCamel = convertToCamel(entity.name);
+        const dbEntity = dbEntities[entity.name];
 
         return {
             // process query - Get and Find
@@ -196,11 +208,23 @@ export default class ResolverGenerator {
                 },
             },
             // process reference traversal
-            [nameCamel]: this.createReferenceResolvers({ entity, dbEntity }),
+            [nameCamel]: this.createReferenceResolvers({
+                entity,
+                dbEntity,
+                entities,
+                dbEntities,
+            }),
         };
     }
 
-    static createReferenceResolvers({ entity, dbEntity }) {
+    static createReferenceResolvers({
+        entity,
+        dbEntity,
+        entities,
+        dbEntities,
+    }) {
+        // get all references
+
         return {
             // pets: async (
             //     source,

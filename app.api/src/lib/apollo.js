@@ -33,15 +33,13 @@ const getServer = async ({
             preConnect: true,
         });
         // create GRAPHQL types
-        const eGQL = entities.map(entity => GQLGenerator.makeOne({ entity }));
+        const eGQL = GQLGenerator.make({ entities });
         // create GRAPHQL resolvers
-        const eResolver = entities.map(entity =>
-            ResolverGenerator.makeOne({
-                entity,
-                dbEntity: dbEntities[entity.name],
-                connection,
-            }),
-        );
+        const eResolver = ResolverGenerator.make({
+            entities,
+            dbEntities,
+            connection,
+        });
 
         // now everything is ready to create the server
         server = new ApolloServer({
