@@ -27,7 +27,7 @@ export default class ResolverGenerator {
                 [`${nameCamel}Get`]: async (
                     source,
                     args,
-                    { dataSources },
+                    { requestId },
                     state,
                 ) => {
                     const result = {
@@ -61,7 +61,7 @@ export default class ResolverGenerator {
                 [`${nameCamel}Find`]: async (
                     source,
                     args,
-                    { dataSources },
+                    { requestId },
                     state,
                 ) => {
                     const result = {
@@ -70,6 +70,8 @@ export default class ResolverGenerator {
                         limit: QUERY_FIND_MAX_PAGE_SIZE,
                         offset: 0,
                     };
+
+                    console.dir(context);
 
                     const { filter, sort, limit, offset } = args;
 
@@ -241,7 +243,7 @@ export default class ResolverGenerator {
     }
 
     static createReferenceResolverSingle({ field, entities, dbEntities }) {
-        return async (source, args, { dataSources }, state) => {
+        return async (source, args, { requestId }, state) => {
             const refValue = source[field.name];
             if (typeof refValue === 'undefined' || refValue === null) {
                 return null;
@@ -278,7 +280,7 @@ export default class ResolverGenerator {
     }
 
     static createReferenceResolverMultiple(field) {
-        return async (source, args, { dataSources }, state) => {
+        return async (source, args, { requestId }, state) => {
             console.dir('Multiple');
             console.dir(source); // the parent element
             console.dir(args);

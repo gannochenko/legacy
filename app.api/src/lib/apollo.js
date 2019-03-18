@@ -3,6 +3,7 @@ import { renderPlaygroundPage } from '@apollographql/graphql-playground-html';
 import { graphqlExpress } from './graphql-express';
 import accepts from 'accepts';
 import { mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
+import uuid from 'uuid/v4';
 
 import GQLGenerator from './gql-generator';
 import ResolverGenerator from './resolver-generator';
@@ -41,14 +42,13 @@ const getServer = async ({ cache, schemaProvider, connectionManager }) => {
         server = new ApolloServer({
             typeDefs: mergeTypes([...eGQL, ...typeDefs], { all: true }),
             resolvers: mergeResolvers([...eResolver, ...resolvers]),
-            // context: async ({ req, res }) => {
-            // },
-            // dataSources: () => {
-            //     return {};
-            // },
+            context: async ({ req, res }) => {
+                return {
+                    requestId: uuid(),
+                };
+            },
             debug: __DEV__,
         });
-        console.dir('Server created');
 
         await cache.set('apollo.server.ready', true, ['apollo']);
     }
