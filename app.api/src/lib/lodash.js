@@ -1,40 +1,20 @@
-const isString = require('lodash.isstring');
-const isObject = require('lodash.isobject');
+import isString from 'lodash.isstring';
+import isObject from 'lodash.isobject';
 // const random = require('lodash.random');
 // const isNumber = require('lodash.isnumber');
 // const isFunction = require('lodash.isfunction');
-const union = require('lodash.union');
+import union from 'lodash.union';
 // const intersection = require('lodash.intersection');
-const difference = require('lodash.difference');
+import difference from 'lodash.difference';
 // const get = require('lodash.get');
 // const cloneDeep = require('lodash.clonedeep');
 // const deepFreeze = require('deep-freeze-node');
 // const isEqual = require('lodash.isequal');
 
-module.exports = {
+export default {
     isArray: Array.isArray,
     isObject,
-    // random,
-    // contains: (where, what) => {
-    //   if (!isArrayLike(where)) {
-    //     return false;
-    //   }
-    //
-    //   return where.indexOf(what) >= 0;
-    // },
-    // forEach: (obj, fn) => {
-    //   Object.keys(obj).forEach((k) => {
-    //     fn(obj[k], k);
-    //   });
-    // },
-    // isEqual,
-    // isNumber,
-    // isFunction,
-    // cloneDeep,
-    // get,
-    // deepFreeze,
     union,
-    // intersection,
     difference,
     iane: arg => {
         return Array.isArray(arg) && arg.length > 0;

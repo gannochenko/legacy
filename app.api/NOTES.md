@@ -146,11 +146,6 @@ query {
       lucky_numbers
       partner {
         full_name
-        code
-        partner {
-          full_name
-          code
-        }
       }
     }
   }

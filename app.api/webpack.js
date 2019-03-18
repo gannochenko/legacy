@@ -55,24 +55,24 @@ module.exports = (env, argv) => {
                     ],
                 },
 
-                {
-                    test: /\.tsx?$/,
-                    loaders: [
-                        {
-                            loader: 'ts-loader',
-                            options: {
-                                transpileOnly: true,
-                            },
-                        },
-                    ],
-
-                    exclude: /node_modules/,
-                },
+                // {
+                //     test: /\.tsx?$/,
+                //     loaders: [
+                //         {
+                //             loader: 'ts-loader',
+                //             options: {
+                //                 transpileOnly: true,
+                //             },
+                //         },
+                //     ],
+                //
+                //     exclude: /node_modules/,
+                // },
             ],
         },
         plugins: [
             new webpack.ProvidePlugin({
-                _: path.join(__dirname, `src/lib/lodash.js`),
+                _: [path.join(__dirname, `src/lib/lodash.js`), 'default'],
                 logger: ['ew-internals', 'logger'],
             }),
             new webpack.DefinePlugin({
@@ -80,7 +80,7 @@ module.exports = (env, argv) => {
                 __TEST__: false,
             }),
             new nodemonPlugin(),
-            new ForkTsCheckerWebpackPlugin(),
+            // new ForkTsCheckerWebpackPlugin(),
         ],
     };
 };

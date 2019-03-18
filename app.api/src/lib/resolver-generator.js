@@ -71,8 +71,6 @@ export default class ResolverGenerator {
                         offset: 0,
                     };
 
-                    console.dir(context);
-
                     const { filter, sort, limit, offset } = args;
 
                     if (
