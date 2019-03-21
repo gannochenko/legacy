@@ -1,4 +1,4 @@
-import { getManager, getRepository } from 'typeorm';
+import { getManager, getRepository, In } from 'typeorm';
 import uuid from 'uuid/v4';
 
 import { convertToCamel } from './util';
@@ -240,8 +240,13 @@ export default class ResolverGenerator {
         return resolvers;
     }
 
-    static createReferenceResolverSingle({ field, entities, dbEntities }) {
-        return async (source, args, { requestId }, state) => {
+    static createReferenceResolverSingle({
+        entity,
+        field,
+        entities,
+        dbEntities,
+    }) {
+        return async (source, args, { requestId, dataLoaderPool }, state) => {
             const refValue = source[field.name];
             if (typeof refValue === 'undefined' || refValue === null) {
                 return null;
@@ -259,21 +264,42 @@ export default class ResolverGenerator {
             }
 
             const repo = getRepository(refDBEntity);
-            const errors = [];
-            let dbItem = null;
-            await this.wrap(async () => {
-                // todo: take "select" into account
-                dbItem = await repo.findOne({
-                    id: refValue,
-                });
-            }, errors);
+            const loader = dataLoaderPool.get(refEntityName, async ids => {
+                const errors = [];
+                let ix = {};
 
-            if (_.iane(errors)) {
+                try {
+                    (await repo.find({
+                        where: {
+                            id: In(ids),
+                        },
+                    })).forEach(item => {
+                        ix[item.id] = item;
+                    });
+                } catch (e) {
+                    errors.push({
+                        code: 'internal',
+                        message: __DEV__ ? e.message : 'Internal error',
+                    });
+                    logger.error('Internal error', e);
+                }
+
+                // maintain the right order
+                return ids.map(id => {
+                    return {
+                        item: id in ix ? ix[id] : null,
+                        errors,
+                    };
+                });
+            });
+
+            const item = await loader.load(refValue);
+            if (_.iane(item.errors)) {
                 // something is wrong
                 return null;
             }
 
-            return this.convertToPlain(dbItem, entity);
+            return item.item;
         };
     }
 
