@@ -2,7 +2,7 @@ import isString from 'lodash.isstring';
 import isObject from 'lodash.isobject';
 // const random = require('lodash.random');
 // const isNumber = require('lodash.isnumber');
-// const isFunction = require('lodash.isfunction');
+import isFunction from 'lodash.isfunction';
 import union from 'lodash.union';
 // const intersection = require('lodash.intersection');
 import difference from 'lodash.difference';
@@ -14,6 +14,7 @@ import difference from 'lodash.difference';
 export default {
     isArray: Array.isArray,
     isObject,
+    isFunction,
     union,
     difference,
     iane: arg => {

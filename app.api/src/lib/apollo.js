@@ -8,6 +8,7 @@ import uuid from 'uuid/v4';
 import GQLGenerator from './gql-generator';
 import ResolverGenerator from './resolver-generator';
 import EntitySchemaGenerator from './entity-schema-generator';
+import DataLoaderPool from './data-loader-pool';
 
 import typeDefs from '../graphql/types/index';
 import resolvers from '../graphql/resolvers/index';
@@ -45,6 +46,7 @@ const getServer = async ({ cache, schemaProvider, connectionManager }) => {
             context: async ({ req, res }) => {
                 return {
                     requestId: uuid(),
+                    dataLoaders: new DataLoaderPool(),
                 };
             },
             debug: __DEV__,
