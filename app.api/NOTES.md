@@ -147,6 +147,9 @@ query {
       partner {
         full_name
       }
+      pets(sort: {nickname: ASC}) {
+        nickname
+      }
     }
   }
 }

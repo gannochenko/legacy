@@ -46,7 +46,7 @@ const getServer = async ({ cache, schemaProvider, connectionManager }) => {
             context: async ({ req, res }) => {
                 return {
                     requestId: uuid(),
-                    dataLoaders: new DataLoaderPool(),
+                    dataLoaderPool: new DataLoaderPool(),
                 };
             },
             debug: __DEV__,
