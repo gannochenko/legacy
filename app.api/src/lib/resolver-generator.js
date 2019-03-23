@@ -5,7 +5,7 @@ import Validator from './validator';
 import { ENTITY_TYPE_DATE, QUERY_FIND_MAX_PAGE_SIZE } from '../constants';
 
 export default class ResolverGenerator {
-    static async make({ schemaProvider, entityManager }) {
+    static async make({ schemaProvider, entityManager, connection }) {
         const entities = await entityManager.get();
         return Object.values(await schemaProvider.get()).map(entity =>
             this.makeForEntity(
@@ -13,6 +13,7 @@ export default class ResolverGenerator {
                 entities[entity.name],
                 entityManager,
                 schemaProvider,
+                connection,
             ),
         );
     }
@@ -24,7 +25,13 @@ export default class ResolverGenerator {
      * @param entityManager
      * @param schemaProvider
      */
-    static makeForEntity(entity, dbEntity, entityManager, schemaProvider) {
+    static makeForEntity(
+        entity,
+        dbEntity,
+        entityManager,
+        schemaProvider,
+        connection,
+    ) {
         const nameCamel = schemaProvider.getCamelEntityName(entity.name);
 
         return {
@@ -219,6 +226,7 @@ export default class ResolverGenerator {
                 dbEntity,
                 entityManager,
                 schemaProvider,
+                connection,
             }),
         };
     }
@@ -266,8 +274,8 @@ export default class ResolverGenerator {
 
             const refEntityName = schemaProvider.getReferenceFieldName(field);
             const refDBEntity = await entityManager.getByName(refEntityName);
-            const entity = await schemaProvider.getByName(refEntityName);
-            if (!refDBEntity || !entity) {
+            const refEntity = await schemaProvider.getByName(refEntityName);
+            if (!refDBEntity || !refEntity) {
                 throw new Error(
                     `Schema is corrupted. No entity under name ${refEntityName} found`,
                 );
@@ -278,6 +286,7 @@ export default class ResolverGenerator {
                 const errors = [];
                 let ix = {};
 
+                // todo: refactor this
                 try {
                     (await repo.find({
                         where: {
@@ -313,17 +322,67 @@ export default class ResolverGenerator {
         };
     }
 
-    static createReferenceResolverMultiple(field) {
+    static createReferenceResolverMultiple({
+        field,
+        entity,
+        entityManager,
+        schemaProvider,
+    }) {
         return async (source, args, { requestId }, state) => {
+            const refValue = source.id;
+            // check if there is nothing to reference through
+            if (typeof refValue === 'undefined' || refValue === null) {
+                return [];
+            }
+
+            const refEntityName = schemaProvider.getReferenceFieldName(field);
+            const refDBEntity = await entityManager.getByName(refEntityName);
+            const refEntity = await schemaProvider.getByName(refEntityName);
+            const refTableEntityName = entityManager.getRefName(entity, field);
+            const refTableDBEntity = await entityManager.getByName(
+                refTableEntityName,
+            );
+
+            if (
+                !refDBEntity ||
+                !refEntity ||
+                !refTableEntityName ||
+                !refTableDBEntity
+            ) {
+                throw new Error(
+                    `Schema is corrupted. No entity under name ${refEntityName} found`,
+                );
+            }
+
             const { filter, sort, limit, offset } = args;
             const canBatch =
                 typeof limit === 'undefined' && typeof offset === 'undefined';
-            console.dir(canBatch);
 
-            console.dir('Multiple');
-            console.dir(source); // the parent element
-            console.dir(args);
-            return [];
+            let items = [];
+            const errors = [];
+            const repo = getRepository(refDBEntity);
+            const qb = repo.createQueryBuilder(refEntityName);
+            try {
+                items = await qb
+                    .innerJoinAndSelect(
+                        refTableDBEntity,
+                        'wtf',
+                        'wtf.rel = pet.id and wtf.self = ' + refValue,
+                    )
+                    .getMany();
+            } catch (e) {
+                errors.push({
+                    code: 'internal',
+                    message: __DEV__ ? e.message : 'Internal error',
+                });
+                logger.error('Internal error', e);
+            }
+
+            if (_.iane(errors)) {
+                return [];
+            }
+
+            return items;
         };
     }
 

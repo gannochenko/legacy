@@ -23,8 +23,6 @@ export default class EntityManager {
                 this.getForEntity(entity, result);
             });
             this._list = result;
-
-            console.dir(result);
         }
 
         return this._list;
