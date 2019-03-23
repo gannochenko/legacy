@@ -1,12 +1,18 @@
-import { convertToCamel } from '../lib/util';
-
 export default class GQLGenerator {
-    static make({ entities }) {
-        return entities.map(entity => this.makeOne({ entity }));
+    static async make({ schemaProvider }) {
+        return Object.values(await schemaProvider.get()).map(entity =>
+            this.makeForEntity(entity, schemaProvider),
+        );
     }
 
-    static makeOne({ entity }) {
-        const nameCamel = this.transformName(entity.name);
+    /**
+     * @private
+     * @param entity
+     * @param schemaProvider
+     * @returns {string}
+     */
+    static makeForEntity(entity, schemaProvider) {
+        const nameCamel = schemaProvider.getCamelEntityName(entity.name);
 
         const tFields = [];
         const iFields = [];
@@ -14,11 +20,14 @@ export default class GQLGenerator {
         const sFields = [];
         entity.schema.forEach(field => {
             tFields.push(
-                `${this.getQueryFieldName(field)}: ${this.getType(field)}`,
+                `${this.getQueryFieldName(
+                    field,
+                    schemaProvider,
+                )}: ${this.getType(field, schemaProvider)}`,
             );
             iFields.push(
-                `${field.name}: ${this.getType(field, true)}${
-                    false && this.getRequired(field) ? '!' : ''
+                `${field.name}: ${this.getType(field, schemaProvider, true)}${
+                    false && field.required ? '!' : ''
                 }`,
             );
             fFields.push(`${field.name}: IFilterFieldValue`);
@@ -75,10 +84,10 @@ type Mutation {
         `;
     }
 
-    static getType(field, input = false) {
+    static getType(field, schemaProvider, input = false) {
         let { type } = field;
         let multiple = false;
-        if (this.isMultipleField(field)) {
+        if (schemaProvider.isMultipleField(field)) {
             multiple = true;
             type = type[0];
         }
@@ -94,7 +103,9 @@ type Mutation {
             gqlType = 'String';
         } else if (_.isne(type)) {
             // reference, for input we accept codes, for types - just put type
-            gqlType = input ? `String` : this.transformName(type);
+            gqlType = input
+                ? `String`
+                : schemaProvider.getCamelEntityName(type);
         }
 
         if (multiple) {
@@ -104,22 +115,10 @@ type Mutation {
         return gqlType;
     }
 
-    static getRequired(field) {
-        if ('inputRequired' in field) {
-            return field.inputRequired;
-        }
-
-        return field.required;
-    }
-
-    static transformName(entityName) {
-        return convertToCamel(entityName.toLowerCase());
-    }
-
-    static getQueryFieldName(field) {
-        const refName = this.getReferenceFieldName(field);
-        if (refName && this.isMultipleField(field)) {
-            const refEntityName = this.transformName(refName);
+    static getQueryFieldName(field, schemaProvider) {
+        const refName = schemaProvider.getReferenceFieldName(field);
+        if (refName && schemaProvider.isMultipleField(field)) {
+            const refEntityName = schemaProvider.getCamelEntityName(refName);
             return `${field.name}(
                 filter: I${refEntityName}Filter
                 sort: I${refEntityName}Sort
@@ -129,17 +128,5 @@ type Mutation {
         }
 
         return field.name;
-    }
-
-    static getReferenceFieldName(field) {
-        if (this.isMultipleField(field) && _.isne(field.type[0])) {
-            return field.type[0];
-        }
-
-        return _.isne(field.type) ? field.type : null;
-    }
-
-    static isMultipleField(field) {
-        return _.isArray(field.type);
     }
 }

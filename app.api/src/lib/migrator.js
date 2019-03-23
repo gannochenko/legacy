@@ -4,21 +4,19 @@
 
 import { Table, TableColumn, TableIndex } from 'typeorm';
 // import md5 from 'md5';
-import {
-    DB_TABLE_PREFIX,
-    DB_IDENTIFIER_LENGTH,
-    DB_VARCHAR_DEF_LENGTH,
-} from '../constants';
+import { DB_TABLE_PREFIX } from '../constants';
+import EntityManager from './entity-manager';
 
-export default class DDLGenerator {
+export default class Migrator {
     /**
      * So this function calculates a set of commands that are to execute to set the database in sync with data structure
      * @param params
      * @returns {Promise<void>}
      */
-    static async make(params = {}) {
+    static async migrate(params = {}) {
         const { schemaProvider, connectionManager } = params;
 
+        const entityManager = new EntityManager(schemaProvider);
         const qr = (await (await connectionManager.getSimple()).getRaw()).createQueryRunner(
             'master',
         );
@@ -44,7 +42,11 @@ export default class DDLGenerator {
         const entities = await schemaProvider.get();
         const willBe = {};
         entities.forEach(entity => {
-            const table = this.getDDL(entity);
+            const table = this.getDatabaseEntity(
+                entity,
+                schemaProvider,
+                entityManager,
+            );
             willBe[table.name] = table;
             if (!(table.name in have)) {
                 toCreate.push(table);
@@ -124,9 +126,9 @@ export default class DDLGenerator {
         }
     }
 
-    static getDDL(entity) {
+    static getDatabaseEntity(entity, schemaProvider, entityManager) {
         const table = {
-            name: this.getTableName(entity),
+            name: entityManager.getTableName(entity),
             columns: [],
         };
 
@@ -147,8 +149,8 @@ export default class DDLGenerator {
 
         entity.schema.forEach(field => {
             if (
-                this.isMultipleField(field) &&
-                _.isne(this.getReferenceFieldName(field))
+                schemaProvider.isMultipleField(field) &&
+                _.isne(schemaProvider.getReferenceFieldName(field))
             ) {
                 // we do not create any fields for many-to-may relation. Instead, a table should be created
                 return;
@@ -160,18 +162,18 @@ export default class DDLGenerator {
                 isPrimary: false,
                 isUnique: field.unique === true,
                 isArray: _.isArray(field.type),
-                length: this.getDDLLength(field),
+                length: this.getFieldLength(field, schemaProvider),
                 zerofill: false,
                 unsigned: false,
                 name: field.name,
-                type: this.getDDLType(field),
+                type: this.getDatabaseFieldType(field),
             });
         });
 
         return table;
     }
 
-    static getDDLType(field) {
+    static getDatabaseFieldType(field) {
         let type = field.type;
 
         if (_.isArray(type)) {
@@ -199,36 +201,12 @@ export default class DDLGenerator {
         return 'character varying';
     }
 
-    static getDDLLength(field) {
-        const type = this.getDDLType(field);
-        if (type === 'character varying') {
-            const length = parseInt(field.length, 10);
-            if (isNaN(length)) {
-                return DB_VARCHAR_DEF_LENGTH.toString();
-            }
-
+    static getFieldLength(field, schemaProvider) {
+        const length = schemaProvider.getFieldLength(field);
+        if (length !== null) {
             return length.toString();
         }
 
         return '';
-    }
-
-    static getTableName(entity) {
-        return `${DB_TABLE_PREFIX}${entity.name.toLowerCase()}`.substr(
-            0,
-            DB_IDENTIFIER_LENGTH,
-        );
-    }
-
-    static getReferenceFieldName(field) {
-        if (this.isMultipleField(field) && _.isne(field.type[0])) {
-            return field.type[0];
-        }
-
-        return _.isne(field.type) ? field.type : null;
-    }
-
-    static isMultipleField(field) {
-        return _.isArray(field.type);
     }
 }

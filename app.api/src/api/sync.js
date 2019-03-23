@@ -1,11 +1,11 @@
 import { wrapError } from 'ew-internals';
-import DDLGenerator from '../lib/ddl-generator';
+import Migrator from '../lib/migrator';
 
 export default (app, params = {}) => {
     app.get(
         '/sync',
         wrapError(async (req, res) => {
-            await DDLGenerator.make(params);
+            await Migrator.migrate(params);
             res.status(200).send(`<pre>1</pre>`);
         }),
     );

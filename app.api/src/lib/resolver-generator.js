@@ -1,25 +1,31 @@
 import { getManager, getRepository, In } from 'typeorm';
 import uuid from 'uuid/v4';
 
-import { convertToCamel } from './util';
 import Validator from './validator';
 import { ENTITY_TYPE_DATE, QUERY_FIND_MAX_PAGE_SIZE } from '../constants';
 
 export default class ResolverGenerator {
-    static make({ entities, dbEntities, connection }) {
-        return entities.map(entity =>
-            ResolverGenerator.makeOne({
+    static async make({ schemaProvider, entityManager }) {
+        const entities = await entityManager.get();
+        return Object.values(await schemaProvider.get()).map(entity =>
+            this.makeForEntity(
                 entity,
-                entities,
-                dbEntities,
-                connection,
-            }),
+                entities[entity.name],
+                entityManager,
+                schemaProvider,
+            ),
         );
     }
 
-    static makeOne({ entity, entities, dbEntities }) {
-        const nameCamel = convertToCamel(entity.name);
-        const dbEntity = dbEntities[entity.name];
+    /**
+     * @private
+     * @param entity
+     * @param dbEntity
+     * @param entityManager
+     * @param schemaProvider
+     */
+    static makeForEntity(entity, dbEntity, entityManager, schemaProvider) {
+        const nameCamel = schemaProvider.getCamelEntityName(entity.name);
 
         return {
             // process query - Get and Find
@@ -211,20 +217,26 @@ export default class ResolverGenerator {
             [nameCamel]: this.createReferenceResolvers({
                 entity,
                 dbEntity,
-                entities,
-                dbEntities,
+                entityManager,
+                schemaProvider,
             }),
         };
     }
 
+    /**
+     * @private
+     * @param args
+     */
     static createReferenceResolvers({ ...args }) {
-        const { entity } = args;
+        const { entity, schemaProvider } = args;
         const resolvers = {};
 
         // get all references
         const refs = entity.schema
             .map(field =>
-                this.getReferenceFieldName(field) !== null ? field : null,
+                schemaProvider.getReferenceFieldName(field) !== null
+                    ? field
+                    : null,
             )
             .filter(x => x);
         if (!_.iane(refs)) {
@@ -232,7 +244,7 @@ export default class ResolverGenerator {
         }
 
         refs.forEach(field => {
-            resolvers[field.name] = this.isMultipleField(field)
+            resolvers[field.name] = schemaProvider.isMultipleField(field)
                 ? this.createReferenceResolverMultiple({ field, ...args })
                 : this.createReferenceResolverSingle({ field, ...args });
         });
@@ -241,22 +253,20 @@ export default class ResolverGenerator {
     }
 
     static createReferenceResolverSingle({
-        entity,
         field,
-        entities,
-        dbEntities,
+        entityManager,
+        schemaProvider,
     }) {
         return async (source, args, { requestId, dataLoaderPool }, state) => {
             const refValue = source[field.name];
+            // check if there is nothing to reference through
             if (typeof refValue === 'undefined' || refValue === null) {
                 return null;
             }
 
-            const refEntityName = this.getReferenceFieldName(field);
-            const refDBEntity = dbEntities[refEntityName];
-            const entity = entities.find(
-                entity => entity.name === refEntityName,
-            );
+            const refEntityName = schemaProvider.getReferenceFieldName(field);
+            const refDBEntity = await entityManager.getByName(refEntityName);
+            const entity = await schemaProvider.getByName(refEntityName);
             if (!refDBEntity || !entity) {
                 throw new Error(
                     `Schema is corrupted. No entity under name ${refEntityName} found`,
@@ -305,23 +315,16 @@ export default class ResolverGenerator {
 
     static createReferenceResolverMultiple(field) {
         return async (source, args, { requestId }, state) => {
+            const { filter, sort, limit, offset } = args;
+            const canBatch =
+                typeof limit === 'undefined' && typeof offset === 'undefined';
+            console.dir(canBatch);
+
             console.dir('Multiple');
             console.dir(source); // the parent element
             console.dir(args);
             return [];
         };
-    }
-
-    static getReferenceFieldName(field) {
-        if (this.isMultipleField(field) && _.isne(field.type[0])) {
-            return field.type[0];
-        }
-
-        return _.isne(field.type) ? field.type : null;
-    }
-
-    static isMultipleField(field) {
-        return _.isArray(field.type);
     }
 
     static async wrap(fn, errors) {
@@ -353,6 +356,11 @@ export default class ResolverGenerator {
                 plain[field.name] = null;
             }
         });
+
+        // plus id, always there
+        if ('id' in dbItem) {
+            plain.id = dbItem.id;
+        }
 
         return plain;
     }

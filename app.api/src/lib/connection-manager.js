@@ -17,6 +17,13 @@ export default class ConnectionManager {
         return this._connections.entity;
     }
 
+    async close() {
+        if (this._connections.entity) {
+            await this._connections.entity.close();
+            this._connections.entity = null;
+        }
+    }
+
     async getSimple() {
         if (!this._connections.simple) {
             this._connections.simple = Connection.make({

@@ -7,7 +7,7 @@ import uuid from 'uuid/v4';
 
 import GQLGenerator from './gql-generator';
 import ResolverGenerator from './resolver-generator';
-import EntitySchemaGenerator from './entity-schema-generator';
+import EntityManager from './entity-manager';
 import DataLoaderPool from './data-loader-pool';
 
 import typeDefs from '../graphql/types/index';
@@ -19,23 +19,21 @@ const getServer = async ({ cache, schemaProvider, connectionManager }) => {
     if (!server || !(await cache.get('apollo.server.ready'))) {
         if (server) {
             await server.stop();
+            await connectionManager.close();
         }
 
-        // get entity configuration from the database
-        const entities = await schemaProvider.get();
-        // turn JSON-s into a real database entities
-        const dbEntities = await EntitySchemaGenerator.make({ entities });
-        // put those entities into a connection
+        const entityManager = new EntityManager(schemaProvider);
         const connection = await connectionManager.get({
-            entities: Object.values(dbEntities),
+            entities: Object.values(await entityManager.get()),
             preConnect: true,
         });
+
         // create GRAPHQL types
-        const eGQL = GQLGenerator.make({ entities });
+        const eGQL = await GQLGenerator.make({ schemaProvider });
         // create GRAPHQL resolvers
-        const eResolver = ResolverGenerator.make({
-            entities,
-            dbEntities,
+        const eResolver = await ResolverGenerator.make({
+            schemaProvider,
+            entityManager,
             connection,
         });
 

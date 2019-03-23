@@ -1,4 +1,6 @@
 import { DB_CODE_COLUMN_LENGTH } from '../constants';
+import { DB_VARCHAR_DEF_LENGTH } from '../constants';
+import { convertToCamel } from './util';
 
 export default class SchemaProvider {
     async get() {
@@ -84,5 +86,54 @@ export default class SchemaProvider {
                 ],
             },
         ];
+    }
+
+    async getByName(name) {
+        const all = await this.get();
+        return all.find(entity => entity.name === name);
+    }
+
+    getFieldType(field) {
+        let type = field.type;
+
+        if (_.isArray(type)) {
+            type = type[0] || String;
+        }
+
+        if (_.isne(type)) {
+            // reference
+            type = Number;
+        }
+
+        return type;
+    }
+
+    getFieldLength(field) {
+        if (field.type === String) {
+            const length = parseInt(field.length, 10);
+            if (isNaN(length)) {
+                return DB_VARCHAR_DEF_LENGTH;
+            }
+
+            return length;
+        }
+
+        return null;
+    }
+
+    getReferenceFieldName(field) {
+        if (this.isMultipleField(field) && _.isne(field.type[0])) {
+            return field.type[0];
+        }
+
+        return _.isne(field.type) ? field.type : null;
+    }
+
+    isMultipleField(field) {
+        return _.isArray(field.type);
+    }
+
+    getCamelEntityName(entityName) {
+        return convertToCamel(entityName.toLowerCase());
     }
 }
