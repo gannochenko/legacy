@@ -1,8 +1,10 @@
 import { EntitySchema } from 'typeorm';
+import md5 from 'md5';
 import {
     DB_CODE_COLUMN_LENGTH,
     DB_IDENTIFIER_LENGTH,
     DB_TABLE_PREFIX,
+    DB_REF_TABLE_PREFIX,
 } from '../constants';
 
 export default class EntityManager {
@@ -15,12 +17,17 @@ export default class EntityManager {
      * @returns {Promise<void>}
      */
     async get() {
-        const result = {};
-        (await this._schemaProvider.get()).forEach(entity => {
-            result[entity.name] = this.getForEntity(entity);
-            // todo: plus there should be all reference entities
-        });
-        return result;
+        if (!this._list) {
+            const result = {};
+            (await this._schemaProvider.get()).forEach(entity => {
+                this.getForEntity(entity, result);
+            });
+            this._list = result;
+
+            console.dir(result);
+        }
+
+        return this._list;
     }
 
     async getByName(name) {
@@ -31,10 +38,13 @@ export default class EntityManager {
     /**
      * @private
      * @param entity
+     * @param result
      * @returns {EntitySchema}
      */
-    getForEntity(entity) {
+    getForEntity(entity, result) {
         const sp = this._schemaProvider;
+
+        // get the entity itself
         const columns = {
             id: {
                 primary: true,
@@ -48,12 +58,14 @@ export default class EntityManager {
                 nullable: false,
             },
         };
+        const references = [];
         entity.schema.forEach(field => {
             if (
                 sp.isMultipleField(field) &&
                 _.isne(sp.getReferenceFieldName(field))
             ) {
-                // we do not create any fields for many-to-may relation
+                // we do not create any fields for many-to-may relation, but make another entity
+                references.push(field);
                 return;
             }
 
@@ -71,9 +83,28 @@ export default class EntityManager {
             columns[field.name] = column;
         });
 
-        return new EntitySchema({
+        result[entity.name] = new EntitySchema({
             name: this.getTableName(entity),
             columns,
+        });
+
+        // now create reference entities
+        references.forEach(field => {
+            result[this.getRefName(entity, field)] = new EntitySchema({
+                name: this.getRefTableName(entity, field),
+                columns: {
+                    self: {
+                        type: Number,
+                        nullable: false,
+                        primary: true,
+                    },
+                    rel: {
+                        type: Number,
+                        nullable: false,
+                        primary: true,
+                    },
+                },
+            });
         });
     }
 
@@ -82,5 +113,13 @@ export default class EntityManager {
             0,
             DB_IDENTIFIER_LENGTH,
         );
+    }
+
+    getRefName(entity, field) {
+        return `${entity.name}_2_${field.name}`;
+    }
+
+    getRefTableName(entity, field) {
+        return `${DB_REF_TABLE_PREFIX}${md5(`${entity.name}_${field.name}`)}`;
     }
 }

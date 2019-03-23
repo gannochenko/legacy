@@ -2,6 +2,9 @@ import { DB_CODE_COLUMN_LENGTH } from '../constants';
 import { DB_VARCHAR_DEF_LENGTH } from '../constants';
 import { convertToCamel } from './util';
 
+/**
+ * todo: this class should produce complex object, with prototypes
+ */
 export default class SchemaProvider {
     async get() {
         return [
