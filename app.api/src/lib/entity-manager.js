@@ -1,11 +1,6 @@
 import { EntitySchema } from 'typeorm';
-import md5 from 'md5';
-import {
-    DB_CODE_COLUMN_LENGTH,
-    DB_IDENTIFIER_LENGTH,
-    DB_TABLE_PREFIX,
-    DB_REF_TABLE_PREFIX,
-} from '../constants';
+import { DB_CODE_COLUMN_LENGTH } from '../constants';
+import { getRefName, getRefTableName, getTableName } from './entity-util';
 
 export default class EntityManager {
     constructor(schemaProvider) {
@@ -82,14 +77,14 @@ export default class EntityManager {
         });
 
         result[entity.name] = new EntitySchema({
-            name: this.getTableName(entity),
+            name: getTableName(entity),
             columns,
         });
 
         // now create reference entities
         references.forEach(field => {
-            result[this.getRefName(entity, field)] = new EntitySchema({
-                name: this.getRefTableName(entity, field),
+            result[getRefName(entity, field)] = new EntitySchema({
+                name: getRefTableName(entity, field),
                 columns: {
                     self: {
                         type: Number,
@@ -104,20 +99,5 @@ export default class EntityManager {
                 },
             });
         });
-    }
-
-    getTableName(entity) {
-        return `${DB_TABLE_PREFIX}${entity.name.toLowerCase()}`.substr(
-            0,
-            DB_IDENTIFIER_LENGTH,
-        );
-    }
-
-    getRefName(entity, field) {
-        return `${entity.name}_2_${field.name}`;
-    }
-
-    getRefTableName(entity, field) {
-        return `${DB_REF_TABLE_PREFIX}${md5(`${entity.name}_${field.name}`)}`;
     }
 }

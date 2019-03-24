@@ -3,9 +3,9 @@
  */
 
 import { Table, TableColumn, TableIndex } from 'typeorm';
-// import md5 from 'md5';
-import { DB_TABLE_PREFIX } from '../constants';
+import { DB_TABLE_PREFIX, DB_REF_TABLE_PREFIX } from '../constants';
 import EntityManager from './entity-manager';
+import { getRefTableName, getTableName } from './entity-util';
 
 export default class Migrator {
     /**
@@ -57,7 +57,10 @@ export default class Migrator {
 
         // tables to drop
         Object.values(have).forEach(table => {
-            if (!(table.name in willBe)) {
+            if (
+                !(table.name in willBe) &&
+                !table.name.startsWith(DB_REF_TABLE_PREFIX)
+            ) {
                 toDrop.push(table);
             }
         });
@@ -65,7 +68,6 @@ export default class Migrator {
         if (_.iane(toCreate)) {
             for (let i = 0; i < toCreate.length; i++) {
                 const table = toCreate[i];
-                console.dir(table);
                 await qr.createTable(new Table(table), true);
                 // await qr.createIndex(table.name, new TableIndex({
                 //     name: `${DB_INDEX_PREFIX}_${md5(table.name)}_code`,
@@ -124,12 +126,63 @@ export default class Migrator {
 
             // todo: support altering of fields
         }
+
+        // dealing with refs
+        const refsHave = Object.values(have)
+            .map(table =>
+                table.name.startsWith(DB_REF_TABLE_PREFIX) ? table.name : false,
+            )
+            .filter(x => x);
+        const refsAdd = [];
+        let refsDrop = [];
+        const refsWillBe = [];
+
+        console.dir(refsHave);
+
+        // find all refs in willBe
+        Object.values(willBe).forEach(table => {
+            table.__refs.forEach(field => {
+                const refName = getRefTableName(table.__entity, field);
+                refsWillBe.push(refName);
+
+                if (refsHave.indexOf(refName) < 0) {
+                    refsAdd.push({
+                        name: refName,
+                        columns: [
+                            {
+                                name: 'self',
+                                isNullable: false,
+                                isPrimary: true,
+                                type: 'integer',
+                            },
+                            {
+                                name: 'rel',
+                                isNullable: false,
+                                isPrimary: true,
+                                type: 'integer',
+                            },
+                        ],
+                    });
+                }
+            });
+        });
+
+        refsDrop = _.difference(refsHave, refsWillBe);
+
+        for (let i = 0; i < refsAdd.length; i++) {}
+        console.dir('refsAdd');
+        console.dir(refsAdd);
+
+        console.dir('refsDrop');
+        console.dir(refsDrop);
     }
 
-    static getDatabaseEntity(entity, schemaProvider, entityManager) {
+    static getDatabaseEntity(entity, schemaProvider) {
         const table = {
-            name: entityManager.getTableName(entity),
+            name: getTableName(entity),
             columns: [],
+            __refs: [],
+            __entity: entity,
         };
 
         // add "system" field: id
@@ -153,6 +206,7 @@ export default class Migrator {
                 _.isne(schemaProvider.getReferenceFieldName(field))
             ) {
                 // we do not create any fields for many-to-may relation. Instead, a table should be created
+                table.__refs.push(field);
                 return;
             }
 

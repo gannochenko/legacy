@@ -53,10 +53,15 @@ export default class SchemaProvider {
                         label: 'Has pets',
                         validate: () => {},
                     },
+                    // {
+                    //     name: 'pets',
+                    //     type: ['pet'],
+                    //     label: 'Pets',
+                    // },
                     {
-                        name: 'pets',
-                        type: ['pet'],
-                        label: 'Pets',
+                        name: 'tools',
+                        type: ['tool'],
+                        label: 'Tools',
                     },
                     {
                         name: 'partner',
@@ -82,6 +87,28 @@ export default class SchemaProvider {
                         name: 'nickname',
                         type: String,
                         label: 'Nickname',
+                        required: true,
+                        validate: () => {},
+                    },
+                ],
+            },
+            {
+                name: 'tool',
+                schema: [
+                    {
+                        // a system field
+                        name: 'code',
+                        type: String,
+                        label: 'Code',
+                        length: 36,
+                        required: true,
+                        unique: true,
+                        validate: () => {},
+                    },
+                    {
+                        name: 'name',
+                        type: String,
+                        label: 'Name',
                         required: true,
                         validate: () => {},
                     },
