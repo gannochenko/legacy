@@ -134,10 +134,7 @@ export default class Migrator {
             )
             .filter(x => x);
         const refsAdd = [];
-        let refsDrop = [];
         const refsWillBe = [];
-
-        console.dir(refsHave);
 
         // find all refs in willBe
         Object.values(willBe).forEach(table => {
@@ -167,14 +164,14 @@ export default class Migrator {
             });
         });
 
-        refsDrop = _.difference(refsHave, refsWillBe);
+        const refsDrop = _.difference(refsHave, refsWillBe);
 
-        for (let i = 0; i < refsAdd.length; i++) {}
-        console.dir('refsAdd');
-        console.dir(refsAdd);
-
-        console.dir('refsDrop');
-        console.dir(refsDrop);
+        for (let i = 0; i < refsAdd.length; i++) {
+            await qr.createTable(new Table(refsAdd[i]), true);
+        }
+        for (let i = 0; i < refsDrop.length; i++) {
+            await qr.dropTable(refsDrop[i], true);
+        }
     }
 
     static getDatabaseEntity(entity, schemaProvider) {

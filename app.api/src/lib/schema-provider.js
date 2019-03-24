@@ -53,11 +53,11 @@ export default class SchemaProvider {
                         label: 'Has pets',
                         validate: () => {},
                     },
-                    // {
-                    //     name: 'pets',
-                    //     type: ['pet'],
-                    //     label: 'Pets',
-                    // },
+                    {
+                        name: 'pets',
+                        type: ['pet'],
+                        label: 'Pets',
+                    },
                     {
                         name: 'tools',
                         type: ['tool'],
