@@ -219,9 +219,50 @@ export default class ResolverGenerator {
                             });
                         } else {
                             const item = items[0];
+                            const id = repo.getId(item);
                             await this.wrap(async () => {
-                                await repo.delete(repo.getId(item));
+                                await repo.delete(id);
                             }, result.errors);
+
+                            // drop refs
+                            // get all references
+                            const refs = entity.schema
+                                .map(field =>
+                                    schemaProvider.isMultipleField(field) &&
+                                    _.isne(
+                                        schemaProvider.getReferenceFieldName(
+                                            field,
+                                        ),
+                                    )
+                                        ? field
+                                        : null,
+                                )
+                                .filter(x => x);
+
+                            // check if something is in data
+                            for (let i = 0; i < refs.length; i++) {
+                                const field = refs[i];
+
+                                const refTableEntityName = getRefName(
+                                    entity,
+                                    field,
+                                );
+                                const refTableDBEntity = await entityManager.getByName(
+                                    refTableEntityName,
+                                );
+
+                                const rrepo = getRepository(refTableDBEntity);
+                                const rqb = rrepo.createQueryBuilder(
+                                    refTableDBEntity,
+                                );
+
+                                // delete all
+                                await rqb
+                                    .delete()
+                                    .from(refTableDBEntity)
+                                    .where('self = :id', { id })
+                                    .execute();
+                            }
                         }
                     }
 
