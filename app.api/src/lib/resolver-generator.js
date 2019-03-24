@@ -1,6 +1,6 @@
 import { getManager, getRepository, In } from 'typeorm';
 import uuid from 'uuid/v4';
-import random from 'crypto-random-string';
+import { getRefName } from './entity-util';
 
 import Validator from './validator';
 import { ENTITY_TYPE_DATE, QUERY_FIND_MAX_PAGE_SIZE } from '../constants';
@@ -173,6 +173,13 @@ export default class ResolverGenerator {
                             }
 
                             await repo.save(dbItem);
+                            await this.manageReferences(
+                                entity,
+                                dbItem.id,
+                                data,
+                                schemaProvider,
+                                entityManager,
+                            );
 
                             result.code = code;
                             result.data = this.convertToPlain(dbItem, entity);
@@ -230,6 +237,57 @@ export default class ResolverGenerator {
                 connection,
             }),
         };
+    }
+
+    static async manageReferences(
+        entity,
+        id,
+        data,
+        schemaProvider,
+        entityManager,
+    ) {
+        // get all references
+        const refs = entity.schema
+            .map(field =>
+                schemaProvider.isMultipleField(field) &&
+                _.isne(schemaProvider.getReferenceFieldName(field))
+                    ? field
+                    : null,
+            )
+            .filter(x => x);
+        console.dir(refs);
+
+        // check if something is in data
+        for (let i = 0; i < refs.length; i++) {
+            const field = refs[i];
+            if (field.name in data) {
+                const values = data[field.name];
+                const refEntityName = schemaProvider.getReferenceFieldName(
+                    field,
+                );
+                const refDBEntity = await entityManager.getByName(
+                    refEntityName,
+                );
+                const repo = getRepository(refDBEntity);
+                const qb = repo.createQueryBuilder(refEntityName);
+
+                // todo: optimise: get code and id only!
+                const items = await qb
+                    .where({
+                        code: In(values),
+                    })
+                    .getMany();
+
+                console.dir('update');
+                console.dir(field.name);
+                console.dir(values);
+                console.dir(items);
+            }
+        }
+
+        // get referenced items: select ids from codes
+
+        // get references data, create or delete some
     }
 
     /**
@@ -339,7 +397,7 @@ export default class ResolverGenerator {
             const refEntityName = schemaProvider.getReferenceFieldName(field);
             const refDBEntity = await entityManager.getByName(refEntityName);
             const refEntity = await schemaProvider.getByName(refEntityName);
-            const refTableEntityName = entityManager.getRefName(entity, field);
+            const refTableEntityName = getRefName(entity, field);
             const refTableDBEntity = await entityManager.getByName(
                 refTableEntityName,
             );

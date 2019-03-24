@@ -150,6 +150,11 @@ export default class SchemaProvider {
         return null;
     }
 
+    /**
+     * todo: rename to "getReferencedEntityName"
+     * @param field
+     * @returns {*}
+     */
     getReferenceFieldName(field) {
         if (this.isMultipleField(field) && _.isne(field.type[0])) {
             return field.type[0];
