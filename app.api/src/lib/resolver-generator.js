@@ -255,7 +255,6 @@ export default class ResolverGenerator {
                     : null,
             )
             .filter(x => x);
-        console.dir(refs);
 
         // check if something is in data
         for (let i = 0; i < refs.length; i++) {
@@ -272,22 +271,40 @@ export default class ResolverGenerator {
                 const qb = repo.createQueryBuilder(refEntityName);
 
                 // todo: optimise: get code and id only!
-                const items = await qb
+                const ids = (await qb
                     .where({
                         code: In(values),
                     })
-                    .getMany();
+                    .getMany()).map(item => item.id);
 
-                console.dir('update');
-                console.dir(field.name);
-                console.dir(values);
-                console.dir(items);
+                const refTableEntityName = getRefName(entity, field);
+                const refTableDBEntity = await entityManager.getByName(
+                    refTableEntityName,
+                );
+
+                const rrepo = getRepository(refTableDBEntity);
+                const rqb = rrepo.createQueryBuilder(refTableDBEntity);
+
+                // delete all
+                await rqb
+                    .delete()
+                    .from(refTableDBEntity)
+                    .where('self = :id', { id })
+                    .execute();
+
+                // and re-create
+                await rqb
+                    .insert()
+                    .into(refTableDBEntity)
+                    .values(
+                        ids.map(relId => ({
+                            self: id,
+                            rel: relId,
+                        })),
+                    )
+                    .execute();
             }
         }
-
-        // get referenced items: select ids from codes
-
-        // get references data, create or delete some
     }
 
     /**
