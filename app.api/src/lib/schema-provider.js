@@ -75,7 +75,6 @@ export default class SchemaProvider {
                         label: 'Code',
                         length: 36,
                         required: true,
-                        // inputRequired: false,
                         unique: true,
                         validate: () => {},
                     },

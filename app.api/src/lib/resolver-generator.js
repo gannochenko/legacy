@@ -355,6 +355,7 @@ export default class ResolverGenerator {
             }
 
             const { filter, sort, limit, offset } = args;
+            // todo: batch
             const canBatch =
                 typeof limit === 'undefined' && typeof offset === 'undefined';
 
@@ -363,11 +364,16 @@ export default class ResolverGenerator {
             const repo = getRepository(refDBEntity);
             const qb = repo.createQueryBuilder(refEntityName);
             try {
+                // todo: apply parameters: sort, filter, limit, offset
+                // todo: make the selected field set narrow
                 items = await qb
                     .innerJoinAndSelect(
                         refTableDBEntity,
                         'wtf',
-                        'wtf.rel = pet.id and wtf.self = ' + refValue,
+                        `wtf.rel = ${this.sanitize(
+                            refEntityName,
+                        )}.id and wtf.self = :refValue`,
+                        { refValue },
                     )
                     .getMany();
             } catch (e) {
@@ -422,5 +428,9 @@ export default class ResolverGenerator {
         }
 
         return plain;
+    }
+
+    static sanitize(value) {
+        return value.replace(/[^a-zA-Z0-9_]/g, '');
     }
 }
