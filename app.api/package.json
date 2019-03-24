@@ -59,6 +59,7 @@
         "apollo-server-express": "^2.4.8",
         "body-parser": "^1.18.3",
         "cors": "^2.8.5",
+        "crypto-random-string": "^1.0.0",
         "dataloader": "^1.4.0",
         "debug": "^4.1.1",
         "ew-internals": "^1.0.4",

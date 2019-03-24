@@ -1,5 +1,6 @@
 import { getManager, getRepository, In } from 'typeorm';
 import uuid from 'uuid/v4';
+import random from 'crypto-random-string';
 
 import Validator from './validator';
 import { ENTITY_TYPE_DATE, QUERY_FIND_MAX_PAGE_SIZE } from '../constants';
@@ -363,16 +364,18 @@ export default class ResolverGenerator {
             const errors = [];
             const repo = getRepository(refDBEntity);
             const qb = repo.createQueryBuilder(refEntityName);
+            const refName = field.name;
+
             try {
                 // todo: apply parameters: sort, filter, limit, offset
                 // todo: make the selected field set narrow
                 items = await qb
                     .innerJoinAndSelect(
                         refTableDBEntity,
-                        'wtf',
-                        `wtf.rel = ${this.sanitize(
+                        refName,
+                        `${refName}.rel = ${this.sanitize(
                             refEntityName,
-                        )}.id and wtf.self = :refValue`,
+                        )}.id and ${refName}.self = :refValue`,
                         { refValue },
                     )
                     .getMany();
