@@ -2,11 +2,11 @@ import md5 from 'md5';
 import {
     DB_IDENTIFIER_LENGTH,
     DB_REF_TABLE_PREFIX,
-    DB_TABLE_PREFIX,
+    DB_ENTITY_TABLE_PREFIX,
 } from '../constants';
 
 export const getTableName = entity => {
-    return `${DB_TABLE_PREFIX}${entity.name.toLowerCase()}`.substr(
+    return `${DB_ENTITY_TABLE_PREFIX}${entity.name.toLowerCase()}`.substr(
         0,
         DB_IDENTIFIER_LENGTH,
     );

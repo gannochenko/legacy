@@ -22,6 +22,12 @@ export default class Application {
         const connectionManager = new ConnectionManager({ settings });
         const schemaProvider = new SchemaProvider();
 
+        // migrate
+        const sysConn = await connectionManager.getSystem();
+        const rawConn = await sysConn.getRaw();
+
+        await rawConn.runMigrations();
+
         instance.attachErrorHandler(app);
 
         const host = await settings.get('network.host', 'localhost');

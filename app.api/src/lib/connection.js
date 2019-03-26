@@ -1,6 +1,10 @@
 import { injectPassword } from './util';
 import { createConnection } from 'typeorm';
 
+/**
+ * todo: this class is useless, move everything to ConnectionManager
+ */
+
 // todo: simplify this file, this is too much, make it stateless
 export default class Connection {
     static async make(params = {}) {
