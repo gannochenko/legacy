@@ -1,7 +1,7 @@
 import { EntitySchema } from 'typeorm';
 import { DB_SCHEMA_TABLE_NAME } from '../constants';
 
-export default new EntitySchema({
+export const schema = {
     name: DB_SCHEMA_TABLE_NAME,
     columns: {
         id: {
@@ -19,4 +19,5 @@ export default new EntitySchema({
             nullable: false,
         },
     },
-});
+};
+export default new EntitySchema(schema);
