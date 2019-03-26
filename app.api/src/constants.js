@@ -10,6 +10,7 @@ export const QUERY_FIND_MAX_PAGE_SIZE = 50;
 
 export const ENTITY_USER_NAME = 'user';
 export const ENTITY_GROUP_NAME = 'group';
+export const ENTITY_CODE_FIELD_NAME = 'code';
 
 export const ENTITY_TYPE_STRING = String;
 export const ENTITY_TYPE_NUMBER = Number;

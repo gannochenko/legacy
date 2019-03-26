@@ -1,13 +1,22 @@
 import Field from './field';
+import CodeField from './code-field';
 import { convertToCamel } from '../util';
-import { ENTITY_USER_NAME, ENTITY_GROUP_NAME } from '../../constants';
+import {
+    ENTITY_USER_NAME,
+    ENTITY_GROUP_NAME,
+    ENTITY_CODE_FIELD_NAME,
+} from '../../constants';
 
 export default class Entity {
     constructor(declaration) {
         const schema = declaration.schema || [];
         this._schema = {
             name: declaration.name,
-            schema: schema.map(field => new Field(field)),
+            schema: schema.map(field =>
+                field.name === ENTITY_CODE_FIELD_NAME
+                    ? new CodeField(field)
+                    : new Field(field),
+            ),
         };
     }
 
