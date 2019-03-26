@@ -5,7 +5,21 @@ export default (app, params = {}) => {
         '/schema',
         wrapError(async (req, res) => {
 
-            res.status(200).send('Cache reset');
+            res.status(200).send('get schema');
+        }),
+    );
+    app.get(
+        '/schema/:entity',
+        wrapError(async (req, res) => {
+
+            res.status(200).send('get schema');
+        }),
+    );
+    app.post(
+        '/schema',
+        wrapError(async (req, res) => {
+
+            res.status(200).send('post schema');
         }),
     );
 };

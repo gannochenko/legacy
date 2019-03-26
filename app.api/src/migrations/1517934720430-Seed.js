@@ -48,6 +48,10 @@ export class Seed1517934720430 {
                 },
             ],
         }), true);
+
+        // todo: users
+        // todo: groups
+
         logger.info('🌱 Seed migration applied');
     }
     async down(queryRunner) {}
