@@ -17,7 +17,7 @@ export default class Migrator {
         const { schemaProvider, connectionManager } = params;
 
         const entityManager = new EntityManager(schemaProvider);
-        const qr = (await (await connectionManager.getSystem()).getRaw()).createQueryRunner(
+        const qr = (await connectionManager.getSystem()).createQueryRunner(
             'master',
         );
         // get all entity tables

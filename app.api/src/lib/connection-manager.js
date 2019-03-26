@@ -1,7 +1,9 @@
-import Connection from './connection';
+import { createConnection } from 'typeorm';
+
 import SchemaEntity from '../entity/schema';
 import migrations from '../migrations';
 import { DB_MIGRATION_TABLE_NAME } from '../constants';
+import {injectPassword} from "./util";
 
 export default class ConnectionManager {
     constructor({ settings }) {
@@ -11,7 +13,7 @@ export default class ConnectionManager {
 
     async get({ entities, preConnect }) {
         if (!this._connections.entity) {
-            this._connections.entity = Connection.make({
+            this._connections.entity = this.make({
                 settings: this._settings,
                 entities,
                 preConnect,
@@ -29,23 +31,39 @@ export default class ConnectionManager {
 
     async getSystem() {
         if (!this._connections.simple) {
-            console.dir(migrations);
-            this._connections.simple = Connection.make({
+            this._connections.simple = this.make({
                 name: 'system',
                 settings: this._settings,
-                preConnect: true,
                 entities: [
                     SchemaEntity,
                     // todo: user entity, group entity
                 ],
-                migrationsTableName: 'custom_migration_table',
-                // migrations,
+                migrationsTableName: DB_MIGRATION_TABLE_NAME,
+                migrations,
             });
         }
         return this._connections.simple;
     }
 
     async invalidateConnections() {
-        // todo
+        await this.close();
+        this._connections = {};
+    }
+
+    async make(params = {}) {
+        const { settings } = params;
+        if (!settings) {
+            throw new Error('No settings provided');
+        }
+
+        const url = await settings.get('db.url', null);
+        const password = await settings.get('db.password', null);
+        const sUrl = injectPassword(url, password);
+
+        return await createConnection({
+            ...params,
+            url: sUrl,
+            type: 'postgres',
+        });
     }
 }

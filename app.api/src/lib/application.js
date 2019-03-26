@@ -24,9 +24,7 @@ export default class Application {
 
         // migrate
         const sysConn = await connectionManager.getSystem();
-        const rawConn = await sysConn.getRaw();
-
-        await rawConn.runMigrations();
+        await sysConn.runMigrations();
 
         instance.attachErrorHandler(app);
 
