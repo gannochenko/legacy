@@ -118,11 +118,23 @@ export default class Schema {
         }
 
         // check health of each entity
+        const times = {};
         schema.forEach(entity => {
             const fErrors = entity.checkHealth();
             if (_.iane(fErrors)) {
                 errors = _.union(errors, fErrors);
             }
+
+            if (entity.getName() in times) {
+                errors.push({
+                    message: `Entity "${entity.getName()}" met several times`,
+                    code: 'entity_duplicate',
+                    reference: entity.getName(),
+                });
+            }
+
+            times[entity.getName()] =
+                entity.getName() in times ? times[entity.getName()] + 1 : 1;
         });
 
         // check that all referenced fields are there

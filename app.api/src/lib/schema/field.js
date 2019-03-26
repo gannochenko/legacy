@@ -65,6 +65,10 @@ export default class Field {
         return null;
     }
 
+    getName() {
+        return this._schema.name;
+    }
+
     getReferenceFieldName() {
         const type = this.getActualType();
         if (
