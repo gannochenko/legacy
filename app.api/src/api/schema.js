@@ -4,7 +4,6 @@ import SchemaEntity from '../entity/schema';
 import Schema from '../lib/schema';
 
 export default (app, params = {}) => {
-
     const { connectionManager } = params;
 
     app.get(
@@ -12,18 +11,26 @@ export default (app, params = {}) => {
         wrapError(async (req, res) => {
             const schema = await Schema.load();
             const entity = _.get(req, 'params.entity');
-            res.header('Content-Type', 'application/json').status(200).send(JSON.stringify({
-                entity: schema.getEntity(entity),
-            }));
+            res.header('Content-Type', 'application/json')
+                .status(200)
+                .send(
+                    JSON.stringify({
+                        entity: schema.getEntity(entity),
+                    }),
+                );
         }),
     );
     app.get(
         '/schema',
         wrapError(async (req, res) => {
             const schema = await Schema.load();
-            res.header('Content-Type', 'application/json').status(200).send(JSON.stringify({
-                structure: schema,
-            }));
+            res.header('Content-Type', 'application/json')
+                .status(200)
+                .send(
+                    JSON.stringify({
+                        structure: schema,
+                    }),
+                );
         }),
     );
     app.post(
@@ -37,12 +44,16 @@ export default (app, params = {}) => {
         '/schema',
         wrapError(async (req, res) => {
             // save new schema as draft, check first
-            const schema = _.get(req.body, 'schema');
 
-            const connection = await connectionManager.getSystem();
-            const repo = connection.getRepository(SchemaEntity);
+            const schema = await Schema.load();
+            const errors = schema.checkHealth();
 
-            console.dir(req.body);
+            // const schema = _.get(req.body, 'schema');
+            //
+            // const connection = await connectionManager.getSystem();
+            // const repo = connection.getRepository(SchemaEntity);
+            //
+            // console.dir(req.body);
 
             res.status(200).send('post schema');
         }),

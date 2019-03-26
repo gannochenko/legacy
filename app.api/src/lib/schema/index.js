@@ -109,7 +109,9 @@ export default class Schema {
     }
 
     checkHealth() {
-
+        // check health of each entity
+        // check that all referenced fields are there
+        // todo: check that there are still User and Group entities left intact
     }
 
     toJSON() {

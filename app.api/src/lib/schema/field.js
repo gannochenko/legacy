@@ -1,4 +1,4 @@
-import {DB_VARCHAR_DEF_LENGTH} from '../../constants';
+import { DB_VARCHAR_DEF_LENGTH } from '../../constants';
 
 export const TYPE_STRING = 'string';
 export const TYPE_INTEGER = 'integer';
@@ -11,7 +11,27 @@ export default class Field {
     }
 
     checkHealth() {
+        const errors = [];
+        const schema = this._schema;
 
+        // check that field has at least name and type
+        if (!_.isne(schema.name)) {
+            errors.push({
+                message: 'Field does not have a name',
+                code: 'field_name_empty',
+                reference: null,
+            });
+        }
+
+        if (!_.isne(schema.type)) {
+            errors.push({
+                message: 'Field does not have a type',
+                code: 'field_type_empty',
+                reference: schema.name,
+            });
+        }
+
+        return errors;
     }
 
     isMultiple() {

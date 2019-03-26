@@ -50,6 +50,7 @@ export default class ResolverGenerator {
                     };
 
                     const { code } = args;
+                    // todo: use connection here
                     const repo = getRepository(dbEntity);
 
                     let dbItem = null;
@@ -106,6 +107,7 @@ export default class ResolverGenerator {
                                 : limit;
                     }
 
+                    // todo: use connection here
                     const repo = getRepository(dbEntity);
 
                     await this.wrap(async () => {
@@ -136,6 +138,7 @@ export default class ResolverGenerator {
                     };
 
                     let { code, data } = args;
+                    // todo: use connection here
                     const repo = getRepository(dbEntity);
 
                     const isNew = !_.isne(code);
@@ -209,6 +212,7 @@ export default class ResolverGenerator {
                     }
 
                     if (!result.errors.length) {
+                        // todo: use connection here
                         const repo = getRepository(dbEntity);
 
                         const items = await repo.find({ code: code.trim() });
@@ -251,6 +255,7 @@ export default class ResolverGenerator {
                                     refTableEntityName,
                                 );
 
+                                // todo: use connection here
                                 const rrepo = getRepository(refTableDBEntity);
                                 const rqb = rrepo.createQueryBuilder(
                                     refTableDBEntity,
@@ -308,6 +313,7 @@ export default class ResolverGenerator {
                 const refDBEntity = await entityManager.getByName(
                     refEntityName,
                 );
+                // todo: use connection here
                 const repo = getRepository(refDBEntity);
                 const qb = repo.createQueryBuilder(refEntityName);
 
@@ -398,6 +404,7 @@ export default class ResolverGenerator {
                 );
             }
 
+            // todo: use connection here
             const repo = getRepository(refDBEntity);
             const loader = dataLoaderPool.get(refEntityName, async ids => {
                 const errors = [];
@@ -478,6 +485,7 @@ export default class ResolverGenerator {
 
             let items = [];
             const errors = [];
+            // todo: use connection here
             const repo = getRepository(refDBEntity);
             const qb = repo.createQueryBuilder(refEntityName);
             const refName = field.name;

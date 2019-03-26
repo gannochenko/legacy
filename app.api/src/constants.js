@@ -8,6 +8,9 @@ export const DB_VARCHAR_DEF_LENGTH = 255;
 export const DB_CODE_COLUMN_LENGTH = 36;
 export const QUERY_FIND_MAX_PAGE_SIZE = 50;
 
+export const ENTITY_USER_NAME = 'user';
+export const ENTITY_GROUP_NAME = 'group';
+
 export const ENTITY_TYPE_STRING = String;
 export const ENTITY_TYPE_NUMBER = Number;
 export const ENTITY_TYPE_BOOLEAN = Boolean;
