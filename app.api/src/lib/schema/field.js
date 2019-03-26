@@ -23,7 +23,7 @@ export default class Field {
             });
         }
 
-        if (!_.isne(schema.type)) {
+        if (!_.isne(this.getActualType())) {
             errors.push({
                 message: 'Field does not have a type',
                 code: 'field_type_empty',
@@ -65,9 +65,17 @@ export default class Field {
         return null;
     }
 
-    // todo: tmp
     getReferenceFieldName() {
-        this.getActualType();
+        const type = this.getActualType();
+        if (
+            [TYPE_STRING, TYPE_BOOLEAN, TYPE_DATETIME, TYPE_INTEGER].indexOf(
+                type,
+            ) >= 0
+        ) {
+            return null;
+        }
+
+        return type;
     }
 
     toJSON() {

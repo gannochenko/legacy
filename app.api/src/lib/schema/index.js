@@ -109,9 +109,37 @@ export default class Schema {
     }
 
     checkHealth() {
+        let errors = [];
+        const schema = this._schema;
+
+        if (!_.iane(schema)) {
+            // nothing to check
+            return errors;
+        }
+
         // check health of each entity
+        schema.forEach(entity => {
+            const fErrors = entity.checkHealth();
+            if (_.iane(fErrors)) {
+                errors = _.union(errors, fErrors);
+            }
+        });
+
         // check that all referenced fields are there
+        this.getReferences().forEach(field => {
+            const rName = field.getReferenceFieldName();
+            if (!this.getEntity(rName)) {
+                errors.push({
+                    message: `Entity "${rName}" is referenced, but not presented`,
+                    code: 'field_broken_reference',
+                    reference: rName,
+                });
+            }
+        });
+
         // todo: check that there are still User and Group entities left intact
+
+        return errors;
     }
 
     toJSON() {
@@ -120,5 +148,14 @@ export default class Schema {
 
     getEntity(name) {
         return this._schema.find(entity => entity.getName() === name);
+    }
+
+    getReferences() {
+        let refs = [];
+        this._schema.forEach(entity => {
+            refs = _.union(refs, entity.getReferences());
+        });
+
+        return refs;
     }
 }

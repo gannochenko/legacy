@@ -48,6 +48,8 @@ export default (app, params = {}) => {
             const schema = await Schema.load();
             const errors = schema.checkHealth();
 
+            console.dir(errors);
+
             // const schema = _.get(req.body, 'schema');
             //
             // const connection = await connectionManager.getSystem();
