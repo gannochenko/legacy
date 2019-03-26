@@ -44,11 +44,16 @@ export default (app, params = {}) => {
         '/schema',
         wrapError(async (req, res) => {
             // save new schema as draft, check first
+            const result = {
+                errors: [],
+            };
 
-            const schema = await Schema.load();
-            const errors = schema.checkHealth();
+            const schema = new Schema(_.get(req, 'body.schema'));
+            result.errors = schema.checkHealth();
 
-            console.dir(errors);
+            if (!_.iane(result.errors)) {
+            } else {
+            }
 
             // const schema = _.get(req.body, 'schema');
             //
@@ -57,7 +62,9 @@ export default (app, params = {}) => {
             //
             // console.dir(req.body);
 
-            res.status(200).send('post schema');
+            res.header('Content-Type', 'application/json')
+                .status(200)
+                .send(JSON.stringify(result));
         }),
     );
 };
