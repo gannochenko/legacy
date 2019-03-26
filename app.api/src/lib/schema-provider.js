@@ -160,4 +160,8 @@ export default class SchemaProvider {
     getCamelEntityName(entityName) {
         return convertToCamel(entityName.toLowerCase());
     }
+
+    validate() {
+
+    }
 }

@@ -5,11 +5,13 @@ import helmet from 'helmet';
 import { Settings } from 'ew-internals';
 import Cache from './cache';
 import ConnectionManager from './connection-manager';
+import SchemaProvider from './schema-provider';
+
 
 import attachGraphQLMiddleware from './apollo';
 import attachHomeAPI from '../api/home';
 import attachSyncAPI from '../api/sync';
-import SchemaProvider from './schema-provider';
+import attachSchemaAPI from '../api/schema';
 
 export default class Application {
     static async make() {
@@ -57,6 +59,7 @@ export default class Application {
             connectionManager,
         });
         attachHomeAPI(app, { cache });
+        attachSchemaAPI(app, { cache, connectionManager });
         attachSyncAPI(app, {
             cache,
             schemaProvider,
@@ -93,6 +96,11 @@ export default class Application {
             origin: (origin, cb) => {
                 // allow requests with no origin, like mobile apps or curl requests
                 if (!origin) {
+                    return cb(null, true);
+                }
+
+                // in devel mode everything is allowed
+                if (__DEV__) {
                     return cb(null, true);
                 }
 

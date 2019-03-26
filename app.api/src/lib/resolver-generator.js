@@ -1,4 +1,4 @@
-import { getManager, getRepository, In } from 'typeorm';
+import { getRepository, In } from 'typeorm';
 import uuid from 'uuid/v4';
 import { getRefName } from './entity-util';
 
