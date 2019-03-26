@@ -1,50 +1,47 @@
-import { DB_CODE_COLUMN_LENGTH } from '../constants';
-import { DB_VARCHAR_DEF_LENGTH } from '../constants';
-import { convertToCamel } from './util';
+import Entity from './entity';
+import { DB_CODE_COLUMN_LENGTH } from '../../constants';
+import SchemaEntity from '../../entity/schema';
+import * as field from './field';
 
-/**
- * todo: this class should produce complex object, with prototypes
- */
-export default class SchemaProvider {
-    async get() {
-        return [
+export default class Schema {
+    static async load() {
+        return new this([
             {
                 name: 'important_person',
                 schema: [
                     {
                         // a system field
                         name: 'code',
-                        type: String,
+                        type: field.TYPE_STRING,
                         label: 'Code',
                         length: DB_CODE_COLUMN_LENGTH,
                         required: true,
-                        // inputRequired: false,
                         unique: true,
                     },
                     {
                         name: 'full_name',
-                        type: String,
+                        type: field.TYPE_STRING,
                         label: 'Full name',
                         required: true,
                     },
                     {
                         name: 'tags',
-                        type: [String],
+                        type: [field.TYPE_STRING],
                         label: 'Tags',
                     },
                     {
                         name: 'lucky_numbers',
-                        type: [Number],
+                        type: [field.TYPE_INTEGER],
                         label: 'Lucky numbers',
                     },
                     {
                         name: 'birth_date',
-                        type: Date,
+                        type: field.TYPE_DATETIME,
                         label: 'Birth date',
                     },
                     {
                         name: 'has_pets',
-                        type: Boolean,
+                        type: field.TYPE_BOOLEAN,
                         label: 'Has pets',
                     },
                     {
@@ -70,7 +67,7 @@ export default class SchemaProvider {
                     {
                         // a system field
                         name: 'code',
-                        type: String,
+                        type: field.TYPE_STRING,
                         label: 'Code',
                         length: 36,
                         required: true,
@@ -78,7 +75,7 @@ export default class SchemaProvider {
                     },
                     {
                         name: 'nickname',
-                        type: String,
+                        type: field.TYPE_STRING,
                         label: 'Nickname',
                         required: true,
                     },
@@ -90,7 +87,7 @@ export default class SchemaProvider {
                     {
                         // a system field
                         name: 'code',
-                        type: String,
+                        type: field.TYPE_STRING,
                         label: 'Code',
                         length: 36,
                         required: true,
@@ -98,66 +95,28 @@ export default class SchemaProvider {
                     },
                     {
                         name: 'name',
-                        type: String,
+                        type: field.TYPE_STRING,
                         label: 'Name',
                         required: true,
                     },
                 ],
             },
-        ];
+        ]);
     }
 
-    async getByName(name) {
-        const all = await this.get();
-        return all.find(entity => entity.name === name);
+    constructor(declaration) {
+        this._schema = declaration.map(entity => new Entity(entity));
     }
 
-    getFieldType(field) {
-        let type = field.type;
+    checkHealth() {
 
-        if (_.isArray(type)) {
-            type = type[0] || String;
-        }
-
-        if (_.isne(type)) {
-            // reference
-            type = Number;
-        }
-
-        return type;
     }
 
-    getFieldLength(field) {
-        if (field.type === String) {
-            const length = parseInt(field.length, 10);
-            if (isNaN(length)) {
-                return DB_VARCHAR_DEF_LENGTH;
-            }
-
-            return length;
-        }
-
-        return null;
+    toJSON() {
+        return this._schema;
     }
 
-    /**
-     * todo: rename to "getReferencedEntityName"
-     * @param field
-     * @returns {*}
-     */
-    getReferenceFieldName(field) {
-        if (this.isMultipleField(field) && _.isne(field.type[0])) {
-            return field.type[0];
-        }
-
-        return _.isne(field.type) ? field.type : null;
-    }
-
-    isMultipleField(field) {
-        return _.isArray(field.type);
-    }
-
-    getCamelEntityName(entityName) {
-        return convertToCamel(entityName.toLowerCase());
+    getEntity(name) {
+        return this._schema.find(entity => entity.getName() === name);
     }
 }

@@ -6,8 +6,8 @@ import isFunction from 'lodash.isfunction';
 import union from 'lodash.union';
 // const intersection = require('lodash.intersection');
 import difference from 'lodash.difference';
-// const get = require('lodash.get');
-// const cloneDeep = require('lodash.clonedeep');
+import get from 'lodash.get';
+import cloneDeep from 'lodash.clonedeep';
 // const deepFreeze = require('deep-freeze-node');
 // const isEqual = require('lodash.isequal');
 
@@ -17,6 +17,8 @@ export default {
     isFunction,
     union,
     difference,
+    cloneDeep,
+    get,
     iane: arg => {
         return Array.isArray(arg) && arg.length > 0;
     },
