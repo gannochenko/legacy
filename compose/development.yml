@@ -19,9 +19,9 @@ services:
         depends_on:
             - db
         labels:
-            com.list.name: 'Adminer'
+            com.list.name: Adminer
             com.list.sort: '2'
-            com.list.link.endpoint: 'Browse database___/?pgsql=db&username=root&db=legacy&ns=public'
+            com.list.link.endpoint: Browse database___/?pgsql=db&username=root&db=legacy&ns=public
     cache:
         build:
             context: ../infra/cache/
@@ -29,17 +29,17 @@ services:
         expose:
             - 6379
         ports:
-            - 6379:6379
+            - '6379:6379'
     cache.gui:
         image: marian/rebrow
         expose:
             - 5001
         ports:
-            - 5001:5001
+            - '5001:5001'
         depends_on:
             - cache
         labels:
-            com.list.name: 'Redis GUI'
+            com.list.name: Redis GUI
             com.list.sort: '3'
             com.list.link.endpoint: 'Browse cache___/cache:6379/0/keys/'
     api:
@@ -61,17 +61,16 @@ services:
             - DEBUG_COLORS=1
             - DEBUG_HIDE_DATE=1
             - network.port=4000
-            - network.cors=http://localhost:4000
-            - cache.url=redis://cache:6379
-            - db.url=postgres://root:123@db:5432/legacy
+            - 'network.cors=http://localhost:4000'
+            - 'cache.url=redis://cache:6379'
+            - 'db.url=postgres://root:123@db:5432/legacy'
         labels:
-            com.list.name: 'Backend'
+            com.list.name: Backend
             com.list.sort: '1'
-            com.list.description: 'Main server that provides API'
-            com.list.link.endpoint: 'GraphQL endpoint___/graphql'
-
+            com.list.description: Main server that provides API
+            com.list.link.endpoint: GraphQL endpoint___/graphql
     container-list:
-        image: 'awesome1888/container-list'
+        image: awesome1888/container-list
         expose:
             - '2000'
         ports:
@@ -80,3 +79,24 @@ services:
             - '/var/run/docker.sock:/var/run/docker.sock:ro'
         environment:
             - PORT=2000
+    admin:
+        image: 'admin:dev'
+        build:
+            context: ../app.admin/
+            dockerfile: docker/development.dockerfile
+        expose:
+            - '3000'
+            - '3100'
+        ports:
+            - '3000:3000'
+            - '3100:3100'
+        depends_on: []
+        volumes:
+            - '../app.admin/:/app/'
+        environment:
+            - NODE_ENV=development
+            - DEBUG_COLORS=1
+            - DEBUG_HIDE_DATE=1
+            - network.port=3000
+        labels:
+            com.list.name: Admin
