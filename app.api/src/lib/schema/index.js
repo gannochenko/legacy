@@ -105,6 +105,9 @@ export default class Schema {
     }
 
     constructor(declaration) {
+        if (!_.iane(declaration)) {
+            declaration = [];
+        }
         this._schema = declaration.map(entity => new Entity(entity));
     }
 

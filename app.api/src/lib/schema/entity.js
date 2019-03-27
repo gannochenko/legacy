@@ -9,10 +9,16 @@ import {
 
 export default class Entity {
     constructor(declaration) {
-        const schema = declaration.schema || [];
+        if (!_.ione(declaration)) {
+            declaration = {};
+        }
+        if (!_.iane(declaration.schema)) {
+            declaration.schema = [];
+        }
+
         this._schema = {
-            name: declaration.name,
-            schema: schema.map(field =>
+            name: declaration.name || '',
+            schema: declaration.schema.map(field =>
                 field.name === ENTITY_CODE_FIELD_NAME
                     ? new CodeField(field)
                     : new Field(field),

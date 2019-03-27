@@ -7,6 +7,9 @@ export const TYPE_DATETIME = 'datetime';
 
 export default class Field {
     constructor(declaration) {
+        if (!_.ione(declaration)) {
+            declaration = {};
+        }
         this._schema = declaration;
     }
 
