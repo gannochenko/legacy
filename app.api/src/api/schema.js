@@ -12,15 +12,27 @@ export default (app, params = {}) => {
     app.get(
         '/schema/:type/:entity',
         wrapError(async (req, res) => {
-            const schema = await Schema.load();
+            const result = {
+                errors: [],
+                entity: null,
+            };
+            res.header('Content-Type', 'application/json');
+
             const entity = _.get(req, 'params.entity');
-            res.header('Content-Type', 'application/json')
-                .status(200)
-                .send(
-                    JSON.stringify({
-                        entity: schema.getEntity(entity),
-                    }),
-                );
+            let type = _.get(req, 'params.type');
+            if (type !== 'draft' && type !== 'actual') {
+                result.errors.push({
+                    message: 'Illegal schema type',
+                    code: 'illegal_schema_type',
+                });
+                res.status(400);
+            } else {
+                const schema = await Schema.load(type, connectionManager);
+                result.entity = schema.getEntity(entity);
+                res.status(200);
+            }
+
+            res.send(JSON.stringify(result));
         }),
     );
 
@@ -30,14 +42,26 @@ export default (app, params = {}) => {
     app.get(
         '/schema/:type',
         wrapError(async (req, res) => {
-            const schema = await Schema.load();
-            res.header('Content-Type', 'application/json')
-                .status(200)
-                .send(
-                    JSON.stringify({
-                        structure: schema,
-                    }),
-                );
+            const result = {
+                errors: [],
+                structure: null,
+            };
+            res.header('Content-Type', 'application/json');
+
+            const entity = _.get(req, 'params.entity');
+            let type = _.get(req, 'params.type');
+            if (type !== 'draft' && type !== 'actual') {
+                result.errors.push({
+                    message: 'Illegal schema type',
+                    code: 'illegal_schema_type',
+                });
+                res.status(400);
+            } else {
+                result.structure = await Schema.load(type, connectionManager);
+                res.status(200);
+            }
+
+            res.send(JSON.stringify(result));
         }),
     );
 
