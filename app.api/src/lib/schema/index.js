@@ -1,7 +1,5 @@
 import Entity from './entity';
-import { DB_CODE_COLUMN_LENGTH } from '../../constants';
 import SchemaEntity from '../../entity/schema';
-import * as field from './field';
 
 export default class Schema {
     static async load(type, connectionManager) {
