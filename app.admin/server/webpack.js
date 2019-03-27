@@ -3,8 +3,6 @@ const nodeExternals = require('webpack-node-externals');
 const webpack = require('webpack');
 const nodemonPlugin = require('nodemon-webpack-plugin');
 
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-
 module.exports = (env, argv) => {
     env = env || {};
     const development =
@@ -60,25 +58,11 @@ module.exports = (env, argv) => {
                     test: /\.(txt|html)$/,
                     use: 'raw-loader',
                 },
-
-                {
-                    test: /\.tsx?$/,
-                    loaders: [
-                        {
-                            loader: 'ts-loader',
-                            options: {
-                                transpileOnly: true,
-                            },
-                        },
-                    ],
-
-                    exclude: /node_modules/,
-                },
             ],
         },
         plugins: [
             new webpack.ProvidePlugin({
-                _: path.join(__dirname, `src/lib/lodash.js`),
+                _: [path.join(__dirname, `src/lib/lodash.js`), 'default'],
                 logger: ['ew-internals', 'logger'],
             }),
             new webpack.DefinePlugin({
@@ -88,7 +72,6 @@ module.exports = (env, argv) => {
             new nodemonPlugin({
                 script: path.join(__dirname, 'build/index.js'),
             }),
-            new ForkTsCheckerWebpackPlugin(),
         ],
     };
 };

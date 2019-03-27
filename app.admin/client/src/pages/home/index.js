@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import Badge from '../../components/MaterialKit/Badge/index.jsx';
+import Badge from '../../components/material-kit/Badge/index.jsx';
 import { LOAD } from './reducer';
 
 const HomePage = ({ dispatch }) => {

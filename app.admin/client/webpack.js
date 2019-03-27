@@ -89,7 +89,7 @@ module.exports = (env, argv) => {
         plugins: [
             new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
             new webpack.ProvidePlugin({
-                _: path.join(__dirname, `src/lib/lodash.js`),
+                _: [path.join(__dirname, `src/lib/lodash.js`), 'default'],
             }),
             new webpack.DefinePlugin({
                 __DEV__: development,
