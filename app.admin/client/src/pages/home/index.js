@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import Badge from '../../components/material-kit/Badge/index.jsx';
 import { LOAD } from './reducer';
+
+import Button from '../../components/material-kit/CustomButtons';
 
 const HomePage = ({ dispatch }) => {
     useEffect(() => {
@@ -11,10 +12,10 @@ const HomePage = ({ dispatch }) => {
     }, []);
 
     return (
-        <div>
-            Hello!
-            <Badge>Default</Badge>
-        </div>
+        <>
+            <Button>Click me</Button>
+            <Button>And me</Button>
+        </>
     );
 };
 

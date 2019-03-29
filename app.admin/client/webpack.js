@@ -22,7 +22,7 @@ module.exports = (env, argv) => {
             publicPath: '/public/',
         },
         resolve: {
-            extensions: ['.js'],
+            extensions: ['.js', '.jsx'],
             symlinks: false,
         },
         // optimization: {
@@ -60,9 +60,9 @@ module.exports = (env, argv) => {
                                 plugins: [
                                     '@babel/plugin-proposal-object-rest-spread',
                                 ],
-                                // cacheDirectory: true,
-                                // cacheCompression: !development,
-                                // compact: !development,
+                                cacheDirectory: true,
+                                cacheCompression: !development,
+                                compact: !development,
                             },
                         },
                     ],
@@ -75,10 +75,8 @@ module.exports = (env, argv) => {
                     test: /\.(jpe?g|gif|png|svg|ico)$/i,
                     use: [
                         {
-                            loader: 'url-loader',
-                            options: {
-                                limit: 10000,
-                            },
+                            loader: 'file-loader',
+                            options: {},
                         },
                     ],
                 },
