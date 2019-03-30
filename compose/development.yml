@@ -69,27 +69,6 @@ services:
             com.list.sort: '1'
             com.list.description: Main server that provides API
             com.list.link.endpoint: GraphQL endpoint___/graphql
-    admin:
-        image: 'admin:dev'
-        build:
-            context: ../app.admin/
-            dockerfile: docker/development.dockerfile
-        expose:
-            - '3000'
-            - '3100'
-        ports:
-            - '3000:3000'
-            - '3100:3100'
-        depends_on: []
-        volumes:
-            - '../app.admin/:/app/'
-        environment:
-            - NODE_ENV=development
-            - DEBUG_COLORS=1
-            - DEBUG_HIDE_DATE=1
-            - network.port=3000
-        labels:
-            com.list.name: Admin
     container-list:
         image: awesome1888/container-list
         expose:
