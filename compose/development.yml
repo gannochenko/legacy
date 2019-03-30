@@ -79,3 +79,24 @@ services:
             - '/var/run/docker.sock:/var/run/docker.sock:ro'
         environment:
             - PORT=2000
+    admin:
+        image: 'admin:dev'
+        build:
+            context: ../app.admin/
+            dockerfile: docker/development.dockerfile
+        expose:
+            - '3000'
+            - '3001'
+        ports:
+            - '3000:3000'
+            - '3001:3001'
+        depends_on: []
+        volumes:
+            - '../app.admin/:/app/'
+        environment:
+            - NODE_ENV=development
+            - DEBUG_COLORS=1
+            - DEBUG_HIDE_DATE=1
+            - network.cors=
+        labels:
+            com.list.name: Admin
