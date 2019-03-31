@@ -69,9 +69,13 @@ app.use(helmet());
 app.use(express.static(process.cwd() + '/public/'));
 
 // todo: use renderer here
-app.get('*', (req, res) => {
+app.get('*', async (req, res) => {
     // todo: ssr is not ready yet
     let application = ''; // renderToString(<Application />);
+
+    const settingsForward = {
+        'api.url': await settings.get('api.url', ''),
+    };
 
     let html = `<!doctype html>
     <html lang="">
@@ -84,6 +88,9 @@ app.get('*', (req, res) => {
         </head>
         <body>
             <div id="root">${application}</div>
+            <script>
+                window.__settings = ${JSON.stringify(settingsForward)};
+            </script>
             <script src="http://localhost:3001/client.js"></script>
         </body>
     </html>`;

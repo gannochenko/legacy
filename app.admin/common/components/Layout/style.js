@@ -25,7 +25,9 @@ export const Footer = withTheme(styled.div`
 `);
 
 export const Left = styled.div`
-    width: 15rem;
+    width: 12rem;
 `;
 
-export const Right = styled.div``;
+export const Right = styled.div`
+    padding: 0 5rem 0 1rem;
+`;

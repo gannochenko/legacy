@@ -2933,10 +2933,10 @@ evp_bytestokey@^1.0.0, evp_bytestokey@^1.0.3:
     md5.js "^1.3.4"
     safe-buffer "^5.1.1"
 
-ew-internals@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/ew-internals/-/ew-internals-1.0.4.tgz#40d3c167875662af015977068a91eb7c9395405f"
-  integrity sha512-RwN1N0MaAOzzlN0jSesDtIrM6Z3BM2txLKStVR2933sUrRTvyTiy6om4cgMEKlN7T23cjQE53MdGHgWljOg6tg==
+ew-internals@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/ew-internals/-/ew-internals-1.0.5.tgz#da466e5a4d23ede0f21af34ec52cb3ffb73aa662"
+  integrity sha512-kFNRPVWJemEotgQwX+ocRWD9cLL8wa9aYPK8WJWKExGkzx2sBKW8z6BMtveFzAcBHYd1EYTGYxfXvmXpcLBnBw==
   dependencies:
     "@babel/polyfill" "^7.2.5"
 
