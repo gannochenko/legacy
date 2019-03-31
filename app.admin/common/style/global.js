@@ -1,5 +1,6 @@
 import React from 'react';
 import { createGlobalStyle } from 'styled-components';
+import { fgColor } from 'sc-companion';
 import _theme from './theme';
 
 export const theme = _theme;
@@ -24,8 +25,8 @@ export const GlobalStyle = withTheme(createGlobalStyle`
     font-weight: 400;
     line-height: 1.8;
     letter-spacing: -0.05px;
-    color: ${props => props.theme.body.text.color};
-    font-family: Georgia, sans-serif;
+    color: ${props => props.theme.body.color};
+    font-family: Roboto, sans-serif;
     min-width: 320px;
     background-color: ${props => props.theme.body.background.color};
   }
@@ -47,3 +48,8 @@ export const GlobalStyle = withTheme(createGlobalStyle`
     outline: none;
   }
 `);
+
+export const stdLink = () => `
+    text-decoration: none;
+    ${fgColor(_theme.link.color.hover, _theme.link.color.hout, '200ms')}
+`;

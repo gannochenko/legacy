@@ -98,5 +98,6 @@ services:
             - DEBUG_COLORS=1
             - DEBUG_HIDE_DATE=1
             - network.cors=
+            - data.url=http://localhost:4000
         labels:
             com.list.name: Admin

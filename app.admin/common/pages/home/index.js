@@ -4,7 +4,8 @@ import { LOAD } from './reducer';
 
 import Button from '../../material-kit/CustomButtons';
 import Mushroom from '../../../public/mushroom.png';
-import { Container, CoinRow, Coin } from './style';
+import { CoinRow, Coin } from './style';
+import Layout from '../../components/Layout';
 
 const HomePage = ({ dispatch }) => {
     useEffect(() => {
@@ -14,7 +15,7 @@ const HomePage = ({ dispatch }) => {
     }, []);
 
     return (
-        <Container>
+        <Layout>
             <h1>Hello from Admin</h1>
             <p>
                 This is a demo page. If you see this page, it means that at
@@ -52,7 +53,7 @@ const HomePage = ({ dispatch }) => {
             </p>
             <p>Enjoy!</p>
             <br />
-        </Container>
+        </Layout>
     );
 };
 

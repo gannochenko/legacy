@@ -1,10 +1,26 @@
+import { palette } from 'sc-companion';
+
 export default {
     body: {
-        text: {
-            color: 'black',
-        },
+        color: palette.black,
         background: {
-            color: 'white',
+            color: palette.white,
+        },
+    },
+    link: {
+        color: {
+            hover: palette.sumacDyed,
+            hout: palette.brightGoldenYellow,
+        },
+    },
+    menu: {
+        subHeader: {
+            color: palette.cascade,
+        },
+    },
+    footer: {
+        background: {
+            color: palette.harborRat,
         },
     },
     grid: {
