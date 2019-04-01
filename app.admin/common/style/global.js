@@ -1,10 +1,8 @@
 import React from 'react';
 import { createGlobalStyle } from 'styled-components';
 import { fgColor } from 'sc-companion';
-import _theme from './theme';
 
-export const theme = _theme;
-export const ThemeContext = React.createContext(theme);
+export const ThemeContext = React.createContext();
 export const withTheme = Component => {
     return props => (
         <ThemeContext.Consumer>
@@ -49,7 +47,7 @@ export const GlobalStyle = withTheme(createGlobalStyle`
   }
 `);
 
-export const stdLink = () => `
+export const stdLink = (hover, hout) => `
     text-decoration: none;
-    ${fgColor(_theme.link.color.hover, _theme.link.color.hout, '200ms')}
+    ${fgColor(hover, hout, '200ms')}
 `;

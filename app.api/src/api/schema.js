@@ -48,7 +48,6 @@ export default (app, params = {}) => {
             };
             res.header('Content-Type', 'application/json');
 
-            const entity = _.get(req, 'params.entity');
             let type = _.get(req, 'params.type');
             if (type !== 'draft' && type !== 'actual') {
                 result.errors.push({

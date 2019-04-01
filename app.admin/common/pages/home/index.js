@@ -1,16 +1,18 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { LOAD } from './reducer';
+import { withSettings } from '../../lib/settings';
 
 import Button from '../../material-kit/CustomButtons';
 import Mushroom from '../../../public/mushroom.png';
 import { CoinRow, Coin } from './style';
 import Layout from '../../components/Layout';
 
-const HomePage = ({ dispatch }) => {
+const HomePage = ({ dispatch, settings }) => {
     useEffect(() => {
         dispatch({
             type: LOAD,
+            settings,
         });
     }, []);
 
@@ -57,4 +59,4 @@ const HomePage = ({ dispatch }) => {
     );
 };
 
-export default connect(x => x.home)(HomePage);
+export default withSettings(connect(x => x.home)(HomePage));

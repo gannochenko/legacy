@@ -73,10 +73,6 @@ app.get('*', async (req, res) => {
     // todo: ssr is not ready yet
     let application = ''; // renderToString(<Application />);
 
-    const settingsForward = {
-        'api.url': await settings.get('api.url', ''),
-    };
-
     let html = `<!doctype html>
     <html lang="">
         <head>
@@ -89,7 +85,9 @@ app.get('*', async (req, res) => {
         <body>
             <div id="root">${application}</div>
             <script>
-                window.__settings = ${JSON.stringify(settingsForward)};
+                window.__settings = ${JSON.stringify(
+                    await settings.forward(['api.url']),
+                )};
             </script>
             <script src="http://localhost:3001/client.js"></script>
         </body>

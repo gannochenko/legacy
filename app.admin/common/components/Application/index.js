@@ -1,24 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Switch } from 'react-router';
 import { ConnectedRouter } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 
 import { LOAD } from './reducer';
-import history from '../../lib/history';
-import { GlobalStyle, ThemeContext, theme } from '../../style/global';
+import history from '../../lib/history'; // todo: deal with it, this is a singleton
+import { GlobalStyle } from '../../style/global';
+import { withSettings } from '../../lib/settings';
 
 import HomePage from '../../pages/home/index';
 
-const Application = ({ dispatch, ready }) => {
+const Application = ({ dispatch, ready, settings }) => {
     useEffect(() => {
         dispatch({
             type: LOAD,
+            settings,
         });
     }, []);
 
     return (
-        <ThemeContext.Provider value={theme}>
+        <>
             <GlobalStyle />
             {ready && (
                 <ConnectedRouter history={history}>
@@ -31,8 +33,8 @@ const Application = ({ dispatch, ready }) => {
                     </Switch>
                 </ConnectedRouter>
             )}
-        </ThemeContext.Provider>
+        </>
     );
 };
 
-export default connect(x => x.application)(Application);
+export default withSettings(connect(x => x.application)(Application));

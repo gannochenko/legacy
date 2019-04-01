@@ -1,10 +1,13 @@
 import { takeLatest, put, call } from 'redux-saga/effects';
 import * as reducer from './reducer';
 
-function* load() {
+import Structure from '../../lib/structure';
+
+function* load({ settings }) {
     try {
-        const user = {};
-        yield put({ type: reducer.LOAD_SUCCESS, payload: { user } });
+        const user = {}; // todo
+        const structure = yield call(() => Structure.load(settings));
+        yield put({ type: reducer.LOAD_SUCCESS, payload: { user, structure } });
     } catch (error) {
         yield put({ type: reducer.LOAD_FAILURE, payload: error });
         if (__DEV__) {

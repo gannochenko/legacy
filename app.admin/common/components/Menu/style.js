@@ -15,10 +15,11 @@ export const Title = withTheme(styled.div`
     color: ${props => props.theme.menu.subHeader.color};
 `);
 
-export const Item = styled(Link)`
+export const Item = withTheme(styled(Link)`
     font-size: 1rem;
     display: block;
-    ${stdLink()}
+    ${props =>
+        stdLink(props.theme.link.color.hover, props.theme.link.color.hout)}
     ${ellipsis()}
     max-width: 12rem;
-`;
+`);
