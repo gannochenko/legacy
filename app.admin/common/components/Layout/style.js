@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { align } from 'sc-companion';
+import { align, rectangle } from 'sc-companion';
+import { Link } from 'react-router-dom';
 import { withTheme } from '../../style/global';
 
 export const Container = styled.div`
@@ -8,9 +9,10 @@ export const Container = styled.div`
 `;
 
 export const Top = styled.div`
-    height: 3rem;
+    min-height: 3rem;
     flex-shrink: 0;
     border-bottom: 1px solid gray;
+    padding: 1rem;
 `;
 
 export const Middle = styled.div`
@@ -30,4 +32,14 @@ export const Left = styled.div`
 
 export const Right = styled.div`
     padding: 0 5rem 0 1rem;
+`;
+
+export const Logo = styled(Link)`
+    ${rectangle('2rem')}
+    border: 1px solid gray;
+    border-radius: 5px;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: gray;
 `;

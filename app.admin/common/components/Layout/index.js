@@ -1,10 +1,13 @@
 import React from 'react';
-import { Container, Top, Middle, Footer, Left, Right } from './style.js';
+
+import { Container, Top, Middle, Footer, Left, Right, Logo } from './style.js';
 import Menu from '../Menu';
 
 export default ({ children }) => (
     <Container>
-        <Top />
+        <Top>
+            <Logo to="/">A</Logo>
+        </Top>
         <Middle>
             <Left>
                 <Menu />
