@@ -9,7 +9,9 @@ import history from '../../lib/history'; // todo: deal with it, this is a single
 import { GlobalStyle } from '../../style/global';
 import { withSettings } from '../../lib/settings';
 
-import HomePage from '../../pages/home/index';
+import HomePage from '../../pages/home';
+import DataPage from '../../pages/data';
+import StructurePage from '../../pages/structure';
 
 const Application = ({ dispatch, ready, settings }) => {
     useEffect(() => {
@@ -30,6 +32,16 @@ const Application = ({ dispatch, ready, settings }) => {
                             path="/"
                             render={route => <HomePage route={route} />}
                         />
+                        <Route
+                            exact
+                            path="/data/:entity_name"
+                            render={route => <DataPage route={route} />}
+                        />
+                        <Route
+                            exact
+                            path="/structure"
+                            render={route => <StructurePage route={route} />}
+                        />
                     </Switch>
                 </ConnectedRouter>
             )}
@@ -37,4 +49,4 @@ const Application = ({ dispatch, ready, settings }) => {
     );
 };
 
-export default withSettings(connect(x => x.application)(Application));
+export default withSettings(connect(s => s.application)(Application));

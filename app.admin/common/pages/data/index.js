@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { LOAD } from './reducer';
 import { withSettings } from '../../lib/settings';
 
-import Button from '../../material-kit/CustomButtons';
+// import Button from '../../material-kit/CustomButtons';
 import Layout from '../../components/Layout';
 
-const HomePage = ({ dispatch, settings }) => {
+const DataPage = ({ dispatch, settings }) => {
     useEffect(() => {
         dispatch({
             type: LOAD,
@@ -16,9 +16,9 @@ const HomePage = ({ dispatch, settings }) => {
 
     return (
         <Layout>
-            <h1>Hello from Admin</h1>
+            <h1>Data here</h1>
         </Layout>
     );
 };
 
-export default withSettings(connect(x => x.home)(HomePage));
+export default withSettings(connect(x => x.data)(DataPage));

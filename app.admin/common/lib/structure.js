@@ -15,4 +15,12 @@ export default class Structure {
     constructor(struct) {
         this._struct = struct;
     }
+
+    get() {
+        return this._struct;
+    }
+
+    isEmpty() {
+        return !this._struct.length;
+    }
 }

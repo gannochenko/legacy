@@ -567,7 +567,15 @@
     "@babel/helper-regex" "^7.0.0"
     regexpu-core "^4.1.3"
 
-"@babel/polyfill@^7.2.5", "@babel/polyfill@^7.4.0":
+"@babel/polyfill@^7.2.5":
+  version "7.4.3"
+  resolved "https://registry.yarnpkg.com/@babel/polyfill/-/polyfill-7.4.3.tgz#332dc6f57b718017c3a8b37b4eea8aa6eeac1187"
+  integrity sha512-rkv8WIvJshA5Ev8iNMGgz5WZkRtgtiPexiT7w5qevGTuT7ZBfM3de9ox1y9JR5/OXb/sWGBbWlHNa7vQKqku3Q==
+  dependencies:
+    core-js "^2.6.5"
+    regenerator-runtime "^0.13.2"
+
+"@babel/polyfill@^7.4.0":
   version "7.4.0"
   resolved "https://registry.yarnpkg.com/@babel/polyfill/-/polyfill-7.4.0.tgz#90f9d68ae34ac42ab4b4aa03151848f536960218"
   integrity sha512-bVsjsrtsDflIHp5I6caaAa2V25Kzn50HKPL6g3X0P0ni1ks+58cPB8Mz6AOKVuRPgaVdq/OwEUc/1vKqX+Mo4A==
@@ -2941,10 +2949,10 @@ evp_bytestokey@^1.0.0, evp_bytestokey@^1.0.3:
     md5.js "^1.3.4"
     safe-buffer "^5.1.1"
 
-ew-internals@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/ew-internals/-/ew-internals-1.0.6.tgz#5f708849af433ee83d9180bc0e576824aa311c11"
-  integrity sha512-KbCTS/kGtNjc926+ALDb9Gs7hGiO19dE22GQSNaTCr08veTzIChNJ48y2KLRVBDWlzAv3SPKvIN9544FDnfzxw==
+ew-internals@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/ew-internals/-/ew-internals-1.0.7.tgz#0b8deb085a6d72cbfe9c8ccfc9d5d1b4cb96a9c9"
+  integrity sha512-8rQ9VQOS4i8FE9jsTZRNKxp2xfAdoOPZB3CDndZF7n9Gstf+grvS8wokvzzCl5YrLB3Dlkg2YzXx9bFIMG2quA==
   dependencies:
     "@babel/polyfill" "^7.2.5"
 
