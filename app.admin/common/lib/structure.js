@@ -16,8 +16,8 @@ export default class Structure {
         this._struct = struct;
     }
 
-    get() {
-        return this._struct;
+    get(name = null) {
+        return name ? this._struct.find(e => e.name === name) : this._struct;
     }
 
     isEmpty() {

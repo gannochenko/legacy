@@ -31,7 +31,7 @@ export const Left = styled.div`
 `;
 
 export const Right = styled.div`
-    padding: 0 5rem 0 1rem;
+    padding: 1rem 5rem 1rem 1rem;
 `;
 
 export const Logo = styled(Link)`
@@ -42,4 +42,9 @@ export const Logo = styled(Link)`
     text-align: center;
     text-decoration: none;
     color: gray;
+`;
+
+export const Header = styled.div`
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
 `;
