@@ -1,18 +1,6 @@
 import Entity from './entity';
-import SchemaEntity from '../../entity/schema';
 
 export default class Schema {
-    static async load(type, connectionManager) {
-        const connection = await connectionManager.getSystem();
-        const repo = connection.getRepository(SchemaEntity);
-
-        const structure = await repo.findOne({
-            draft: type === 'draft',
-        });
-
-        return new this(structure.structure);
-    }
-
     constructor(declaration) {
         if (!_.iane(declaration)) {
             declaration = [];
@@ -81,5 +69,9 @@ export default class Schema {
         });
 
         return refs;
+    }
+
+    isEmpty() {
+        return !this._schema.length;
     }
 }

@@ -1,11 +1,11 @@
 import Field from './field';
 import CodeField from './code-field';
-import { convertToCamel } from '../util';
+import { convertToCamel } from '../../common/lib/util';
 import {
     ENTITY_USER_NAME,
     ENTITY_GROUP_NAME,
     ENTITY_CODE_FIELD_NAME,
-} from '../../constants';
+} from '../constants';
 
 export default class Entity {
     constructor(declaration) {

@@ -1,4 +1,4 @@
-import { DB_VARCHAR_DEF_LENGTH } from '../../constants';
+import { DB_VARCHAR_DEF_LENGTH } from '../constants';
 
 export const TYPE_STRING = 'string';
 export const TYPE_INTEGER = 'integer';

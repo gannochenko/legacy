@@ -1,12 +1,12 @@
 import { takeLatest, put, call } from 'redux-saga/effects';
 import * as reducer from './reducer';
 
-import Structure from '../../lib/structure';
+import loadSchema from '../../../shared/schema/loader/client.js';
 
 function* load({ settings }) {
     try {
         const user = {}; // todo
-        const structure = yield call(() => Structure.load(settings));
+        const structure = yield call(() => loadSchema(settings));
         yield put({ type: reducer.LOAD_SUCCESS, payload: { user, structure } });
     } catch (error) {
         yield put({ type: reducer.LOAD_FAILURE, payload: error });
