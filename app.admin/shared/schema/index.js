@@ -58,6 +58,10 @@ export default class Schema {
         return this._schema;
     }
 
+    get() {
+        return this._schema;
+    }
+
     getEntity(name) {
         return this._schema.find(entity => entity.getName() === name);
     }

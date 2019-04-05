@@ -7,7 +7,6 @@ module.exports = (env, argv) => {
         argv.mode === 'development' || env.NODE_ENV === 'development';
 
     return {
-        devtool: 'inline-source-map',
         entry: [
             'react-hot-loader/patch',
             'webpack-dev-server/client?http://localhost:3001',
@@ -20,6 +19,7 @@ module.exports = (env, argv) => {
             extensions: ['.js', '.jsx'],
             symlinks: false,
         },
+        devtool: development ? 'source-map' : false,
         module: {
             rules: [
                 {

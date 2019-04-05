@@ -1,20 +1,33 @@
 import React from 'react';
-import { Container } from './style.js';
+import {
+    Container,
+    Table,
+    THead,
+    TBody,
+    TH,
+    TR,
+    TD,
+    HeaderLink,
+} from './style.js';
 
 const List = ({ children }) => (
     <Container>
-        <table>
-            <thead>
-                <th>
-                    <td>Code</td>
-                </th>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>353454543</td>
-                </tr>
-            </tbody>
-        </table>
+        <Table cellPadding="0" cellSpacing="0">
+            <THead>
+                <TR>
+                    <TH>
+                        <HeaderLink>Code</HeaderLink>
+                    </TH>
+                    <TH>Name</TH>
+                </TR>
+            </THead>
+            <TBody>
+                <TR>
+                    <TD>353454543</TD>
+                    <TD>Mr Twister</TD>
+                </TR>
+            </TBody>
+        </Table>
     </Container>
 );
 

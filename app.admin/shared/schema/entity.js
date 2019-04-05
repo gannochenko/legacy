@@ -1,3 +1,4 @@
+import { uCFirst } from 'ew-internals';
 import Field from './field';
 import CodeField from './code-field';
 import { convertToCamel } from '../../common/lib/util';
@@ -100,6 +101,10 @@ export default class Entity {
 
     getCamelName() {
         return convertToCamel(this.getName().toLowerCase());
+    }
+
+    getDisplayName() {
+        return uCFirst(this.getName()).replace(/_/g, ' ');
     }
 
     getReferences() {

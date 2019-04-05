@@ -6,7 +6,7 @@ import { withSettings } from '../../lib/settings';
 // import Button from '../../material-kit/CustomButtons';
 import Layout from '../../components/Layout';
 
-const StructurePage = ({ dispatch, settings }) => {
+const SchemaPage = ({ dispatch, settings }) => {
     useEffect(() => {
         dispatch({
             type: LOAD,
@@ -21,4 +21,4 @@ const StructurePage = ({ dispatch, settings }) => {
     );
 };
 
-export default withSettings(connect(x => x.structure)(StructurePage));
+export default withSettings(connect(x => x.schema)(SchemaPage));

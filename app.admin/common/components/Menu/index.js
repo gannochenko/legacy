@@ -1,32 +1,30 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Container, Section, Title, Item } from './style.js';
-import { uCFirst } from 'ew-internals';
 
-const makeDisplay = name => {
-    return uCFirst(name).replace(/_/g, ' ');
-};
-
-const Menu = ({ structure }) => {
-    if (!structure) {
+const Menu = ({ schema }) => {
+    if (!schema) {
         return null;
     }
 
     return (
         <Container>
-            {!structure.isEmpty() && (
+            {!schema.isEmpty() && (
                 <Section>
                     <Title>Content</Title>
-                    {structure.get().map(entity => (
-                        <Item to={`/data/${entity.name}`} key={entity.name}>
-                            {makeDisplay(entity.name)}
+                    {schema.get().map(entity => (
+                        <Item
+                            to={`/data/${entity.getName()}`}
+                            key={entity.getName()}
+                        >
+                            {entity.getDisplayName()}
                         </Item>
                     ))}
                 </Section>
             )}
             <Section>
                 <Title>Settings</Title>
-                <Item to="/structure">Structure</Item>
+                <Item to="/schema">Schema</Item>
             </Section>
         </Container>
     );

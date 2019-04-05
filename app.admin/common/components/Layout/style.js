@@ -16,7 +16,7 @@ export const Top = styled.div`
 `;
 
 export const Middle = styled.div`
-    ${align('top', 'left')}
+    ${align('stretch', 'left')}
     flex-grow: 2;
 `;
 
@@ -32,6 +32,7 @@ export const Left = styled.div`
 
 export const Right = styled.div`
     padding: 1rem 5rem 1rem 1rem;
+    flex-grow: 2;
 `;
 
 export const Logo = styled(Link)`

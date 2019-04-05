@@ -1,6 +1,6 @@
-export const LOAD = 'structure.load';
-export const LOAD_SUCCESS = 'structure.load.success';
-export const LOAD_FAILURE = 'structure.load.failure';
+export const LOAD = 'schema.load';
+export const LOAD_SUCCESS = 'schema.load.success';
+export const LOAD_FAILURE = 'schema.load.failure';
 
 const initialState = {
     loading: false,

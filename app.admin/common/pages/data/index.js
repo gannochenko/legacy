@@ -7,7 +7,7 @@ import List from '../../components/List';
 // import Button from '../../material-kit/CustomButtons';
 import Layout from '../../components/Layout';
 
-const DataPage = ({ dispatch, settings, route, structure }) => {
+const DataPage = ({ dispatch, settings, route, schema }) => {
     useEffect(() => {
         dispatch({
             type: LOAD,
@@ -16,18 +16,19 @@ const DataPage = ({ dispatch, settings, route, structure }) => {
     }, []);
 
     const entityName = _.get(route, 'match.params.entity_name');
-    const entity = structure.get(entityName);
+    const entity = schema.getEntity(entityName);
 
-    console.dir(entityName);
-    console.dir(entity);
+    if (!entity) {
+        return null;
+    }
 
     return (
-        <Layout title="Data here">
+        <Layout title={entity.getDisplayName()}>
             <List />
         </Layout>
     );
 };
 
 export default withSettings(
-    connect(s => ({ ...s.data, structure: s.application.structure }))(DataPage),
+    connect(s => ({ ...s.data, schema: s.application.schema }))(DataPage),
 );

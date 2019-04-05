@@ -6,8 +6,8 @@ import loadSchema from '../../../shared/schema/loader/client.js';
 function* load({ settings }) {
     try {
         const user = {}; // todo
-        const structure = yield call(() => loadSchema(settings));
-        yield put({ type: reducer.LOAD_SUCCESS, payload: { user, structure } });
+        const schema = yield call(() => loadSchema(settings));
+        yield put({ type: reducer.LOAD_SUCCESS, payload: { user, schema } });
     } catch (error) {
         yield put({ type: reducer.LOAD_FAILURE, payload: error });
         if (__DEV__) {

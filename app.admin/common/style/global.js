@@ -11,7 +11,7 @@ export const withTheme = Component => {
     );
 };
 export const GlobalStyle = withTheme(createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css?family=Roboto');
+  @import url('https://fonts.googleapis.com/css?family=Montserrat');
 
   html {
     font-size: 20px;
@@ -22,9 +22,10 @@ export const GlobalStyle = withTheme(createGlobalStyle`
     margin: 0 !important;
     font-weight: 400;
     line-height: 1.8;
+    font-size: 0.8rem;
     letter-spacing: -0.05px;
     color: ${props => props.theme.body.color};
-    font-family: Roboto, sans-serif;
+    font-family: Montserrat, sans-serif;
     min-width: 320px;
     background-color: ${props => props.theme.body.background.color};
   }

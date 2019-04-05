@@ -11,7 +11,7 @@ import { withSettings } from '../../lib/settings';
 
 import HomePage from '../../pages/home';
 import DataPage from '../../pages/data';
-import StructurePage from '../../pages/structure';
+import SchemaPage from '../../pages/schema';
 
 const Application = ({ dispatch, ready, settings }) => {
     useEffect(() => {
@@ -39,8 +39,8 @@ const Application = ({ dispatch, ready, settings }) => {
                         />
                         <Route
                             exact
-                            path="/structure"
-                            render={route => <StructurePage route={route} />}
+                            path="/schema"
+                            render={route => <SchemaPage route={route} />}
                         />
                     </Switch>
                 </ConnectedRouter>
