@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { LOAD } from './reducer';
 import { withSettings } from '../../lib/settings';
@@ -22,9 +22,17 @@ const DataPage = ({ dispatch, settings, route, schema }) => {
         return null;
     }
 
+    const columns = useMemo(() => {
+        return entity.getFields().map(field => ({
+            name: field.getName(),
+            display: field.getDisplayName(),
+            sortable: field.isSortable(),
+        }));
+    }, [entity]);
+
     return (
         <Layout title={entity.getDisplayName()}>
-            <List />
+            <List columns={columns} />
         </Layout>
     );
 };

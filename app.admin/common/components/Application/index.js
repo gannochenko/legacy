@@ -30,17 +30,23 @@ const Application = ({ dispatch, ready, settings }) => {
                         <Route
                             exact
                             path="/"
-                            render={route => <HomePage route={route} />}
+                            render={route => (
+                                <HomePage route={route} history={history} />
+                            )}
                         />
                         <Route
                             exact
                             path="/data/:entity_name"
-                            render={route => <DataPage route={route} />}
+                            render={route => (
+                                <DataPage route={route} history={history} />
+                            )}
                         />
                         <Route
                             exact
                             path="/schema"
-                            render={route => <SchemaPage route={route} />}
+                            render={route => (
+                                <SchemaPage route={route} history={history} />
+                            )}
                         />
                     </Switch>
                 </ConnectedRouter>

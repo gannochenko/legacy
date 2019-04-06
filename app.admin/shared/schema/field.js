@@ -1,3 +1,4 @@
+import { uCFirst } from 'ew-internals';
 import { DB_VARCHAR_DEF_LENGTH } from '../constants';
 
 export const TYPE_STRING = 'string';
@@ -37,10 +38,6 @@ export default class Field {
         return errors;
     }
 
-    isMultiple() {
-        return _.isArray(this._schema.type);
-    }
-
     getType() {
         return this._schema.type || null;
     }
@@ -72,6 +69,12 @@ export default class Field {
         return this._schema.name;
     }
 
+    getDisplayName() {
+        return _.isne(this._schema.label)
+            ? this._schema.label
+            : uCFirst(this.getName()).replace(/_/g, ' ');
+    }
+
     getReferenceFieldName() {
         const type = this.getActualType();
         if (
@@ -83,6 +86,18 @@ export default class Field {
         }
 
         return type;
+    }
+
+    isMultiple() {
+        return _.isArray(this._schema.type);
+    }
+
+    isReference() {
+        return _.isne(this.getReferenceFieldName());
+    }
+
+    isSortable() {
+        return !this.isMultiple() && !this.isReference();
     }
 
     toJSON() {

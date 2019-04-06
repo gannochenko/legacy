@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { iconLabel } from 'sc-companion';
+import { iconLabel, align, fgColor, group, ellipsis } from 'sc-companion';
 
 const thPadding = '1rem';
 
@@ -17,7 +17,6 @@ export const TBody = styled.tbody``;
 export const TH = styled.th`
     text-align: left;
     padding: 0.5rem 1rem;
-    color: #b6b9c2;
     border-bottom: 1px solid #b6b9c2;
 `;
 
@@ -29,5 +28,30 @@ export const TD = styled.td`
 `;
 
 export const HeaderLink = styled.div`
-    ${iconLabel('arrow_drop_down')}
+	height: 43px;
+    ${props =>
+        props.sortable
+            ? iconLabel(`arrow_drop_${props.up ? 'up' : 'down'}`, '1.2rem')
+            : ''}
+    ${props => (props.sortable ? 'cursor: pointer;' : '')}
+    ${align('center', 'left')}
+    color: #b6b9c2;
+    ${props => (props.sortable ? fgColor('#b6b9c2', '#363636', '200ms') : '')}
+    white-space: nowrap;
+    max-width: 15rem;
+    ${ellipsis()}
+`;
+
+export const PageNav = styled.div`
+    ${align('center', 'left')}
+`;
+
+export const Footer = styled.div`
+    ${align('center', 'left')}
+`;
+
+export const Counter = styled.div`
+    flex-grow: 2;
+    padding: 1rem;
+    color: #b6b9c2;
 `;

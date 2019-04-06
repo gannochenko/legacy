@@ -23,7 +23,6 @@ export const Middle = styled.div`
 export const Footer = withTheme(styled.div`
     height: 5rem;
     flex-shrink: 0;
-    background-color: ${props => props.theme.footer.background.color};
 `);
 
 export const Left = styled.div`

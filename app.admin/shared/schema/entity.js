@@ -115,6 +115,10 @@ export default class Entity {
             .filter(x => x);
     }
 
+    getFields() {
+        return this._schema.schema;
+    }
+
     toJSON() {
         return this._schema;
     }
