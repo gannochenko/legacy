@@ -1,17 +1,17 @@
 import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { LOAD } from './reducer';
-import { withSettings } from '../../lib/settings';
+import { withClient } from '../../lib/client';
 import List from '../../components/List';
 
 // import Button from '../../material-kit/CustomButtons';
 import Layout from '../../components/Layout';
 
-const DataPage = ({ dispatch, settings, route, schema }) => {
+const DataPage = ({ dispatch, client, route, schema }) => {
     useEffect(() => {
         dispatch({
             type: LOAD,
-            settings,
+            client,
         });
     }, []);
 
@@ -37,6 +37,6 @@ const DataPage = ({ dispatch, settings, route, schema }) => {
     );
 };
 
-export default withSettings(
+export default withClient(
     connect(s => ({ ...s.data, schema: s.application.schema }))(DataPage),
 );

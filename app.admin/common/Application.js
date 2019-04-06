@@ -1,21 +1,30 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { Settings } from 'ew-internals';
 
 import { ThemeContext } from './style/global';
-import { SettingsContext } from './lib/settings';
+import { Context as SettingsContext, createSettings } from './lib/settings';
+import { Context as HistoryContext, createHistory } from './lib/history';
+import { Context as ClientContext, createClient } from './lib/client';
 import ApplicationUI from './components/Application';
+import { createStore } from './store';
 
-import store from './store';
 import theme from './style/theme';
-const settings = new Settings();
+
+const history = createHistory();
+const { store, saga } = createStore({ history });
+const settings = createSettings();
+const client = createClient(settings);
 
 const Application = () => (
     <ThemeContext.Provider value={theme}>
         <SettingsContext.Provider value={settings}>
-            <Provider store={store}>
-                <ApplicationUI />
-            </Provider>
+            <HistoryContext.Provider value={history}>
+                <ClientContext.Provider value={client}>
+                    <Provider store={store}>
+                        <ApplicationUI history={history} settings={settings} />
+                    </Provider>
+                </ClientContext.Provider>
+            </HistoryContext.Provider>
         </SettingsContext.Provider>
     </ThemeContext.Provider>
 );

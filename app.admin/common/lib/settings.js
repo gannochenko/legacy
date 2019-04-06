@@ -1,10 +1,12 @@
 import React from 'react';
+import { Settings } from 'ew-internals';
 
-export const SettingsContext = React.createContext();
+export const createSettings = () => new Settings();
+export const Context = React.createContext();
 export const withSettings = Component => {
     return props => (
-        <SettingsContext.Consumer>
+        <Context.Consumer>
             {value => <Component {...props} settings={value} />}
-        </SettingsContext.Consumer>
+        </Context.Consumer>
     );
 };

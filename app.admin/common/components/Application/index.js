@@ -5,15 +5,13 @@ import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 
 import { LOAD } from './reducer';
-import history from '../../lib/history'; // todo: deal with it, this is a singleton
 import { GlobalStyle } from '../../style/global';
-import { withSettings } from '../../lib/settings';
 
 import HomePage from '../../pages/home';
 import DataPage from '../../pages/data';
 import SchemaPage from '../../pages/schema';
 
-const Application = ({ dispatch, ready, settings }) => {
+const Application = ({ dispatch, ready, settings, history }) => {
     useEffect(() => {
         dispatch({
             type: LOAD,
@@ -30,23 +28,17 @@ const Application = ({ dispatch, ready, settings }) => {
                         <Route
                             exact
                             path="/"
-                            render={route => (
-                                <HomePage route={route} history={history} />
-                            )}
+                            render={route => <HomePage route={route} />}
                         />
                         <Route
                             exact
                             path="/data/:entity_name"
-                            render={route => (
-                                <DataPage route={route} history={history} />
-                            )}
+                            render={route => <DataPage route={route} />}
                         />
                         <Route
                             exact
                             path="/schema"
-                            render={route => (
-                                <SchemaPage route={route} history={history} />
-                            )}
+                            render={route => <SchemaPage route={route} />}
                         />
                     </Switch>
                 </ConnectedRouter>
@@ -55,4 +47,4 @@ const Application = ({ dispatch, ready, settings }) => {
     );
 };
 
-export default withSettings(connect(s => s.application)(Application));
+export default connect(s => s.application)(Application);
