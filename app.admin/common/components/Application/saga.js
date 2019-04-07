@@ -1,12 +1,20 @@
 import { takeLatest, put, call } from 'redux-saga/effects';
 import * as reducer from './reducer';
 
-import loadSchema from '../../../shared/schema/loader/client.js';
+import Schema from '../../../shared/schema';
 
-function* load({ settings }) {
+function* load({ client }) {
     try {
         const user = {}; // todo
-        const schema = yield call(() => loadSchema(settings));
+
+        const result = yield call(() => client.get(`schema/draft`));
+        let schema = null;
+        if (result.data.structure && !_.iane(result.data.errors)) {
+            schema = new Schema(result.data.structure);
+        } else {
+            // todo: handle errors
+        }
+
         yield put({ type: reducer.LOAD_SUCCESS, payload: { user, schema } });
     } catch (error) {
         yield put({ type: reducer.LOAD_FAILURE, payload: error });

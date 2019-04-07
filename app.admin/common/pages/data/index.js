@@ -8,19 +8,20 @@ import List from '../../components/List';
 import Layout from '../../components/Layout';
 
 const DataPage = ({ dispatch, client, route, schema }) => {
-    useEffect(() => {
-        dispatch({
-            type: LOAD,
-            client,
-        });
-    }, []);
-
     const entityName = _.get(route, 'match.params.entity_name');
     const entity = schema.getEntity(entityName);
 
     if (!entity) {
         return null;
     }
+
+    useEffect(() => {
+        dispatch({
+            type: LOAD,
+            client,
+            entity,
+        });
+    }, [entity.getName()]);
 
     const columns = useMemo(() => {
         return entity.getFields().map(field => ({

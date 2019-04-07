@@ -13,3 +13,8 @@
 * [DONE] Support limit-offset in find()
 * Make code cleaner, remove duplication
 * Hooks
+
+Tech debts:
+
+1) backend still does not use database when reading a schema
+2) schema classes are duplicate, across applications (see shared/ folder)

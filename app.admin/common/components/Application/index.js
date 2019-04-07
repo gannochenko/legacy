@@ -11,11 +11,11 @@ import HomePage from '../../pages/home';
 import DataPage from '../../pages/data';
 import SchemaPage from '../../pages/schema';
 
-const Application = ({ dispatch, ready, settings, history }) => {
+const Application = ({ dispatch, ready, client, history }) => {
     useEffect(() => {
         dispatch({
             type: LOAD,
-            settings,
+            client,
         });
     }, []);
 

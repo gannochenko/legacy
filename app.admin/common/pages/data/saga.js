@@ -2,10 +2,18 @@ import { takeLatest, put, call } from 'redux-saga/effects';
 import * as reducer from './reducer';
 import gql from 'graphql-tag';
 
-const makeQuery = (entity, page, pageSize, sortBy, filter, select) => {
+const makeQuery = (
+    queryName,
+    entity,
+    page,
+    pageSize,
+    sortBy,
+    filter,
+    select,
+) => {
     return gql`
         query {
-            ImportantPersonFind(
+            ${queryName}(
                 limit: 10
                 offset: 0
                 sort: { full_name: ASC }
@@ -16,28 +24,29 @@ const makeQuery = (entity, page, pageSize, sortBy, filter, select) => {
                 }
                 data {
                     code
-                    full_name
-                    lucky_numbers
-                    partner {
-                        full_name
-                    }
-                    pets(sort: { nickname: ASC }) {
-                        nickname
-                    }
                 }
             }
         }
     `;
 };
 
-function* load({ client }) {
+function* load({ entity, client }) {
     try {
-        const data = yield call(() => {
+        const queryName = `${entity.getCamelName()}Find`;
+        const result = yield call(() => {
             return client.query({
-                query: makeQuery(),
+                query: makeQuery(queryName, entity),
             });
         });
-        yield put({ type: reducer.LOAD_SUCCESS, payload: { data } });
+
+        const payload = _.get(result, `data.${queryName}`);
+        // todo: check for errors
+        console.dir(payload);
+
+        yield put({
+            type: reducer.LOAD_SUCCESS,
+            payload: { data: payload.data },
+        });
     } catch (error) {
         yield put({ type: reducer.LOAD_FAILURE, payload: error });
         if (__DEV__) {

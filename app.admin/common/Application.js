@@ -21,7 +21,7 @@ const Application = () => (
             <HistoryContext.Provider value={history}>
                 <ClientContext.Provider value={client}>
                     <Provider store={store}>
-                        <ApplicationUI history={history} settings={settings} />
+                        <ApplicationUI history={history} client={client} />
                     </Provider>
                 </ClientContext.Provider>
             </HistoryContext.Provider>
