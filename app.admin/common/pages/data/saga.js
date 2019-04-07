@@ -1,41 +1,14 @@
 import { takeLatest, put, call } from 'redux-saga/effects';
 import * as reducer from './reducer';
-import gql from 'graphql-tag';
+import buildQuery from './query-builder';
 
-const makeQuery = (
-    queryName,
-    entity,
-    page,
-    pageSize,
-    sortBy,
-    filter,
-    select,
-) => {
-    return gql`
-        query {
-            ${queryName}(
-                limit: 10
-                offset: 0
-                sort: { full_name: ASC }
-            ) {
-                errors {
-                    code
-                    message
-                }
-                data {
-                    code
-                }
-            }
-        }
-    `;
-};
-
-function* load({ entity, client }) {
+function* load(params) {
+    const { entity, client } = params;
     try {
         const queryName = `${entity.getCamelName()}Find`;
         const result = yield call(() => {
             return client.query({
-                query: makeQuery(queryName, entity),
+                query: buildQuery(params),
             });
         });
 

@@ -14,57 +14,69 @@ import {
 } from './style.js';
 import Button from '../../material-kit/CustomButtons';
 
-const List = ({ columns, children }) => (
+import {
+    ENTITY_TYPE_STRING,
+    ENTITY_TYPE_DATE,
+    ENTITY_TYPE_NUMBER,
+    ENTITY_TYPE_BOOLEAN,
+} from '../../../shared/constants';
+
+import ListCellString from '../ListCellString';
+import ListCellReference from '../ListCellReference';
+import ListCellDate from '../ListCellDate';
+import ListCellCode from '../ListCellCode';
+
+const getCellComponent = field => {
+    if (field.getName() === 'code') {
+        return ListCellCode;
+    }
+    if (field.isReference()) {
+        return ListCellReference;
+    }
+    if (field.getActualType() === ENTITY_TYPE_STRING) {
+        return ListCellString;
+    }
+    if (field.getActualType() === ENTITY_TYPE_DATE) {
+        return ListCellDate;
+    }
+
+    return ListCellString;
+};
+
+const List = ({ entity, data }) => (
     <Container>
         <Table cellPadding="0" cellSpacing="0">
             <THead>
                 <TR>
-                    {columns.map(column => (
+                    {entity.getFields().map(field => (
                         <TH>
-                            <HeaderLink sortable={column.sortable} up>
-                                {column.display}
+                            <HeaderLink sortable={field.isSortable()} up>
+                                {field.getDisplayName()}
                             </HeaderLink>
                         </TH>
                     ))}
                 </TR>
             </THead>
             <TBody>
-                <TR>
-                    <TD>353454543</TD>
-                    <TD>Mr Twister</TD>
-                    <TD>Value</TD>
-                    <TD>Value 2</TD>
-                </TR>
-                <TR>
-                    <TD>353454543</TD>
-                    <TD>Mr Twister</TD>
-                    <TD>Value</TD>
-                    <TD>Value 2</TD>
-                </TR>
-                <TR>
-                    <TD>353454543</TD>
-                    <TD>Mr Twister</TD>
-                    <TD>Value</TD>
-                    <TD>Value 2</TD>
-                </TR>
-                <TR>
-                    <TD>353454543</TD>
-                    <TD>Mr Twister</TD>
-                    <TD>Value</TD>
-                    <TD>Value 2</TD>
-                </TR>
-                <TR>
-                    <TD>353454543</TD>
-                    <TD>Mr Twister</TD>
-                    <TD>Value</TD>
-                    <TD>Value 2</TD>
-                </TR>
-                <TR>
-                    <TD>353454543</TD>
-                    <TD>Mr Twister</TD>
-                    <TD>Value</TD>
-                    <TD>Value 2</TD>
-                </TR>
+                {_.iane(data) &&
+                    data.map(item => {
+                        return (
+                            <TR>
+                                {entity.getFields().map(field => {
+                                    const Cell = getCellComponent(field);
+                                    return (
+                                        <TD>
+                                            <Cell
+                                                entity={entity}
+                                                field={field}
+                                                value={item[field.getName()]}
+                                            />
+                                        </TD>
+                                    );
+                                })}
+                            </TR>
+                        );
+                    })}
             </TBody>
         </Table>
         <Footer>

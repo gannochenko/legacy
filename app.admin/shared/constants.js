@@ -12,7 +12,7 @@ export const ENTITY_USER_NAME = 'user';
 export const ENTITY_GROUP_NAME = 'group';
 export const ENTITY_CODE_FIELD_NAME = 'code';
 
-export const ENTITY_TYPE_STRING = String;
-export const ENTITY_TYPE_NUMBER = Number;
-export const ENTITY_TYPE_BOOLEAN = Boolean;
-export const ENTITY_TYPE_DATE = Date;
+export const ENTITY_TYPE_STRING = 'string';
+export const ENTITY_TYPE_NUMBER = 'number';
+export const ENTITY_TYPE_BOOLEAN = 'boolean';
+export const ENTITY_TYPE_DATE = 'datetime';

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { LOAD } from './reducer';
 import { withClient } from '../../lib/client';
@@ -7,7 +7,15 @@ import List from '../../components/List';
 // import Button from '../../material-kit/CustomButtons';
 import Layout from '../../components/Layout';
 
-const DataPage = ({ dispatch, client, route, schema }) => {
+const DataPage = ({
+    dispatch,
+    client,
+    route,
+    schema,
+    ready,
+    loading,
+    data,
+}) => {
     const entityName = _.get(route, 'match.params.entity_name');
     const entity = schema.getEntity(entityName);
 
@@ -23,17 +31,13 @@ const DataPage = ({ dispatch, client, route, schema }) => {
         });
     }, [entity.getName()]);
 
-    const columns = useMemo(() => {
-        return entity.getFields().map(field => ({
-            name: field.getName(),
-            display: field.getDisplayName(),
-            sortable: field.isSortable(),
-        }));
-    }, [entity]);
+    if (!ready || loading) {
+        return null;
+    }
 
     return (
         <Layout title={entity.getDisplayName()}>
-            <List columns={columns} />
+            <List entity={entity} data={data} />
         </Layout>
     );
 };
