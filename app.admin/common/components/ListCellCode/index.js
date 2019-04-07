@@ -10,7 +10,13 @@ export default ({ field, value, entity }) => {
 
     return (
         <ListCellCode>
-            <Link to={`/data/${entity.getName()}/${value}/`}>{value}</Link>
+            <Link
+                to={`/data/${encodeURIComponent(
+                    entity.getName(),
+                )}/${encodeURIComponent(value)}/`}
+            >
+                {value}
+            </Link>
         </ListCellCode>
     );
 };

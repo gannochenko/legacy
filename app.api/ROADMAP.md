@@ -18,3 +18,4 @@ Tech debts:
 
 1) backend still does not use database when reading a schema
 2) schema classes are duplicate, across applications (see shared/ folder)
+3) interlink fields, entities and schema?

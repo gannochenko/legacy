@@ -17,7 +17,7 @@ import Button from '../../material-kit/CustomButtons';
 import {
     ENTITY_TYPE_STRING,
     ENTITY_TYPE_DATE,
-    ENTITY_TYPE_NUMBER,
+    // ENTITY_TYPE_NUMBER,
     ENTITY_TYPE_BOOLEAN,
 } from '../../../shared/constants';
 
@@ -87,26 +87,28 @@ const List = ({ entity, data, count }) => (
                     })}
             </TBody>
         </Table>
-        <Footer>
-            <Counter>Count: {count}</Counter>
-            <PageNav>
-                <Button color="warning" size="sm">
-                    &larr;
-                </Button>
-                <Button color="warning" size="sm">
-                    1
-                </Button>
-                <Button color="warning" size="sm">
-                    2
-                </Button>
-                <Button color="warning" size="sm">
-                    3
-                </Button>
-                <Button color="warning" size="sm">
-                    &rarr;
-                </Button>
-            </PageNav>
-        </Footer>
+        {count !== null && (
+            <Footer>
+                <Counter>Count: {count}</Counter>
+                <PageNav>
+                    <Button color="warning" size="sm">
+                        &larr;
+                    </Button>
+                    <Button color="warning" size="sm">
+                        1
+                    </Button>
+                    <Button color="warning" size="sm">
+                        2
+                    </Button>
+                    <Button color="warning" size="sm">
+                        3
+                    </Button>
+                    <Button color="warning" size="sm">
+                        &rarr;
+                    </Button>
+                </PageNav>
+            </Footer>
+        )}
     </Container>
 );
 

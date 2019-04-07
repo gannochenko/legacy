@@ -18,6 +18,9 @@ First version:
 * https://github.com/typeorm/typeorm/blob/master/test/functional/database-schema/column-types/postgres/entity/Post.ts
 * http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a003169814.htm
 
+Unofficial reference?
+* http://typeorm.delightful.studio/classes/_repository_repository_.repository.html#count
+
 Reference:
 * DDL
     * single reference (add ref -> add field, remove ref -> remove field)

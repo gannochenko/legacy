@@ -32,13 +32,15 @@ const DataPage = ({
         });
     }, [entity.getName()]);
 
-    if (!ready || loading) {
-        return null;
-    }
+    const notReady = !ready || loading;
 
     return (
         <Layout title={entity.getDisplayName()}>
-            <List entity={entity} data={data} count={count} />
+            <List
+                entity={entity}
+                data={notReady ? [] : data}
+                count={notReady ? null : count}
+            />
         </Layout>
     );
 };
