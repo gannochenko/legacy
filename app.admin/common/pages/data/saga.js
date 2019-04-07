@@ -18,7 +18,7 @@ function* load(params) {
 
         yield put({
             type: reducer.LOAD_SUCCESS,
-            payload: { data: payload.data },
+            payload: { data: payload.data, count: payload.count },
         });
     } catch (error) {
         yield put({ type: reducer.LOAD_FAILURE, payload: error });

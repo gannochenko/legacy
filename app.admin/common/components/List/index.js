@@ -47,13 +47,13 @@ const getCellComponent = field => {
     return ListCellString;
 };
 
-const List = ({ entity, data }) => (
+const List = ({ entity, data, count }) => (
     <Container>
         <Table cellPadding="0" cellSpacing="0">
             <THead>
                 <TR>
                     {entity.getFields().map(field => (
-                        <TH>
+                        <TH key={field.getName()}>
                             <HeaderLink sortable={field.isSortable()} up>
                                 {field.getDisplayName()}
                             </HeaderLink>
@@ -65,11 +65,15 @@ const List = ({ entity, data }) => (
                 {_.iane(data) &&
                     data.map(item => {
                         return (
-                            <TR>
+                            <TR key={item.code}>
                                 {entity.getFields().map(field => {
                                     const Cell = getCellComponent(field);
                                     return (
-                                        <TD>
+                                        <TD
+                                            key={`${
+                                                item.code
+                                            }_${field.getName()}`}
+                                        >
                                             <Cell
                                                 entity={entity}
                                                 field={field}
@@ -84,7 +88,7 @@ const List = ({ entity, data }) => (
             </TBody>
         </Table>
         <Footer>
-            <Counter>Count: 143</Counter>
+            <Counter>Count: {count}</Counter>
             <PageNav>
                 <Button color="warning" size="sm">
                     &larr;

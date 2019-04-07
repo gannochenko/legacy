@@ -18,14 +18,15 @@ export default ({ entity, page, pageSize, sortBy, filter, select }) => {
                 offset: 0
                 sort: { full_name: ASC }
             ) {
-            errors {
-                code
-                message
+                errors {
+                    code
+                    message
+                }
+                data {
+                    ${selectedFields.join('\n')}
+                }
+                count
             }
-            data {
-                ${selectedFields.join('\n')}
-            }
-        }
         }
 	`;
 };

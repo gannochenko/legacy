@@ -1,6 +1,7 @@
 import { getRepository, In } from 'typeorm';
 import uuid from 'uuid/v4';
 import { getRefName } from './entity-util';
+import { getSelectionAt } from './ast';
 
 import Validator from './validator';
 import { ENTITY_TYPE_DATE, QUERY_FIND_MAX_PAGE_SIZE } from '../constants';
@@ -77,7 +78,7 @@ export default class ResolverGenerator {
                     source,
                     args,
                     { requestId },
-                    state,
+                    info,
                 ) => {
                     const result = {
                         errors: [],
@@ -119,6 +120,15 @@ export default class ResolverGenerator {
                             take: result.limit,
                         })).map(item => this.convertToPlain(item, entity));
                     }, result.errors);
+
+                    if (!!getSelectionAt(info, 'count')) {
+                        // count asked
+                        await this.wrap(async () => {
+                            result.count = await repo.count({
+                                where: {},
+                            });
+                        }, result.errors);
+                    }
 
                     return result;
                 },

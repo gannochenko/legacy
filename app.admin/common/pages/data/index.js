@@ -15,6 +15,7 @@ const DataPage = ({
     ready,
     loading,
     data,
+    count,
 }) => {
     const entityName = _.get(route, 'match.params.entity_name');
     const entity = schema.getEntity(entityName);
@@ -37,7 +38,7 @@ const DataPage = ({
 
     return (
         <Layout title={entity.getDisplayName()}>
-            <List entity={entity} data={data} />
+            <List entity={entity} data={data} count={count} />
         </Layout>
     );
 };
