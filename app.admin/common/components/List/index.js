@@ -25,6 +25,7 @@ import ListCellString from '../ListCellString';
 import ListCellReference from '../ListCellReference';
 import ListCellDate from '../ListCellDate';
 import ListCellCode from '../ListCellCode';
+import ListCellBoolean from '../ListCellBoolean';
 
 const getCellComponent = field => {
     if (field.getName() === 'code') {
@@ -38,6 +39,9 @@ const getCellComponent = field => {
     }
     if (field.getActualType() === ENTITY_TYPE_DATE) {
         return ListCellDate;
+    }
+    if (field.getActualType() === ENTITY_TYPE_BOOLEAN) {
+        return ListCellBoolean;
     }
 
     return ListCellString;

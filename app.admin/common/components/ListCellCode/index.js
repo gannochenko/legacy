@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { ListCellCode } from './style.js';
+import { ListCellCode, Link } from './style.js';
 
 export default ({ field, value, entity }) => {
     if (typeof value === 'undefined' || value === null) {
