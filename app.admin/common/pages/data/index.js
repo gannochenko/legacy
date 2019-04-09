@@ -40,6 +40,8 @@ const DataPage = ({
                 entity={entity}
                 data={notReady ? [] : data}
                 count={notReady ? null : count}
+                page={1}
+                onPageChange={page => console.dir(page)}
             />
         </Layout>
     );

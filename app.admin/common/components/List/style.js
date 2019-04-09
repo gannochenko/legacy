@@ -42,10 +42,6 @@ export const HeaderLink = styled.div`
     ${ellipsis()}
 `;
 
-export const PageNav = styled.div`
-    ${align('center', 'left')}
-`;
-
 export const Footer = styled.div`
     ${align('center', 'left')}
 `;

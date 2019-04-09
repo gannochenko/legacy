@@ -8,11 +8,9 @@ import {
     TR,
     TD,
     HeaderLink,
-    PageNav,
     Footer,
     Counter,
 } from './style.js';
-import Button from '../../material-kit/CustomButtons';
 
 import {
     ENTITY_TYPE_STRING,
@@ -20,6 +18,8 @@ import {
     // ENTITY_TYPE_NUMBER,
     ENTITY_TYPE_BOOLEAN,
 } from '../../../shared/constants';
+
+import PageNavigation from '../PageNavigation';
 
 import ListCellString from '../ListCellString';
 import ListCellReference from '../ListCellReference';
@@ -47,7 +47,7 @@ const getCellComponent = field => {
     return ListCellString;
 };
 
-const List = ({ entity, data, count }) => (
+const List = ({ entity, data, page, count, onPageChange }) => (
     <Container>
         <Table cellPadding="0" cellSpacing="0">
             <THead>
@@ -90,23 +90,12 @@ const List = ({ entity, data, count }) => (
         {count !== null && (
             <Footer>
                 <Counter>Count: {count}</Counter>
-                <PageNav>
-                    <Button color="warning" size="sm">
-                        &larr;
-                    </Button>
-                    <Button color="warning" size="sm">
-                        1
-                    </Button>
-                    <Button color="warning" size="sm">
-                        2
-                    </Button>
-                    <Button color="warning" size="sm">
-                        3
-                    </Button>
-                    <Button color="warning" size="sm">
-                        &rarr;
-                    </Button>
-                </PageNav>
+                <PageNavigation
+                    count={count}
+                    page={page}
+                    onNavigate={onPageChange}
+                    pageSize={2}
+                />
             </Footer>
         )}
     </Container>

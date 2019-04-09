@@ -21,7 +21,7 @@ services:
         labels:
             com.list.name: Adminer
             com.list.sort: '2'
-            com.list.link.endpoint: Browse database___/?pgsql=db&username=root&db=legacy&ns=public
+            com.list.link.endpoint: Browse database|/?pgsql=db&username=root&db=legacy&ns=public
     cache:
         build:
             context: ../infra/cache/
@@ -41,7 +41,7 @@ services:
         labels:
             com.list.name: Redis GUI
             com.list.sort: '3'
-            com.list.link.endpoint: 'Browse cache___/cache:6379/0/keys/'
+            com.list.link.endpoint: 'Browse cache|/cache:6379/0/keys/'
     api:
         image: 'api:dev'
         build:
@@ -68,7 +68,7 @@ services:
             com.list.name: Backend
             com.list.sort: '1'
             com.list.description: Main server that provides API
-            com.list.link.endpoint: GraphQL endpoint___/graphql
+            com.list.link.endpoint: GraphQL endpoint|/graphql
     container-list:
         image: awesome1888/container-list
         expose:
