@@ -47,7 +47,7 @@ const getCellComponent = field => {
     return ListCellString;
 };
 
-const List = ({ entity, data, page, count, onPageChange }) => (
+const List = ({ entity, data, page, count, pageSize, onPageChange }) => (
     <Container>
         <Table cellPadding="0" cellSpacing="0">
             <THead>
@@ -94,7 +94,7 @@ const List = ({ entity, data, page, count, onPageChange }) => (
                     count={count}
                     page={page}
                     onNavigate={onPageChange}
-                    pageSize={2}
+                    pageSize={pageSize}
                 />
             </Footer>
         )}

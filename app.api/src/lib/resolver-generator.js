@@ -87,26 +87,28 @@ export default class ResolverGenerator {
                         offset: 0,
                     };
 
-                    const { filter, sort, limit, offset } = args;
+                    let { filter, sort, limit, offset, page, pageSize } = args;
 
-                    if (
-                        typeof offset !== 'undefined' &&
-                        offset !== null &&
-                        offset > 0
-                    ) {
-                        result.offset = offset;
+                    // page/pageSize pair has higher priority
+                    if (typeof pageSize !== 'undefined') {
+                        limit = pageSize;
                     }
 
-                    if (
-                        typeof limit !== 'undefined' &&
-                        limit !== null &&
-                        limit > 0
-                    ) {
-                        result.limit =
-                            limit > QUERY_FIND_MAX_PAGE_SIZE
-                                ? QUERY_FIND_MAX_PAGE_SIZE
-                                : limit;
+                    if (typeof limit === 'undefined') {
+                        limit = QUERY_FIND_MAX_PAGE_SIZE;
+                    } else if (limit > QUERY_FIND_MAX_PAGE_SIZE) {
+                        result.errors.push({
+                            code: 'limit_too_high',
+                            message: 'Limit too high',
+                        });
                     }
+
+                    if (typeof page !== 'undefined') {
+                        offset = (page - 1) * limit;
+                    }
+
+                    result.limit = limit;
+                    result.offset = offset;
 
                     // todo: use connection here
                     const repo = getRepository(dbEntity);

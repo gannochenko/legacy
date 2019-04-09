@@ -14,7 +14,7 @@ function* load(params) {
 
         const payload = _.get(result, `data.${queryName}`);
         // todo: check for errors
-        console.dir(payload);
+        // console.dir(payload);
 
         yield put({
             type: reducer.LOAD_SUCCESS,

@@ -56,6 +56,8 @@ export default ({ count, page, pageSize, onNavigate }) => {
         return getRange(count, page, pageSize);
     }, [count, page]);
 
+    page = parseInt(page, 10);
+
     return (
         <PageNavigation>
             <Button

@@ -10,12 +10,15 @@ export default ({ entity, page, pageSize, sortBy, filter, select }) => {
         return name;
     });
 
+    console.dir(page);
+    console.dir(pageSize);
+
     const queryName = `${entity.getCamelName()}Find`;
     return gql`
         query {
             ${queryName}(
-                limit: 10
-                offset: 0
+                page: ${page}
+                pageSize: ${pageSize}
                 sort: { full_name: ASC }
             ) {
                 errors {

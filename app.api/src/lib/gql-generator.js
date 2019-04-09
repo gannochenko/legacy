@@ -73,6 +73,8 @@ type Query {
         sort: I${nameCamel}Sort
         limit: Int
         offset: Int
+        page: Int
+        pageSize: Int
         count: Boolean
     ): ${nameCamel}SearchResult
 }
@@ -124,6 +126,9 @@ type Mutation {
                 sort: I${refEntityName}Sort
                 limit: Int
                 offset: Int
+                page: Int
+                pageSize: Int
+                count: Int
             )`;
         }
 
