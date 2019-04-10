@@ -31,7 +31,7 @@ export const HeaderLink = styled.div`
 	height: 43px;
     ${props =>
         props.sortable
-            ? iconLabel(`arrow_drop_${props.up ? 'up' : 'down'}`, '1.2rem')
+            ? iconLabel(props.sign, '1.2rem')
             : ''}
     ${props => (props.sortable ? 'cursor: pointer;' : '')}
     ${align('center', 'left')}
@@ -40,6 +40,7 @@ export const HeaderLink = styled.div`
     white-space: nowrap;
     max-width: 15rem;
     ${ellipsis()}
+    user-select: none;
 `;
 
 export const Footer = styled.div`

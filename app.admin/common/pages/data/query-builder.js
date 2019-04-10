@@ -1,22 +1,24 @@
 import gql from 'graphql-tag';
 
-export default ({ entity, page, pageSize, sortBy, filter, select }) => {
+const escape = str => str.replace(/[^a-z_]/ig, '');
+
+export default ({ entity, page, pageSize, sort, filter, select }) => {
     const selectedFields = entity.getFields().map(field => {
         const name = field.getName();
         if (field.isReference()) {
-            return `${name} { code }`;
+            return `${escape(name)} { code }`;
         }
 
-        return name;
+        return escape(name);
     });
 
     const queryName = `${entity.getCamelName()}Find`;
     return gql`
         query {
-            ${queryName}(
+            ${escape(queryName)}(
                 page: ${parseInt(page, 10)}
                 pageSize: ${parseInt(pageSize, 10)}
-                sort: { full_name: ASC }
+                ${_.iane(sort) ? `sort: { ${escape(sort[0])}: ${escape(sort[1]).toUpperCase()} }` : ''}
             ) {
                 errors {
                     code

@@ -2,7 +2,7 @@ import isString from 'lodash.isstring';
 import isObject from 'lodash.isobject';
 // import random from 'lodash.random';
 // import isNumber from 'lodash.isnumber';
-// import isFunction from 'lodash.isfunction';
+import isFunction from 'lodash.isfunction';
 // import union from 'lodash.union';
 // import intersection from 'lodash.intersection';
 // import difference from 'lodash.difference';
@@ -24,4 +24,5 @@ export default {
         return isString(arg) && arg.length > 0;
     },
     get,
+    isFunction,
 };

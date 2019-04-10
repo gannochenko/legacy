@@ -17,6 +17,7 @@ First version:
 * https://github.com/typeorm/typeorm/blob/master/src/driver/types/ColumnTypes.ts
 * https://github.com/typeorm/typeorm/blob/master/test/functional/database-schema/column-types/postgres/entity/Post.ts
 * http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a003169814.htm
+* https://github.com/typeorm/typeorm/blob/master/docs/find-options.md
 
 Unofficial reference?
 * http://typeorm.delightful.studio/classes/_repository_repository_.repository.html#count

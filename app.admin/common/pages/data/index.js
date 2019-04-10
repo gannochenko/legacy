@@ -41,13 +41,22 @@ const DataPage = ({
         route.location.search,
     ]);
 
+	const page = search.page || 1;
+	let sort = search.sort;
+	if (_.isne(sort)) {
+	    sort = sort.split(':');
+    } else {
+	    sort = [];
+    }
+
     useEffect(() => {
         dispatch({
             type: LOAD,
             client,
             entity,
-            page: search.page,
+            page,
             pageSize,
+            sort,
         });
     }, [entity.getName(), search]);
 
@@ -59,13 +68,19 @@ const DataPage = ({
                 entity={entity}
                 data={notReady ? [] : data}
                 count={notReady ? null : count}
-                page={search.page}
+                page={page}
                 pageSize={pageSize}
+                sort={{ field: sort[0] || null, way: sort[1] || null, }}
                 onPageChange={page =>
                     history.push(
                         putSearchParameters(route.location.search, { page }),
                     )
                 }
+                onSortChange={sort => {
+	                history.push(
+		                putSearchParameters(route.location.search, { sort: `${sort.field}:${sort.way}` }),
+	                )
+                }}
             />
         </Layout>
     );
