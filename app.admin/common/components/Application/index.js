@@ -9,6 +9,7 @@ import { GlobalStyle } from '../../style/global';
 
 import HomePage from '../../pages/home';
 import DataPage from '../../pages/data';
+import DataDetailPage from '../../pages/data-detail';
 import SchemaPage from '../../pages/schema';
 
 const Application = ({ dispatch, ready, client, history }) => {
@@ -30,6 +31,11 @@ const Application = ({ dispatch, ready, client, history }) => {
                             path="/"
                             render={route => <HomePage route={route} />}
                         />
+	                    <Route
+		                    exact
+		                    path="/data/:entity_name/:code"
+		                    render={route => <DataDetailPage route={route} />}
+	                    />
                         <Route
                             exact
                             path="/data/:entity_name"

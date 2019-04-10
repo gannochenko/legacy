@@ -1,16 +1,12 @@
 import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
-import { stringify, parse } from '@m59/qs';
 import { LOAD } from './reducer';
 import { withClient } from '../../lib/client';
 import { withHistory } from '../../lib/history';
-import List from '../../components/List';
-import { putSearchParameters, parseSearch } from '../../lib/util';
+import { parseSearch } from '../../lib/util';
 
 // import Button from '../../material-kit/CustomButtons';
 import Layout from '../../components/Layout';
-
-const pageSize = 10;
 
 const DataPage = ({
     dispatch,
@@ -20,7 +16,6 @@ const DataPage = ({
     ready,
     loading,
     data,
-    count,
     history,
 }) => {
     const entityName = _.get(route, 'match.params.entity_name');
@@ -34,45 +29,19 @@ const DataPage = ({
         route.location.search,
     ]);
 
-	const page = search.page || 1;
-	let sort = search.sort;
-	if (_.isne(sort)) {
-	    sort = sort.split(':');
-    } else {
-	    sort = [];
-    }
-
     useEffect(() => {
         dispatch({
             type: LOAD,
             client,
             entity,
-            page,
-            pageSize,
-            sort,
         });
     }, [entity.getName(), search]);
 
+    const notReady = !ready || loading;
+
     return (
         <Layout title={entity.getDisplayName()}>
-            <List
-                entity={entity}
-                data={data || []}
-                count={count}
-                page={page}
-                pageSize={pageSize}
-                sort={{ field: sort[0] || null, way: sort[1] || null, }}
-                onPageChange={page =>
-                    history.push(
-                        putSearchParameters(route.location.search, { page }),
-                    )
-                }
-                onSortChange={sort => {
-	                history.push(
-		                putSearchParameters(route.location.search, { sort: `${sort.field}:${sort.way}` }),
-	                )
-                }}
-            />
+
         </Layout>
     );
 };
