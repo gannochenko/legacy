@@ -17,7 +17,7 @@ const putSearchParameters = (url, params) => {
 
 const parseSearch = url => parse(url.replace(/^\?/, ''));
 
-const pageSize = 2;
+const pageSize = 10;
 
 const DataPage = ({
     dispatch,

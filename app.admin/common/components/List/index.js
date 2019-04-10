@@ -15,7 +15,6 @@ import {
 import {
     ENTITY_TYPE_STRING,
     ENTITY_TYPE_DATE,
-    // ENTITY_TYPE_NUMBER,
     ENTITY_TYPE_BOOLEAN,
 } from '../../../shared/constants';
 
@@ -90,12 +89,14 @@ const List = ({ entity, data, page, count, pageSize, onPageChange }) => (
         {count !== null && (
             <Footer>
                 <Counter>Count: {count}</Counter>
-                <PageNavigation
-                    count={count}
-                    page={page}
-                    onNavigate={onPageChange}
-                    pageSize={pageSize}
-                />
+                {count > pageSize && (
+                    <PageNavigation
+                        count={count}
+                        page={page}
+                        onNavigate={onPageChange}
+                        pageSize={pageSize}
+                    />
+                )}
             </Footer>
         )}
     </Container>
