@@ -1,6 +1,5 @@
 import gql from 'graphql-tag';
-
-const escape = str => str.replace(/[^a-z_-]/ig, '');
+import { escape } from '../../lib/util';
 
 export default ({ entity, code }) => {
     const selectedFields = entity.getFields().map(field => {
@@ -13,19 +12,6 @@ export default ({ entity, code }) => {
     });
 
     const queryName = `${entity.getCamelName()}Get`;
-
-    const q = `query {
-            ${escape(queryName)}(code: "${escape(code)}") {
-                errors {
-                    code
-                    message
-                }
-                data {
-                    ${selectedFields.join('\n')}
-                }
-            }
-        }`;
-	console.dir(q);
     
     return gql`
         query {

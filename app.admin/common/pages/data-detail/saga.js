@@ -5,7 +5,7 @@ import buildQuery from './query-builder';
 function* load(params) {
     const { entity, client } = params;
     try {
-        const queryName = `${entity.getCamelName()}Find`;
+        const queryName = `${entity.getCamelName()}Get`;
         const result = yield call(() => {
             return client.query({
                 query: buildQuery(params),
@@ -18,7 +18,7 @@ function* load(params) {
 
         yield put({
             type: reducer.LOAD_SUCCESS,
-            payload: { data: payload.data, count: payload.count },
+            payload: { data: payload.data },
         });
     } catch (error) {
         yield put({ type: reducer.LOAD_FAILURE, payload: error });

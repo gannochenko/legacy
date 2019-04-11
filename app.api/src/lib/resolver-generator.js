@@ -47,12 +47,14 @@ export default class ResolverGenerator {
                 ) => {
                     const result = {
                         errors: [],
-                        data: {},
+                        data: null,
                     };
 
                     const { code } = args;
                     // todo: use connection here
                     const repo = getRepository(dbEntity);
+
+	                console.dir(code);
 
                     let dbItem = null;
                     await this.wrap(async () => {
@@ -70,8 +72,10 @@ export default class ResolverGenerator {
                         }
                     }
 
-                    result.data = this.convertToPlain(dbItem, entity);
-
+                    if (dbItem) {
+	                    result.data = this.convertToPlain(dbItem, entity);
+                    }
+                    
                     return result;
                 },
                 [`${nameCamel}Find`]: async (
@@ -109,7 +113,7 @@ export default class ResolverGenerator {
 
                     result.limit = limit;
                     result.offset = offset;
-
+                    
                     // todo: use connection here
                     const repo = getRepository(dbEntity);
 
@@ -545,6 +549,7 @@ export default class ResolverGenerator {
 
     static convertToPlain(dbItem, entity) {
         const plain = {};
+	    console.dir(dbItem);
         entity.schema.forEach(field => {
             if (
                 field.name in dbItem &&

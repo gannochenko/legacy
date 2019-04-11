@@ -13,3 +13,5 @@ export const putSearchParameters = (url, params) => {
 };
 
 export const parseSearch = url => parse(url.replace(/^\?/, ''));
+
+export const escape = str => str.replace(/[^a-z0-9_-]/ig, '');

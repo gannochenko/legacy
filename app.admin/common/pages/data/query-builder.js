@@ -1,6 +1,5 @@
 import gql from 'graphql-tag';
-
-const escape = str => str.replace(/[^a-z0-9_-]/ig, '');
+import { escape } from '../../lib/util';
 
 export default ({ entity, page, pageSize, sort, filter, select }) => {
     const selectedFields = entity.getFields().map(field => {

@@ -37,7 +37,7 @@ export default class GQLGenerator {
         return `
 type ${nameCamel}Result {
     errors: [Error]
-    data: ${nameCamel}!
+    data: ${nameCamel}
 }
 
 type ${nameCamel}SearchResult {
