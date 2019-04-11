@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
-const escape = str => str.replace(/[^a-z_]/ig, '');
+const escape = str => str.replace(/[^a-z_-]/ig, '');
 
-export default ({ entity, page, pageSize, sort, filter, select }) => {
+export default ({ entity, code }) => {
     const selectedFields = entity.getFields().map(field => {
         const name = field.getName();
         if (field.isReference()) {
@@ -12,14 +12,10 @@ export default ({ entity, page, pageSize, sort, filter, select }) => {
         return escape(name);
     });
 
-    const queryName = `${entity.getCamelName()}Find`;
-    return gql`
-        query {
-            ${escape(queryName)}(
-                page: ${parseInt(page, 10)}
-                pageSize: ${parseInt(pageSize, 10)}
-                ${_.iane(sort) ? `sort: { ${escape(sort[0])}: ${escape(sort[1]).toUpperCase()} }` : ''}
-            ) {
+    const queryName = `${entity.getCamelName()}Get`;
+
+    const q = `query {
+            ${escape(queryName)}(code: "${escape(code)}") {
                 errors {
                     code
                     message
@@ -27,8 +23,21 @@ export default ({ entity, page, pageSize, sort, filter, select }) => {
                 data {
                     ${selectedFields.join('\n')}
                 }
-                count
             }
-        }
-	`;
+        }`;
+	console.dir(q);
+    
+    return gql`
+        query {
+            ${escape(queryName)}(code: "${escape(code)}") {
+                errors {
+                    code
+                    message
+                }
+                data {
+                    ${selectedFields.join('\n')}
+                }
+            }
+        }        
+    `;
 };

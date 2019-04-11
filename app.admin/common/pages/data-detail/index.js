@@ -19,25 +19,25 @@ const DataPage = ({
     history,
 }) => {
     const entityName = _.get(route, 'match.params.entity_name');
+    const code = _.get(route, 'match.params.code');
     const entity = schema.getEntity(entityName);
 
-    if (!entity) {
+    if (!entity || !code) {
         return null;
     }
 
-    const search = useMemo(() => parseSearch(route.location.search), [
-        route.location.search,
-    ]);
+    // const search = useMemo(() => parseSearch(route.location.search), [
+    //     route.location.search,
+    // ]);
 
     useEffect(() => {
         dispatch({
             type: LOAD,
             client,
             entity,
+	        code,
         });
-    }, [entity.getName(), search]);
-
-    const notReady = !ready || loading;
+    }, [entity.getName(), code]);
 
     return (
         <Layout title={entity.getDisplayName()}>
