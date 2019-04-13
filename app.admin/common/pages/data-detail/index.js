@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { LOAD } from './reducer';
 import { withClient } from '../../lib/client';
 import { withHistory } from '../../lib/history';
-import { parseSearch } from '../../lib/util';
+import Form from '../../components/Form';
 
 // import Button from '../../material-kit/CustomButtons';
 import Layout from '../../components/Layout';
@@ -35,19 +35,29 @@ const DataPage = ({
             type: LOAD,
             client,
             entity,
-	        code,
+            code,
         });
     }, [entity.getName(), code]);
 
-    return (
-        <Layout title={entity.getDisplayName()}>
+    data = data || {};
 
+    return (
+        <Layout
+            title={`${entity.getDisplayName()}${
+                data.code ? `: ${data.code}` : ''
+            }`}
+        >
+            {ready && (
+                <Form data={data || {}} schema={schema || {}} entity={entity} />
+            )}
         </Layout>
     );
 };
 
 export default withHistory(
     withClient(
-        connect(s => ({ ...s.data, schema: s.application.schema }))(DataPage),
+        connect(s => ({ ...s['data-detail'], schema: s.application.schema }))(
+            DataPage,
+        ),
     ),
 );

@@ -1,6 +1,12 @@
 import { palette } from 'sc-companion';
 
 export default {
+    font: {
+        normal: '1rem',
+        small: '0.8rem',
+        xSmall: '0.6rem',
+    },
+
     body: {
         color: palette.black,
         background: {
@@ -11,6 +17,22 @@ export default {
         color: {
             hover: palette.sumacDyed,
             hout: palette.brightGoldenYellow,
+        },
+    },
+    error: {
+        color: palette.monza,
+    },
+    input: {
+        color: {
+            hover: palette.sumacDyed,
+            hout: palette.cascade,
+            error: palette.monza,
+        },
+    },
+    button: {
+        color: {
+            hover: palette.cascade,
+            hout: palette.black,
         },
     },
     menu: {

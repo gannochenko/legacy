@@ -48,7 +48,24 @@ export const GlobalStyle = withTheme(createGlobalStyle`
   }
 `);
 
-export const stdLink = (hover, hout) => `
+export const stdLink = (colorHover, colorHout) => `
     text-decoration: none;
-    ${fgColor(hover, hout, '200ms')}
+    ${fgColor(colorHover, colorHout, '200ms')}
+    cursor: pointer;
 `;
+
+export const stdInput = (colors, hasError = false) => {
+    colors = colors || {};
+    const { hover, hout, error } = colors;
+    return `
+    padding: 0.5rem 0.7rem;
+    ${!hasError && hout ? `border: 1px solid ${hout};` : ''}
+    ${hasError && error ? `border: 1px solid ${error};` : ''}
+    ${
+        hover
+            ? `&:hover, &:focus, &:active {border-color: ${hover};}; transition: border-color 200ms ease;`
+            : ''
+    }
+    border-radius: 2px;
+  `;
+};

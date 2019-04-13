@@ -63,6 +63,7 @@ export default class Schema {
     }
 
     getEntity(name) {
+        // todo: make an index here
         return this._schema.find(entity => entity.getName() === name);
     }
 

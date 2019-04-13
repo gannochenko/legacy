@@ -5,6 +5,7 @@ export const LOAD_FAILURE = 'data-detail.load.failure';
 const initialState = {
     loading: false,
     ready: false,
+    data: null,
     error: null,
 };
 

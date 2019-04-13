@@ -7,7 +7,7 @@ import isFunction from 'lodash.isfunction';
 // import intersection from 'lodash.intersection';
 // import difference from 'lodash.difference';
 import get from 'lodash.get';
-// import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash.clonedeep';
 // import deepFreeze from deep-freeze-node';
 // import isEqual from 'lodash.isequal';
 
@@ -25,4 +25,5 @@ export default {
     },
     get,
     isFunction,
+    cloneDeep,
 };
