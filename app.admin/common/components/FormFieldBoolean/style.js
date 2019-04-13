@@ -2,13 +2,14 @@ import styled from 'styled-components';
 import { withTheme, stdInput } from '../../style/global';
 import { disabled } from 'sc-companion';
 
-export const Checkbox = withTheme(styled.div`
-    ${props => stdInput(props.theme.input.color, false, '2px')}
+export const Checkbox = withTheme(styled.a`
+    ${props => stdInput(props.theme.input.color, false, '2px', props.focus)}
     width: 3rem;
     height: 31px;
     position: relative;
     cursor: pointer;
     background: white;
+    display: block;
 `);
 
 export const Check = withTheme(styled.div`
@@ -24,11 +25,3 @@ export const Check = withTheme(styled.div`
     ${props => `left: ${props.checked ? 'calc(50% - 2px)' : '2px'};`}
     transition: left ease 200ms;
 `);
-
-export const InvisibleCheck = styled.input`
-    width: 0;
-    height: 0;
-    opacity: 0;
-    ${disabled()}
-    position: absolute;
-`;

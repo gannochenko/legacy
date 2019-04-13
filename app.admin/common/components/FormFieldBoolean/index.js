@@ -5,22 +5,36 @@ import { Checkbox, Check, InvisibleCheck } from './style.js';
 
 const Toggle = ({ field, value, onChange }) => {
     const [checked, setChecked] = useState(!!value);
+    const [focused, setFocus] = useState(false);
     return (
-        <Checkbox>
-            <Check checked={checked} />
-            <InvisibleCheck
-                type="checkbox"
-                defaultChecked={!!value}
-                onChange={e => {
-                    setChecked(e.target.checked);
+        <Checkbox
+            href="#"
+            focus={focused}
+            onClick={e => {
+                setChecked(!checked);
+                onChange({
+                    target: {
+                        value: !checked,
+                        name: field.getName(),
+                    },
+                });
+                e.preventDefault();
+            }}
+            onKeyPress={e => {
+                if (e.key === ' ') {
+                    setChecked(!checked);
                     onChange({
                         target: {
-                            value: e.target.checked,
+                            value: !checked,
                             name: field.getName(),
                         },
                     });
-                }}
-            />
+                }
+            }}
+            onFocus={() => setFocus(true)}
+            onBlur={() => setFocus(false)}
+        >
+            <Check checked={checked} />
         </Checkbox>
     );
 };

@@ -54,7 +54,12 @@ export const stdLink = (colorHover, colorHout) => `
     cursor: pointer;
 `;
 
-export const stdInput = (colors, hasError = false, padding = '0.5rem') => {
+export const stdInput = (
+    colors,
+    hasError = false,
+    padding = '0.5rem',
+    focus = null,
+) => {
     colors = colors || {};
     const { hover, hout, error } = colors;
     return `
@@ -62,10 +67,23 @@ export const stdInput = (colors, hasError = false, padding = '0.5rem') => {
     ${!hasError && hout ? `border: 1px solid ${hout};` : ''}
     ${hasError && error ? `border: 1px solid ${error};` : ''}
     ${
-        hover
-            ? `&:hover, &:focus, &:active {border-color: ${hover};}; transition: border-color 200ms ease;`
+        focus === null
+            ? hover
+                ? `&:hover, &:focus, &:active {border-color: ${hover};}; transition: border-color 200ms ease;`
+                : ''
             : ''
     }
+    ${
+        focus !== null
+            ? hover
+                ? `
+			        &:hover {border-color: ${hover};}; transition: border-color 200ms ease;
+			        ${focus ? `border-color: ${hover};` : ''}
+			    `
+                : ''
+            : ''
+    }
+
     border-radius: 2px;
   `;
 };
