@@ -5,16 +5,24 @@ import { Form, Fields } from './style.js';
 import Button from '../../material-kit/CustomButtons';
 import * as fieldSchema from '../../../shared/schema/field';
 
-import FormFieldString from '../FormFieldString';
+import FormFieldScalar from '../FormFieldScalar';
 import FormFieldBoolean from '../FormFieldBoolean';
+import FormFieldDate from '../FormFieldDate';
 
 const getField = field => {
-    if (field.getType() === fieldSchema.TYPE_STRING) {
-        return FormFieldString;
+    const type = field.getActualType();
+
+    if (type === fieldSchema.TYPE_STRING || type === fieldSchema.TYPE_INTEGER) {
+        return FormFieldScalar;
     }
-    if (field.getType() === fieldSchema.TYPE_BOOLEAN) {
+    if (type === fieldSchema.TYPE_BOOLEAN) {
         return FormFieldBoolean;
     }
+    if (type === fieldSchema.TYPE_DATETIME) {
+        return FormFieldDate;
+    }
+
+    // todo: render reference
 
     return null;
 };
