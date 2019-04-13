@@ -54,11 +54,11 @@ export const stdLink = (colorHover, colorHout) => `
     cursor: pointer;
 `;
 
-export const stdInput = (colors, hasError = false) => {
+export const stdInput = (colors, hasError = false, padding = '0.5rem') => {
     colors = colors || {};
     const { hover, hout, error } = colors;
     return `
-    padding: 0.5rem 0.7rem;
+    padding: ${padding};
     ${!hasError && hout ? `border: 1px solid ${hout};` : ''}
     ${hasError && error ? `border: 1px solid ${error};` : ''}
     ${

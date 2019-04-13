@@ -29,6 +29,13 @@ export default {
             error: palette.monza,
         },
     },
+    checkbox: {
+        color: {
+            hover: palette.sumacDyed,
+            hout: palette.cascade,
+            error: palette.monza,
+        },
+    },
     button: {
         color: {
             hover: palette.cascade,
