@@ -7,6 +7,7 @@ import {
 import {
     DatePicker,
     Selectors,
+    SelectorsWrapper,
     Month,
     YearInput,
     Increase,
@@ -15,6 +16,8 @@ import {
     CalendarRow,
     CalendarRowWrap,
     CalendarDay,
+    WeekDays,
+    WeekDay,
 } from './style.js';
 
 // // tmp
@@ -36,6 +39,8 @@ const monthList = [
     'November',
     'December',
 ];
+
+const wDays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
 export default ({ value, onChange }) => {
     const valueUTC = useMemo(() => {
@@ -61,34 +66,41 @@ export default ({ value, onChange }) => {
     return (
         <DatePicker>
             <Selectors>
-                <Month
-                    className="date-picker__selector-month"
-                    onChange={e => {
-                        valueUTC.setUTCMonth(e.target.value);
-                        onChange(convertUTCToDate(valueUTC));
-                    }}
-                >
-                    {monthList.map((monthName, i) => (
-                        <option value={i} selected={month === i}>
-                            {monthName}
-                        </option>
-                    ))}
-                </Month>
-                <YearInput type="text" value={year} reanOnly />
-                <Decrease
-                    onClick={() => {
-                        valueUTC.setUTCFullYear(year - 1);
-                        onChange(convertUTCToDate(valueUTC));
-                    }}
-                />
-                <Increase
-                    onClick={() => {
-                        valueUTC.setUTCFullYear(year + 1);
-                        onChange(convertUTCToDate(valueUTC));
-                    }}
-                />
+                <SelectorsWrapper>
+                    <Month
+                        className="date-picker__selector-month"
+                        onChange={e => {
+                            valueUTC.setUTCMonth(e.target.value);
+                            onChange(convertUTCToDate(valueUTC));
+                        }}
+                    >
+                        {monthList.map((monthName, i) => (
+                            <option value={i} selected={month === i}>
+                                {monthName}
+                            </option>
+                        ))}
+                    </Month>
+                    <YearInput type="text" value={year} reanOnly />
+                    <Decrease
+                        onClick={() => {
+                            valueUTC.setUTCFullYear(year - 1);
+                            onChange(convertUTCToDate(valueUTC));
+                        }}
+                    />
+                    <Increase
+                        onClick={() => {
+                            valueUTC.setUTCFullYear(year + 1);
+                            onChange(convertUTCToDate(valueUTC));
+                        }}
+                    />
+                </SelectorsWrapper>
             </Selectors>
             <Calendar>
+                <WeekDays>
+                    {wDays.map(wDay => (
+                        <WeekDay key={wDay}>{wDay}</WeekDay>
+                    ))}
+                </WeekDays>
                 {calendar.grid.map((week, i) => {
                     return (
                         <CalendarRow key={i}>

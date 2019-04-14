@@ -9,7 +9,6 @@ export const Input = withTheme(styled.input`
 
 export const DatePickerPanel = withTheme(styled.div`
     background-color: white;
-    padding: 0.5rem;
     border: 1px solid ${props => props.theme.input.color.hout};
     border-radius: 2px;
 `);

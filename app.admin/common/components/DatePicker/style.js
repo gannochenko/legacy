@@ -5,7 +5,12 @@ import { borderColor } from '../../to-npm/mixin';
 
 export const DatePicker = styled.div``;
 
-export const Selectors = styled.div`
+export const Selectors = withTheme(styled.div`
+    padding: 0.5rem;
+    border-bottom: 1px solid ${props => props.theme.input.color.hout};
+`);
+
+export const SelectorsWrapper = styled.div`
     ${align('center', 'left')}
     ${group(0, '0.5rem')}
 `;
@@ -46,7 +51,7 @@ export const Decrease = withTheme(styled.div`
 
 export const Calendar = styled.div`
     ${group('0.5rem')}
-    margin-top: 0.5rem;
+    padding: 0.5rem;
 `;
 
 export const CalendarRow = styled.div``;
@@ -59,7 +64,7 @@ export const CalendarRowWrap = styled.div`
 export const CalendarDay = withTheme(styled.div`
     ${align('center', 'right')}
     ${rectangle('1.7rem')}
-  padding: 0.3rem;
+    padding: 0.3rem;
     border-radius: 2px;
     cursor: pointer;
     border: 1px solid red;
@@ -76,3 +81,16 @@ export const CalendarDay = withTheme(styled.div`
             ? `color: ${props.theme.input.color.hout};`
             : ''}
 `);
+
+export const WeekDays = styled.div`
+    ${group(0, '0.5rem')}
+    ${align('top', 'left')}
+    user-select: none;
+`;
+
+export const WeekDay = styled.div`
+    ${align('center', 'center')}
+    ${rectangle('1.7rem')}
+    padding: 0.3rem;
+    font-size: 0.5rem;
+`;
