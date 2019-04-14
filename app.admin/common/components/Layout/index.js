@@ -1,22 +1,18 @@
 import React from 'react';
+import VerticalTriplet from '../../to-npm/VerticalTriplet';
 
-import {
-    Container,
-    Top,
-    Middle,
-    Footer,
-    Left,
-    Right,
-    Logo,
-    Header,
-} from './style.js';
+import { Top, Middle, Footer, Left, Right, Logo, Header } from './style.js';
 import Menu from '../Menu';
 
 export default ({ children, title }) => (
-    <Container>
-        <Top>
-            <Logo to="/">A</Logo>
-        </Top>
+    <VerticalTriplet
+        top={
+            <Top>
+                <Logo to="/">A</Logo>
+            </Top>
+        }
+        bottom={<Footer />}
+    >
         <Middle>
             <Left>
                 <Menu />
@@ -26,6 +22,5 @@ export default ({ children, title }) => (
                 {children}
             </Right>
         </Middle>
-        <Footer />
-    </Container>
+    </VerticalTriplet>
 );

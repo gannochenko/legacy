@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { align } from 'sc-companion';
 import { withTheme } from '../../style/global';
 
-import { stdInput } from '../../to-npm';
+import { stdInput } from '../../to-npm/mixin';
 
 export const DatePicker = styled.div``;
 

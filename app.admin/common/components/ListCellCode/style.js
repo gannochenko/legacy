@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { withTheme } from '../../style/global';
-import { stdLink } from '../../to-npm';
+import { stdLink } from '../../to-npm/mixin';
 import { Link as RouterLink } from 'react-router-dom';
 // import {
 //   align

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { withTheme } from '../../style/global';
-import { stdInput } from '../../to-npm';
+import { stdInput } from '../../to-npm/mixin';
 
 export const Input = withTheme(styled.input`
     width: 100%;
