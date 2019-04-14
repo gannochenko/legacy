@@ -1,9 +1,11 @@
 import styled from 'styled-components';
-import { withTheme, stdInput } from '../../style/global';
+import { withTheme } from '../../style/global';
+import { stdInput } from '../../to-npm';
 import { disabled } from 'sc-companion';
 
 export const Checkbox = withTheme(styled.a`
-    ${props => stdInput(props.theme.input.color, false, '2px', props.focus)}
+    ${props =>
+        stdInput({ padding: '2px', ...props.theme.input }, false, props.focus)}
     width: 3rem;
     height: 31px;
     position: relative;

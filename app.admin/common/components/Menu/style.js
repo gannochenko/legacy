@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { group, ellipsis } from 'sc-companion';
-import { withTheme, stdLink } from '../../style/global';
+import { withTheme } from '../../style/global';
+import { stdLink } from '../../to-npm';
 import { Link } from 'react-router-dom';
 
 export const Container = withTheme(styled.div`
@@ -18,8 +19,7 @@ export const Title = withTheme(styled.div`
 export const Item = withTheme(styled(Link)`
     font-size: 1rem;
     display: block;
-    ${props =>
-        stdLink(props.theme.link.color.hover, props.theme.link.color.hout)}
+    ${props => stdLink(props.theme.link)}
     ${ellipsis()}
     max-width: 12rem;
 `);

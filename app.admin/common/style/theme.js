@@ -1,12 +1,26 @@
-import { palette } from 'sc-companion';
+import { palette, zIxEverest } from 'sc-companion';
 
 export default {
+    // general settings
     font: {
         normal: '1rem',
         small: '0.8rem',
         xSmall: '0.6rem',
     },
+    grid: {
+        resolution: 12,
+        breakpoints: {
+            xl: 1200,
+            lg: 992,
+            md: 768,
+            sm: 576,
+        },
+    },
+    zIndex: {
+        picker: zIxEverest,
+    },
 
+    // common elements
     body: {
         color: palette.black,
         background: {
@@ -19,6 +33,8 @@ export default {
             hout: palette.brightGoldenYellow,
         },
     },
+
+    // custom elements
     error: {
         color: palette.monza,
     },
@@ -50,15 +66,6 @@ export default {
     footer: {
         background: {
             color: palette.harborRat,
-        },
-    },
-    grid: {
-        resolution: 12,
-        breakpoints: {
-            xl: 1200,
-            lg: 992,
-            md: 768,
-            sm: 576,
         },
     },
 };
