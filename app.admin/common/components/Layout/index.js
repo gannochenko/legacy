@@ -1,5 +1,5 @@
 import React from 'react';
-import VerticalTriplet from '../../to-npm/VerticalTriplet';
+import { VerticalTriplet } from 'ew-internals-ui';
 
 import { Top, Middle, Footer, Left, Right, Logo, Header } from './style.js';
 import Menu from '../Menu';
