@@ -3,9 +3,7 @@ import {
     DatePicker,
     Selectors,
     Month,
-    Year,
     YearInput,
-    YearButtons,
     Add,
     Remove,
 } from './style.js';
@@ -58,17 +56,13 @@ export default () => {
                         December
                     </option>
                 </Month>
-                <Year>
-                    <YearInput type="text" value={cYear} />
-                    <YearButtons className="date-picker__selector-year-buttons">
-                        <Add
-                        // onClick={this.onYearIncrementClick}
-                        />
-                        <Remove
-                        // onClick={this.onYearDecrementClick}
-                        />
-                    </YearButtons>
-                </Year>
+                <YearInput type="text" value={cYear} />
+                <Add
+                // onClick={this.onYearIncrementClick}
+                />
+                <Remove
+                // onClick={this.onYearDecrementClick}
+                />
             </Selectors>
         </DatePicker>
     );

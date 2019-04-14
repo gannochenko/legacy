@@ -16,9 +16,7 @@ export default {
             sm: 576,
         },
     },
-    zIndex: {
-        picker: zIxEverest,
-    },
+    zIndex: {},
 
     // common elements
     body: {
@@ -67,5 +65,9 @@ export default {
         background: {
             color: palette.harborRat,
         },
+    },
+
+    dropPanel: {
+        zIndex: zIxEverest,
     },
 };
