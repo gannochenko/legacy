@@ -37,6 +37,7 @@ export default withTheme(({ field, value, error, onChange, theme }) => {
                         <Input
                             {...props}
                             onFocus={() => dpRef.current.open()}
+                            onBlur={() => dpRef.current.close()}
                             onClick={() => dpRef.current.open()}
                             autoComplete="off"
                         />

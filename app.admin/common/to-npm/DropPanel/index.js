@@ -28,6 +28,9 @@ export default class extends Component {
         let node = e.target;
         while (node) {
             if (node === this.panel.current) {
+                console.dir('cancel close');
+                clearTimeout(this.timer);
+                this.timer = null;
                 return;
             }
             node = node.parentNode;
@@ -53,9 +56,12 @@ export default class extends Component {
     }
 
     close() {
-        this.setState({
-            open: false,
-        });
+        this.timer = setTimeout(() => {
+            this.timer = null;
+            this.setState({
+                open: false,
+            });
+        }, 300);
     }
 
     render() {
