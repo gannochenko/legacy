@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import { group, ellipsis } from 'sc-companion';
+import { group, ellipsis, stdLink } from 'sc-companion';
 import { withTheme } from '../../style/global';
-import { stdLink } from '../../to-npm/mixin';
 import { Link } from 'react-router-dom';
 
 export const Container = withTheme(styled.div`

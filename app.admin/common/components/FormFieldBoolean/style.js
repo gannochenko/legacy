@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { withTheme } from '../../style/global';
-import { stdInput } from '../../to-npm/mixin';
-import { disabled } from 'sc-companion';
+import { disabled, stdInput } from 'sc-companion';
 
 export const Checkbox = withTheme(styled.a`
     ${props =>

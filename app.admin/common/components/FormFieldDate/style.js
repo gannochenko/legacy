@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { withTheme } from '../../style/global';
-import { stdInput } from '../../to-npm/mixin';
+import { stdInput } from 'sc-companion';
 
 export const Wrapper = styled.div`
     width: 10rem;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { createGlobalStyle } from 'styled-components';
-import { fgColor } from 'sc-companion';
+import { fgColor, fontMaterialIcons } from 'sc-companion';
 
 export const ThemeContext = React.createContext();
 export const withTheme = Component => {
@@ -12,6 +12,7 @@ export const withTheme = Component => {
 };
 export const GlobalStyle = withTheme(createGlobalStyle`
   @import url('https://fonts.googleapis.com/css?family=Montserrat');
+  ${fontMaterialIcons()}
 
   html {
     font-size: 20px;

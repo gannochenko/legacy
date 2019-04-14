@@ -6994,10 +6994,10 @@ sax@^1.2.4:
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
 
-sc-companion@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/sc-companion/-/sc-companion-2.1.1.tgz#fa6ade71236d64a708098c7886da5b75bb9d1060"
-  integrity sha512-mtOVtK2mkxc8AfX8PTSIlb+67LYiBhgkNfGCFHuOnLdPYneOf5mGW9slDn/7JH5Wj6othrSTNHLz7CK9W9da1g==
+sc-companion@^2.1.4:
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/sc-companion/-/sc-companion-2.1.4.tgz#d3c9991f15f2e549a2d44d9ead07958418d63576"
+  integrity sha512-uEupxqg13rJErGqYgpP7P7sbmt8abbeAtcDoENuAiSZKFfPsV3lH26NA7fWsVEypDfkA8SyF0JlvxwWM1yRp3g==
 
 scheduler@^0.13.6:
   version "0.13.6"
