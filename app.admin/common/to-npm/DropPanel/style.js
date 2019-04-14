@@ -17,6 +17,7 @@ export const Panel = styled.div`
     top: 100%;
     ${props => (props.theme ? `z-index: ${props.theme.zIndex};` : '')}
     ${props => (props.open ? '' : 'display: none;')}
+    margin-bottom: 1rem;
 `;
 
 export const PanelInner = styled.div`

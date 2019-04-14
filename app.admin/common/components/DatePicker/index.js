@@ -1,69 +1,119 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
+import {
+    getCalendar,
+    convertLocalDateToUTC,
+    convertUTCToDate,
+} from '../../lib/util';
 import {
     DatePicker,
     Selectors,
     Month,
     YearInput,
-    Add,
-    Remove,
+    Increase,
+    Decrease,
+    Calendar,
+    CalendarRow,
+    CalendarRowWrap,
+    CalendarDay,
 } from './style.js';
 
-export default () => {
-    const cMonth = 0;
-    const cYear = 2019;
+// // tmp
+// const print = (date) => {
+//     return `${date.getUTCDate()}.${date.getUTCMonth()}.${date.getUTCFullYear()}`;
+// };
+
+const monthList = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+];
+
+export default ({ value, onChange }) => {
+    const valueUTC = useMemo(() => {
+        return convertLocalDateToUTC(
+            value ? new Date(value) : new Date(Date.now()),
+        );
+    }, [value]);
+    const calendar = useMemo(() => {
+        return getCalendar(valueUTC, valueUTC);
+    }, [valueUTC]);
+
+    const [month, year] = useMemo(() => {
+        return [
+            // valueUTC.getUTCDate(),
+            valueUTC.getUTCMonth(),
+            valueUTC.getUTCFullYear(),
+        ];
+    }, [valueUTC]);
+
+    // console.dir(calendar);
+    // console.dir(`${day}.${month}.${year}`);
 
     return (
         <DatePicker>
             <Selectors>
                 <Month
                     className="date-picker__selector-month"
-                    // onChange={this.onMonthChange}
+                    onChange={e => {
+                        valueUTC.setUTCMonth(e.target.value);
+                        onChange(convertUTCToDate(valueUTC));
+                    }}
                 >
-                    <option value="0" selected={cMonth === 0}>
-                        January
-                    </option>
-                    <option value="1" selected={cMonth === 1}>
-                        February
-                    </option>
-                    <option value="2" selected={cMonth === 2}>
-                        March
-                    </option>
-                    <option value="3" selected={cMonth === 3}>
-                        April
-                    </option>
-                    <option value="4" selected={cMonth === 4}>
-                        May
-                    </option>
-                    <option value="5" selected={cMonth === 5}>
-                        June
-                    </option>
-                    <option value="6" selected={cMonth === 6}>
-                        July
-                    </option>
-                    <option value="7" selected={cMonth === 7}>
-                        August
-                    </option>
-                    <option value="8" selected={cMonth === 8}>
-                        September
-                    </option>
-                    <option value="9" selected={cMonth === 9}>
-                        October
-                    </option>
-                    <option value="10" selected={cMonth === 10}>
-                        November
-                    </option>
-                    <option value="11" selected={cMonth === 11}>
-                        December
-                    </option>
+                    {monthList.map((monthName, i) => (
+                        <option value={i} selected={month === i}>
+                            {monthName}
+                        </option>
+                    ))}
                 </Month>
-                <YearInput type="text" value={cYear} />
-                <Add
-                // onClick={this.onYearIncrementClick}
+                <YearInput type="text" value={year} reanOnly />
+                <Decrease
+                    onClick={() => {
+                        valueUTC.setUTCFullYear(year - 1);
+                        onChange(convertUTCToDate(valueUTC));
+                    }}
                 />
-                <Remove
-                // onClick={this.onYearDecrementClick}
+                <Increase
+                    onClick={() => {
+                        valueUTC.setUTCFullYear(year + 1);
+                        onChange(convertUTCToDate(valueUTC));
+                    }}
                 />
             </Selectors>
+            <Calendar>
+                {calendar.grid.map((week, i) => {
+                    return (
+                        <CalendarRow key={i}>
+                            <CalendarRowWrap>
+                                {week.map(day => (
+                                    <CalendarDay
+                                        key={day.key}
+                                        current={day.currentMonth}
+                                        selected={day.selected}
+                                        onClick={() => {
+                                            valueUTC.setUTCDate(day.day);
+                                            valueUTC.setUTCMonth(day.month);
+                                            onChange(
+                                                convertUTCToDate(valueUTC),
+                                            );
+                                        }}
+                                    >
+                                        {day.day}
+                                    </CalendarDay>
+                                ))}
+                            </CalendarRowWrap>
+                        </CalendarRow>
+                    );
+                })}
+            </Calendar>
         </DatePicker>
     );
 };

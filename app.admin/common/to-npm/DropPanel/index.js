@@ -6,22 +6,26 @@ import React, { Component } from 'react';
 import { DropPanel, Panel, PanelInner } from './style.js';
 
 export default class extends Component {
-    constructor() {
+    constructor(props = {}) {
         super();
         this.state = {
-            open: false,
+            open: !!props.open,
         };
         this.panel = React.createRef();
     }
 
     componentDidMount() {
-        window.addEventListener('click', this.onDocumentClick);
-        window.addEventListener('keydown', this.onDocumentKeyPress);
+        if (!this.props.disableEvents) {
+            window.addEventListener('click', this.onDocumentClick);
+            window.addEventListener('keydown', this.onDocumentKeyPress);
+        }
     }
 
     componentWillUnmount() {
-        window.removeEventListener('click', this.onDocumentClick);
-        window.removeEventListener('keydown', this.onDocumentKeyPress);
+        if (!this.props.disableEvents) {
+            window.removeEventListener('click', this.onDocumentClick);
+            window.removeEventListener('keydown', this.onDocumentKeyPress);
+        }
     }
 
     onDocumentClick = e => {
