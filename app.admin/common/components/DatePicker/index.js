@@ -20,11 +20,6 @@ import {
     WeekDay,
 } from './style.js';
 
-// // tmp
-// const print = (date) => {
-//     return `${date.getUTCDate()}.${date.getUTCMonth()}.${date.getUTCFullYear()}`;
-// };
-
 const monthList = [
     'January',
     'February',
