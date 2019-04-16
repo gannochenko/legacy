@@ -39,6 +39,9 @@ export default withTheme(({ field, value, error, onChange, theme }) => {
                                             },
                                         });
                                     }}
+                                    onDaySelect={() =>
+                                        dpRef.current.closeImmediate()
+                                    }
                                 />
                             </DatePickerPanel>
                         }

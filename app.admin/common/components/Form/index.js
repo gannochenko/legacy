@@ -8,9 +8,14 @@ import * as fieldSchema from '../../../shared/schema/field';
 import FormFieldScalar from '../FormFieldScalar';
 import FormFieldBoolean from '../FormFieldBoolean';
 import FormFieldDate from '../FormFieldDate';
+import FormFieldReference from '../FormFieldReference';
 
 const getField = field => {
     const type = field.getActualType();
+
+    if (field.isReference()) {
+        return FormFieldReference;
+    }
 
     if (type === fieldSchema.TYPE_STRING || type === fieldSchema.TYPE_INTEGER) {
         return FormFieldScalar;
@@ -21,8 +26,6 @@ const getField = field => {
     if (type === fieldSchema.TYPE_DATETIME) {
         return FormFieldDate;
     }
-
-    // todo: render reference
 
     return null;
 };

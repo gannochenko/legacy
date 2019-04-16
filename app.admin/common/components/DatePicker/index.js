@@ -37,7 +37,7 @@ const monthList = [
 
 const wDays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
-export default ({ value, onChange }) => {
+export default ({ value, onChange, onDaySelect }) => {
     const valueUTC = useMemo(() => {
         return convertLocalDateToUTC(
             value ? new Date(value) : new Date(Date.now()),
@@ -111,6 +111,9 @@ export default ({ value, onChange }) => {
                                             onChange(
                                                 convertUTCToDate(valueUTC),
                                             );
+                                            if (_.isFunction(onDaySelect)) {
+                                                onDaySelect();
+                                            }
                                         }}
                                     >
                                         {day.day}
