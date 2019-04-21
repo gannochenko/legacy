@@ -30,8 +30,17 @@ export default withTheme(({ field, value, error, onChange, schema, theme }) => {
         [],
     );
 
-    console.dir(field);
-    console.dir(value);
+    const iValue = field.isMultiple() ? value : [value];
+    const [pFieldName, refEntity] = useMemo(() => {
+        const refEntity = schema.getEntity(field.getReferenceFieldName());
+        const pField = refEntity.getPresentationField();
+
+        if (pField) {
+            return [pField.getName(), refEntity];
+        }
+
+        return [null, refEntity];
+    }, [field]);
 
     return (
         <FormField
@@ -122,54 +131,32 @@ export default withTheme(({ field, value, error, onChange, schema, theme }) => {
                 ref={dpRef}
             >
                 <List>
-                    <Item>
-                        <ItemData>
-                            <ItemLink
-                                href=""
-                                target="_blank"
-                                rel="noreferrer noopener"
-                            >
-                                bd3b45df-6956-4901-915f-520ae62929d2
-                            </ItemLink>
-                            <br />
-                            <ItemDescription>Anna Krevnik</ItemDescription>
-                        </ItemData>
-                        <ItemActions>
-                            <RemoveButton />
-                        </ItemActions>
-                    </Item>
-                    <Item>
-                        <ItemData>
-                            <ItemLink
-                                href=""
-                                target="_blank"
-                                rel="noreferrer noopener"
-                            >
-                                bd3b45df-6956-4901-915f-520ae62929d2
-                            </ItemLink>
-                            <br />
-                            <ItemDescription>Anna Krevnik</ItemDescription>
-                        </ItemData>
-                        <ItemActions>
-                            <RemoveButton />
-                        </ItemActions>
-                    </Item>
-                    <Item>
-                        <ItemData>
-                            <ItemLink
-                                href=""
-                                target="_blank"
-                                rel="noreferrer noopener"
-                            >
-                                bd3b45df-6956-4901-915f-520ae62929d2
-                            </ItemLink>
-                            <br />
-                            <ItemDescription>Anna Krevnik</ItemDescription>
-                        </ItemData>
-                        <ItemActions>
-                            <RemoveButton />
-                        </ItemActions>
-                    </Item>
+                    {iValue.map(item => (
+                        <Item key={item.code}>
+                            <ItemData>
+                                <ItemLink
+                                    href={`/data/${encodeURIComponent(
+                                        refEntity.getName(),
+                                    )}/${encodeURIComponent(item.code)}/`}
+                                    target="_blank"
+                                    rel="noreferrer noopener"
+                                >
+                                    {item.code}
+                                </ItemLink>
+                                {_.isne(pFieldName) && !!item[pFieldName] && (
+                                    <>
+                                        <br />
+                                        <ItemDescription>
+                                            {item[pFieldName]}
+                                        </ItemDescription>
+                                    </>
+                                )}
+                            </ItemData>
+                            <ItemActions>
+                                <RemoveButton onClick={() => {}} />
+                            </ItemActions>
+                        </Item>
+                    ))}
                 </List>
             </DropPanel>
         </FormField>
