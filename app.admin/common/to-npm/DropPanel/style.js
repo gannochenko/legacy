@@ -21,5 +21,5 @@ export const Panel = styled.div`
 `;
 
 export const PanelInner = styled.div`
-    margin-top: 0.5rem;
+    margin-top: ${props => (props.theme ? props.theme.panelVOffset : '')};
 `;

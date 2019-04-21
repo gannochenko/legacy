@@ -69,5 +69,6 @@ export default {
 
     dropPanel: {
         zIndex: zIxEverest,
+        panelVOffset: '0.5rem',
     },
 };

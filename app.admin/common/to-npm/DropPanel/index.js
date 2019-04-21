@@ -52,10 +52,13 @@ export default class extends Component {
         }
     };
 
-    open() {
+    open(e) {
         this.setState({
             open: true,
         });
+        if (e) {
+            e.stopPropagation();
+        }
     }
 
     close() {
@@ -79,7 +82,7 @@ export default class extends Component {
             <DropPanel ref={this.panel}>
                 {children}
                 <Panel theme={theme} open={this.state.open}>
-                    <PanelInner>{panel}</PanelInner>
+                    <PanelInner theme={theme}>{panel}</PanelInner>
                 </Panel>
             </DropPanel>
         );
