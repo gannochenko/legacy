@@ -12,6 +12,7 @@ export default class extends Component {
             open: !!props.open,
         };
         this.panel = React.createRef();
+        this.preventClose = false;
     }
 
     componentDidMount() {
@@ -29,6 +30,10 @@ export default class extends Component {
     }
 
     onDocumentClick = e => {
+        if (this.preventClose) {
+            return;
+        }
+
         let node = e.target;
         while (node) {
             if (node === this.panel.current) {
@@ -52,12 +57,21 @@ export default class extends Component {
         }
     };
 
-    open(e) {
+    open(options) {
+        options = options || {};
+        const { preventClose } = options;
+
+        if (preventClose) {
+            this.preventClose = true;
+        }
+
         this.setState({
             open: true,
         });
-        if (e) {
-            e.stopPropagation();
+        if (preventClose) {
+            setTimeout(() => {
+                this.preventClose = false;
+            }, 100);
         }
     }
 

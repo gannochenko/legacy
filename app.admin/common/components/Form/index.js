@@ -77,6 +77,7 @@ export default ({ data, schema, entity }) => {
                                         <Field
                                             key={fName}
                                             field={field}
+                                            schema={schema}
                                             value={values[fName]}
                                             error={errors[fName]}
                                             onChange={handleChange}

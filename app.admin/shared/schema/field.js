@@ -75,7 +75,7 @@ export default class Field {
             : uCFirst(this.getName()).replace(/_/g, ' ');
     }
 
-    getReferenceFieldName() {
+    getReferencedEntityName() {
         const type = this.getActualType();
         if (
             [TYPE_STRING, TYPE_BOOLEAN, TYPE_DATETIME, TYPE_INTEGER].indexOf(
@@ -88,12 +88,20 @@ export default class Field {
         return type;
     }
 
+    /**
+     * @deprecated
+     * @returns {*}
+     */
+    getReferenceFieldName() {
+        return this.getReferencedEntityName();
+    }
+
     isMultiple() {
         return _.isArray(this._schema.type);
     }
 
     isReference() {
-        return _.isne(this.getReferenceFieldName());
+        return _.isne(this.getReferencedEntityName());
     }
 
     isSortable() {

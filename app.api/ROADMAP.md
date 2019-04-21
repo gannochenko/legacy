@@ -18,5 +18,5 @@ Tech debts:
 
 1) backend still does not use database when reading a schema
 2) schema classes are duplicate, across applications (see shared/ folder)
-3) interlink fields, entities and schema?
+3) interlink fields, entities and schema (to prevent from passing "schema" object everywhere)
 4) probably move to Yup in server-side validation

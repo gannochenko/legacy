@@ -1,11 +1,10 @@
 import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
-import { LOAD } from './reducer';
+import { LOAD, UNLOAD } from './reducer';
 import { withClient } from '../../lib/client';
 import { withHistory } from '../../lib/history';
 import Form from '../../components/Form';
 
-// import Button from '../../material-kit/CustomButtons';
 import Layout from '../../components/Layout';
 
 const DataPage = ({
@@ -16,7 +15,7 @@ const DataPage = ({
     ready,
     loading,
     data,
-    history,
+    // history,
 }) => {
     const entityName = _.get(route, 'match.params.entity_name');
     const code = _.get(route, 'match.params.code');
@@ -30,14 +29,26 @@ const DataPage = ({
     //     route.location.search,
     // ]);
 
+    // load data on mount
     useEffect(() => {
         dispatch({
             type: LOAD,
             client,
             entity,
+            schema,
             code,
         });
     }, [entity.getName(), code]);
+
+    // cleanup data on unmount
+    useEffect(
+        () => () => {
+            dispatch({
+                type: UNLOAD,
+            });
+        },
+        [],
+    );
 
     data = data || {};
 

@@ -1,5 +1,5 @@
 import { uCFirst } from 'ew-internals';
-import Field from './field';
+import Field, { TYPE_STRING } from './field';
 import CodeField from './code-field';
 import { convertToCamel } from '../../common/lib/util';
 import {
@@ -121,5 +121,16 @@ export default class Entity {
 
     toJSON() {
         return this._schema;
+    }
+
+    // aux
+    getPresentationField() {
+        return (
+            this._schema.schema.find(
+                field =>
+                    field.getType() === TYPE_STRING &&
+                    field.getName() !== ENTITY_CODE_FIELD_NAME,
+            ) || null
+        );
     }
 }

@@ -1,6 +1,7 @@
 export const LOAD = 'data-detail.load';
 export const LOAD_SUCCESS = 'data-detail.load.success';
 export const LOAD_FAILURE = 'data-detail.load.failure';
+export const UNLOAD = 'data-detail.unload';
 
 const initialState = {
     loading: false,
@@ -28,6 +29,8 @@ const reducer = (state = initialState, action) => {
                 ready: true,
                 error: action.payload,
             };
+        case UNLOAD:
+            return { ...initialState };
         default:
             return state;
     }

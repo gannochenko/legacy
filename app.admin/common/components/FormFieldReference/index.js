@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useEffect } from 'react';
 import FormField from '../FormField';
 import DropPanel from '../../to-npm/DropPanel';
 import { withTheme } from '../../style/global';
@@ -21,13 +21,17 @@ import {
     SearchItemActions,
 } from './style.js';
 
-export default withTheme(({ field, value, error, onChange, theme }) => {
+export default withTheme(({ field, value, error, onChange, schema, theme }) => {
     const dpRef = useRef();
+    // const searchRef = useRef();
     const dTheme = useMemo(
         () =>
             theme.dropPanel ? { ...theme.dropPanel, panelVOffset: '0' } : {},
         [],
     );
+
+    console.dir(field);
+    console.dir(value);
 
     return (
         <FormField
@@ -35,17 +39,25 @@ export default withTheme(({ field, value, error, onChange, theme }) => {
             error={error}
             actions={
                 field.isMultiple() ? (
-                    <AddButton onClick={e => dpRef.current.open(e)} />
+                    <AddButton
+                        onClick={() => {
+                            const panel = dpRef.current;
+                            panel.open({ preventClose: true });
+                            // setTimeout(() => searchRef.current.focus(), 1000);
+                        }}
+                    />
                 ) : (
                     ''
                 )
             }
         >
             <DropPanel
-                open
                 panel={
                     <ItemPicker>
-                        <Search placeholder="Search..." />
+                        <Search
+                            placeholder="Search..."
+                            innerRef={comp => console.dir(comp)}
+                        />
                         <ScrollPanel>
                             <SearchResults>
                                 <SearchItem>
