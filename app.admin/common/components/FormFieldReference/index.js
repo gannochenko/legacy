@@ -26,11 +26,18 @@ export default withTheme(({ field, value, error, onChange, schema, theme }) => {
     // const searchRef = useRef();
     const dTheme = useMemo(
         () =>
-            theme.dropPanel ? { ...theme.dropPanel, panelVOffset: '0' } : {},
+            theme.dropPanel
+                ? { ...theme.dropPanel, panelVOffset: '0.2rem' }
+                : {},
         [],
     );
 
-    const iValue = field.isMultiple() ? value : [value];
+    let iValue = [];
+    if (field.isMultiple()) {
+        iValue = value;
+    } else if (value !== null && value !== undefined) {
+        iValue = [value];
+    }
     const [pFieldName, refEntity] = useMemo(() => {
         const refEntity = schema.getEntity(field.getReferenceFieldName());
         const pField = refEntity.getPresentationField();
@@ -47,7 +54,8 @@ export default withTheme(({ field, value, error, onChange, schema, theme }) => {
             field={field}
             error={error}
             actions={
-                field.isMultiple() ? (
+                field.isMultiple() ||
+                (!field.isMultiple() && !iValue.length) ? (
                     <AddButton
                         onClick={() => {
                             const panel = dpRef.current;
@@ -153,7 +161,24 @@ export default withTheme(({ field, value, error, onChange, schema, theme }) => {
                                 )}
                             </ItemData>
                             <ItemActions>
-                                <RemoveButton onClick={() => {}} />
+                                <RemoveButton
+                                    onClick={() => {
+                                        let newValue = undefined;
+                                        if (field.isMultiple()) {
+                                            newValue = value.filter(
+                                                vItem =>
+                                                    vItem.code !== item.code,
+                                            );
+                                        }
+
+                                        onChange({
+                                            target: {
+                                                name: field.getName(),
+                                                value: newValue,
+                                            },
+                                        });
+                                    }}
+                                />
                             </ItemActions>
                         </Item>
                     ))}

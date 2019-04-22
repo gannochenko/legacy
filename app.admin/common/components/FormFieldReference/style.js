@@ -2,7 +2,9 @@ import styled from 'styled-components';
 import { withTheme } from '../../style/global';
 import { stdInput, stdLink, fgColor, icon, align, group } from 'sc-companion';
 
-export const List = styled.div``;
+export const List = withTheme(styled.div`
+    border-bottom: 1px solid ${props => props.theme.input.color.hout};
+`);
 
 export const ItemPicker = withTheme(styled.div`
     background-color: white;
@@ -25,7 +27,7 @@ export const AddButton = withTheme(styled.div`
 `);
 
 export const Item = withTheme(styled.div`
-    ${align('top', 'left')}
+    ${align('center', 'left')}
 
     padding: 0.5rem 0;
     &:not(:last-child) {
