@@ -1,4 +1,4 @@
-import { getRepository, In } from 'typeorm';
+import { getRepository, In, Like } from 'typeorm';
 import uuid from 'uuid/v4';
 import { getRefName } from './entity-util';
 import { getSelectionAt } from './ast';
@@ -54,8 +54,6 @@ export default class ResolverGenerator {
                     // todo: use connection here
                     const repo = getRepository(dbEntity);
 
-	                console.dir(code);
-
                     let dbItem = null;
                     await this.wrap(async () => {
                         dbItem = await repo.findOne({
@@ -73,9 +71,9 @@ export default class ResolverGenerator {
                     }
 
                     if (dbItem) {
-	                    result.data = this.convertToPlain(dbItem, entity);
+                        result.data = this.convertToPlain(dbItem, entity);
                     }
-                    
+
                     return result;
                 },
                 [`${nameCamel}Find`]: async (
@@ -86,12 +84,30 @@ export default class ResolverGenerator {
                 ) => {
                     const result = {
                         errors: [],
-                        data: {},
+                        data: [],
                         limit: QUERY_FIND_MAX_PAGE_SIZE,
                         offset: 0,
                     };
 
-                    let { filter, sort, limit, offset, page, pageSize } = args;
+                    let {
+                        filter,
+                        search,
+                        sort,
+                        limit,
+                        offset,
+                        page,
+                        pageSize,
+                    } = args;
+
+                    if (filter !== undefined && search !== undefined) {
+                        result.errors.push({
+                            code: 'search_filter_conflict',
+                            message:
+                                'You can not set both search and filter at the same time',
+                        });
+
+                        return result;
+                    }
 
                     // page/pageSize pair has higher priority
                     if (typeof pageSize !== 'undefined') {
@@ -105,6 +121,8 @@ export default class ResolverGenerator {
                             code: 'limit_too_high',
                             message: 'Limit too high',
                         });
+
+                        return result;
                     }
 
                     if (typeof page !== 'undefined') {
@@ -113,14 +131,14 @@ export default class ResolverGenerator {
 
                     result.limit = limit;
                     result.offset = offset;
-                    
+
                     // todo: use connection here
                     const repo = getRepository(dbEntity);
 
                     await this.wrap(async () => {
                         result.data = (await repo.find({
                             // select: {},
-                            where: {},
+                            where: this.makeWhereFind(filter, search),
                             order: _.ione(sort) ? sort : {},
                             skip: result.offset,
                             take: result.limit,
@@ -547,9 +565,21 @@ export default class ResolverGenerator {
         }
     }
 
+    static makeWhereFind(filter, search) {
+        let where = {};
+
+        if (_.isne(search)) {
+            // a very basic type of search - by the part of code
+            where.code = Like(`%${search.replace(/[^a-zA-Z0-9_-]/, '')}%`);
+        }
+
+        console.dir(where);
+
+        return where;
+    }
+
     static convertToPlain(dbItem, entity) {
         const plain = {};
-	    console.dir(dbItem);
         entity.schema.forEach(field => {
             if (
                 field.name in dbItem &&

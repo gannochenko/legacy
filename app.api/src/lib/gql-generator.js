@@ -70,6 +70,7 @@ type Query {
     ${nameCamel}Get(code: String!): ${nameCamel}Result
     ${nameCamel}Find(
         filter: I${nameCamel}Filter
+        search: String
         sort: I${nameCamel}Sort
         limit: Int
         offset: Int

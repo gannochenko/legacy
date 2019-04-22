@@ -1,4 +1,6 @@
 import React, { useRef, useMemo, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { withClient } from '../../lib/client';
 import FormField from '../FormField';
 import DropPanel from '../../to-npm/DropPanel';
 import { withTheme } from '../../style/global';
@@ -21,7 +23,15 @@ import {
     SearchItemActions,
 } from './style.js';
 
-export default withTheme(({ field, value, error, onChange, schema, theme }) => {
+const FormFieldReference = ({
+    field,
+    value,
+    error,
+    onChange,
+    schema,
+    theme,
+    client,
+}) => {
     const dpRef = useRef();
     // const searchRef = useRef();
     const dTheme = useMemo(
@@ -49,6 +59,16 @@ export default withTheme(({ field, value, error, onChange, schema, theme }) => {
         return [null, refEntity];
     }, [field]);
 
+    const onSearchDebounced = useMemo(
+        () =>
+            _.debounce(text => {
+                if (_.isFunction(onSearch)) {
+                    onSearch(text);
+                }
+            }, 300),
+        [],
+    );
+
     return (
         <FormField
             field={field}
@@ -74,6 +94,7 @@ export default withTheme(({ field, value, error, onChange, schema, theme }) => {
                         <Search
                             placeholder="Search..."
                             innerRef={comp => console.dir(comp)}
+                            onKeyUp={e => onSearchDebounced(e.target.value)}
                         />
                         <ScrollPanel>
                             <SearchResults>
@@ -186,4 +207,8 @@ export default withTheme(({ field, value, error, onChange, schema, theme }) => {
             </DropPanel>
         </FormField>
     );
-});
+};
+
+export default withClient(
+    withTheme(connect(s => s['data-detail'])(FormFieldReference)),
+);

@@ -10,6 +10,7 @@ import get from 'lodash.get';
 import cloneDeep from 'lodash.clonedeep';
 // import deepFreeze from deep-freeze-node';
 // import isEqual from 'lodash.isequal';
+import debounce from 'lodash.debounce';
 
 export default {
     isArray: Array.isArray,
@@ -26,4 +27,5 @@ export default {
     get,
     isFunction,
     cloneDeep,
+    debounce,
 };

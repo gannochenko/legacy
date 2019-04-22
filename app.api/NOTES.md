@@ -158,6 +158,26 @@ query {
     }
   }
 }
+
+query {
+  ImportantPersonFind(limit: 10, offset: 0, sort: {full_name: ASC}, search: "117a") {
+    errors {
+      code
+      message
+    }
+    data {
+      code
+      full_name
+      lucky_numbers
+      partner {
+        full_name
+      }
+      pets(sort: {nickname: ASC}) {
+        nickname
+      }
+    }
+  }
+}
 ~~~~
 
 ~~~~

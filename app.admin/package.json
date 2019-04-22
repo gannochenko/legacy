@@ -26,6 +26,7 @@
         "history": "^4.9.0",
         "jss": "^9.8.7",
         "lodash.clonedeep": "^4.5.0",
+        "lodash.debounce": "^4.0.8",
         "lodash.difference": "^4.5.0",
         "lodash.get": "^4.4.2",
         "lodash.intersection": "^4.4.0",

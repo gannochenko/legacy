@@ -2,7 +2,6 @@ import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { LOAD, UNLOAD } from './reducer';
 import { withClient } from '../../lib/client';
-import { withHistory } from '../../lib/history';
 import Form from '../../components/Form';
 
 import Layout from '../../components/Layout';
@@ -15,7 +14,6 @@ const DataPage = ({
     ready,
     loading,
     data,
-    // history,
 }) => {
     const entityName = _.get(route, 'match.params.entity_name');
     const code = _.get(route, 'match.params.code');
@@ -65,10 +63,8 @@ const DataPage = ({
     );
 };
 
-export default withHistory(
-    withClient(
-        connect(s => ({ ...s['data-detail'], schema: s.application.schema }))(
-            DataPage,
-        ),
+export default withClient(
+    connect(s => ({ ...s['data-detail'], schema: s.application.schema }))(
+        DataPage,
     ),
 );
