@@ -31,10 +31,12 @@ const DataPage = ({
     useEffect(() => {
         dispatch({
             type: LOAD,
-            client,
-            entity,
-            schema,
-            code,
+            payload: {
+                client,
+                entity,
+                schema,
+                code,
+            },
         });
     }, [entity.getName(), code]);
 

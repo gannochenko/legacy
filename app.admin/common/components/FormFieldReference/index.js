@@ -70,10 +70,12 @@ const FormFieldReference = ({
             _.debounce(text => {
                 dispatch({
                     type: ITEM_SEARCH,
-                    client,
-                    entity: refEntity,
-                    field,
-                    text,
+                    payload: {
+                        client,
+                        entity: refEntity,
+                        field,
+                        text,
+                    },
                 });
             }, 300),
         [],
@@ -111,7 +113,7 @@ const FormFieldReference = ({
                                 {_.iane(itemSearchResult[field.getName()]) &&
                                     itemSearchResult[field.getName()].map(
                                         sResult => (
-                                            <SearchItem>
+                                            <SearchItem key={sResult.code}>
                                                 <SearchItemData>
                                                     <ItemLink
                                                         href={`/data/${encodeURIComponent(
@@ -140,7 +142,26 @@ const FormFieldReference = ({
                                                     )}
                                                 </SearchItemData>
                                                 <SearchItemActions>
-                                                    <AddButton />
+                                                    <AddButton
+                                                        onClick={() => {
+                                                            let newValue = sResult;
+                                                            if (
+                                                                field.isMultiple()
+                                                            ) {
+                                                                newValue = [
+                                                                    ...value,
+                                                                    sResult,
+                                                                ];
+                                                            }
+
+                                                            onChange({
+                                                                target: {
+                                                                    name: field.getName(),
+                                                                    value: newValue,
+                                                                },
+                                                            });
+                                                        }}
+                                                    />
                                                 </SearchItemActions>
                                             </SearchItem>
                                         ),

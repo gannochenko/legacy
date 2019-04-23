@@ -3,22 +3,23 @@ import * as reducer from './reducer';
 import { buildQueryLoad, buildQuerySearch } from './query-builder';
 
 function* load(params) {
-    const { entity, client } = params;
+    const { payload } = params;
+    const { entity, client } = payload || {};
     try {
         const queryName = `${entity.getCamelName()}Get`;
         const result = yield call(() => {
             return client.query({
-                query: buildQueryLoad(params),
+                query: buildQueryLoad(payload),
             });
         });
 
-        const payload = _.get(result, `data.${queryName}`);
+        const queryResult = _.get(result, `data.${queryName}`);
         // todo: check for errors
         // console.dir(payload);
 
         yield put({
             type: reducer.LOAD_SUCCESS,
-            payload: { data: payload.data },
+            payload: { data: queryResult.data },
         });
     } catch (error) {
         yield put({ type: reducer.LOAD_FAILURE, payload: error });
@@ -29,21 +30,22 @@ function* load(params) {
 }
 
 function* itemSearch(params) {
-    const { entity, client, field } = params;
+    const { payload } = params;
+    const { entity, client, field } = payload || {};
     try {
         const queryName = `${entity.getCamelName()}Find`;
         const result = yield call(() => {
             return client.query({
-                query: buildQuerySearch(params),
+                query: buildQuerySearch(payload),
             });
         });
 
-        const payload = _.get(result, `data.${queryName}`);
+        const queryResult = _.get(result, `data.${queryName}`);
         // todo: check for errors
 
         yield put({
             type: reducer.ITEM_SEARCH_SUCCESS,
-            payload: { field: field.getName(), data: payload.data },
+            payload: { field: field.getName(), data: queryResult.data },
         });
     } catch (error) {
         // yield put({ type: reducer.LOAD_FAILURE, payload: error });
