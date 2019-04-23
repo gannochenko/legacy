@@ -30,6 +30,10 @@ export default class extends Component {
     }
 
     onDocumentClick = e => {
+        if (!this.state.open) {
+            return;
+        }
+
         if (this.preventClose) {
             return;
         }
@@ -44,16 +48,16 @@ export default class extends Component {
             node = node.parentNode;
         }
 
-        this.setState({
-            open: false,
-        });
+        this.closeImmediate();
     };
 
     onDocumentKeyPress = e => {
+        if (!this.state.open) {
+            return;
+        }
+
         if (e.code === 'Escape') {
-            this.setState({
-                open: false,
-            });
+            this.closeImmediate();
         }
     };
 
@@ -78,9 +82,7 @@ export default class extends Component {
     close() {
         this.timer = setTimeout(() => {
             this.timer = null;
-            this.setState({
-                open: false,
-            });
+            this.closeImmediate();
         }, 300);
     }
 
@@ -88,6 +90,9 @@ export default class extends Component {
         this.setState({
             open: false,
         });
+        if (_.isFunction(this.props.onClose)) {
+            this.props.onClose();
+        }
     }
 
     render() {

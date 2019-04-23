@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import { sanitize } from '../../lib/util';
 import { ENTITY_CODE_FIELD_NAME } from '../../../shared/constants';
 
-export default ({ entity, schema, code }) => {
+export const buildQueryLoad = ({ entity, schema, code }) => {
     const selectedFields = entity.getFields().map(field => {
         const name = field.getName();
         if (field.isReference()) {
@@ -34,5 +34,25 @@ export default ({ entity, schema, code }) => {
                 }
             }
         }        
+    `;
+};
+
+export const buildQuerySearch = ({ entity, schema, text }) => {
+    const queryName = `${entity.getCamelName()}Find`;
+    let presentationalField = entity.getPresentationField();
+
+    return gql`
+        query {
+            ${sanitize(queryName)}(search: "${sanitize(text)}", limit: 5) {
+                errors {
+                    code
+                    message
+                }
+                data {
+                    code
+                    ${presentationalField ? presentationalField.getName() : ''}
+                }
+            }
+        }
     `;
 };

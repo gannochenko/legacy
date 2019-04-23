@@ -5,6 +5,10 @@ import FormField from '../FormField';
 import DropPanel from '../../to-npm/DropPanel';
 import { withTheme } from '../../style/global';
 import ScrollPanel from '../../to-npm/ScrollPanel';
+import {
+    ITEM_SEARCH,
+    ITEM_SEARCH_CLEANUP,
+} from '../../pages/data-detail/reducer';
 
 import {
     List,
@@ -31,9 +35,11 @@ const FormFieldReference = ({
     schema,
     theme,
     client,
+    dispatch,
+    itemSearchResult,
 }) => {
     const dpRef = useRef();
-    // const searchRef = useRef();
+    const searchRef = useRef();
     const dTheme = useMemo(
         () =>
             theme.dropPanel
@@ -62,9 +68,13 @@ const FormFieldReference = ({
     const onSearchDebounced = useMemo(
         () =>
             _.debounce(text => {
-                if (_.isFunction(onSearch)) {
-                    onSearch(text);
-                }
+                dispatch({
+                    type: ITEM_SEARCH,
+                    client,
+                    entity: refEntity,
+                    field,
+                    text,
+                });
             }, 300),
         [],
     );
@@ -93,71 +103,63 @@ const FormFieldReference = ({
                     <ItemPicker>
                         <Search
                             placeholder="Search..."
-                            innerRef={comp => console.dir(comp)}
+                            innerRef={ref => console.dir(ref)} // due to some reason this does not work
                             onKeyUp={e => onSearchDebounced(e.target.value)}
                         />
                         <ScrollPanel>
                             <SearchResults>
-                                <SearchItem>
-                                    <SearchItemData>
-                                        <ItemLink
-                                            href=""
-                                            target="_blank"
-                                            rel="noreferrer noopener"
-                                        >
-                                            bd3b45df-6956-4901-915f-520ae62929d2
-                                        </ItemLink>
-                                        <br />
-                                        <ItemDescription>
-                                            Anna Krevnik
-                                        </ItemDescription>
-                                    </SearchItemData>
-                                    <SearchItemActions>
-                                        <AddButton />
-                                    </SearchItemActions>
-                                </SearchItem>
-                                <SearchItem>
-                                    <SearchItemData>
-                                        <ItemLink
-                                            href=""
-                                            target="_blank"
-                                            rel="noreferrer noopener"
-                                        >
-                                            bd3b45df-6956-4901-915f-520ae62929d2
-                                        </ItemLink>
-                                        <br />
-                                        <ItemDescription>
-                                            Anna Krevnik
-                                        </ItemDescription>
-                                    </SearchItemData>
-                                    <SearchItemActions>
-                                        <AddButton />
-                                    </SearchItemActions>
-                                </SearchItem>
-                                <SearchItem>
-                                    <SearchItemData>
-                                        <ItemLink
-                                            href=""
-                                            target="_blank"
-                                            rel="noreferrer noopener"
-                                        >
-                                            bd3b45df-6956-4901-915f-520ae62929d2
-                                        </ItemLink>
-                                        <br />
-                                        <ItemDescription>
-                                            Anna Krevnik
-                                        </ItemDescription>
-                                    </SearchItemData>
-                                    <SearchItemActions>
-                                        <AddButton />
-                                    </SearchItemActions>
-                                </SearchItem>
+                                {_.iane(itemSearchResult[field.getName()]) &&
+                                    itemSearchResult[field.getName()].map(
+                                        sResult => (
+                                            <SearchItem>
+                                                <SearchItemData>
+                                                    <ItemLink
+                                                        href={`/data/${encodeURIComponent(
+                                                            refEntity.getName(),
+                                                        )}/${encodeURIComponent(
+                                                            sResult.code,
+                                                        )}/`}
+                                                        target="_blank"
+                                                        rel="noreferrer noopener"
+                                                    >
+                                                        {sResult.code}
+                                                    </ItemLink>
+                                                    {_.isne(
+                                                        sResult[pFieldName],
+                                                    ) && (
+                                                        <>
+                                                            <br />
+                                                            <ItemDescription>
+                                                                {
+                                                                    sResult[
+                                                                        pFieldName
+                                                                    ]
+                                                                }
+                                                            </ItemDescription>
+                                                        </>
+                                                    )}
+                                                </SearchItemData>
+                                                <SearchItemActions>
+                                                    <AddButton />
+                                                </SearchItemActions>
+                                            </SearchItem>
+                                        ),
+                                    )}
                             </SearchResults>
                         </ScrollPanel>
                     </ItemPicker>
                 }
                 theme={dTheme}
                 ref={dpRef}
+                onClose={() => {
+                    dispatch({
+                        type: ITEM_SEARCH_CLEANUP,
+                        payload: {
+                            field: field.getName(),
+                        },
+                    });
+                    // todo: make searchRef work and cleanup the text input
+                }}
             >
                 <List>
                     {iValue.map(item => (
