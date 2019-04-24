@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { stringify, parse } from '@m59/qs';
 import { LOAD } from './reducer';
 import { withClient } from '../../lib/client';
-import { withHistory } from '../../lib/history';
 import List from '../../components/List';
 import { putSearchParameters, parseSearch } from '../../lib/util';
+import { push } from 'connected-react-router';
 
 // import Button from '../../material-kit/CustomButtons';
 import Layout from '../../components/Layout';
@@ -34,12 +34,12 @@ const DataPage = ({
         route.location.search,
     ]);
 
-	const page = search.page || 1;
-	let sort = search.sort;
-	if (_.isne(sort)) {
-	    sort = sort.split(':');
+    const page = search.page || 1;
+    let sort = search.sort;
+    if (_.isne(sort)) {
+        sort = sort.split(':');
     } else {
-	    sort = [];
+        sort = [];
     }
 
     useEffect(() => {
@@ -61,24 +61,30 @@ const DataPage = ({
                 count={count}
                 page={page}
                 pageSize={pageSize}
-                sort={{ field: sort[0] || null, way: sort[1] || null, }}
+                sort={{ field: sort[0] || null, way: sort[1] || null }}
                 onPageChange={page =>
-                    history.push(
-                        putSearchParameters(route.location.search, { page }),
+                    dispatch(
+                        push(
+                            putSearchParameters(route.location.search, {
+                                page,
+                            }),
+                        ),
                     )
                 }
-                onSortChange={sort => {
-	                history.push(
-		                putSearchParameters(route.location.search, { sort: `${sort.field}:${sort.way}` }),
-	                )
-                }}
+                onSortChange={sort =>
+                    dispatch(
+                        push(
+                            putSearchParameters(route.location.search, {
+                                sort: `${sort.field}:${sort.way}`,
+                            }),
+                        ),
+                    )
+                }
             />
         </Layout>
     );
 };
 
-export default withHistory(
-    withClient(
-        connect(s => ({ ...s.data, schema: s.application.schema }))(DataPage),
-    ),
+export default withClient(
+    connect(s => ({ ...s.data, schema: s.application.schema }))(DataPage),
 );

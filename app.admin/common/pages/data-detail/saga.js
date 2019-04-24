@@ -31,7 +31,16 @@ function* load(params) {
 
 function* itemSearch(params) {
     const { payload } = params;
-    const { entity, client, field } = payload || {};
+    const { entity, client, field, text } = payload || {};
+
+    if (!_.isne(text)) {
+        yield put({
+            type: reducer.ITEM_SEARCH_SUCCESS,
+            payload: { field: field.getName(), data: [] },
+        });
+        return;
+    }
+
     try {
         const queryName = `${entity.getCamelName()}Find`;
         const result = yield call(() => {
