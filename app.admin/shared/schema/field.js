@@ -108,6 +108,10 @@ export default class Field {
         return !this.isMultiple() && !this.isReference();
     }
 
+    isMandatory() {
+        return this._schema.required === true;
+    }
+
     toJSON() {
         return this._schema;
     }

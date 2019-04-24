@@ -8,7 +8,9 @@ export default ({ children, title }) => (
     <VerticalTriplet
         top={
             <Top>
-                <Logo to="/">A</Logo>
+                <Logo to="/">
+                    <div>A</div>
+                </Logo>
             </Top>
         }
         bottom={<Footer />}

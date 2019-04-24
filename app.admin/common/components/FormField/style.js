@@ -25,3 +25,7 @@ export const Error = withTheme(styled.div`
 export const Actions = styled.div`
     padding-left: 1rem;
 `;
+
+export const RedStar = withTheme(styled.span`
+    color: ${props => props.theme.error.color};
+`);

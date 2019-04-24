@@ -28,10 +28,9 @@ export const Right = styled.div`
 
 export const Logo = styled(Link)`
     ${rectangle('2rem')}
+    ${align('center', 'center')}
     border: 1px solid gray;
     border-radius: 5px;
-    display: block;
-    text-align: center;
     text-decoration: none;
     color: gray;
 `;
