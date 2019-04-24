@@ -13,7 +13,7 @@ export const Label = styled.div`
 export const Footer = styled.div`
     margin-top: 0.2rem;
     ${align('top', 'left')}
-    min-height: 1rem;
+    min-height: 1.2rem;
 `;
 
 export const Error = withTheme(styled.div`

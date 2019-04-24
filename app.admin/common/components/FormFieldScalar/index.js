@@ -2,6 +2,7 @@ import React from 'react';
 import FormField from '../FormField';
 import FormFieldMultiplier, { Add } from '../FormFieldMultiplier';
 import { Input } from './style.js';
+import { TYPE_INTEGER } from '../../../shared/schema/field';
 
 export default ({ field, value, error, onChange }) => (
     <FormField
@@ -9,7 +10,14 @@ export default ({ field, value, error, onChange }) => (
         error={error}
         actions={
             field.isMultiple() ? (
-                <Add field={field} onChange={onChange} value={value} />
+                <Add
+                    field={field}
+                    onChange={onChange}
+                    value={value}
+                    initialValue={
+                        field.getActualType() === TYPE_INTEGER ? '0' : ''
+                    }
+                />
             ) : null
         }
     >

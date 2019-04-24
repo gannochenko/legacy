@@ -1,5 +1,11 @@
 import { uCFirst } from 'ew-internals';
-import Field, { TYPE_STRING } from './field';
+import * as yup from 'yup';
+import Field, {
+    TYPE_STRING,
+    TYPE_INTEGER,
+    TYPE_DATETIME,
+    TYPE_BOOLEAN,
+} from './field';
 import CodeField from './code-field';
 import { convertToCamel } from '../../common/lib/util';
 import {
@@ -132,5 +138,42 @@ export default class Entity {
                     field.getName() !== ENTITY_CODE_FIELD_NAME,
             ) || null
         );
+    }
+
+    getValidator() {
+        const shape = {};
+        this._schema.schema.forEach(field => {
+            let rule = null;
+
+            // type
+            if (field.isReference()) {
+                rule = yup.string();
+            } else {
+                const type = field.getActualType();
+                if (type === TYPE_INTEGER) {
+                    rule = yup.number().integer();
+                } else if (type === TYPE_BOOLEAN) {
+                    rule = yup.boolean();
+                } else if (type === TYPE_DATETIME) {
+                    rule = yup.date();
+                } else {
+                    rule = yup.string();
+                }
+            }
+
+            // multiple
+            if (field.isMultiple()) {
+                rule = yup.array().of(rule);
+            }
+
+            // required
+            if (field.isMandatory()) {
+                rule = rule.required(`${field.getDisplayName()} is required`);
+            }
+
+            shape[field.getName()] = rule;
+        });
+
+        return yup.object().shape(shape);
     }
 }

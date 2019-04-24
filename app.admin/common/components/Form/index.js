@@ -1,6 +1,5 @@
 import React, { useMemo, useRef } from 'react';
 import { Formik } from 'formik';
-import * as Yup from 'yup';
 import { Form, Fields } from './style.js';
 import Button from '../../material-kit/CustomButtons';
 import * as fieldSchema from '../../../shared/schema/field';
@@ -32,6 +31,7 @@ const getField = field => {
 
 export default ({ data, schema, entity }) => {
     const initial = useMemo(() => _.cloneDeep(data), [data]);
+    const validator = useMemo(() => entity.getValidator(), [entity]);
     const form = useRef();
     return (
         <Form>
@@ -45,11 +45,7 @@ export default ({ data, schema, entity }) => {
                     // 	setSubmitting(false);
                     // }, 500);
                 }}
-                // validationSchema={Yup.object().shape({
-                // 	email: Yup.string()
-                // 		.email()
-                // 		.required('Required'),
-                // })}
+                validationSchema={validator}
             >
                 {props => {
                     const {

@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { FieldSet, AddButton } from './style.js';
 
-export const Add = ({ field, value, onChange }) => {
+export const Add = ({ field, value, onChange, initialValue }) => {
     if (!field.isMultiple() || !_.isFunction(onChange)) {
         return null;
     }
@@ -16,7 +16,10 @@ export const Add = ({ field, value, onChange }) => {
                 onChange({
                     target: {
                         name: field.getName(),
-                        value: [...value, ''],
+                        value: [
+                            ...value,
+                            initialValue !== undefined ? initialValue : '',
+                        ],
                     },
                 });
             }}
