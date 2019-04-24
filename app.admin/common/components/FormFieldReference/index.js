@@ -149,14 +149,25 @@ const FormFieldReference = ({
                                                 <SearchItemActions>
                                                     <AddButton
                                                         onClick={() => {
-                                                            let newValue = sResult;
+                                                            let newValue = null;
                                                             if (
                                                                 field.isMultiple()
                                                             ) {
-                                                                newValue = [
-                                                                    ...value,
-                                                                    sResult,
-                                                                ];
+                                                                // need to check if the item is already there
+                                                                if (
+                                                                    !value.find(
+                                                                        item =>
+                                                                            item.code ===
+                                                                            sResult.code,
+                                                                    )
+                                                                ) {
+                                                                    newValue = [
+                                                                        ...value,
+                                                                        sResult,
+                                                                    ];
+                                                                }
+                                                            } else {
+                                                                newValue = sResult;
                                                             }
 
                                                             if (
@@ -169,12 +180,17 @@ const FormFieldReference = ({
                                                                 );
                                                             }
 
-                                                            onChange({
-                                                                target: {
-                                                                    name: field.getName(),
-                                                                    value: newValue,
-                                                                },
-                                                            });
+                                                            if (
+                                                                newValue !==
+                                                                null
+                                                            ) {
+                                                                onChange({
+                                                                    target: {
+                                                                        name: field.getName(),
+                                                                        value: newValue,
+                                                                    },
+                                                                });
+                                                            }
                                                         }}
                                                     />
                                                 </SearchItemActions>
