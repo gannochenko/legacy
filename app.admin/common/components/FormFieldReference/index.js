@@ -92,7 +92,11 @@ const FormFieldReference = ({
                         onClick={() => {
                             const panel = dpRef.current;
                             panel.open({ preventClose: true });
-                            // setTimeout(() => searchRef.current.focus(), 1000);
+
+                            if (searchRef.current) {
+                                searchRef.current.value = '';
+                                setTimeout(() => searchRef.current.focus(), 0);
+                            }
                         }}
                     />
                 ) : (
@@ -105,8 +109,9 @@ const FormFieldReference = ({
                     <ItemPicker>
                         <Search
                             placeholder="Search..."
-                            innerRef={ref => console.dir(ref)} // due to some reason this does not work
+                            ref={searchRef} // due to some reason this does not work
                             onKeyUp={e => onSearchDebounced(e.target.value)}
+                            theme={theme}
                         />
                         <ScrollPanel>
                             <SearchResults>
@@ -152,6 +157,16 @@ const FormFieldReference = ({
                                                                     ...value,
                                                                     sResult,
                                                                 ];
+                                                            }
+
+                                                            if (
+                                                                searchRef.current
+                                                            ) {
+                                                                setTimeout(
+                                                                    () =>
+                                                                        searchRef.current.focus(),
+                                                                    0,
+                                                                );
                                                             }
 
                                                             onChange({

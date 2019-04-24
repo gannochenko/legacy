@@ -61,11 +61,11 @@ export const ItemDescription = withTheme(styled.div`
     font-size: ${props => props.theme.font.xSmall};
 `);
 
-export const Search = withTheme(styled.input`
+export const Search = styled.input`
     ${props => stdInput(props.theme.input, !!props.error)}
     width: 100%;
     margin-bottom: 0.5rem;
-`);
+`;
 
 export const SearchResults = styled.div`
     ${group('0.5rem')}

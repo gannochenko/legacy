@@ -21,7 +21,6 @@ const DataPage = ({
     loading,
     data,
     count,
-    history,
 }) => {
     const entityName = _.get(route, 'match.params.entity_name');
     const entity = schema.getEntity(entityName);
