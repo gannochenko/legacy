@@ -176,4 +176,15 @@ export default class Entity {
 
         return yup.object().shape(shape);
     }
+
+    prepareData(data) {
+        if (!_.ione(data)) {
+            return {};
+        }
+
+        delete data.__typename;
+
+        // todo
+        return data;
+    }
 }

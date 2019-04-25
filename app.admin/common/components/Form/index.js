@@ -29,7 +29,7 @@ const getField = field => {
     return null;
 };
 
-export default ({ data, schema, entity }) => {
+export default ({ data, schema, entity, onSubmit }) => {
     const initial = useMemo(() => _.cloneDeep(data), [data]);
     const validator = useMemo(() => entity.getValidator(), [entity]);
     const form = useRef();
@@ -38,13 +38,7 @@ export default ({ data, schema, entity }) => {
             <Formik
                 ref={form}
                 initialValues={initial}
-                onSubmit={(values, { setSubmitting }) => {
-                    console.dir(values);
-                    // setTimeout(() => {
-                    //    console.dir(values);
-                    // 	setSubmitting(false);
-                    // }, 500);
-                }}
+                onSubmit={onSubmit}
                 validationSchema={validator}
             >
                 {props => {
@@ -81,12 +75,7 @@ export default ({ data, schema, entity }) => {
                                     );
                                 })}
                             </Fields>
-                            <Button
-                                type="submit"
-                                onClick={() => {
-                                    form.current.submitForm();
-                                }}
-                            >
+                            <Button type="submit" onClick={handleSubmit}>
                                 Save
                             </Button>
                         </>

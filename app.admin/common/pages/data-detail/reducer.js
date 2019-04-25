@@ -6,6 +6,9 @@ export const ITEM_SEARCH = 'data-detail.item-search';
 export const ITEM_SEARCH_SUCCESS = 'data-detail.item-search.success';
 export const ITEM_SEARCH_FAILURE = 'data-detail.item-search.failure';
 export const ITEM_SEARCH_CLEANUP = 'data-detail.item-search.cleanup';
+export const SAVE = 'data-detail.save';
+export const SAVE_SUCCESS = 'data-detail.save.success';
+export const SAVE_FAILURE = 'data-detail.save.failure';
 
 const initialState = {
     loading: false,
@@ -13,6 +16,7 @@ const initialState = {
     data: null,
     error: null,
     itemSearchResult: {},
+    itemSearchError: {},
 };
 
 const reducer = (state = initialState, action) => {
@@ -43,12 +47,32 @@ const reducer = (state = initialState, action) => {
                     ...state.itemSearchResult,
                     [action.payload.field]: action.payload.data,
                 },
+                itemSearchError: {
+                    ...state.itemSearchError,
+                    [action.payload.field]: [],
+                },
+            };
+        case ITEM_SEARCH_FAILURE:
+            return {
+                ...state,
+                itemSearchResult: {
+                    ...state.itemSearchResult,
+                    [action.payload.field]: {},
+                },
+                itemSearchError: {
+                    ...state.itemSearchError,
+                    [action.payload.field]: action.payload.error,
+                },
             };
         case ITEM_SEARCH_CLEANUP:
             return {
                 ...state,
                 itemSearchResult: {
                     ...state.itemSearchResult,
+                    [action.payload.field]: [],
+                },
+                itemSearchError: {
+                    ...state.itemSearchError,
                     [action.payload.field]: [],
                 },
             };

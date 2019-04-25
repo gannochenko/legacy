@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
-import { LOAD, UNLOAD } from './reducer';
+import { LOAD, UNLOAD, SAVE } from './reducer';
 import { withClient } from '../../lib/client';
 import Form from '../../components/Form';
 
@@ -59,7 +59,22 @@ const DataPage = ({
             }`}
         >
             {ready && (
-                <Form data={data || {}} schema={schema || {}} entity={entity} />
+                <Form
+                    data={data || {}}
+                    schema={schema || {}}
+                    entity={entity}
+                    onSubmit={(values, formActions) => {
+                        dispatch({
+                            type: SAVE,
+                            payload: {
+                                data: values,
+                                entity,
+                                client,
+                                formActions,
+                            },
+                        });
+                    }}
+                />
             )}
         </Layout>
     );

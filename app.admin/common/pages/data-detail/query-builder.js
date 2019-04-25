@@ -37,7 +37,7 @@ export const buildQueryLoad = ({ entity, schema, code }) => {
     `;
 };
 
-export const buildQuerySearch = ({ entity, schema, text }) => {
+export const buildQuerySearch = ({ entity, text }) => {
     const queryName = `${entity.getCamelName()}Find`;
     let presentationalField = entity.getPresentationField();
 
@@ -55,4 +55,43 @@ export const buildQuerySearch = ({ entity, schema, text }) => {
             }
         }
     `;
+};
+
+export const buildMutationPut = ({ entity, schema, data }) => {
+    const mutationName = `${entity.getCamelName()}Put`;
+    const { code } = data;
+
+    let dataStr = [];
+    Object.keys(entity.prepareData(data)).forEach(fieldName => {
+        dataStr.push(`${sanitize(fieldName)}: "${''}"`);
+    });
+
+    const q = `
+        mutation {
+            ${sanitize(mutationName)}(data: {${dataStr.join(', ')}}${
+        _.isne(code) ? `, code: "${sanitize(code)}"` : ''
+    }) {
+                errors {
+                    code
+                    message
+                }
+            }
+        }
+    `;
+    console.dir(q);
+
+    const mutation = gql`
+        mutation {
+            ${sanitize(mutationName)}(data: {${dataStr.join(', ')}}${
+        _.isne(code) ? `, code: "${sanitize(code)}"` : ''
+    }) {
+                errors {
+                    code
+                    message
+                }
+            }
+        }
+    `;
+
+    return [mutationName, mutation];
 };
