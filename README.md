@@ -1,5 +1,7 @@
 # The registry of architectural legacy
 
+A title for the project: "Project "Minimum" - a minimalistic GraphQL backend
+
 ## Parts
 
 * A front application, the main site

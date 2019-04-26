@@ -44,11 +44,13 @@ const DataPage = ({
     useEffect(() => {
         dispatch({
             type: LOAD,
-            client,
-            entity,
-            page,
-            pageSize,
-            sort,
+            payload: {
+                client,
+                entity,
+                page,
+                pageSize,
+                sort,
+            },
         });
     }, [entity.getName(), search]);
 

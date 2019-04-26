@@ -18,6 +18,7 @@ export const parseSearch = url => parse(url.replace(/^\?/, ''));
 
 // todo: move to ew-internals
 export const sanitize = str => str.replace(/[^a-z0-9_-]/gi, '');
+export const escapeQuote = str => str.replace(/"/g, '"');
 
 // todo: move to ew-internals
 export const getCalendar = (date, chosenDate = null) => {

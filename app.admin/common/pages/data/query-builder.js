@@ -13,7 +13,7 @@ export default ({ entity, page, pageSize, sort, filter, select }) => {
     });
 
     const queryName = `${entity.getCamelName()}Find`;
-    return gql`
+    const query = gql`
         query {
             ${sanitize(queryName)}(
                 page: ${parseInt(page, 10)}
@@ -37,4 +37,6 @@ export default ({ entity, page, pageSize, sort, filter, select }) => {
             }
         }
 	`;
+
+    return [queryName, query];
 };

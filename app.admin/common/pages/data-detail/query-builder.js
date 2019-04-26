@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
-import { sanitize } from '../../lib/util';
+import { sanitize, escapeQuote } from '../../lib/util';
 import { ENTITY_CODE_FIELD_NAME } from '../../../shared/constants';
+import { TYPE_STRING, TYPE_DATETIME } from '../../../shared/schema/field';
 
 export const buildQueryLoad = ({ entity, schema, code }) => {
     const selectedFields = entity.getFields().map(field => {
@@ -21,8 +22,7 @@ export const buildQueryLoad = ({ entity, schema, code }) => {
     });
 
     const queryName = `${entity.getCamelName()}Get`;
-
-    return gql`
+    const query = gql`
         query {
             ${sanitize(queryName)}(code: "${sanitize(code)}") {
                 errors {
@@ -35,13 +35,15 @@ export const buildQueryLoad = ({ entity, schema, code }) => {
             }
         }        
     `;
+
+    return [queryName, query];
 };
 
 export const buildQuerySearch = ({ entity, text }) => {
     const queryName = `${entity.getCamelName()}Find`;
     let presentationalField = entity.getPresentationField();
 
-    return gql`
+    const query = gql`
         query {
             ${sanitize(queryName)}(search: "${sanitize(text)}", limit: 5) {
                 errors {
@@ -55,30 +57,58 @@ export const buildQuerySearch = ({ entity, text }) => {
             }
         }
     `;
+
+    return [queryName, query];
 };
 
 export const buildMutationPut = ({ entity, schema, data }) => {
     const mutationName = `${entity.getCamelName()}Put`;
     const { code } = data;
 
-    let dataStr = [];
-    Object.keys(entity.prepareData(data)).forEach(fieldName => {
-        dataStr.push(`${sanitize(fieldName)}: "${''}"`);
-    });
+    data = entity.prepareData(data);
 
-    const q = `
-        mutation {
-            ${sanitize(mutationName)}(data: {${dataStr.join(', ')}}${
-        _.isne(code) ? `, code: "${sanitize(code)}"` : ''
-    }) {
-                errors {
-                    code
-                    message
-                }
+    // translate to GraphQL presentation
+    let dataStr = [];
+    entity.getFields().forEach(field => {
+        const name = field.getName();
+        if (!(name in data)) {
+            return;
+        }
+
+        let value = data[name];
+        const type = field.getActualType();
+        if (
+            type === TYPE_DATETIME ||
+            type === TYPE_STRING ||
+            field.isReference()
+        ) {
+            if (field.isMultiple()) {
+                value = value.map(subValue => `"${escapeQuote(subValue)}"`);
+            } else {
+                value = `"${escapeQuote(value)}"`;
             }
         }
-    `;
-    console.dir(q);
+
+        dataStr.push(
+            `${sanitize(name)}: ${
+                _.isArray(value) ? `[${value.join(', ')}]` : value
+            }`,
+        );
+    });
+
+    // const q = `
+    //     mutation {
+    //         ${sanitize(mutationName)}(data: {${dataStr.join(', ')}}${
+    //     _.isne(code) ? `, code: "${sanitize(code)}"` : ''
+    // }) {
+    //             errors {
+    //                 code
+    //                 message
+    //             }
+    //         }
+    //     }
+    // `;
+    // console.dir(q);
 
     const mutation = gql`
         mutation {

@@ -14,7 +14,9 @@ export const Middle = styled.div`
 `;
 
 export const Footer = withTheme(styled.div`
-    height: 5rem;
+    padding: 1rem 3rem;
+    border-top: 1px solid gray;
+    font-size: ${props => props.theme.font.xSmall};
 `);
 
 export const Left = styled.div`

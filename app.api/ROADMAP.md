@@ -20,3 +20,4 @@ Tech debts:
 2) schema classes are duplicate, across applications (see shared/ folder)
 3) interlink fields, entities and schema (to prevent from passing "schema" object everywhere)
 4) probably move to Yup in server-side validation
+5) replace field-type if-s with class implementations

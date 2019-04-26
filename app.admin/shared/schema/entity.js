@@ -178,13 +178,93 @@ export default class Entity {
     }
 
     prepareData(data) {
+        const processed = {};
+
         if (!_.ione(data)) {
-            return {};
+            return processed;
         }
 
-        delete data.__typename;
+        this.getFields().forEach(field => {
+            const name = field.getName();
+            if (name === ENTITY_CODE_FIELD_NAME) {
+                return;
+            }
+
+            if (!(name in data)) {
+                return;
+            }
+
+            let value = data[name];
+
+            if (field.isMultiple()) {
+                if (!_.isArray(value)) {
+                    value = [];
+                } else {
+                    value = value.map(subValue =>
+                        this.castFieldValue(field, subValue),
+                    );
+                }
+
+                if (field.isReference()) {
+                    value = _.unique(value);
+                }
+            } else {
+                value = this.castFieldValue(field, value);
+            }
+
+            processed[name] = value;
+        });
 
         // todo
-        return data;
+        return processed;
+    }
+
+    /**
+     * @private
+     * todo: replace these if-s with a class implementation
+     */
+    castFieldValue(field, value) {
+        const type = field.getActualType();
+        if (type === TYPE_STRING) {
+            if (value === undefined || value === null) {
+                value = '';
+            } else {
+                value = value.toString();
+            }
+        } else if (type === TYPE_BOOLEAN) {
+            value = !!value;
+        } else if (type === TYPE_INTEGER) {
+            value = parseInt(value, 10);
+            if (isNaN(value)) {
+                value = 0;
+            }
+        } else if (type === TYPE_DATETIME) {
+            if (value === undefined || value === null) {
+                return '';
+            }
+
+            if (value instanceof Date) {
+                value = value.toISOString();
+            } else if (isNaN(Date.parse(value))) {
+                return '';
+            }
+        } else if (field.isReference()) {
+            if (_.isString(value)) {
+                // all good
+            } else if (_.isObject(value)) {
+                if (ENTITY_CODE_FIELD_NAME in value) {
+                    value = value[ENTITY_CODE_FIELD_NAME];
+                    if (!_.isne(value)) {
+                        value = '';
+                    }
+                }
+            } else {
+                value = '';
+            }
+        } else {
+            value = '';
+        }
+
+        return value;
     }
 }

@@ -12,7 +12,11 @@ export const ENTITY_USER_NAME = 'user';
 export const ENTITY_GROUP_NAME = 'group';
 export const ENTITY_CODE_FIELD_NAME = 'code';
 
+/** @deprecated */
 export const ENTITY_TYPE_STRING = 'string';
+/** @deprecated */
 export const ENTITY_TYPE_NUMBER = 'number';
+/** @deprecated */
 export const ENTITY_TYPE_BOOLEAN = 'boolean';
+/** @deprecated */
 export const ENTITY_TYPE_DATE = 'datetime';

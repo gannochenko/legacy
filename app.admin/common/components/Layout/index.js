@@ -9,11 +9,16 @@ export default ({ children, title }) => (
         top={
             <Top>
                 <Logo to="/">
-                    <div>A</div>
+                    <div>MIN</div>
                 </Logo>
             </Top>
         }
-        bottom={<Footer />}
+        bottom={
+            <Footer>
+                &copy; 2019 Project &laquo;Minimum&raquo; &mdash; a minimalistic
+                GraphQL backend
+            </Footer>
+        }
     >
         <Middle>
             <Left>

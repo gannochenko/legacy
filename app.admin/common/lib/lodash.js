@@ -11,6 +11,7 @@ import cloneDeep from 'lodash.clonedeep';
 // import deepFreeze from deep-freeze-node';
 // import isEqual from 'lodash.isequal';
 import debounce from 'lodash.debounce';
+import unique from 'lodash.uniq';
 
 export default {
     isArray: Array.isArray,
@@ -21,6 +22,7 @@ export default {
     ione: arg => {
         return isObject(arg) && Object.keys(arg).length > 0;
     },
+    isString,
     isne: arg => {
         return isString(arg) && arg.length > 0;
     },
@@ -28,4 +30,5 @@ export default {
     isFunction,
     cloneDeep,
     debounce,
+    unique,
 };

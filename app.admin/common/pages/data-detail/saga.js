@@ -8,12 +8,12 @@ import {
 
 function* load(params) {
     const { payload } = params || {};
-    const { entity, client } = payload || {};
+    const { client } = payload || {};
     try {
-        const queryName = `${entity.getCamelName()}Get`;
+        const [queryName, query] = buildQueryLoad(payload);
         const result = yield call(() => {
             return client.query({
-                query: buildQueryLoad(payload),
+                query,
             });
         });
 
@@ -46,10 +46,10 @@ function* itemSearch(params) {
     }
 
     try {
-        const queryName = `${entity.getCamelName()}Find`;
+        const [queryName, query] = buildQuerySearch(payload);
         const result = yield call(() => {
             return client.query({
-                query: buildQuerySearch(payload),
+                query,
             });
         });
 

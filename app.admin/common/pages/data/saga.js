@@ -3,22 +3,23 @@ import * as reducer from './reducer';
 import buildQuery from './query-builder';
 
 function* load(params) {
-    const { entity, client } = params;
+    const { payload } = params || {};
+    const { client } = payload || {};
     try {
-        const queryName = `${entity.getCamelName()}Find`;
+        const [queryName, query] = buildQuery(payload);
         const result = yield call(() => {
             return client.query({
-                query: buildQuery(params),
+                query,
             });
         });
 
-        const payload = _.get(result, `data.${queryName}`);
+        const queryResult = _.get(result, `data.${queryName}`);
         // todo: check for errors
         // console.dir(payload);
 
         yield put({
             type: reducer.LOAD_SUCCESS,
-            payload: { data: payload.data, count: payload.count },
+            payload: { data: queryResult.data, count: queryResult.count },
         });
     } catch (error) {
         yield put({ type: reducer.LOAD_FAILURE, payload: error });
