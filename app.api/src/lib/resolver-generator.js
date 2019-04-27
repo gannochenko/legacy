@@ -208,16 +208,41 @@ export default class ResolverGenerator {
                                 )
                                 .filter(x => x);
 
-                            // todo: that needs to be optimized
+                            // todo: that needs to be optimized: batch this
                             for (let i = 0; i < refs.length; i++) {
-                                if (refs[i].name in data) {
+                                const rName = refs[i].name;
+                                if (rName in data) {
+                                    if (
+                                        data[rName] === undefined ||
+                                        data[rName] === null
+                                    ) {
+                                        data[rName] = null;
+                                        continue;
+                                    }
+
+                                    data[rName] = data[rName].toString().trim();
+                                    if (!data[rName].length) {
+                                        data[rName] = null;
+                                        continue;
+                                    }
+
                                     const refEntityName = refs[i].type;
                                     // need to replace code with id
-                                    // console.dir(data[key]);
                                     const refDBEntity = await entityManager.getByName(
                                         refEntityName,
                                     );
-                                    console.dir(refDBEntity);
+                                    const repo = connection.getRepository(
+                                        refDBEntity,
+                                    );
+                                    const refItem = await repo.findOne({
+                                        where: { code: data[rName] },
+                                        select: ['id'],
+                                    });
+                                    if (refItem) {
+                                        data[rName] = refItem.id;
+                                    } else {
+                                        data[rName] = null;
+                                    }
                                 }
                             }
 
@@ -371,6 +396,10 @@ export default class ResolverGenerator {
             const field = refs[i];
             if (field.name in data) {
                 const values = data[field.name];
+                if (!_.iane(values)) {
+                    continue;
+                }
+
                 const refEntityName = schemaProvider.getReferenceFieldName(
                     field,
                 );
@@ -615,7 +644,9 @@ export default class ResolverGenerator {
                 dbItem[field.name] !== null
             ) {
                 if (field.type === ENTITY_TYPE_DATE) {
-                    plain[field.name] = dbItem[field.name].toISOString();
+                    if (dbItem[field.name] instanceof Date) {
+                        plain[field.name] = dbItem[field.name].toISOString();
+                    }
                 } else {
                     plain[field.name] = dbItem[field.name];
                 }
