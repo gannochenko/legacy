@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { stringify, parse } from '@m59/qs';
-import { LOAD } from './reducer';
+import { LOAD, UNLOAD } from './reducer';
 import { withClient } from '../../lib/client';
 import List from '../../components/List';
 import { putSearchParameters, parseSearch } from '../../lib/util';
@@ -41,6 +41,7 @@ const DataPage = ({
         sort = [];
     }
 
+    // load data on component mount
     useEffect(() => {
         dispatch({
             type: LOAD,
@@ -53,6 +54,16 @@ const DataPage = ({
             },
         });
     }, [entity.getName(), search]);
+
+    // cleanup data on unmount
+    useEffect(
+        () => () => {
+            dispatch({
+                type: UNLOAD,
+            });
+        },
+        [],
+    );
 
     return (
         <Layout title={entity.getDisplayName()}>

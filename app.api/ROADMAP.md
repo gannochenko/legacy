@@ -16,6 +16,17 @@
 
 Tech debts:
 
+1) scroll to error
++++ сохранение
+2.1) добавление
+2.2) удаление
+2.3) кнопка добавления в списке
+2.4) попап с кнопками редактирования и удаления в списке
+3) scroll to top
+5) нотификашки
+4) запихать некоторое в модуль
+
+
 1) backend still does not use database when reading a schema
 2) schema classes are duplicate, across applications (see shared/ folder)
 3) interlink fields, entities and schema (to prevent from passing "schema" object everywhere)
