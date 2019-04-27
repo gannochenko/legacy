@@ -96,19 +96,7 @@ export const buildMutationPut = ({ entity, schema, data }) => {
         );
     });
 
-    // const q = `
-    //     mutation {
-    //         ${sanitize(mutationName)}(data: {${dataStr.join(', ')}}${
-    //     _.isne(code) ? `, code: "${sanitize(code)}"` : ''
-    // }) {
-    //             errors {
-    //                 code
-    //                 message
-    //             }
-    //         }
-    //     }
-    // `;
-    // console.dir(q);
+    console.dir(dataStr.join(', '));
 
     const mutation = gql`
         mutation {

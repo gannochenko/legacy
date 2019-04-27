@@ -21,6 +21,11 @@ export class Client {
         return apollo.query(...args);
     }
 
+    async mutate(...args) {
+        const apollo = await this.getApollo();
+        return apollo.mutate(...args);
+    }
+
     async get(path) {
         const url = await this.getUrl();
         return await Axios.get(`${url}/${path}`);

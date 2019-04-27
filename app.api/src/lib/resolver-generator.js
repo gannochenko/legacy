@@ -191,6 +191,36 @@ export default class ResolverGenerator {
 
                     if (!result.errors.length) {
                         await this.wrap(async () => {
+                            // todo: run Entity.prepareData() here
+                            // need to replace single references from code to id
+                            // todo: add this to the server side of Entity.prepareData()
+                            // get all single references
+                            const refs = entity.schema
+                                .map(field =>
+                                    !schemaProvider.isMultipleField(field) &&
+                                    _.isne(
+                                        schemaProvider.getReferenceFieldName(
+                                            field,
+                                        ),
+                                    )
+                                        ? field
+                                        : null,
+                                )
+                                .filter(x => x);
+
+                            // todo: that needs to be optimized
+                            for (let i = 0; i < refs.length; i++) {
+                                if (refs[i].name in data) {
+                                    const refEntityName = refs[i].type;
+                                    // need to replace code with id
+                                    // console.dir(data[key]);
+                                    const refDBEntity = await entityManager.getByName(
+                                        refEntityName,
+                                    );
+                                    console.dir(refDBEntity);
+                                }
+                            }
+
                             let dbItem = null;
                             if (isNew) {
                                 dbItem = repo.create(data);
@@ -210,7 +240,7 @@ export default class ResolverGenerator {
                             }
 
                             await repo.save(dbItem);
-                            await this.manageReferences(
+                            await this.managerMultipleReferences(
                                 entity,
                                 dbItem.id,
                                 data,
@@ -263,7 +293,7 @@ export default class ResolverGenerator {
                             }, result.errors);
 
                             // drop refs
-                            // get all references
+                            // get all multiple references
                             const refs = entity.schema
                                 .map(field =>
                                     schemaProvider.isMultipleField(field) &&
@@ -319,14 +349,14 @@ export default class ResolverGenerator {
         };
     }
 
-    static async manageReferences(
+    static async managerMultipleReferences(
         entity,
         id,
         data,
         schemaProvider,
         entityManager,
     ) {
-        // get all references
+        // get all multiple references
         const refs = entity.schema
             .map(field =>
                 schemaProvider.isMultipleField(field) &&
@@ -572,8 +602,6 @@ export default class ResolverGenerator {
             // a very basic type of search - by the part of code
             where.code = Like(`%${search.replace(/[^a-zA-Z0-9_-]/, '')}%`);
         }
-
-        console.dir(where);
 
         return where;
     }

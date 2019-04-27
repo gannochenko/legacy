@@ -35,7 +35,7 @@ function* load(params) {
 
 function* itemSearch(params) {
     const { payload } = params;
-    const { entity, client, field, text } = payload || {};
+    const { client, field, text } = payload || {};
 
     if (!_.isne(text)) {
         yield put({
@@ -75,12 +75,14 @@ function* save(params) {
     try {
         const [mutationName, mutation] = buildMutationPut(payload);
 
-        // const result = yield call(() => {
-        // 	return client.mutation({
-        // 		mutation,
-        // 	});
-        // });
-        //
+        const result = yield call(() => {
+            return client.mutate({
+                mutation,
+            });
+        });
+
+        console.dir(result);
+
         // console.dir(result);
         //
         // const mutationResult = _.get(result, `data.${mutationName}`);
