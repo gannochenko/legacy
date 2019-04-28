@@ -171,6 +171,8 @@ export default class ResolverGenerator {
                         data: {},
                     };
 
+                    console.log(require('util').inspect(args, { depth: 10 }));
+
                     let { code, data } = args;
                     // todo: use connection here
                     const repo = getRepository(dbEntity);
@@ -395,28 +397,6 @@ export default class ResolverGenerator {
         for (let i = 0; i < refs.length; i++) {
             const field = refs[i];
             if (field.name in data) {
-                const values = data[field.name];
-                if (!_.iane(values)) {
-                    continue;
-                }
-
-                const refEntityName = schemaProvider.getReferenceFieldName(
-                    field,
-                );
-                const refDBEntity = await entityManager.getByName(
-                    refEntityName,
-                );
-                // todo: use connection here
-                const repo = getRepository(refDBEntity);
-                const qb = repo.createQueryBuilder(refEntityName);
-
-                // todo: optimise: get code and id only!
-                const ids = (await qb
-                    .where({
-                        code: In(values),
-                    })
-                    .getMany()).map(item => item.id);
-
                 const refTableEntityName = getRefName(entity, field);
                 const refTableDBEntity = await entityManager.getByName(
                     refTableEntityName,
@@ -424,6 +404,28 @@ export default class ResolverGenerator {
 
                 const rrepo = getRepository(refTableDBEntity);
                 const rqb = rrepo.createQueryBuilder(refTableDBEntity);
+
+                const values = data[field.name];
+                let ids = [];
+
+                if (_.iane(values)) {
+                    const refEntityName = schemaProvider.getReferenceFieldName(
+                        field,
+                    );
+                    const refDBEntity = await entityManager.getByName(
+                        refEntityName,
+                    );
+                    // todo: use connection here
+                    const repo = getRepository(refDBEntity);
+                    const qb = repo.createQueryBuilder(refEntityName);
+
+                    // todo: optimise: get code and id only!
+                    ids = (await qb
+                        .where({
+                            code: In(values),
+                        })
+                        .getMany()).map(item => item.id);
+                }
 
                 // delete all
                 await rqb
@@ -433,16 +435,18 @@ export default class ResolverGenerator {
                     .execute();
 
                 // and re-create
-                await rqb
-                    .insert()
-                    .into(refTableDBEntity)
-                    .values(
-                        ids.map(relId => ({
-                            self: id,
-                            rel: relId,
-                        })),
-                    )
-                    .execute();
+                if (_.iane(ids)) {
+                    await rqb
+                        .insert()
+                        .into(refTableDBEntity)
+                        .values(
+                            ids.map(relId => ({
+                                self: id,
+                                rel: relId,
+                            })),
+                        )
+                        .execute();
+                }
             }
         }
     }

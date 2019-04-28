@@ -233,7 +233,7 @@ export const FormFieldReference = ({
                             <ItemActions>
                                 <RemoveButton
                                     onClick={() => {
-                                        let newValue = undefined;
+                                        let newValue = null;
                                         if (field.isMultiple()) {
                                             newValue = value.filter(
                                                 vItem =>

@@ -169,6 +169,8 @@ export default class Entity {
             // required
             if (field.isMandatory()) {
                 rule = rule.required(`${field.getDisplayName()} is required`);
+            } else {
+                rule = rule.nullable();
             }
 
             shape[field.getName()] = rule;
@@ -215,7 +217,6 @@ export default class Entity {
             processed[name] = value;
         });
 
-        // todo
         return processed;
     }
 
