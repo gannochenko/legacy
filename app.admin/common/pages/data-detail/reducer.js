@@ -16,8 +16,7 @@ const initialState = {
     data: null,
     error: null,
     formData: {},
-    // itemSearchResult: {},
-    // itemSearchError: {},
+    saveCounter: 0,
 };
 
 const reducer = (state = initialState, action) => {
@@ -51,14 +50,6 @@ const reducer = (state = initialState, action) => {
                         error: [],
                     },
                 },
-                // itemSearchResult: {
-                //     ...state.itemSearchResult,
-                //     [action.payload.field]: action.payload.data,
-                // },
-                // itemSearchError: {
-                //     ...state.itemSearchError,
-                //     [action.payload.field]: [],
-                // },
             };
         case ITEM_SEARCH_FAILURE:
             return {
@@ -70,14 +61,6 @@ const reducer = (state = initialState, action) => {
                         error: action.payload.error,
                     },
                 },
-                // itemSearchResult: {
-                //     ...state.itemSearchResult,
-                //     [action.payload.field]: {},
-                // },
-                // itemSearchError: {
-                //     ...state.itemSearchError,
-                //     [action.payload.field]: action.payload.error,
-                // },
             };
         case ITEM_SEARCH_CLEANUP:
             return {
@@ -89,14 +72,17 @@ const reducer = (state = initialState, action) => {
                         error: [],
                     },
                 },
-                // itemSearchResult: {
-                //     ...state.itemSearchResult,
-                //     [action.payload.field]: [],
-                // },
-                // itemSearchError: {
-                //     ...state.itemSearchError,
-                //     [action.payload.field]: [],
-                // },
+            };
+        case SAVE_SUCCESS:
+            return {
+                ...state,
+                error: null,
+                saveCounter: state.saveCounter + 1,
+            };
+        case SAVE_FAILURE:
+            return {
+                ...state,
+                error: action.payload,
             };
         default:
             return state;

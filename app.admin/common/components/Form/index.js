@@ -77,7 +77,11 @@ export default ({ data, schema, entity, onSubmit, dispatch, formData }) => {
                                     );
                                 })}
                             </Fields>
-                            <Button type="submit" onClick={handleSubmit}>
+                            <Button
+                                type="submit"
+                                onClick={handleSubmit}
+                                disabled={isSubmitting}
+                            >
                                 Save
                             </Button>
                         </>

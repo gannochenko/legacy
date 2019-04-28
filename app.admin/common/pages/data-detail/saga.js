@@ -11,20 +11,24 @@ function* load(params) {
     const { client } = payload || {};
     try {
         const [queryName, query] = buildQueryLoad(payload);
-        const result = yield call(() => {
+        const apolloResult = yield call(() => {
             return client.query({
                 query,
             });
         });
 
-        const queryResult = _.get(result, `data.${queryName}`);
-        // todo: check for errors
-        // console.dir(payload);
-
-        yield put({
-            type: reducer.LOAD_SUCCESS,
-            payload: { data: queryResult.data },
-        });
+        const result = _.get(apolloResult, `data.${queryName}`);
+        if (_.iane(result.errors)) {
+            yield put({
+                type: reducer.LOAD_FAILURE,
+                payload: result.errors,
+            });
+        } else {
+            yield put({
+                type: reducer.LOAD_SUCCESS,
+                payload: { data: result.data },
+            });
+        }
     } catch (error) {
         yield put({ type: reducer.LOAD_FAILURE, payload: error });
         if (__DEV__) {
@@ -47,19 +51,24 @@ function* itemSearch(params) {
 
     try {
         const [queryName, query] = buildQuerySearch(payload);
-        const result = yield call(() => {
+        const apolloResult = yield call(() => {
             return client.query({
                 query,
             });
         });
 
-        const queryResult = _.get(result, `data.${queryName}`);
-        // todo: check for errors
-
-        yield put({
-            type: reducer.ITEM_SEARCH_SUCCESS,
-            payload: { field: field.getName(), data: queryResult.data },
-        });
+        const result = _.get(apolloResult, `data.${queryName}`);
+        if (_.iane(result.errors)) {
+            yield put({
+                type: reducer.ITEM_SEARCH_FAILURE,
+                payload: result.errors,
+            });
+        } else {
+            yield put({
+                type: reducer.ITEM_SEARCH_SUCCESS,
+                payload: { field: field.getName(), data: result.data },
+            });
+        }
     } catch (error) {
         yield put({ type: reducer.ITEM_SEARCH_FAILURE, payload: [error] });
         if (__DEV__) {
@@ -70,31 +79,33 @@ function* itemSearch(params) {
 
 function* save(params) {
     const { payload } = params || {};
-    const { client, formActions } = payload || {};
+    let { client, formActions } = payload || {};
+    formActions = formActions || {};
 
     try {
         const [mutationName, mutation] = buildMutationPut(payload);
 
-        console.dir('CALL');
-        const result = yield call(() => {
+        const apolloResult = yield call(() => {
             return client.mutate({
                 mutation,
             });
         });
 
-        console.dir(result);
+        if (_.isFunction(formActions.setSubmitting)) {
+            formActions.setSubmitting(false);
+        }
 
-        // console.dir(result);
-        //
-        // const mutationResult = _.get(result, `data.${mutationName}`);
-        // console.dir(mutationResult);
-
-        // // todo: check for errors
-        //
-        // yield put({
-        // 	type: reducer.ITEM_SEARCH_SUCCESS,
-        // 	payload: { field: field.getName(), data: queryResult.data },
-        // });
+        const result = _.get(apolloResult, `data.${mutationName}`);
+        if (_.iane(result.errors)) {
+            yield put({
+                type: reducer.SAVE_FAILURE,
+                payload: result.errors,
+            });
+        } else {
+            yield put({
+                type: reducer.SAVE_SUCCESS,
+            });
+        }
     } catch (error) {
         yield put({ type: reducer.SAVE_FAILURE, payload: [error] });
         if (__DEV__) {
