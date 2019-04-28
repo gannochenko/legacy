@@ -15,8 +15,9 @@ const initialState = {
     ready: false,
     data: null,
     error: null,
-    itemSearchResult: {},
-    itemSearchError: {},
+    formData: {},
+    // itemSearchResult: {},
+    // itemSearchError: {},
 };
 
 const reducer = (state = initialState, action) => {
@@ -43,38 +44,59 @@ const reducer = (state = initialState, action) => {
         case ITEM_SEARCH_SUCCESS:
             return {
                 ...state,
-                itemSearchResult: {
-                    ...state.itemSearchResult,
-                    [action.payload.field]: action.payload.data,
+                formData: {
+                    ...state.formData,
+                    [action.payload.field]: {
+                        result: action.payload.data,
+                        error: [],
+                    },
                 },
-                itemSearchError: {
-                    ...state.itemSearchError,
-                    [action.payload.field]: [],
-                },
+                // itemSearchResult: {
+                //     ...state.itemSearchResult,
+                //     [action.payload.field]: action.payload.data,
+                // },
+                // itemSearchError: {
+                //     ...state.itemSearchError,
+                //     [action.payload.field]: [],
+                // },
             };
         case ITEM_SEARCH_FAILURE:
             return {
                 ...state,
-                itemSearchResult: {
-                    ...state.itemSearchResult,
-                    [action.payload.field]: {},
+                formData: {
+                    ...state.formData,
+                    [action.payload.field]: {
+                        result: {},
+                        error: action.payload.error,
+                    },
                 },
-                itemSearchError: {
-                    ...state.itemSearchError,
-                    [action.payload.field]: action.payload.error,
-                },
+                // itemSearchResult: {
+                //     ...state.itemSearchResult,
+                //     [action.payload.field]: {},
+                // },
+                // itemSearchError: {
+                //     ...state.itemSearchError,
+                //     [action.payload.field]: action.payload.error,
+                // },
             };
         case ITEM_SEARCH_CLEANUP:
             return {
                 ...state,
-                itemSearchResult: {
-                    ...state.itemSearchResult,
-                    [action.payload.field]: [],
+                formData: {
+                    ...state.formData,
+                    [action.payload.field]: {
+                        result: {},
+                        error: [],
+                    },
                 },
-                itemSearchError: {
-                    ...state.itemSearchError,
-                    [action.payload.field]: [],
-                },
+                // itemSearchResult: {
+                //     ...state.itemSearchResult,
+                //     [action.payload.field]: [],
+                // },
+                // itemSearchError: {
+                //     ...state.itemSearchError,
+                //     [action.payload.field]: [],
+                // },
             };
         default:
             return state;

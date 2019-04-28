@@ -96,8 +96,6 @@ export const buildMutationPut = ({ entity, schema, data }) => {
         );
     });
 
-    console.dir(dataStr.join(', '));
-
     const mutation = gql`
         mutation {
             ${sanitize(mutationName)}(data: {${dataStr.join(', ')}}${

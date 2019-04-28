@@ -70,7 +70,7 @@ export default ({ value, onChange, onDaySelect }) => {
                         }}
                     >
                         {monthList.map((monthName, i) => (
-                            <option value={i} selected={month === i}>
+                            <option key={i} value={i} selected={month === i}>
                                 {monthName}
                             </option>
                         ))}

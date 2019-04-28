@@ -16,6 +16,7 @@
 
 Tech debts:
 
+0) don't render "code" editable
 1) scroll to error
 +++ сохранение
 2.1) добавление

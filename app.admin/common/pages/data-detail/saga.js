@@ -75,6 +75,7 @@ function* save(params) {
     try {
         const [mutationName, mutation] = buildMutationPut(payload);
 
+        console.dir('CALL');
         const result = yield call(() => {
             return client.mutate({
                 mutation,

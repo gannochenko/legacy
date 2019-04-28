@@ -14,6 +14,7 @@ const DataPage = ({
     ready,
     loading,
     data,
+    formData,
 }) => {
     const entityName = _.get(route, 'match.params.entity_name');
     const code = _.get(route, 'match.params.code');
@@ -63,6 +64,8 @@ const DataPage = ({
                     data={data || {}}
                     schema={schema || {}}
                     entity={entity}
+                    dispatch={dispatch}
+                    formData={formData}
                     onSubmit={(values, formActions) => {
                         dispatch({
                             type: SAVE,

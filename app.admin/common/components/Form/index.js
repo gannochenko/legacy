@@ -29,7 +29,7 @@ const getField = field => {
     return null;
 };
 
-export default ({ data, schema, entity, onSubmit }) => {
+export default ({ data, schema, entity, onSubmit, dispatch, formData }) => {
     const initial = useMemo(() => _.cloneDeep(data), [data]);
     const validator = useMemo(() => entity.getValidator(), [entity]);
     const form = useRef();
@@ -71,6 +71,8 @@ export default ({ data, schema, entity, onSubmit }) => {
                                             value={values[fName]}
                                             error={errors[fName]}
                                             onChange={handleChange}
+                                            dispatch={dispatch}
+                                            formData={formData[fName]}
                                         />
                                     );
                                 })}
