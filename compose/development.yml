@@ -48,8 +48,10 @@ services:
             context: ../app.api/
             dockerfile: docker/development.dockerfile
         expose:
+            - '4001'
             - '4000'
         ports:
+            - '4001:4001'
             - '4000:4000'
         depends_on:
             - db

@@ -26,6 +26,7 @@ module.exports = (env, argv) => {
         resolve: {
             extensions: ['.ts', '.js'],
         },
+        devtool: development ? 'source-map' : 'none',
         module: {
             rules: [
                 {
@@ -79,7 +80,9 @@ module.exports = (env, argv) => {
                 __DEV__: development,
                 __TEST__: false,
             }),
-            new nodemonPlugin(),
+            new nodemonPlugin({
+                nodeArgs: development ? ['--inspect=0.0.0.0:4001'] : [],
+            }),
             // new ForkTsCheckerWebpackPlugin(),
         ],
     };

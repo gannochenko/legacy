@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { Switch } from 'react-router';
 import { ConnectedRouter } from 'connected-react-router';
 import { connect } from 'react-redux';
@@ -6,6 +6,8 @@ import { Route } from 'react-router-dom';
 
 import { LOAD } from './reducer';
 import { GlobalStyle } from '../../style/global';
+import Notification from '../../components/Notification';
+import { Context as NotificationContext } from '../../components/Notification/context';
 
 import HomePage from '../../pages/home';
 import DataPage from '../../pages/data';
@@ -20,35 +22,42 @@ const Application = ({ dispatch, ready, client, history }) => {
         });
     }, []);
 
+    const notificationRef = useRef();
+
     return (
         <>
             <GlobalStyle />
-            {ready && (
-                <ConnectedRouter history={history}>
-                    <Switch>
-                        <Route
-                            exact
-                            path="/"
-                            render={route => <HomePage route={route} />}
-                        />
-	                    <Route
-		                    exact
-		                    path="/data/:entity_name/:code"
-		                    render={route => <DataDetailPage route={route} />}
-	                    />
-                        <Route
-                            exact
-                            path="/data/:entity_name"
-                            render={route => <DataPage route={route} />}
-                        />
-                        <Route
-                            exact
-                            path="/schema"
-                            render={route => <SchemaPage route={route} />}
-                        />
-                    </Switch>
-                </ConnectedRouter>
-            )}
+            <Notification ref={notificationRef} />
+            <NotificationContext.Provider value={notificationRef}>
+                {ready && (
+                    <ConnectedRouter history={history}>
+                        <Switch>
+                            <Route
+                                exact
+                                path="/"
+                                render={route => <HomePage route={route} />}
+                            />
+                            <Route
+                                exact
+                                path="/data/:entity_name/:code"
+                                render={route => (
+                                    <DataDetailPage route={route} />
+                                )}
+                            />
+                            <Route
+                                exact
+                                path="/data/:entity_name"
+                                render={route => <DataPage route={route} />}
+                            />
+                            <Route
+                                exact
+                                path="/schema"
+                                render={route => <SchemaPage route={route} />}
+                            />
+                        </Switch>
+                    </ConnectedRouter>
+                )}
+            </NotificationContext.Provider>
         </>
     );
 };
