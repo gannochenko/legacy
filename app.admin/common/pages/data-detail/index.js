@@ -50,7 +50,10 @@ const DataPage = ({
     );
 
     useEffect(() => {
-        notify('Hoooray!');
+        notify({
+            text: 'Notify',
+            type: 'notify',
+        });
     }, []);
 
     data = data || {};
