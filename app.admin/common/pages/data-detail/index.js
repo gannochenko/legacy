@@ -17,6 +17,8 @@ const DataPage = ({
     data,
     formData,
     notify,
+    error,
+    saveCounter,
 }) => {
     const entityName = _.get(route, 'match.params.entity_name');
     const code = _.get(route, 'match.params.code');
@@ -50,11 +52,24 @@ const DataPage = ({
     );
 
     useEffect(() => {
-        notify({
-            text: 'Notify',
-            type: 'notify',
-        });
-    }, []);
+        if (_.iane(error)) {
+            notify({
+                text: error[0].message,
+                type: 'error',
+            });
+        }
+    }, [error]);
+
+    useEffect(() => {
+        if (saveCounter) {
+            notify({
+                text: 'Changes saved',
+                type: 'confirm',
+                code: 'saved',
+                lifeTime: 2000,
+            });
+        }
+    }, [saveCounter]);
 
     data = data || {};
 

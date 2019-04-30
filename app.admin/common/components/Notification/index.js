@@ -1,5 +1,12 @@
 import React from 'react';
-import { Notification, Message, MessagePadding, Text, Close } from './style.js';
+import {
+    Notification,
+    Message,
+    MessageGap,
+    MessageWrap,
+    Text,
+    Close,
+} from './style.js';
 
 export default class extends React.Component {
     constructor(props) {
@@ -36,6 +43,7 @@ export default class extends React.Component {
             closeable: message.closeable !== false,
             closing: false,
             code: message.code,
+            lifeTime: message.lifeTime || 0,
         };
 
         if (message.lifeTime > 0) {
@@ -56,12 +64,12 @@ export default class extends React.Component {
             let heightNode = this._messageHeights[id];
             if (heightNode) {
                 // lock the height of the element to let the animation know it
-                heightNode.style.height = heightNode.offsetHeight;
+                heightNode.style.height = `${heightNode.offsetHeight}px`;
             }
 
             setTimeout(() => {
                 this.removeMessage(id);
-            }, 400);
+            }, 500);
 
             message.closing = true;
 
@@ -69,7 +77,7 @@ export default class extends React.Component {
         }
     }
 
-    closeMessagesByCode() {
+    closeMessagesByCode(code) {
         this._messages
             .filter(message => message.code === code)
             .forEach(message => {
@@ -87,24 +95,26 @@ export default class extends React.Component {
         return (
             <Notification>
                 {this._messages.map(message => (
-                    <Message
-                        closing={message.closing}
+                    <MessageWrap
                         key={message.id}
                         ref={ref => {
                             this._messageHeights[message.id] = ref;
                         }}
+                        closing={message.closing}
                     >
-                        <MessagePadding>
-                            <Text type={message.type}>{message.text}</Text>
-                            {message.closeable && (
-                                <Close
-                                    onClick={() =>
-                                        this.closeMessage(message.id)
-                                    }
-                                />
-                            )}
-                        </MessagePadding>
-                    </Message>
+                        <MessageGap>
+                            <Message>
+                                <Text type={message.type}>{message.text}</Text>
+                                {message.closeable && (
+                                    <Close
+                                        onClick={() =>
+                                            this.closeMessage(message.id)
+                                        }
+                                    />
+                                )}
+                            </Message>
+                        </MessageGap>
+                    </MessageWrap>
                 ))}
             </Notification>
         );

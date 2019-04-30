@@ -6,7 +6,7 @@ import {
 } from '../../style/global';
 
 const mapType2Icon = {
-    notify: 'info_outline',
+    info: 'info_outline',
     error: 'new_releases',
     offline: 'sync_disabled',
     confirm: 'check_circle',
@@ -42,13 +42,21 @@ export const Notification = styled.div`
 `;
 
 export const Message = withTheme(styled.div`
-    margin-bottom: 1rem;
     margin-right: 0.5rem;
     background-color: white;
     max-width: 20rem;
     min-width: 1rem;
     animation: ${appear} 0.25s ease;
     ${props => (props.closable ? 'padding-right: 3rem;' : '')}
+	border: 1px solid ${props => props.theme.input.color.hout};
+	border-radius: 2px;
+	position: relative;
+	box-shadow: 4px 6px 15px -4px rgba(0,0,0,0.21);
+	overflow-x: hidden;
+	padding: 0.5rem 2.5rem 0.5rem 0;
+`);
+
+export const MessageWrap = styled.div`
     ${props =>
         props.closing
             ? css`
@@ -57,22 +65,17 @@ export const Message = withTheme(styled.div`
                   overflow: hidden;
               `
             : ''}
-	border: 1px solid ${props => props.theme.input.color.hout};
-	border-radius: 2px;
-	position: relative;
-	box-shadow: 4px 6px 15px -4px rgba(0,0,0,0.21);
-	overflow-x: hidden;
-`);
+`;
 
-export const MessagePadding = styled.div`
-    padding: 0.5rem 2.5rem 0.5rem 0;
+export const MessageGap = styled.div`
+    padding-bottom: 1rem;
 `;
 
 export const Text = styled.div`
     ${props =>
         iconLabel(
             props.type ? mapType2Icon[props.type] : 'info_outline',
-            '1.5rem',
+            '1.3rem',
             '0',
             'baseline',
             '2.5rem',
