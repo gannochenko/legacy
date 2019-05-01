@@ -1,5 +1,6 @@
 import { takeLatest, put, call } from 'redux-saga/effects';
 import * as reducer from './reducer';
+import { push } from 'connected-react-router';
 import {
     buildQueryLoad,
     buildQuerySearch,
@@ -79,7 +80,7 @@ function* itemSearch(params) {
 
 function* save(params) {
     const { payload } = params || {};
-    let { client, formActions } = payload || {};
+    let { client, formActions, code, entity } = payload || {};
     formActions = formActions || {};
 
     try {
@@ -102,9 +103,14 @@ function* save(params) {
                 payload: result.errors,
             });
         } else {
+            const newCode = _.get(result, 'data.code');
+
             yield put({
                 type: reducer.SAVE_SUCCESS,
             });
+            if (code !== newCode) {
+                yield put(push(`/data/${entity.getName()}/${newCode}/`));
+            }
         }
     } catch (error) {
         yield put({ type: reducer.SAVE_FAILURE, payload: [error] });

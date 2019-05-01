@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
-import { LOAD, UNLOAD, SAVE } from './reducer';
+import { LOAD, UNLOAD, SAVE, LOAD_SUCCESS } from './reducer';
 import { withClient } from '../../lib/client';
 import { withNotification } from '../../components/Notification/context';
 import Form from '../../components/Form';
@@ -30,15 +30,24 @@ const DataPage = ({
 
     // load data on mount
     useEffect(() => {
-        dispatch({
-            type: LOAD,
-            payload: {
-                client,
-                entity,
-                schema,
-                code,
-            },
-        });
+        if (code !== 'new') {
+            dispatch({
+                type: LOAD,
+                payload: {
+                    client,
+                    entity,
+                    schema,
+                    code,
+                },
+            });
+        } else {
+            dispatch({
+                type: LOAD_SUCCESS,
+                payload: {
+                    data: {},
+                },
+            });
+        }
     }, [entity.getName(), code]);
 
     // cleanup data on unmount
@@ -77,7 +86,7 @@ const DataPage = ({
     return (
         <Layout
             title={`${entity.getDisplayName()}${
-                data.code ? `: ${data.code}` : ''
+                data.code ? `: ${data.code}` : 'new'
             }`}
         >
             {ready && (
@@ -95,6 +104,7 @@ const DataPage = ({
                                 entity,
                                 client,
                                 formActions,
+                                code,
                             },
                         });
                     }}

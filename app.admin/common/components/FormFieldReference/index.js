@@ -52,7 +52,7 @@ export const FormFieldReference = ({
 
     let iValue = [];
     if (field.isMultiple()) {
-        iValue = value;
+        iValue = value || [];
     } else if (value !== null && value !== undefined) {
         iValue = [value];
     }

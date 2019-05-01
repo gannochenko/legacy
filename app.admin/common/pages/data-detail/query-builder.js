@@ -61,9 +61,8 @@ export const buildQuerySearch = ({ entity, text }) => {
     return [queryName, query];
 };
 
-export const buildMutationPut = ({ entity, schema, data }) => {
+export const buildMutationPut = ({ entity, schema, data, code }) => {
     const mutationName = `${entity.getCamelName()}Put`;
-    const { code } = data;
 
     data = entity.prepareData(data);
 
@@ -99,8 +98,11 @@ export const buildMutationPut = ({ entity, schema, data }) => {
     const mutation = gql`
         mutation {
             ${sanitize(mutationName)}(data: {${dataStr.join(', ')}}${
-        _.isne(code) ? `, code: "${sanitize(code)}"` : ''
+        _.isne(code) && code !== 'new' ? `, code: "${sanitize(code)}"` : ''
     }) {
+                data {
+                    code
+                }
                 errors {
                     code
                     message
