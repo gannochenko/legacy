@@ -1,10 +1,10 @@
 import React from 'react';
 import moment from 'moment';
-import { ListCellDate } from './style.js';
+import { ListCellDate, Empty } from './style.js';
 
 export default ({ field, value }) => {
     if (typeof value === 'undefined' || value === null) {
-        return null;
+        return <Empty>&mdash;</Empty>;
     }
 
     const format = 'DD.MM.YYYY HH:m:s';

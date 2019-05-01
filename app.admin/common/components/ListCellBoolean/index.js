@@ -1,9 +1,9 @@
 import React from 'react';
-import { ListCellBoolean } from './style.js';
+import { ListCellBoolean, Empty } from './style.js';
 
 export default ({ field, value }) => {
     if (typeof value === 'undefined' || value === null) {
-        return null;
+        return <Empty>&mdash;</Empty>;
     }
 
     const display = value => (value ? '✅' : '❌');

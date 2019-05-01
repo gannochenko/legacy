@@ -1,9 +1,13 @@
 import React from 'react';
-import { ListCellReference } from './style.js';
+import { ListCellReference, Empty } from './style.js';
 
 export default ({ field, value }) => {
-    if (typeof value === 'undefined' || value === null) {
-        return null;
+    if (
+        typeof value === 'undefined' ||
+        value === null ||
+        (_.isArray(value) && !value.length)
+    ) {
+        return <Empty>&mdash;</Empty>;
     }
 
     value = field.isMultiple()
