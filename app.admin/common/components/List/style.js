@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { iconLabel, align, fgColor, group, ellipsis } from 'sc-companion';
+import { iconLabel, icon, align, fgColor, group, ellipsis } from 'sc-companion';
 
 const thPadding = '1rem';
 
@@ -20,6 +20,14 @@ export const TH = styled.th`
     border-bottom: 1px solid #b6b9c2;
 `;
 
+const actionW = '15px';
+
+export const ActionTH = styled.th`
+    border-bottom: 1px solid #b6b9c2;
+    width: ${actionW};
+    text-align: center;
+`;
+
 export const TR = styled.tr``;
 
 export const TD = styled.td`
@@ -27,12 +35,15 @@ export const TD = styled.td`
     border-bottom: 1px solid #b6b9c2;
 `;
 
+export const ActionTD = styled.th`
+    border-bottom: 1px solid #b6b9c2;
+    width: ${actionW};
+    text-align: center;
+`;
+
 export const HeaderLink = styled.div`
 	height: 43px;
-    ${props =>
-        props.sortable
-            ? iconLabel(props.sign, '1.2rem')
-            : ''}
+    ${props => (props.sortable ? iconLabel(props.sign, '1.2rem') : '')}
     ${props => (props.sortable ? 'cursor: pointer;' : '')}
     ${align('center', 'left')}
     color: #b6b9c2;
@@ -51,4 +62,9 @@ export const Counter = styled.div`
     flex-grow: 2;
     padding: 1rem;
     color: #b6b9c2;
+`;
+
+export const Actions = styled.div`
+    cursor: pointer;
+    ${icon('menu', 'inherit', '0.5rem')}
 `;
