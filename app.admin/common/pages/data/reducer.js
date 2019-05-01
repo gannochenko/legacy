@@ -7,6 +7,8 @@ const initialState = {
     loading: false,
     ready: false,
     error: null,
+    data: [],
+    count: 0,
 };
 
 const reducer = (state = initialState, action) => {

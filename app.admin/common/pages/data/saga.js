@@ -22,7 +22,7 @@ function* load(params) {
         } else {
             yield put({
                 type: reducer.LOAD_SUCCESS,
-                payload: { data: result.data },
+                payload: { data: result.data, count: result.count },
             });
         }
     } catch (error) {
