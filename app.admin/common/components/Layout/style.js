@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { align, rectangle } from 'sc-companion';
+import { align, rectangle, group } from 'sc-companion';
 import { Link } from 'react-router-dom';
 import { withTheme } from '../../style/global';
 
@@ -11,6 +11,7 @@ export const Top = styled.div`
 
 export const Middle = styled.div`
     ${align('stretch', 'left')}
+    width: 100%;
 `;
 
 export const Footer = withTheme(styled.div`
@@ -21,10 +22,11 @@ export const Footer = withTheme(styled.div`
 
 export const Left = styled.div`
     width: 12rem;
+    flex-shrink: 0;
 `;
 
 export const Right = styled.div`
-    padding: 1rem 5rem 1rem 1rem;
+    padding: 1rem;
     flex-grow: 2;
 `;
 
@@ -38,6 +40,14 @@ export const Logo = styled(Link)`
 `;
 
 export const Header = styled.div`
-    font-size: 1.5rem;
     margin-bottom: 1rem;
+    ${align('top', 'left')}
+    ${group(null, '1rem')}
 `;
+
+export const Title = styled.div`
+    font-size: 1.5rem;
+    flex-grow: 2;
+`;
+
+export const Actions = styled.div``;

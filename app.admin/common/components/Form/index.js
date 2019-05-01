@@ -89,6 +89,7 @@ export default ({ data, schema, entity, onSubmit, dispatch, formData }) => {
                             >
                                 Save
                             </Button>
+                            <a href="">Delete</a>
                         </>
                     );
                 }}

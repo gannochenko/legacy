@@ -6,8 +6,8 @@ import { withClient } from '../../lib/client';
 import List from '../../components/List';
 import { putSearchParameters, parseSearch } from '../../lib/util';
 import { push } from 'connected-react-router';
+import Button from '../../material-kit/CustomButtons';
 
-// import Button from '../../material-kit/CustomButtons';
 import Layout from '../../components/Layout';
 
 const pageSize = 10;
@@ -66,7 +66,21 @@ const DataPage = ({
     );
 
     return (
-        <Layout title={entity.getDisplayName()}>
+        <Layout
+            title={entity.getDisplayName()}
+            actions={
+                <>
+                    <Button
+                        type="button"
+                        onClick={() =>
+                            dispatch(push(`/data/${entity.getName()}/new/`))
+                        }
+                    >
+                        Add
+                    </Button>
+                </>
+            }
+        >
             <List
                 entity={entity}
                 data={data || []}
