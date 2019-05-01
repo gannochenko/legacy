@@ -1,5 +1,5 @@
 import React from 'react';
-import ApolloClient from 'apollo-boost';
+import ApolloClient, { InMemoryCache } from 'apollo-boost';
 import Axios from 'axios';
 
 export const Context = React.createContext();
@@ -16,9 +16,9 @@ export class Client {
         this._settings = settings;
     }
 
-    async query(...args) {
+    async query(parameters) {
         const apollo = await this.getApollo();
-        return apollo.query(...args);
+        return apollo.query({ ...parameters, fetchPolicy: 'network-only' });
     }
 
     async mutate(...args) {
@@ -39,6 +39,7 @@ export class Client {
         if (!this._apollo) {
             this._apollo = new ApolloClient({
                 uri: `${await this.getUrl()}/graphql`,
+                cache: new InMemoryCache(),
             });
         }
 
