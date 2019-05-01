@@ -8,6 +8,7 @@ import FormFieldScalar from '../FormFieldScalar';
 import FormFieldBoolean from '../FormFieldBoolean';
 import FormFieldDate from '../FormFieldDate';
 import FormFieldReference from '../FormFieldReference';
+import { ENTITY_CODE_FIELD_NAME } from '../../../shared/constants';
 
 const getField = field => {
     const type = field.getActualType();
@@ -44,20 +45,24 @@ export default ({ data, schema, entity, onSubmit, dispatch, formData }) => {
                 {props => {
                     const {
                         values,
-                        touched,
+                        // touched,
                         errors,
-                        dirty,
+                        // dirty,
                         isSubmitting,
                         handleChange,
-                        handleBlur,
+                        // handleBlur,
                         handleSubmit,
-                        handleReset,
+                        // handleReset,
                     } = props;
                     return (
                         <>
                             <Fields>
                                 {entity.getFields().map(field => {
                                     const fName = field.getName();
+                                    if (fName === ENTITY_CODE_FIELD_NAME) {
+                                        return;
+                                    }
+
                                     const Field = getField(field);
                                     if (!Field) {
                                         return;

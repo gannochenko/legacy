@@ -17,7 +17,7 @@ export default class SchemaProvider {
                         type: String,
                         label: 'Code',
                         length: DB_CODE_COLUMN_LENGTH,
-                        required: true,
+                        required: false,
                         // inputRequired: false,
                         unique: true,
                     },
@@ -73,7 +73,7 @@ export default class SchemaProvider {
                         type: String,
                         label: 'Code',
                         length: 36,
-                        required: true,
+                        required: false,
                         unique: true,
                     },
                     {
@@ -93,7 +93,7 @@ export default class SchemaProvider {
                         type: String,
                         label: 'Code',
                         length: 36,
-                        required: true,
+                        required: false,
                         unique: true,
                     },
                     {

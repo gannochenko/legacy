@@ -25,11 +25,16 @@ export default class GQLGenerator {
                     schemaProvider,
                 )}: ${this.getType(field, schemaProvider)}`,
             );
-            iFields.push(
-                `${field.name}: ${this.getType(field, schemaProvider, true)}${
-                    false && field.required ? '!' : ''
-                }`,
-            );
+            if (field.name !== 'code') {
+                // code is a read-only field
+                iFields.push(
+                    `${field.name}: ${this.getType(
+                        field,
+                        schemaProvider,
+                        true,
+                    )}${false && field.required ? '!' : ''}`,
+                );
+            }
             fFields.push(`${field.name}: IFilterFieldValue`);
             sFields.push(`${field.name}: SortOrder`);
         });

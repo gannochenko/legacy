@@ -56,6 +56,7 @@ const DataPage = ({
             notify({
                 text: error[0].message,
                 type: 'error',
+                code: 'error',
             });
         }
     }, [error]);

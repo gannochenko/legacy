@@ -5,14 +5,14 @@ export default class CodeField extends Field {
         const errors = super.checkHealth();
         const schema = this._schema;
 
-        // check that it is mandatory
-        if (!schema.required) {
-            errors.push({
-                message: 'System field "code" should be mandatory',
-                code: 'field_code_not_mandatory',
-                reference: schema.name,
-            });
-        }
+        // // check that it is mandatory
+        // if (!schema.required) {
+        //     errors.push({
+        //         message: 'System field "code" should be mandatory',
+        //         code: 'field_code_not_mandatory',
+        //         reference: schema.name,
+        //     });
+        // }
 
         // check that it is unique
         if (!schema.unique) {

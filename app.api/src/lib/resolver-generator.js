@@ -171,19 +171,18 @@ export default class ResolverGenerator {
                         data: {},
                     };
 
-                    console.log(require('util').inspect(args, { depth: 10 }));
-
                     let { code, data } = args;
                     // todo: use connection here
                     const repo = getRepository(dbEntity);
 
                     const isNew = !_.isne(code);
 
+                    delete data.code; // there is no way to set the code manually
                     // no code - auto-generate
                     if (!_.isne(code)) {
                         code = uuid();
+                        data.code = code;
                     }
-                    data.code = code;
 
                     // validate
                     const vResult = await Validator.validate(entity, data);

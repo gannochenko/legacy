@@ -10,6 +10,7 @@ import moment from 'moment';
 export default class Validator {
     /**
      * todo: different locales
+     * todo: use yup here
      * @param entity
      * @param data
      * @returns {Promise<Array>}
