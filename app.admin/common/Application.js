@@ -20,7 +20,11 @@ const Application = () => (
         <SettingsContext.Provider value={settings}>
             <ClientContext.Provider value={client}>
                 <Provider store={store}>
-                    <ApplicationUI history={history} client={client} />
+                    <ApplicationUI
+                        history={history}
+                        theme={theme}
+                        client={client}
+                    />
                 </Provider>
             </ClientContext.Provider>
         </SettingsContext.Provider>

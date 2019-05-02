@@ -1,9 +1,11 @@
 import styled, { keyframes, css } from 'styled-components';
 import { iconLabel, icon } from 'sc-companion';
-import {
-    withTheme,
-    // stdLink,
-} from '../../style/global';
+
+const defTheme = {
+    border: {
+        color: 'lightgray',
+    },
+};
 
 const mapType2Icon = {
     info: 'info_outline',
@@ -41,20 +43,20 @@ export const Notification = styled.div`
     right: 0;
 `;
 
-export const Message = withTheme(styled.div`
+export const Message = styled.div`
     margin-right: 0.5rem;
     background-color: white;
     max-width: 20rem;
     min-width: 1rem;
     animation: ${appear} 0.25s ease;
     ${props => (props.closable ? 'padding-right: 3rem;' : '')}
-	border: 1px solid ${props => props.theme.input.color.hout};
+	border: 1px solid ${props => (props.theme || defTheme).border.color};
 	border-radius: 2px;
 	position: relative;
 	box-shadow: 4px 6px 15px -4px rgba(0,0,0,0.21);
 	overflow-x: hidden;
 	padding: 0.5rem 2.5rem 0.5rem 0;
-`);
+`;
 
 export const MessageWrap = styled.div`
     ${props =>

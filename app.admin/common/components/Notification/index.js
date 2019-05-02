@@ -92,6 +92,7 @@ export default class extends React.Component {
     }
 
     render() {
+        const { theme } = this.props;
         return (
             <Notification>
                 {this._messages.map(message => (
@@ -101,15 +102,19 @@ export default class extends React.Component {
                             this._messageHeights[message.id] = ref;
                         }}
                         closing={message.closing}
+                        theme={theme}
                     >
-                        <MessageGap>
-                            <Message>
-                                <Text type={message.type}>{message.text}</Text>
+                        <MessageGap theme={theme}>
+                            <Message theme={theme}>
+                                <Text type={message.type} theme={theme}>
+                                    {message.text}
+                                </Text>
                                 {message.closeable && (
                                     <Close
                                         onClick={() =>
                                             this.closeMessage(message.id)
                                         }
+                                        theme={theme}
                                     />
                                 )}
                             </Message>

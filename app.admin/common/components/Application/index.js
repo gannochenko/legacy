@@ -14,7 +14,7 @@ import DataPage from '../../pages/data';
 import DataDetailPage from '../../pages/data-detail';
 import SchemaPage from '../../pages/schema';
 
-const Application = ({ dispatch, ready, client, history }) => {
+const Application = ({ dispatch, ready, client, history, theme }) => {
     useEffect(() => {
         dispatch({
             type: LOAD,
@@ -27,7 +27,7 @@ const Application = ({ dispatch, ready, client, history }) => {
     return (
         <>
             <GlobalStyle />
-            <Notification ref={notificationRef} />
+            <Notification ref={notificationRef} theme={theme.notifications} />
             <NotificationContext.Provider value={notificationRef}>
                 {ready && (
                     <ConnectedRouter history={history}>

@@ -71,4 +71,10 @@ export default {
         zIndex: zIxEverest,
         panelVOffset: '0.5rem',
     },
+
+    notifications: {
+        border: {
+            color: palette.cascade,
+        },
+    },
 };
