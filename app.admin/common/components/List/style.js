@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { iconLabel, icon, align, fgColor, group, ellipsis } from 'sc-companion';
+import { withTheme } from '../../style/global';
 
 const thPadding = '1rem';
 
@@ -67,4 +68,15 @@ export const Counter = styled.div`
 export const Actions = styled.div`
     cursor: pointer;
     ${icon('menu', 'inherit', '0.5rem')}
+`;
+
+export const ItemActions = withTheme(styled.div`
+    background-color: white;
+    border: 1px solid ${props => props.theme.input.color.hout};
+    border-radius: 2px;
+    padding: 0.5rem;
+`);
+
+export const ItemAction = styled.div`
+    ${iconLabel('remove_circle')}
 `;

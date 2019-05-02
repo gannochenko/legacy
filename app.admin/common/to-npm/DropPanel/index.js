@@ -86,6 +86,12 @@ export default class extends Component {
         }, 300);
     }
 
+    toggle = () => {
+        this.setState(state => ({
+            open: !state.open,
+        }));
+    };
+
     closeImmediate() {
         this.setState({
             open: false,
@@ -96,10 +102,13 @@ export default class extends Component {
     }
 
     render() {
-        const { children, theme, panel } = this.props;
+        const { children, theme, panel, openOnChildrenClick } = this.props;
         return (
             <DropPanel ref={this.panel}>
-                {children}
+                {!!openOnChildrenClick && (
+                    <div onClick={this.toggle}>{children}</div>
+                )}
+                {!openOnChildrenClick && children}
                 <Panel theme={theme} open={this.state.open}>
                     <PanelInner theme={theme}>{panel}</PanelInner>
                 </Panel>

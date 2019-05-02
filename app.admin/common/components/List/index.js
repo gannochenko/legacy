@@ -13,6 +13,8 @@ import {
     Footer,
     Counter,
     Actions,
+    ItemActions,
+    ItemAction,
 } from './style.js';
 
 import {
@@ -22,6 +24,7 @@ import {
 } from '../../../shared/schema/field';
 
 import PageNavigation from '../PageNavigation';
+import DropPanel from '../../to-npm/DropPanel';
 
 import ListCellString from '../ListCellString';
 import ListCellReference from '../ListCellReference';
@@ -105,7 +108,18 @@ const List = ({
                             return (
                                 <TR key={item.code}>
                                     <ActionTD>
-                                        <Actions />
+                                        <DropPanel
+                                            panel={
+                                                <ItemActions>
+                                                    <ItemAction>
+                                                        Delete
+                                                    </ItemAction>
+                                                </ItemActions>
+                                            }
+                                            openOnChildrenClick
+                                        >
+                                            <Actions />
+                                        </DropPanel>
                                     </ActionTD>
                                     {entity.getFields().map(field => {
                                         const Cell = getCellComponent(field);

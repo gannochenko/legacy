@@ -1,5 +1,4 @@
-import React, { useRef, useMemo, useEffect } from 'react';
-import { connect } from 'react-redux';
+import React, { useRef, useMemo } from 'react';
 import { withClient } from '../../lib/client';
 import FormField from '../FormField';
 import DropPanel from '../../to-npm/DropPanel';
