@@ -3,11 +3,10 @@ import { Switch } from 'react-router';
 import { ConnectedRouter } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
+import { Notification, NotificationContext } from 'ew-internals-ui';
 
 import { LOAD } from './reducer';
 import { GlobalStyle } from '../../style/global';
-import Notification from '../../components/Notification';
-import { Context as NotificationContext } from '../../components/Notification/context';
 
 import HomePage from '../../pages/home';
 import DataPage from '../../pages/data';

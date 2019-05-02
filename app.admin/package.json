@@ -17,7 +17,7 @@
         "cors": "^2.8.5",
         "debug": "^4.1.1",
         "ew-internals": "^1.0.7",
-        "ew-internals-ui": "^1.0.1",
+        "ew-internals-ui": "^1.0.5",
         "express": "^4.16.4",
         "formik": "^1.5.2",
         "graphql": "^14.2.1",

@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 import { LOAD, UNLOAD, SAVE, LOAD_SUCCESS } from './reducer';
 import { withClient } from '../../lib/client';
-import { withNotification } from '../../components/Notification/context';
+import { withNotification } from 'ew-internals-ui';
 import Form from '../../components/Form';
 // import Button from '../../material-kit/CustomButtons';
 

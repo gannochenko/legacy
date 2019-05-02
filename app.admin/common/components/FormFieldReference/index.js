@@ -1,9 +1,8 @@
 import React, { useRef, useMemo } from 'react';
 import { withClient } from '../../lib/client';
 import FormField from '../FormField';
-import DropPanel from '../../to-npm/DropPanel';
+import { DropPanel, ScrollPanel } from 'ew-internals-ui';
 import { withTheme } from '../../style/global';
-import ScrollPanel from '../../to-npm/ScrollPanel';
 import {
     ITEM_SEARCH,
     ITEM_SEARCH_CLEANUP,

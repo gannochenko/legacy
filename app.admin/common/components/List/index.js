@@ -24,7 +24,7 @@ import {
 } from '../../../shared/schema/field';
 
 import PageNavigation from '../PageNavigation';
-import DropPanel from '../../to-npm/DropPanel';
+import { DropPanel } from 'ew-internals-ui';
 
 import ListCellString from '../ListCellString';
 import ListCellReference from '../ListCellReference';
