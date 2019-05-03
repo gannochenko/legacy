@@ -73,7 +73,13 @@ const DataPage = ({
                     <Button
                         type="button"
                         onClick={() =>
-                            dispatch(push(`/data/${entity.getName()}/new/`))
+                            dispatch(
+                                push(
+                                    `/data/${encodeURIComponent(
+                                        entity.getName(),
+                                    )}/new/`,
+                                ),
+                            )
                         }
                     >
                         Add
