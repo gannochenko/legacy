@@ -106,6 +106,19 @@ const DataPage = ({
                         ),
                     )
                 }
+                onActionClick={(action, item) => {
+                    if (action === 'edit') {
+                        dispatch(
+                            push(
+                                `/data/${encodeURIComponent(
+                                    entity.getName(),
+                                )}/${encodeURIComponent(item.code)}/`,
+                            ),
+                        );
+                    }
+                    if (action === 'delete') {
+                    }
+                }}
             />
         </Layout>
     );

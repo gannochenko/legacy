@@ -10,4 +10,5 @@ export const ListCellDate = styled.div`
 export const Empty = styled.div`
     text-align: center;
     color: lightgray;
+    user-select: none;
 `;

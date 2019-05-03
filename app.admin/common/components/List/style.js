@@ -1,5 +1,13 @@
 import styled from 'styled-components';
-import { iconLabel, icon, align, fgColor, group, ellipsis } from 'sc-companion';
+import {
+    iconLabel,
+    icon,
+    align,
+    fgColor,
+    group,
+    ellipsis,
+    bgColor,
+} from 'sc-companion';
 import { withTheme } from '../../style/global';
 
 const thPadding = '1rem';
@@ -75,8 +83,13 @@ export const ItemActions = withTheme(styled.div`
     border: 1px solid ${props => props.theme.input.color.hout};
     border-radius: 2px;
     padding: 0.5rem;
+    box-shadow: 4px 6px 15px -4px rgba(0, 0, 0, 0.21);
 `);
 
 export const ItemAction = styled.div`
-    ${iconLabel('remove_circle')}
+    ${props => iconLabel(props.icon, '0.8rem', '0', 'baseline', '2rem')}
+    ${bgColor('transparent', '#e0e3ec', null, '200ms')}
+	padding-right: 1rem;
+    border-radius: 2px;
+    cursor: pointer;
 `;

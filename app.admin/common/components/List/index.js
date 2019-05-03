@@ -25,6 +25,7 @@ import {
 
 import PageNavigation from '../PageNavigation';
 import { DropPanel } from 'ew-internals-ui';
+import { push } from 'connected-react-router';
 
 import ListCellString from '../ListCellString';
 import ListCellReference from '../ListCellReference';
@@ -61,6 +62,7 @@ const List = ({
     sort,
     onPageChange,
     onSortChange,
+    onActionClick,
 }) => {
     sort = sort || {};
     return (
@@ -111,7 +113,26 @@ const List = ({
                                         <DropPanel
                                             panel={
                                                 <ItemActions>
-                                                    <ItemAction>
+                                                    <ItemAction
+                                                        icon="edit"
+                                                        onClick={() =>
+                                                            onActionClick(
+                                                                'edit',
+                                                                item,
+                                                            )
+                                                        }
+                                                    >
+                                                        Edit
+                                                    </ItemAction>
+                                                    <ItemAction
+                                                        icon="clear"
+                                                        onClick={() =>
+                                                            onActionClick(
+                                                                'delete',
+                                                                item,
+                                                            )
+                                                        }
+                                                    >
                                                         Delete
                                                     </ItemAction>
                                                 </ItemActions>

@@ -10,4 +10,5 @@ export const ListCellReference = styled.div`
 export const Empty = styled.div`
     text-align: center;
     color: lightgray;
+    user-select: none;
 `;
