@@ -25,7 +25,7 @@ import {
 
 import PageNavigation from '../PageNavigation';
 import { DropPanel } from 'ew-internals-ui';
-import { push } from 'connected-react-router';
+import Modal from '../../to-npm/Modal';
 
 import ListCellString from '../ListCellString';
 import ListCellReference from '../ListCellReference';
@@ -67,6 +67,34 @@ const List = ({
     sort = sort || {};
     return (
         <Container>
+            <Modal>
+                ----
+                <br />
+                111111
+                <br />
+                111111
+                <br />
+                111111
+                <br />
+                111111
+                <br />
+                111111
+                <br />
+                111111
+                <br />
+                111111
+                <br />
+                111111
+                <br />
+                111111
+                <br />
+                111111
+                <br />
+                111111
+                <br />
+                111111
+                <br />
+            </Modal>
             <Table cellPadding="0" cellSpacing="0">
                 <THead>
                     <TR>
