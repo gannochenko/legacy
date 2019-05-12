@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '../../material-kit/CustomButtons';
 import {
     Container,
     Table,
@@ -17,6 +18,8 @@ import {
     ItemAction,
 } from './style.js';
 
+import { withModal } from '../../to-npm/Modal/context';
+
 import {
     TYPE_STRING,
     TYPE_DATETIME,
@@ -25,7 +28,6 @@ import {
 
 import PageNavigation from '../PageNavigation';
 import { DropPanel } from 'ew-internals-ui';
-import { push } from 'connected-react-router';
 
 import ListCellString from '../ListCellString';
 import ListCellReference from '../ListCellReference';
@@ -53,6 +55,31 @@ const getCellComponent = field => {
     return ListCellString;
 };
 
+const renderItemActions = (item, onActionClick, openModal) => {
+    return (
+        <ItemActions>
+            <ItemAction icon="edit" onClick={() => onActionClick('edit', item)}>
+                Edit
+            </ItemAction>
+            <ItemAction
+                icon="clear"
+                onClick={
+                    () =>
+                        openModal(({ closeModal }) => {
+                            return <Button onClick={closeModal}>Hey</Button>;
+                        })
+                    // onActionClick(
+                    //     'delete',
+                    //     item,
+                    // )
+                }
+            >
+                Delete
+            </ItemAction>
+        </ItemActions>
+    );
+};
+
 const List = ({
     entity,
     data,
@@ -63,6 +90,7 @@ const List = ({
     onPageChange,
     onSortChange,
     onActionClick,
+    openModal,
 }) => {
     sort = sort || {};
     return (
@@ -111,32 +139,11 @@ const List = ({
                                 <TR key={item.code}>
                                     <ActionTD>
                                         <DropPanel
-                                            panel={
-                                                <ItemActions>
-                                                    <ItemAction
-                                                        icon="edit"
-                                                        onClick={() =>
-                                                            onActionClick(
-                                                                'edit',
-                                                                item,
-                                                            )
-                                                        }
-                                                    >
-                                                        Edit
-                                                    </ItemAction>
-                                                    <ItemAction
-                                                        icon="clear"
-                                                        onClick={() =>
-                                                            onActionClick(
-                                                                'delete',
-                                                                item,
-                                                            )
-                                                        }
-                                                    >
-                                                        Delete
-                                                    </ItemAction>
-                                                </ItemActions>
-                                            }
+                                            panel={renderItemActions(
+                                                item,
+                                                onActionClick,
+                                                openModal,
+                                            )}
                                             openOnChildrenClick
                                         >
                                             <Actions />
@@ -182,4 +189,4 @@ const List = ({
     );
 };
 
-export default List;
+export default withModal(List);

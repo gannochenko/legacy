@@ -14,7 +14,7 @@ const Menu = ({ schema }) => {
                     <Title>Content</Title>
                     {schema.get().map(entity => (
                         <Item
-                            to={`/data/${entity.getName()}`}
+                            to={`/data/${encodeURIComponent(entity.getName())}`}
                             key={entity.getName()}
                         >
                             {entity.getDisplayName()}

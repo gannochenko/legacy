@@ -109,7 +109,13 @@ function* save(params) {
                 type: reducer.SAVE_SUCCESS,
             });
             if (code !== newCode) {
-                yield put(push(`/data/${entity.getName()}/${newCode}/`));
+                yield put(
+                    push(
+                        `/data/${encodeURIComponent(
+                            entity.getName(),
+                        )}/${encodeURIComponent(newCode)}/`,
+                    ),
+                );
             }
         }
     } catch (error) {

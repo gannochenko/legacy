@@ -1,5 +1,15 @@
 import { palette, zIxEverest } from 'sc-companion';
 
+const grid = {
+    resolution: 12,
+    breakpoints: {
+        xs: [null, 767], // max-width: 767
+        sm: [768, 991], // min-width: 768 and max-width: 991
+        md: [992, 1199], // min-width: 992 and max-width: 1199
+        lg: [1200, null], // min-width: 1200
+    },
+};
+
 export default {
     // general settings
     font: {
@@ -7,15 +17,7 @@ export default {
         small: '0.8rem',
         xSmall: '0.6rem',
     },
-    grid: {
-        resolution: 12,
-        breakpoints: {
-            xl: 1200,
-            lg: 992,
-            md: 768,
-            sm: 576,
-        },
-    },
+    grid,
     zIndex: {},
 
     // common elements
@@ -70,6 +72,16 @@ export default {
     dropPanel: {
         zIndex: zIxEverest,
         panelVOffset: '0.5rem',
+    },
+
+    modal: {
+        grid,
+        cross: {
+            color: {
+                hover: palette.cascade,
+                hout: palette.black,
+            },
+        },
     },
 
     notifications: {
