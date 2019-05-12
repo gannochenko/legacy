@@ -7040,10 +7040,10 @@ sax@^1.2.4:
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
 
-sc-companion@^2.1.5:
-  version "2.1.5"
-  resolved "https://registry.yarnpkg.com/sc-companion/-/sc-companion-2.1.5.tgz#6c5e107f059777bedd5f0eee5cc848fb79aba21d"
-  integrity sha512-2fiwO83TJKThm2DXgg5uBUev5HcZ3Irx5iD377skZbHsPvkg+SJKt8Bd95RNYcRgd+/MbJ89VqC7rEOqz0JQDw==
+sc-companion@^2.1.7:
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/sc-companion/-/sc-companion-2.1.7.tgz#44672ab97517fd83079d921bedf1d7b070d1b5f7"
+  integrity sha512-8ztsTwQC1DfdCCIUrF4vAZCA/n+NwF6MLNEd3c5XgAD3UM3QDLRwqrFRV6gLW8TT58SR91Lu09G0UP8C2OXQeQ==
 
 scheduler@^0.13.6:
   version "0.13.6"
