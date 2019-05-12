@@ -1,5 +1,5 @@
 import styled, { keyframes } from 'styled-components';
-import { align, fixedCover, media, icon, fgColor } from 'sc-companion';
+import { align, fixedCover, media, icon, fgColor, group } from 'sc-companion';
 
 export const defaultTheme = {
     grid: {
@@ -73,4 +73,13 @@ export const Cross = styled.div`
             props.theme.cross.color.hover,
             '200ms',
         )}
+`;
+
+export const Question = styled.div`
+    font-size: 1.2rem;
+    padding-bottom: 1rem;
+`;
+
+export const Buttons = styled.div`
+    ${group(null, '0.5rem')}
 `;

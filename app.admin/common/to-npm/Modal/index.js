@@ -1,6 +1,14 @@
 import React from 'react';
 import { bool, func, object } from 'prop-types';
-import { Overlay, Panel, PanelOffset, Cross, defaultTheme } from './style.js';
+import {
+    Overlay,
+    Panel,
+    PanelOffset,
+    Cross,
+    Question,
+    Buttons,
+    defaultTheme,
+} from './style.js';
 
 const Modal = class extends React.Component {
     constructor(props) {
@@ -8,7 +16,7 @@ const Modal = class extends React.Component {
 
         this.state = {
             open: false,
-            children: null,
+            children: () => {},
         };
     }
 
@@ -21,6 +29,7 @@ const Modal = class extends React.Component {
     };
 
     openExternal = children => {
+        console.dir(children);
         if (this.props.active) {
             this.open(children);
         }
@@ -33,12 +42,24 @@ const Modal = class extends React.Component {
         this.props.onClose();
     };
 
-    onOpenClick = () => {
-        this.openExternal();
-    };
+    // onOpenClick = () => {
+    //     this.openExternal();
+    // };
 
     onCloseClick = () => {
         this.closeExternal();
+    };
+
+    openConfirm = (
+        question = 'A very important question',
+        buttons = () => {},
+    ) => {
+        this.openExternal((...args) => (
+            <>
+                <Question>{question}</Question>
+                <Buttons>{buttons(...args)}</Buttons>
+            </>
+        ));
     };
 
     render() {

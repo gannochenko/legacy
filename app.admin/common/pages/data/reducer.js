@@ -1,7 +1,10 @@
 export const LOAD = 'data.load';
 export const LOAD_SUCCESS = 'data.load.success';
 export const LOAD_FAILURE = 'data.load.failure';
-export const UNLOAD = 'data.unload';
+export const UNLOAD = 'delete.unload';
+export const DELETE = 'delete';
+export const DELETE_SUCCESS = 'delete.success';
+export const DELETE_FAILURE = 'delete.failure';
 
 const initialState = {
     loading: false,
@@ -9,6 +12,7 @@ const initialState = {
     error: null,
     data: [],
     count: 0,
+    errorDelete: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -32,6 +36,14 @@ const reducer = (state = initialState, action) => {
             };
         case UNLOAD:
             return { ...initialState };
+        case DELETE_SUCCESS:
+            return {
+                errorDelete: null,
+            };
+        case DELETE_FAILURE:
+            return {
+                errorDelete: action.payload,
+            };
         default:
             return state;
     }

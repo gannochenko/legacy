@@ -10,6 +10,9 @@ export const withModal = Component => {
                     openModal={(...args) =>
                         reference.current.openExternal(...args)
                     }
+                    openConfirmModal={(...args) =>
+                        reference.current.openConfirm(...args)
+                    }
                     closeModal={(...args) =>
                         reference.current.closeExternal(...args)
                     }

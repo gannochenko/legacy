@@ -16,6 +16,7 @@ import {
     Actions,
     ItemActions,
     ItemAction,
+    ButtonWrap,
 } from './style.js';
 
 import { withModal } from '../../to-npm/Modal/context';
@@ -55,7 +56,7 @@ const getCellComponent = field => {
     return ListCellString;
 };
 
-const renderItemActions = (item, onActionClick, openModal) => {
+const renderItemActions = (item, onActionClick, openConfirmModal) => {
     return (
         <ItemActions>
             <ItemAction icon="edit" onClick={() => onActionClick('edit', item)}>
@@ -63,15 +64,30 @@ const renderItemActions = (item, onActionClick, openModal) => {
             </ItemAction>
             <ItemAction
                 icon="clear"
-                onClick={
-                    () =>
-                        openModal(({ closeModal }) => {
-                            return <Button onClick={closeModal}>Hey</Button>;
-                        })
-                    // onActionClick(
-                    //     'delete',
-                    //     item,
-                    // )
+                onClick={() =>
+                    openConfirmModal(
+                        <span>
+                            Do you really want to delete item {item.code}?<br />
+                            You won't be able to un-do this.
+                        </span>,
+                        ({ closeModal }) => {
+                            return [
+                                <ButtonWrap key="yes">
+                                    <Button
+                                        onClick={() => {
+                                            onActionClick('delete', item);
+                                            closeModal();
+                                        }}
+                                    >
+                                        Yes
+                                    </Button>
+                                </ButtonWrap>,
+                                <ButtonWrap key="no">
+                                    <Button onClick={closeModal}>No</Button>
+                                </ButtonWrap>,
+                            ];
+                        },
+                    )
                 }
             >
                 Delete
@@ -90,7 +106,7 @@ const List = ({
     onPageChange,
     onSortChange,
     onActionClick,
-    openModal,
+    openConfirmModal,
 }) => {
     sort = sort || {};
     return (
@@ -142,7 +158,7 @@ const List = ({
                                             panel={renderItemActions(
                                                 item,
                                                 onActionClick,
-                                                openModal,
+                                                openConfirmModal,
                                             )}
                                             openOnChildrenClick
                                         >
