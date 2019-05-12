@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '../../material-kit/CustomButtons';
 import {
     Container,
     Table,
@@ -15,7 +16,10 @@ import {
     Actions,
     ItemActions,
     ItemAction,
+    ButtonWrap,
 } from './style.js';
+
+import { withModal } from '../../to-npm/Modal/context';
 
 import {
     TYPE_STRING,
@@ -25,7 +29,6 @@ import {
 
 import PageNavigation from '../PageNavigation';
 import { DropPanel } from 'ew-internals-ui';
-import Modal from '../../to-npm/Modal';
 
 import ListCellString from '../ListCellString';
 import ListCellReference from '../ListCellReference';
@@ -53,6 +56,46 @@ const getCellComponent = field => {
     return ListCellString;
 };
 
+const renderItemActions = (item, onActionClick, openConfirmModal) => {
+    return (
+        <ItemActions>
+            <ItemAction icon="edit" onClick={() => onActionClick('edit', item)}>
+                Edit
+            </ItemAction>
+            <ItemAction
+                icon="clear"
+                onClick={() =>
+                    openConfirmModal(
+                        <span>
+                            Do you really want to delete item {item.code}?<br />
+                            You won't be able to un-do this.
+                        </span>,
+                        ({ closeModal }) => {
+                            return [
+                                <ButtonWrap key="yes">
+                                    <Button
+                                        onClick={() => {
+                                            onActionClick('delete', item);
+                                            closeModal();
+                                        }}
+                                    >
+                                        Yes
+                                    </Button>
+                                </ButtonWrap>,
+                                <ButtonWrap key="no">
+                                    <Button onClick={closeModal}>No</Button>
+                                </ButtonWrap>,
+                            ];
+                        },
+                    )
+                }
+            >
+                Delete
+            </ItemAction>
+        </ItemActions>
+    );
+};
+
 const List = ({
     entity,
     data,
@@ -63,38 +106,11 @@ const List = ({
     onPageChange,
     onSortChange,
     onActionClick,
+    openConfirmModal,
 }) => {
     sort = sort || {};
     return (
         <Container>
-            <Modal>
-                ----
-                <br />
-                111111
-                <br />
-                111111
-                <br />
-                111111
-                <br />
-                111111
-                <br />
-                111111
-                <br />
-                111111
-                <br />
-                111111
-                <br />
-                111111
-                <br />
-                111111
-                <br />
-                111111
-                <br />
-                111111
-                <br />
-                111111
-                <br />
-            </Modal>
             <Table cellPadding="0" cellSpacing="0">
                 <THead>
                     <TR>
@@ -139,32 +155,11 @@ const List = ({
                                 <TR key={item.code}>
                                     <ActionTD>
                                         <DropPanel
-                                            panel={
-                                                <ItemActions>
-                                                    <ItemAction
-                                                        icon="edit"
-                                                        onClick={() =>
-                                                            onActionClick(
-                                                                'edit',
-                                                                item,
-                                                            )
-                                                        }
-                                                    >
-                                                        Edit
-                                                    </ItemAction>
-                                                    <ItemAction
-                                                        icon="clear"
-                                                        onClick={() =>
-                                                            onActionClick(
-                                                                'delete',
-                                                                item,
-                                                            )
-                                                        }
-                                                    >
-                                                        Delete
-                                                    </ItemAction>
-                                                </ItemActions>
-                                            }
+                                            panel={renderItemActions(
+                                                item,
+                                                onActionClick,
+                                                openConfirmModal,
+                                            )}
                                             openOnChildrenClick
                                         >
                                             <Actions />
@@ -210,4 +205,4 @@ const List = ({
     );
 };
 
-export default List;
+export default withModal(List);

@@ -93,3 +93,7 @@ export const ItemAction = styled.div`
     border-radius: 2px;
     cursor: pointer;
 `;
+
+export const ButtonWrap = styled.div`
+    display: inline-block;
+`;

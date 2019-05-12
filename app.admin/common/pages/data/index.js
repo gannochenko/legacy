@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 // import { stringify, parse } from '@m59/qs';
-import { LOAD, UNLOAD } from './reducer';
+import { LOAD, UNLOAD, DELETE } from './reducer';
 import { withClient } from '../../lib/client';
 import List from '../../components/List';
 import { putSearchParameters, parseSearch } from '../../lib/util';
@@ -123,6 +123,7 @@ const DataPage = ({
                         );
                     }
                     if (action === 'delete') {
+                        dispatch({ type: DELETE, payload: item.code });
                     }
                 }}
             />
