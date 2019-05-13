@@ -1,5 +1,4 @@
 import { wrapError } from 'ew-internals';
-import { getRepository } from 'typeorm';
 import SchemaEntity from '../entity/schema';
 import Schema from '../lib/schema';
 
@@ -19,7 +18,7 @@ export default (app, params = {}) => {
             res.header('Content-Type', 'application/json');
 
             const entity = _.get(req, 'params.entity');
-            let type = _.get(req, 'params.type');
+            const type = _.get(req, 'params.type');
             if (type !== 'draft' && type !== 'actual') {
                 result.errors.push({
                     message: 'Illegal schema type',
@@ -48,7 +47,7 @@ export default (app, params = {}) => {
             };
             res.header('Content-Type', 'application/json');
 
-            let type = _.get(req, 'params.type');
+            const type = _.get(req, 'params.type');
             if (type !== 'draft' && type !== 'actual') {
                 result.errors.push({
                     message: 'Illegal schema type',
@@ -79,12 +78,12 @@ export default (app, params = {}) => {
             const connection = await connectionManager.getSystem();
             const repo = connection.getRepository(SchemaEntity);
 
-            let draft = await repo.findOne({
+            const draft = await repo.findOne({
                 draft: true,
             });
 
             if (draft) {
-                const structure = draft.structure;
+                const { structure } = draft;
                 const schema = new Schema(structure);
                 result.errors = schema.checkHealth();
 
