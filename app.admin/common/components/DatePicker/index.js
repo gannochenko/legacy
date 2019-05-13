@@ -1,11 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import {
     getCalendar,
     convertLocalDateToUTC,
     convertUTCToDate,
 } from '../../lib/util';
 import {
-    DatePicker,
+    DatePickerContainer,
     Selectors,
     SelectorsWrapper,
     Month,
@@ -18,7 +18,7 @@ import {
     CalendarDay,
     WeekDays,
     WeekDay,
-} from './style.js';
+} from './style';
 
 const monthList = [
     'January',
@@ -37,7 +37,7 @@ const monthList = [
 
 const wDays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
-export default ({ value, onChange, onDaySelect }) => {
+const DatePicker = ({ value, onChange, onDaySelect }) => {
     const valueUTC = useMemo(() => {
         return convertLocalDateToUTC(
             value ? new Date(value) : new Date(Date.now()),
@@ -59,7 +59,7 @@ export default ({ value, onChange, onDaySelect }) => {
     // console.dir(`${day}.${month}.${year}`);
 
     return (
-        <DatePicker>
+        <DatePickerContainer>
             <Selectors>
                 <SelectorsWrapper>
                     <Month
@@ -124,6 +124,8 @@ export default ({ value, onChange, onDaySelect }) => {
                     );
                 })}
             </Calendar>
-        </DatePicker>
+        </DatePickerContainer>
     );
 };
+
+export default DatePicker;

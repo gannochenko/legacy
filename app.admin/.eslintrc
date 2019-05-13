@@ -2,38 +2,17 @@
   "parser": "babel-eslint",
   "extends": [
     "eslint:recommended",
-    "plugin:react/recommended",
     "airbnb-base",
     "prettier",
+    "prettier/react",
     "plugin:import/errors",
-    "plugin:import/warnings"
+    "plugin:import/warnings",
+    "plugin:react/recommended"
   ],
-  "plugins": [
-    "prettier",
-    "import"
-  ],
+  "plugins": ["prettier", "react", "import", "jsx-a11y", "react-hooks"],
   "rules": {
     "prettier/prettier": "error",
-    "import/no-unresolved": "off",
-    "class-methods-use-this": "off",
-    "no-underscore-dangle": "off"
+    "import/prefer-default-export": "off",
+    "no-use-before-define": ["error", { "functions": false }]
   },
-  "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module"
-  },
-  "globals": {
-    "__DEV__": true,
-    "__TEST__": true,
-    "__SERVER__": true,
-    "__CLIENT__": true,
-    "logger": true,
-    "_": true
-  },
-  "env": {
-    "es6": true,
-    "browser": true,
-    "node": true,
-    "jest": true
-  }
 }

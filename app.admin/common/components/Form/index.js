@@ -1,6 +1,6 @@
 import React, { useMemo, useRef } from 'react';
 import { Formik } from 'formik';
-import { Form, Fields } from './style.js';
+import { Form, Fields } from './style';
 import Button from '../../material-kit/CustomButtons';
 import * as fieldSchema from '../../../shared/schema/field';
 

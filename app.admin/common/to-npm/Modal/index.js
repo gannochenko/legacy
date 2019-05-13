@@ -1,3 +1,10 @@
+/**
+ * Todo:
+ * * close by overlay click
+ * * mouse wheel prevent default
+ * * close by escape
+ */
+
 import React from 'react';
 import { bool, func, object } from 'prop-types';
 import {
@@ -8,9 +15,9 @@ import {
     Question,
     Buttons,
     defaultTheme,
-} from './style.js';
+} from './style';
 
-const Modal = class extends React.Component {
+class Modal extends React.Component {
     constructor(props) {
         super(props);
 
@@ -29,7 +36,6 @@ const Modal = class extends React.Component {
     };
 
     openExternal = children => {
-        console.dir(children);
         if (this.props.active) {
             this.open(children);
         }
@@ -42,9 +48,9 @@ const Modal = class extends React.Component {
         this.props.onClose();
     };
 
-    // onOpenClick = () => {
-    //     this.openExternal();
-    // };
+    onOpenClick = () => {
+        this.openExternal();
+    };
 
     onCloseClick = () => {
         this.closeExternal();
@@ -91,7 +97,7 @@ const Modal = class extends React.Component {
             </Overlay>
         );
     }
-};
+}
 
 Modal.propTypes = {
     active: bool, // if active is set to true, the modal controls whether it is open or not internally

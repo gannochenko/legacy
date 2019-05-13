@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Switch } from 'react-router';
 import { ConnectedRouter } from 'connected-react-router';
 import { connect } from 'react-redux';

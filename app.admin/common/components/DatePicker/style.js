@@ -3,7 +3,7 @@ import { align, group, stdInput, icon, fgColor, rectangle } from 'sc-companion';
 import { withTheme } from '../../style/global';
 import { borderColor } from '../../to-npm/mixin';
 
-export const DatePicker = styled.div``;
+export const DatePickerContainer = styled.div``;
 
 export const Selectors = withTheme(styled.div`
     padding: 0.5rem;
