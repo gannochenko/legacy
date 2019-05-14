@@ -76,7 +76,7 @@ export const Cross = styled.div`
 `;
 
 export const Question = styled.div`
-    font-size: 1.2rem;
+    font-size: 1rem;
     padding-bottom: 1rem;
 `;
 
