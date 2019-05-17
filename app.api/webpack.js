@@ -1,7 +1,7 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const webpack = require('webpack');
-const nodemonPlugin = require('nodemon-webpack-plugin');
+const NodemonPlugin = require('nodemon-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = (env, argv) => {
@@ -80,10 +80,13 @@ module.exports = (env, argv) => {
                 __DEV__: development,
                 __TEST__: false,
             }),
-            new nodemonPlugin({
+            new NodemonPlugin({
                 nodeArgs: development ? ['--inspect=0.0.0.0:4001'] : [],
+                watch: path.join(__dirname, 'build'),
             }),
-            // new ForkTsCheckerWebpackPlugin(),
+            // new ForkTsCheckerWebpackPlugin({
+            //     watch: path.join(__dirname, 'src'),
+            // }),
         ],
     };
 };

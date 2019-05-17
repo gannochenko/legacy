@@ -1,4 +1,4 @@
-import { palette, zIxEverest } from 'sc-companion';
+import { palette, zIxEverest, zIxStratosphere } from 'sc-companion';
 
 const grid = {
     resolution: 12,
@@ -81,6 +81,9 @@ export default {
                 hover: palette.cascade,
                 hout: palette.black,
             },
+        },
+        overlay: {
+            zIndex: zIxStratosphere,
         },
     },
 

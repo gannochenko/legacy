@@ -87,7 +87,7 @@ export const ItemActions = withTheme(styled.div`
 `);
 
 export const ItemAction = styled.div`
-    ${props => iconLabel(props.icon, '0.8rem', '0', 'baseline', '2rem')}
+    ${props => iconLabel(props.icon, '0.8rem', '0.2rem', 'baseline', '2rem')}
     ${bgColor('transparent', '#e0e3ec', null, '200ms')}
 	padding-right: 1rem;
     border-radius: 2px;

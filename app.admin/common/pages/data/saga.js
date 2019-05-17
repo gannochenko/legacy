@@ -1,12 +1,12 @@
 import { takeLatest, put, call } from 'redux-saga/effects';
 import * as reducer from './reducer';
-import buildQuery from './query-builder';
+import { buildQueryFind, buildMutationDelete } from './query-builder';
 
 function* load(params) {
     const { payload } = params || {};
     const { client } = payload || {};
     try {
-        const [queryName, query] = buildQuery(payload);
+        const [queryName, query] = buildQueryFind(payload);
         const apolloResult = yield call(() => {
             return client.query({
                 query,
@@ -37,7 +37,7 @@ function* remove(params) {
     const { payload } = params || {};
     const { client } = payload || {};
     try {
-        const [queryName, query] = buildQuery(payload);
+        const [queryName, query] = buildMutationDelete(payload);
         const apolloResult = yield call(() => {
             return client.query({
                 query,

@@ -16,6 +16,9 @@ export const defaultTheme = {
             hover: '#000',
             hout: '#000',
         },
+        overlay: {
+            zIndex: 0,
+        },
     },
 };
 
@@ -34,8 +37,9 @@ const appear = keyframes`
 export const Overlay = styled.div`
     ${props => align(props.central ? 'center' : 'top', 'center')}
     ${fixedCover()}
-  overflow-y: auto;
+    overflow-y: auto;
     background-color: #1b273333;
+    z-index: ${props => props.theme.overlay.zIndex};
     ${props =>
         media({ all: 'padding: 2rem 0;', xs: 'padding: 0;' }, props.theme.grid)}
 `;
