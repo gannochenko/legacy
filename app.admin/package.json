@@ -24,7 +24,7 @@
         "eslint-plugin-react": "^7.13.0",
         "eslint-plugin-react-hooks": "^1.6.0",
         "ew-internals": "^1.0.7",
-        "ew-internals-ui": "^1.0.5",
+        "ew-internals-ui": "^1.0.8",
         "express": "^4.16.4",
         "formik": "^1.5.2",
         "graphql": "^14.2.1",

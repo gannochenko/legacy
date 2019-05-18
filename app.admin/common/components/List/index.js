@@ -17,9 +17,7 @@ import {
     ItemActions,
     ItemAction,
     ButtonWrap,
-} from './style.js';
-
-import { withModal } from '../../to-npm/Modal/context';
+} from './style';
 
 import {
     TYPE_STRING,
@@ -28,7 +26,7 @@ import {
 } from '../../../shared/schema/field';
 
 import PageNavigation from '../PageNavigation';
-import { DropPanel } from 'ew-internals-ui';
+import { withModal, DropPanel } from 'ew-internals-ui';
 
 import ListCellString from '../ListCellString';
 import ListCellReference from '../ListCellReference';
@@ -56,7 +54,12 @@ const getCellComponent = field => {
     return ListCellString;
 };
 
-const renderItemActions = (item, onActionClick, openConfirmModal) => {
+const renderItemActions = (
+    item,
+    onActionClick,
+    openConfirmModal,
+    closePanel,
+) => {
     return (
         <ItemActions>
             <ItemAction icon="edit" onClick={() => onActionClick('edit', item)}>
@@ -64,7 +67,8 @@ const renderItemActions = (item, onActionClick, openConfirmModal) => {
             </ItemAction>
             <ItemAction
                 icon="clear"
-                onClick={() =>
+                onClick={() => {
+                    closePanel();
                     openConfirmModal(
                         <span>
                             Do you really want to delete item {item.code}?<br />
@@ -87,8 +91,8 @@ const renderItemActions = (item, onActionClick, openConfirmModal) => {
                                 </ButtonWrap>,
                             ];
                         },
-                    )
-                }
+                    );
+                }}
             >
                 Delete
             </ItemAction>
@@ -155,14 +159,17 @@ const List = ({
                                 <TR key={item.code}>
                                     <ActionTD>
                                         <DropPanel
-                                            panel={renderItemActions(
-                                                item,
-                                                onActionClick,
-                                                openConfirmModal,
-                                            )}
+                                            panel={({ closePanel }) =>
+                                                renderItemActions(
+                                                    item,
+                                                    onActionClick,
+                                                    openConfirmModal,
+                                                    closePanel,
+                                                )
+                                            }
                                             openOnChildrenClick
                                         >
-                                            <Actions />
+                                            {() => <Actions />}
                                         </DropPanel>
                                     </ActionTD>
                                     {entity.getFields().map(field => {

@@ -105,7 +105,7 @@ export const FormFieldReference = ({
             }
         >
             <DropPanel
-                panel={
+                panel={() => (
                     <ItemPicker>
                         <Search
                             placeholder="Search..."
@@ -193,7 +193,7 @@ export const FormFieldReference = ({
                             </SearchResults>
                         </ScrollPanel>
                     </ItemPicker>
-                }
+                )}
                 theme={dTheme}
                 ref={dpRef}
                 onClose={() => {
@@ -206,51 +206,54 @@ export const FormFieldReference = ({
                     // todo: make searchRef work and cleanup the text input
                 }}
             >
-                <List>
-                    {iValue.map(item => (
-                        <Item key={item.code}>
-                            <ItemData>
-                                <ItemLink
-                                    href={`/data/${encodeURIComponent(
-                                        refEntity.getName(),
-                                    )}/${encodeURIComponent(item.code)}/`}
-                                    target="_blank"
-                                    rel="noreferrer noopener"
-                                >
-                                    {item.code}
-                                </ItemLink>
-                                {_.isne(pFieldName) && !!item[pFieldName] && (
-                                    <>
-                                        <br />
-                                        <ItemDescription>
-                                            {item[pFieldName]}
-                                        </ItemDescription>
-                                    </>
-                                )}
-                            </ItemData>
-                            <ItemActions>
-                                <RemoveButton
-                                    onClick={() => {
-                                        let newValue = null;
-                                        if (field.isMultiple()) {
-                                            newValue = value.filter(
-                                                vItem =>
-                                                    vItem.code !== item.code,
-                                            );
-                                        }
+                {() => (
+                    <List>
+                        {iValue.map(item => (
+                            <Item key={item.code}>
+                                <ItemData>
+                                    <ItemLink
+                                        href={`/data/${encodeURIComponent(
+                                            refEntity.getName(),
+                                        )}/${encodeURIComponent(item.code)}/`}
+                                        target="_blank"
+                                        rel="noreferrer noopener"
+                                    >
+                                        {item.code}
+                                    </ItemLink>
+                                    {_.isne(pFieldName) && !!item[pFieldName] && (
+                                        <>
+                                            <br />
+                                            <ItemDescription>
+                                                {item[pFieldName]}
+                                            </ItemDescription>
+                                        </>
+                                    )}
+                                </ItemData>
+                                <ItemActions>
+                                    <RemoveButton
+                                        onClick={() => {
+                                            let newValue = null;
+                                            if (field.isMultiple()) {
+                                                newValue = value.filter(
+                                                    vItem =>
+                                                        vItem.code !==
+                                                        item.code,
+                                                );
+                                            }
 
-                                        onChange({
-                                            target: {
-                                                name: field.getName(),
-                                                value: newValue,
-                                            },
-                                        });
-                                    }}
-                                />
-                            </ItemActions>
-                        </Item>
-                    ))}
-                </List>
+                                            onChange({
+                                                target: {
+                                                    name: field.getName(),
+                                                    value: newValue,
+                                                },
+                                            });
+                                        }}
+                                    />
+                                </ItemActions>
+                            </Item>
+                        ))}
+                    </List>
+                )}
             </DropPanel>
         </FormField>
     );

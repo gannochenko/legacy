@@ -27,7 +27,7 @@ export default withTheme(({ field, value, error, onChange, theme }) => {
             >
                 {props => (
                     <DropPanel
-                        panel={
+                        panel={() => (
                             <DatePickerPanel>
                                 <DatePicker
                                     value={value}
@@ -44,21 +44,25 @@ export default withTheme(({ field, value, error, onChange, theme }) => {
                                     }
                                 />
                             </DatePickerPanel>
-                        }
+                        )}
                         theme={theme.dropPanel}
                         ref={dpRef}
                     >
-                        <Input
-                            {...props}
-                            value={
-                                value ? moment(value).format('DD.MM.YYYY') : ''
-                            }
-                            onFocus={() => dpRef.current.open()}
-                            onBlur={() => dpRef.current.close()}
-                            onClick={() => dpRef.current.open()}
-                            autoComplete="off"
-                            readOnly
-                        />
+                        {() => (
+                            <Input
+                                {...props}
+                                value={
+                                    value
+                                        ? moment(value).format('DD.MM.YYYY')
+                                        : ''
+                                }
+                                onFocus={() => dpRef.current.open()}
+                                onBlur={() => dpRef.current.close()}
+                                onClick={() => dpRef.current.open()}
+                                autoComplete="off"
+                                readOnly
+                            />
+                        )}
                     </DropPanel>
                 )}
             </FormFieldMultiplier>

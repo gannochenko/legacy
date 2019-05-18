@@ -3,9 +3,12 @@ import { Switch } from 'react-router';
 import { ConnectedRouter } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
-import { Notification, NotificationContext } from 'ew-internals-ui';
-import Modal from '../../to-npm/Modal';
-import { Context as ModalContext } from '../../to-npm/Modal/context';
+import {
+    Notification,
+    NotificationContext,
+    Modal,
+    ModalContext,
+} from 'ew-internals-ui';
 
 import { LOAD } from './reducer';
 import { GlobalStyle } from '../../style/global';
