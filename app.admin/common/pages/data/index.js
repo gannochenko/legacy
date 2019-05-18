@@ -10,7 +10,24 @@ import Button from '../../material-kit/CustomButtons';
 
 import Layout from '../../components/Layout';
 
-const pageSize = 10;
+const extractPageParameters = search => {
+    let page = parseInt(search.page, 10);
+    if (Number.isNaN(page) || page < 1) {
+        page = 1;
+    }
+    let sort = search.sort;
+    if (_.isne(sort)) {
+        sort = sort.split(':');
+    } else {
+        sort = [];
+    }
+
+    return {
+        page,
+        sort,
+        pageSize: 10,
+    };
+};
 
 const DataPage = ({
     dispatch,
@@ -33,13 +50,7 @@ const DataPage = ({
         route.location.search,
     ]);
 
-    const page = search.page || 1;
-    let sort = search.sort;
-    if (_.isne(sort)) {
-        sort = sort.split(':');
-    } else {
-        sort = [];
-    }
+    const pageParams = extractPageParameters(search);
 
     // load data on component mount
     useEffect(() => {
@@ -48,9 +59,7 @@ const DataPage = ({
             payload: {
                 client,
                 entity,
-                page,
-                pageSize,
-                sort,
+                ...pageParams,
             },
         });
     }, [entity.getName(), search]);
@@ -91,9 +100,11 @@ const DataPage = ({
                 entity={entity}
                 data={data || []}
                 count={count}
-                page={page}
-                pageSize={pageSize}
-                sort={{ field: sort[0] || null, way: sort[1] || null }}
+                {...pageParams}
+                sort={{
+                    field: pageParams.sort[0] || null,
+                    way: pageParams.sort[1] || null,
+                }}
                 onPageChange={page =>
                     dispatch(
                         push(
@@ -123,7 +134,15 @@ const DataPage = ({
                         );
                     }
                     if (action === 'delete') {
-                        dispatch({ type: DELETE, payload: item.code });
+                        dispatch({
+                            type: DELETE,
+                            payload: {
+                                entity,
+                                code: item.code,
+                                client,
+                                ...pageParams,
+                            },
+                        });
                     }
                 }}
             />

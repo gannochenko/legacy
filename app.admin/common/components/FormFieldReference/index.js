@@ -114,83 +114,90 @@ export const FormFieldReference = ({
                             theme={theme}
                         />
                         <ScrollPanel>
-                            <SearchResults>
-                                {_.iane(formData.result) &&
-                                    formData.result.map(sResult => (
-                                        <SearchItem key={sResult.code}>
-                                            <SearchItemData>
-                                                <ItemLink
-                                                    href={`/data/${encodeURIComponent(
-                                                        refEntity.getName(),
-                                                    )}/${encodeURIComponent(
-                                                        sResult.code,
-                                                    )}/`}
-                                                    target="_blank"
-                                                    rel="noreferrer noopener"
-                                                >
-                                                    {sResult.code}
-                                                </ItemLink>
-                                                {_.isne(
-                                                    sResult[pFieldName],
-                                                ) && (
-                                                    <>
-                                                        <br />
-                                                        <ItemDescription>
-                                                            {
-                                                                sResult[
-                                                                    pFieldName
-                                                                ]
-                                                            }
-                                                        </ItemDescription>
-                                                    </>
-                                                )}
-                                            </SearchItemData>
-                                            <SearchItemActions>
-                                                <AddButton
-                                                    onClick={() => {
-                                                        let newValue = null;
-                                                        if (
-                                                            field.isMultiple()
-                                                        ) {
-                                                            // need to check if the item is already there
+                            {() => (
+                                <SearchResults>
+                                    {_.iane(formData.result) &&
+                                        formData.result.map(sResult => (
+                                            <SearchItem key={sResult.code}>
+                                                <SearchItemData>
+                                                    <ItemLink
+                                                        href={`/data/${encodeURIComponent(
+                                                            refEntity.getName(),
+                                                        )}/${encodeURIComponent(
+                                                            sResult.code,
+                                                        )}/`}
+                                                        target="_blank"
+                                                        rel="noreferrer noopener"
+                                                    >
+                                                        {sResult.code}
+                                                    </ItemLink>
+                                                    {_.isne(
+                                                        sResult[pFieldName],
+                                                    ) && (
+                                                        <>
+                                                            <br />
+                                                            <ItemDescription>
+                                                                {
+                                                                    sResult[
+                                                                        pFieldName
+                                                                    ]
+                                                                }
+                                                            </ItemDescription>
+                                                        </>
+                                                    )}
+                                                </SearchItemData>
+                                                <SearchItemActions>
+                                                    <AddButton
+                                                        onClick={() => {
+                                                            let newValue = null;
                                                             if (
-                                                                !value.find(
-                                                                    item =>
-                                                                        item.code ===
-                                                                        sResult.code,
-                                                                )
+                                                                field.isMultiple()
                                                             ) {
-                                                                newValue = [
-                                                                    ...value,
-                                                                    sResult,
-                                                                ];
+                                                                // need to check if the item is already there
+                                                                if (
+                                                                    !value.find(
+                                                                        item =>
+                                                                            item.code ===
+                                                                            sResult.code,
+                                                                    )
+                                                                ) {
+                                                                    newValue = [
+                                                                        ...value,
+                                                                        sResult,
+                                                                    ];
+                                                                }
+                                                            } else {
+                                                                newValue = sResult;
                                                             }
-                                                        } else {
-                                                            newValue = sResult;
-                                                        }
 
-                                                        if (searchRef.current) {
-                                                            setTimeout(
-                                                                () =>
-                                                                    searchRef.current.focus(),
-                                                                0,
-                                                            );
-                                                        }
+                                                            if (
+                                                                searchRef.current
+                                                            ) {
+                                                                setTimeout(
+                                                                    () =>
+                                                                        searchRef.current.focus(),
+                                                                    0,
+                                                                );
+                                                            }
 
-                                                        if (newValue !== null) {
-                                                            onChange({
-                                                                target: {
-                                                                    name: field.getName(),
-                                                                    value: newValue,
-                                                                },
-                                                            });
-                                                        }
-                                                    }}
-                                                />
-                                            </SearchItemActions>
-                                        </SearchItem>
-                                    ))}
-                            </SearchResults>
+                                                            if (
+                                                                newValue !==
+                                                                null
+                                                            ) {
+                                                                onChange({
+                                                                    target: {
+                                                                        name: field.getName(),
+                                                                        value: newValue,
+                                                                    },
+                                                                });
+                                                            }
+                                                        }}
+                                                    />
+                                                </SearchItemActions>
+                                            </SearchItem>
+                                        ))}
+                                </SearchResults>
+                            )}
                         </ScrollPanel>
                     </ItemPicker>
                 )}
