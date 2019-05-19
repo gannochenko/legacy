@@ -1,10 +1,10 @@
 export const LOAD = 'data.load';
 export const LOAD_SUCCESS = 'data.load.success';
 export const LOAD_FAILURE = 'data.load.failure';
-export const UNLOAD = 'delete.unload';
-export const DELETE = 'delete';
-export const DELETE_SUCCESS = 'delete.success';
-export const DELETE_FAILURE = 'delete.failure';
+export const UNLOAD = 'data.unload';
+export const DELETE = 'data.delete';
+export const DELETE_SUCCESS = 'data.delete.success';
+export const DELETE_FAILURE = 'data.delete.failure';
 
 const initialState = {
     loading: false,
@@ -38,11 +38,11 @@ const reducer = (state = initialState, action) => {
             return { ...initialState };
         case DELETE_SUCCESS:
             return {
-                errorDelete: null,
+                error: null,
             };
         case DELETE_FAILURE:
             return {
-                errorDelete: action.payload,
+                error: action.payload,
             };
         default:
             return state;

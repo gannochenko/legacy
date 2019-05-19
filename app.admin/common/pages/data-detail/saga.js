@@ -5,6 +5,7 @@ import {
     buildQueryLoad,
     buildQuerySearch,
     buildMutationPut,
+    buildMutationDelete,
 } from './query-builder';
 
 function* load(params) {
@@ -126,8 +127,38 @@ function* save(params) {
     }
 }
 
+function* remove(params) {
+    const { payload } = params || {};
+    const { client, entity } = payload || {};
+
+    try {
+        const [mutationName, mutation] = buildMutationDelete(payload);
+        const apolloResult = yield call(() => {
+            return client.mutate({
+                mutation,
+            });
+        });
+
+        const result = _.get(apolloResult, `data.${mutationName}`);
+        if (_.iane(result.errors)) {
+            yield put({
+                type: reducer.DELETE_FAILURE,
+                payload: result.errors,
+            });
+        } else {
+            yield put(push(`/data/${encodeURIComponent(entity.getName())}/`));
+        }
+    } catch (error) {
+        yield put({ type: reducer.DELETE_FAILURE, payload: error });
+        if (__DEV__) {
+            console.error(error);
+        }
+    }
+}
+
 export default function* watcher() {
     yield takeLatest(reducer.LOAD, load);
     yield takeLatest(reducer.ITEM_SEARCH, itemSearch);
     yield takeLatest(reducer.SAVE, save);
+    yield takeLatest(reducer.DELETE, remove);
 }

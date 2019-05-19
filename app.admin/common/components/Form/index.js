@@ -30,7 +30,15 @@ const getField = field => {
     return null;
 };
 
-export default ({ data, schema, entity, onSubmit, dispatch, formData }) => {
+export default ({
+    data,
+    schema,
+    entity,
+    onSubmit,
+    onActionClick,
+    dispatch,
+    formData,
+}) => {
     const initial = useMemo(() => _.cloneDeep(data), [data]);
     const validator = useMemo(() => entity.getValidator(), [entity]);
     const form = useRef();
@@ -89,7 +97,15 @@ export default ({ data, schema, entity, onSubmit, dispatch, formData }) => {
                             >
                                 Save
                             </Button>
-                            <a href="">Delete</a>
+                            <a
+                                href="javascript:void(0)"
+                                onClick={event => {
+                                    onActionClick('delete');
+                                    event.preventDefault();
+                                }}
+                            >
+                                Delete
+                            </a>
                         </>
                     );
                 }}

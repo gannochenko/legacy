@@ -41,7 +41,7 @@ export const buildQueryLoad = ({ entity, schema, code }) => {
 
 export const buildQuerySearch = ({ entity, text }) => {
     const queryName = `${entity.getCamelName()}Find`;
-    let presentationalField = entity.getPresentationField();
+    const presentationalField = entity.getPresentationField();
 
     const query = gql`
         query {
@@ -108,6 +108,22 @@ export const buildMutationPut = ({ entity, schema, data, code }) => {
                     message
                 }
             }
+        }
+    `;
+
+    return [mutationName, mutation];
+};
+
+export const buildMutationDelete = ({ entity, code }) => {
+    const mutationName = `${entity.getCamelName()}Delete`;
+    const mutation = gql`
+        mutation {
+            ${sanitize(mutationName)}(code: "${sanitize(code)}") {
+            errors {
+                code
+                message
+            }
+        }
         }
     `;
 

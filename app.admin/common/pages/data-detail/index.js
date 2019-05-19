@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
-import { LOAD, UNLOAD, SAVE, LOAD_SUCCESS } from './reducer';
+import { LOAD, UNLOAD, SAVE, LOAD_SUCCESS, DELETE } from './reducer';
 import { withClient } from '../../lib/client';
 import { withNotification } from 'ew-internals-ui';
 import Form from '../../components/Form';
@@ -122,6 +122,21 @@ const DataPage = ({
                                 code,
                             },
                         });
+                    }}
+                    showDelete={true}
+                    onActionClick={action => {
+                        if (action === 'delete') {
+                            if (data.code) {
+                                dispatch({
+                                    type: DELETE,
+                                    payload: {
+                                        entity,
+                                        code: data.code,
+                                        client,
+                                    },
+                                });
+                            }
+                        }
                     }}
                 />
             )}

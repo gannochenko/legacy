@@ -9,6 +9,9 @@ export const ITEM_SEARCH_CLEANUP = 'data-detail.item-search.cleanup';
 export const SAVE = 'data-detail.save';
 export const SAVE_SUCCESS = 'data-detail.save.success';
 export const SAVE_FAILURE = 'data-detail.save.failure';
+export const DELETE = 'data-detail.delete';
+export const DELETE_SUCCESS = 'data-detail.delete.success';
+export const DELETE_FAILURE = 'data-detail.delete.failure';
 
 const initialState = {
     loading: false,
@@ -82,6 +85,14 @@ const reducer = (state = initialState, action) => {
         case SAVE_FAILURE:
             return {
                 ...state,
+                error: action.payload,
+            };
+        case DELETE_SUCCESS:
+            return {
+                error: null,
+            };
+        case DELETE_FAILURE:
+            return {
                 error: action.payload,
             };
         default:

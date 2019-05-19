@@ -7,8 +7,8 @@ export const buildQueryFind = ({
     page,
     pageSize,
     sort,
-    filter,
-    select,
+    // filter,
+    // select,
 }) => {
     const selectedFields = entity.getFields().map(field => {
         const name = field.getName();

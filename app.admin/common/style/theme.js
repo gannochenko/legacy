@@ -1,4 +1,4 @@
-import { palette, zIxEverest, zIxStratosphere } from 'sc-companion';
+import { palette, zIxEverest, zIxStratosphere, zIxOrbit } from 'sc-companion';
 
 const grid = {
     resolution: 12,
@@ -88,8 +88,11 @@ export default {
     },
 
     notifications: {
-        border: {
-            color: palette.cascade,
+        message: {
+            border: {
+                color: palette.cascade,
+            },
+            zIndex: zIxOrbit,
         },
     },
 };
