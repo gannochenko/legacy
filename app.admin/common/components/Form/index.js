@@ -1,6 +1,13 @@
 import React, { useMemo, useRef } from 'react';
 import { Formik } from 'formik';
-import { Form, Fields } from './style';
+import { withModal } from 'ew-internals-ui';
+import {
+    FormContainer,
+    Fields,
+    ButtonWrap,
+    DeleteButton,
+    FormButtons,
+} from './style';
 import Button from '../../material-kit/CustomButtons';
 import * as fieldSchema from '../../../shared/schema/field';
 
@@ -30,7 +37,7 @@ const getField = field => {
     return null;
 };
 
-export default ({
+const Form = ({
     data,
     schema,
     entity,
@@ -38,12 +45,13 @@ export default ({
     onActionClick,
     dispatch,
     formData,
+    openConfirmModal,
 }) => {
     const initial = useMemo(() => _.cloneDeep(data), [data]);
     const validator = useMemo(() => entity.getValidator(), [entity]);
     const form = useRef();
     return (
-        <Form>
+        <FormContainer>
             <Formik
                 ref={form}
                 initialValues={initial}
@@ -90,26 +98,61 @@ export default ({
                                     );
                                 })}
                             </Fields>
-                            <Button
-                                type="submit"
-                                onClick={handleSubmit}
-                                disabled={isSubmitting}
-                            >
-                                Save
-                            </Button>
-                            <a
-                                href="javascript:void(0)"
-                                onClick={event => {
-                                    onActionClick('delete');
-                                    event.preventDefault();
-                                }}
-                            >
-                                Delete
-                            </a>
+                            <FormButtons>
+                                <ButtonWrap>
+                                    <Button
+                                        type="submit"
+                                        onClick={handleSubmit}
+                                        disabled={isSubmitting}
+                                    >
+                                        Save
+                                    </Button>
+                                </ButtonWrap>
+                                <DeleteButton
+                                    href="javascript:void(0)"
+                                    onClick={event => {
+                                        openConfirmModal(
+                                            <span>
+                                                Do you really want to delete
+                                                item {data.code}?<br />
+                                                You won't be able to un-do this.
+                                            </span>,
+                                            ({ closeModal }) => {
+                                                return [
+                                                    <ButtonWrap key="yes">
+                                                        <Button
+                                                            onClick={() => {
+                                                                onActionClick(
+                                                                    'delete',
+                                                                );
+                                                                closeModal();
+                                                            }}
+                                                        >
+                                                            Yes
+                                                        </Button>
+                                                    </ButtonWrap>,
+                                                    <ButtonWrap key="no">
+                                                        <Button
+                                                            onClick={closeModal}
+                                                        >
+                                                            No
+                                                        </Button>
+                                                    </ButtonWrap>,
+                                                ];
+                                            },
+                                        );
+                                        event.preventDefault();
+                                    }}
+                                >
+                                    Delete
+                                </DeleteButton>
+                            </FormButtons>
                         </>
                     );
                 }}
             </Formik>
-        </Form>
+        </FormContainer>
     );
 };
+
+export default withModal(Form);

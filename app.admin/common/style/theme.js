@@ -88,11 +88,11 @@ export default {
     },
 
     notifications: {
+        zIndex: zIxOrbit,
         message: {
             border: {
                 color: palette.cascade,
             },
-            zIndex: zIxOrbit,
         },
     },
 };

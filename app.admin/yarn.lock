@@ -3256,10 +3256,10 @@ evp_bytestokey@^1.0.0, evp_bytestokey@^1.0.3:
     md5.js "^1.3.4"
     safe-buffer "^5.1.1"
 
-ew-internals-ui@^1.0.8:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/ew-internals-ui/-/ew-internals-ui-1.0.8.tgz#5b7b45d00e3e5ece5a33b61e452e6a0632a8c049"
-  integrity sha512-RF9Bv83plUr1ygPKreG8qDhG004FV4VbRp/T26S5yTrXgdwtTTvpjAT4/HL18VDtEx1sAp+pZ9iYkhWMPICJKw==
+ew-internals-ui@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/ew-internals-ui/-/ew-internals-ui-1.0.11.tgz#5c5d38c675afba3f87c7dca1f847d219c13c309e"
+  integrity sha512-dkJ6nGx6tWegE8RMsyn50UGG2VVSLJvE4FE+a5DGHn3b0O+YRkTbWzIXwyWLApsg6/o+njxZkQV3WizBr/0Xww==
 
 ew-internals@^1.0.7:
   version "1.0.7"
