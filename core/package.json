@@ -29,6 +29,7 @@
         "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
         "@babel/preset-env": "^7.4.4",
         "@babel/preset-react": "^7.0.0",
+        "babel-eslint": "^10.0.1",
         "babel-loader": "^8.0.6",
         "babel-plugin-styled-components": "^1.10.0",
         "eslint": "^5.16.0",
@@ -50,7 +51,9 @@
     },
     "dependencies": {},
     "peerDependencies": {
-        "react": "16.x"
+        "ew-internals": "x.x",
+        "react": "16.x",
+        "yup": "x.x"
     },
     "husky": {
         "hooks": {

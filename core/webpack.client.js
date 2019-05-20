@@ -7,7 +7,7 @@ module.exports = (env, argv) => {
         argv.mode === 'development' || env.NODE_ENV === 'development';
 
     return {
-        entry: path.join(__dirname, 'src/index.js'),
+        entry: path.join(__dirname, 'src/client.js'),
         mode: development ? 'development' : 'production',
         output: {
             filename: 'client.js',
@@ -21,7 +21,7 @@ module.exports = (env, argv) => {
             },
             symlinks: false,
         },
-        externals: ['react'],
+        externals: ['react', 'ew-internals', 'yup'],
         module: {
             rules: [
                 {
