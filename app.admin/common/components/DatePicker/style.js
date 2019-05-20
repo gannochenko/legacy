@@ -1,7 +1,14 @@
 import styled from 'styled-components';
-import { align, group, stdInput, icon, fgColor, rectangle } from 'sc-companion';
+import {
+    align,
+    group,
+    stdInput,
+    icon,
+    fgColor,
+    rectangle,
+    borderColor,
+} from 'sc-companion';
 import { withTheme } from '../../style/global';
-import { borderColor } from '../../to-npm/mixin';
 
 export const DatePickerContainer = styled.div``;
 
