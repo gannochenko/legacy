@@ -123,7 +123,6 @@ const DataPage = ({
                             },
                         });
                     }}
-                    showDelete={true}
                     onActionClick={action => {
                         if (action === 'delete') {
                             if (data.code) {

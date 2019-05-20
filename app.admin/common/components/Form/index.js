@@ -108,44 +108,49 @@ const Form = ({
                                         Save
                                     </Button>
                                 </ButtonWrap>
-                                <DeleteButton
-                                    href="javascript:void(0)"
-                                    onClick={event => {
-                                        openConfirmModal(
-                                            <span>
-                                                Do you really want to delete
-                                                item {data.code}?<br />
-                                                You won't be able to un-do this.
-                                            </span>,
-                                            ({ closeModal }) => {
-                                                return [
-                                                    <ButtonWrap key="yes">
-                                                        <Button
-                                                            onClick={() => {
-                                                                onActionClick(
-                                                                    'delete',
-                                                                );
-                                                                closeModal();
-                                                            }}
-                                                        >
-                                                            Yes
-                                                        </Button>
-                                                    </ButtonWrap>,
-                                                    <ButtonWrap key="no">
-                                                        <Button
-                                                            onClick={closeModal}
-                                                        >
-                                                            No
-                                                        </Button>
-                                                    </ButtonWrap>,
-                                                ];
-                                            },
-                                        );
-                                        event.preventDefault();
-                                    }}
-                                >
-                                    Delete
-                                </DeleteButton>
+                                {_.isne(data.code) && (
+                                    <DeleteButton
+                                        href="javascript:void(0)"
+                                        onClick={event => {
+                                            openConfirmModal(
+                                                <span>
+                                                    Do you really want to delete
+                                                    item {data.code}?<br />
+                                                    You won't be able to un-do
+                                                    this.
+                                                </span>,
+                                                ({ closeModal }) => {
+                                                    return [
+                                                        <ButtonWrap key="yes">
+                                                            <Button
+                                                                onClick={() => {
+                                                                    onActionClick(
+                                                                        'delete',
+                                                                    );
+                                                                    closeModal();
+                                                                }}
+                                                            >
+                                                                Yes
+                                                            </Button>
+                                                        </ButtonWrap>,
+                                                        <ButtonWrap key="no">
+                                                            <Button
+                                                                onClick={
+                                                                    closeModal
+                                                                }
+                                                            >
+                                                                No
+                                                            </Button>
+                                                        </ButtonWrap>,
+                                                    ];
+                                                },
+                                            );
+                                            event.preventDefault();
+                                        }}
+                                    >
+                                        Delete
+                                    </DeleteButton>
+                                )}
                             </FormButtons>
                         </>
                     );
