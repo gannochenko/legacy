@@ -1,0 +1,22 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "eslint:recommended",
+    "airbnb-base",
+    "prettier",
+    "prettier/react",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:react/recommended"
+  ],
+  "plugins": ["prettier", "react", "import", "jsx-a11y", "react-hooks"],
+  "rules": {
+    "prettier/prettier": "error",
+    "import/prefer-default-export": "off",
+    "no-use-before-define": ["error", { "functions": false }]
+  },
+  "globals": {
+    "__DEV__": true,
+    "__TEST__": true
+  }
+}

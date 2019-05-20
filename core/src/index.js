@@ -1,1 +1,3 @@
 // write your code here ...
+
+let hz = 1;

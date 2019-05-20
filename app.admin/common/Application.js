@@ -10,10 +10,6 @@ import { createStore } from './store';
 
 import theme from './style/theme';
 
-import { ENTITY_USER_NAME } from '../core/constants';
-
-console.dir(ENTITY_USER_NAME);
-
 const history = createHistory();
 const { store, saga } = createStore({ history });
 const settings = createSettings();
