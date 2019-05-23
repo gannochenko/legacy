@@ -20,7 +20,7 @@
         "connected-react-router": "^6.3.2",
         "cors": "^2.8.5",
         "debug": "^4.1.1",
-        "ew-internals": "^1.0.7",
+        "ew-internals": "^1.0.8",
         "ew-internals-ui": "^1.0.11",
         "express": "^4.16.4",
         "formik": "^1.5.2",

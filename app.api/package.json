@@ -63,7 +63,7 @@
         "crypto-random-string": "^1.0.0",
         "dataloader": "^1.4.0",
         "debug": "^4.1.1",
-        "ew-internals": "^1.0.4",
+        "ew-internals": "^1.0.8",
         "express": "^4.16.4",
         "graphql": "^14.0.2",
         "helmet": "^3.15.1",
