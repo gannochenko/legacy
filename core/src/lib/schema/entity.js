@@ -11,7 +11,8 @@ import {
     ENTITY_USER_NAME,
     ENTITY_GROUP_NAME,
     ENTITY_CODE_FIELD_NAME,
-} from '../constants';
+} from '../entity-types';
+import _ from '../lodash';
 
 export default class Entity {
     constructor(declaration) {
@@ -34,7 +35,7 @@ export default class Entity {
 
     checkHealth() {
         let errors = [];
-        const schema = this.schema;
+        const { schema } = this;
 
         // check that field has a name
         if (!_.isne(schema.name)) {

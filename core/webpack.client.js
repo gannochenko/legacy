@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const PeerDepsExternalsPlugin = require('peer-deps-externals-webpack-plugin');
 
 module.exports = (env, argv) => {
     env = env || {};
@@ -57,6 +58,7 @@ module.exports = (env, argv) => {
             new webpack.ProvidePlugin({
                 // varname: path.join(__dirname, `src/lib/module.js`),
             }),
+            new PeerDepsExternalsPlugin(),
             new webpack.DefinePlugin({
                 __DEV__: development,
                 __TEST__: false,

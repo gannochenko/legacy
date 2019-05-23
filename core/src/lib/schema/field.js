@@ -1,5 +1,6 @@
 import { uCFirst } from 'ew-internals';
 import { DB_VARCHAR_DEF_LENGTH } from '../constants';
+import _ from '../lodash';
 
 export const TYPE_STRING = 'string';
 export const TYPE_INTEGER = 'integer';
