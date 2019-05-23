@@ -19,11 +19,7 @@ import {
     ButtonWrap,
 } from './style';
 
-import {
-    TYPE_STRING,
-    TYPE_DATETIME,
-    TYPE_BOOLEAN,
-} from '../../../shared/schema/field';
+import { TYPE_STRING, TYPE_DATETIME, TYPE_BOOLEAN } from 'project-minimum-core';
 
 import PageNavigation from '../PageNavigation';
 import { withModal, DropPanel } from 'ew-internals-ui';

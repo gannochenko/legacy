@@ -2,7 +2,7 @@ import React from 'react';
 import FormField from '../FormField';
 import FormFieldMultiplier, { Add } from '../FormFieldMultiplier';
 import { Input } from './style.js';
-import { TYPE_INTEGER } from '../../../shared/schema/field';
+import { TYPE_INTEGER } from 'project-minimum-core';
 
 export default ({ field, value, error, onChange }) => (
     <FormField

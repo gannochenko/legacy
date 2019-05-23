@@ -2,6 +2,13 @@ import React, { useMemo, useRef } from 'react';
 import { Formik } from 'formik';
 import { withModal } from 'ew-internals-ui';
 import {
+    TYPE_STRING,
+    TYPE_INTEGER,
+    TYPE_BOOLEAN,
+    TYPE_DATETIME,
+    ENTITY_CODE_FIELD_NAME,
+} from 'project-minimum-core';
+import {
     FormContainer,
     Fields,
     ButtonWrap,
@@ -9,13 +16,11 @@ import {
     FormButtons,
 } from './style';
 import Button from '../../material-kit/CustomButtons';
-import * as fieldSchema from '../../../shared/schema/field';
 
 import FormFieldScalar from '../FormFieldScalar';
 import FormFieldBoolean from '../FormFieldBoolean';
 import FormFieldDate from '../FormFieldDate';
 import FormFieldReference from '../FormFieldReference';
-import { ENTITY_CODE_FIELD_NAME } from '../../../shared/constants';
 
 const getField = field => {
     const type = field.getActualType();
@@ -24,13 +29,13 @@ const getField = field => {
         return FormFieldReference;
     }
 
-    if (type === fieldSchema.TYPE_STRING || type === fieldSchema.TYPE_INTEGER) {
+    if (type === TYPE_STRING || type === TYPE_INTEGER) {
         return FormFieldScalar;
     }
-    if (type === fieldSchema.TYPE_BOOLEAN) {
+    if (type === TYPE_BOOLEAN) {
         return FormFieldBoolean;
     }
-    if (type === fieldSchema.TYPE_DATETIME) {
+    if (type === TYPE_DATETIME) {
         return FormFieldDate;
     }
 

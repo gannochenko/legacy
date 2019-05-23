@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
+import { ENTITY_CODE_FIELD_NAME } from 'project-minimum-core';
 import { sanitize } from '../../lib/util';
-import { ENTITY_CODE_FIELD_NAME } from '../../../shared/constants';
 
 export const buildQueryFind = ({
     entity,
