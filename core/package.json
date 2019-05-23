@@ -51,9 +51,12 @@
     },
     "dependencies": {},
     "peerDependencies": {
-        "ew-internals": "x.x",
         "react": "16.x",
-        "yup": "x.x"
+        "yup": "x.x",
+        "lodash.union": "x.x",
+        "lodash.isstring": "x.x",
+        "lodash.isobject": "x.x",
+        "ew-internals": "x.x"
     },
     "husky": {
         "hooks": {

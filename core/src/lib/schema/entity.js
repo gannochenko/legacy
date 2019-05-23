@@ -1,4 +1,4 @@
-import { uCFirst } from 'ew-internals';
+import { uCFirst, convertToCamel } from 'ew-internals';
 import * as yup from 'yup';
 import Field, {
     TYPE_STRING,
@@ -7,7 +7,6 @@ import Field, {
     TYPE_BOOLEAN,
 } from './field';
 import CodeField from './code-field';
-import { convertToCamel } from '../../common/lib/util';
 import {
     ENTITY_USER_NAME,
     ENTITY_GROUP_NAME,
@@ -236,7 +235,7 @@ export default class Entity {
             value = !!value;
         } else if (type === TYPE_INTEGER) {
             value = parseInt(value, 10);
-            if (isNaN(value)) {
+            if (Number.isNaN(value)) {
                 value = 0;
             }
         } else if (type === TYPE_DATETIME) {
@@ -246,7 +245,7 @@ export default class Entity {
 
             if (value instanceof Date) {
                 value = value.toISOString();
-            } else if (isNaN(Date.parse(value))) {
+            } else if (Number.isNaN(Date.parse(value))) {
                 return '';
             }
         } else if (field.isReference()) {
