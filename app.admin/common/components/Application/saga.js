@@ -2,9 +2,6 @@ import { takeLatest, put, call } from 'redux-saga/effects';
 import { Schema } from 'project-minimum-core';
 import * as reducer from './reducer';
 
-console.dir('Schema');
-console.dir(Schema);
-
 function* load({ client }) {
     try {
         const user = {}; // todo

@@ -81,7 +81,7 @@
         "moment": "^2.24.0",
         "naming-style": "^1.0.0",
         "pg": "^7.8.1",
-        "project-minimum-core": "^1.0.0",
+        "project-minimum-core": "^1.0.1",
         "redis-tag-cache": "^1.2.1",
         "reflect-metadata": "^0.1.13",
         "typeorm": "^0.2.14",
