@@ -1,6 +1,7 @@
 import { wrapError } from 'ew-internals';
 import SchemaEntity from '../entity/schema';
 import Schema from '../lib/schema';
+import loadSchema from '../lib/schema-loader';
 
 export default (app, params = {}) => {
     const { connectionManager } = params;
@@ -24,14 +25,13 @@ export default (app, params = {}) => {
                     message: 'Illegal schema type',
                     code: 'illegal_schema_type',
                 });
-                res.status(400);
-            } else {
-                const schema = await Schema.load(type, connectionManager);
-                result.entity = schema.getEntity(entity);
-                res.status(200);
+                return res.status(400).send('{}'); // todo: send something meaningful
             }
 
-            res.send(JSON.stringify(result));
+            const schema = await loadSchema(type, connectionManager);
+            result.entity = schema.getEntity(entity);
+
+            return res.status(200).send(JSON.stringify(result));
         }),
     );
 
@@ -53,13 +53,11 @@ export default (app, params = {}) => {
                     message: 'Illegal schema type',
                     code: 'illegal_schema_type',
                 });
-                res.status(400);
-            } else {
-                result.structure = await Schema.load(type, connectionManager);
-                res.status(200);
+                return res.status(400).send('{}'); // todo: send something meaningful
             }
 
-            res.send(JSON.stringify(result));
+            result.structure = await loadSchema(type, connectionManager);
+            return res.status(200).send(JSON.stringify(result));
         }),
     );
 
@@ -109,7 +107,7 @@ export default (app, params = {}) => {
                 }
             }
 
-            res.status(200).send(JSON.stringify(result));
+            return res.status(200).send(JSON.stringify(result));
         }),
     );
 
