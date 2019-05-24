@@ -13,7 +13,8 @@
   "rules": {
     "prettier/prettier": "error",
     "import/prefer-default-export": "off",
-    "no-use-before-define": ["error", { "functions": false }]
+    "no-use-before-define": ["error", { "functions": false }],
+    "no-underscore-dangle": ["error", { "allow": ["__DEV__", "__TEST__"] }]
   },
   "globals": {
     "__DEV__": true,

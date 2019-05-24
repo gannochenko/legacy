@@ -1,6 +1,7 @@
-import Field, { TYPE_STRING } from './field';
+import { Field } from './field';
+import { TYPE_STRING } from '../field-types';
 
-export default class CodeField extends Field {
+export class CodeField extends Field {
     checkHealth() {
         const errors = super.checkHealth();
         const { schema } = this;

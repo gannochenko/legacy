@@ -6,8 +6,8 @@
         var t = {};
         function n(r) {
             if (t[r]) return t[r].exports;
-            var s = (t[r] = { i: r, l: !1, exports: {} });
-            return e[r].call(s.exports, s, s.exports, n), (s.l = !0), s.exports;
+            var i = (t[r] = { i: r, l: !1, exports: {} });
+            return e[r].call(i.exports, i, i.exports, n), (i.l = !0), i.exports;
         }
         return (
             (n.m = e),
@@ -37,13 +37,13 @@
                     }),
                     2 & t && 'string' != typeof e)
                 )
-                    for (var s in e)
+                    for (var i in e)
                         n.d(
                             r,
-                            s,
+                            i,
                             function(t) {
                                 return e[t];
-                            }.bind(null, s),
+                            }.bind(null, i),
                         );
                 return r;
             }),
@@ -62,7 +62,7 @@
                 return Object.prototype.hasOwnProperty.call(e, t);
             }),
             (n.p = ''),
-            n((n.s = 5))
+            n((n.s = 6))
         );
     })([
         function(e, t) {
@@ -80,48 +80,55 @@
         function(e, t) {
             e.exports = require('lodash.union');
         },
+        function(e, t) {
+            e.exports = require('lodash.uniq');
+        },
         function(e, t, n) {
             'use strict';
             n.r(t);
             const r = 255,
-                s = 'user',
-                i = 'group',
-                a = 'code';
-            var c = n(1),
-                u = n(0),
-                o = n(2),
-                l = n.n(o),
-                m = n(3),
-                h = n.n(m),
-                f = n(4),
+                i = 'user',
+                s = 'group',
+                a = 'code',
+                c = 'string',
+                u = 'integer',
+                o = 'boolean',
+                l = 'datetime';
+            var m = n(1),
+                h = n(0),
+                f = n(2),
                 d = n.n(f),
-                g = {
+                g = n(3),
+                p = n.n(g),
+                _ = n(4),
+                y = n.n(_),
+                E = n(5),
+                N = n.n(E),
+                T = {
                     isArray: Array.isArray,
-                    isString: l.a,
-                    union: d.a,
+                    isString: d.a,
+                    isObject: p.a,
+                    union: y.a,
                     iane: e => Array.isArray(e) && e.length > 0,
-                    ione: e => h()(e) && Object.keys(e).length > 0,
-                    isne: e => l()(e) && e.length > 0,
+                    ione: e => p()(e) && Object.keys(e).length > 0,
+                    isne: e => d()(e) && e.length > 0,
+                    unique: N.a,
                 };
-            const p = 'string',
-                _ = 'integer',
-                y = 'boolean',
-                N = 'datetime';
-            class E {
+            class b {
                 constructor(e) {
-                    g.ione(e) || (e = {}), (this.schema = e);
+                    T.ione(e) || (e = {}), (this.schema = e);
                 }
                 checkHealth() {
                     const e = [],
                         t = this.schema;
                     return (
-                        g.isne(t.name) ||
+                        T.isne(t.name) ||
                             e.push({
                                 message: 'Field does not have a name',
                                 code: 'field_name_empty',
                                 reference: null,
                             }),
-                        g.isne(this.getActualType()) ||
+                        T.isne(this.getActualType()) ||
                             e.push({
                                 message: 'Field does not have a type',
                                 code: 'field_type_empty',
@@ -138,7 +145,7 @@
                     return e ? (this.isMultiple() ? e[0] : e) : null;
                 }
                 getLength() {
-                    if (this.getType() === p) {
+                    if (this.getType() === TYPE_STRING) {
                         const e = parseInt(this.schema.length, 10);
                         return Number.isNaN(e) ? r : e;
                     }
@@ -148,22 +155,29 @@
                     return this.schema.name;
                 }
                 getDisplayName() {
-                    return g.isne(this.schema.label)
+                    return T.isne(this.schema.label)
                         ? this.schema.label
-                        : Object(c.uCFirst)(this.getName()).replace(/_/g, ' ');
+                        : Object(m.uCFirst)(this.getName()).replace(/_/g, ' ');
                 }
                 getReferencedEntityName() {
                     const e = this.getActualType();
-                    return [p, y, N, _].indexOf(e) >= 0 ? null : e;
+                    return [
+                        TYPE_STRING,
+                        TYPE_BOOLEAN,
+                        TYPE_DATETIME,
+                        TYPE_INTEGER,
+                    ].indexOf(e) >= 0
+                        ? null
+                        : e;
                 }
                 getReferenceFieldName() {
                     return this.getReferencedEntityName();
                 }
                 isMultiple() {
-                    return g.isArray(this.schema.type);
+                    return T.isArray(this.schema.type);
                 }
                 isReference() {
-                    return g.isne(this.getReferencedEntityName());
+                    return T.isne(this.getReferencedEntityName());
                 }
                 isSortable() {
                     return !this.isMultiple() && !this.isReference();
@@ -178,7 +192,7 @@
                     return this.schema;
                 }
             }
-            class b extends E {
+            class A extends b {
                 checkHealth() {
                     const e = super.checkHealth(),
                         { schema: t } = this;
@@ -188,7 +202,7 @@
                             code: 'field_code_not_unique',
                             reference: t.name,
                         }),
-                        this.getActualType() !== p &&
+                        this.getActualType() !== c &&
                             e.push({
                                 message:
                                     'System field "code" should be of type string',
@@ -215,27 +229,27 @@
                     );
                 }
             }
-            class T {
+            class R {
                 constructor(e) {
-                    g.ione(e) || (e = {}),
-                        g.iane(e.schema) || (e.schema = []),
+                    T.ione(e) || (e = {}),
+                        T.iane(e.schema) || (e.schema = []),
                         (this.schema = {
                             name: e.name || '',
                             schema: e.schema.map(e =>
-                                e.name === a ? new b(e) : new E(e),
+                                e.name === a ? new A(e) : new b(e),
                             ),
                         });
                 }
                 checkHealth() {
                     let e = [];
                     const { schema: t } = this;
-                    g.isne(t.name) ||
+                    T.isne(t.name) ||
                         e.push({
                             message: 'Entity does not have a name',
                             code: 'entity_name_empty',
                             reference: null,
                         }),
-                        g.iane(t.schema) ||
+                        T.iane(t.schema) ||
                             e.push({
                                 message: 'Entity does not have a single field',
                                 code: 'entityschema_empty',
@@ -244,8 +258,8 @@
                     const n = {};
                     return (
                         t.schema.forEach(r => {
-                            const s = r.checkHealth();
-                            g.iane(s) && (e = g.union(e, s)),
+                            const i = r.checkHealth();
+                            T.iane(i) && (e = T.union(e, i)),
                                 r.getName() in n &&
                                     e.push({
                                         message: `Field "${r.getName()}" met several times`,
@@ -261,8 +275,8 @@
                                 code: 'entity_code_field_missing',
                                 reference: t.name,
                             }),
-                        !g.isne(t.name) ||
-                            (t.name !== s && t.name !== i) ||
+                        !T.isne(t.name) ||
+                            (t.name !== i && t.name !== s) ||
                             e.push({
                                 message: 'Entity name is a reserved name',
                                 code: 'entity_name_reserved',
@@ -275,17 +289,17 @@
                     return this.schema.name;
                 }
                 getCamelName() {
-                    return Object(c.convertToCamel)(
+                    return Object(m.convertToCamel)(
                         this.getName().toLowerCase(),
                     );
                 }
                 getDisplayName() {
-                    return Object(c.uCFirst)(this.getName()).replace(/_/g, ' ');
+                    return Object(m.uCFirst)(this.getName()).replace(/_/g, ' ');
                 }
                 getReferences() {
                     return this.schema.schema
                         .map(e =>
-                            g.isne(e.getReferenceFieldName()) ? e : null,
+                            T.isne(e.getReferenceFieldName()) ? e : null,
                         )
                         .filter(e => e);
                 }
@@ -298,7 +312,7 @@
                 getPresentationField() {
                     return (
                         this.schema.schema.find(
-                            e => e.getType() === p && e.getName() !== a,
+                            e => e.getType() === c && e.getName() !== a,
                         ) || null
                     );
                 }
@@ -307,19 +321,19 @@
                     return (
                         this.schema.schema.forEach(t => {
                             let n = null;
-                            if (t.isReference()) n = u.string();
+                            if (t.isReference()) n = h.string();
                             else {
                                 const e = t.getActualType();
                                 n =
-                                    e === _
-                                        ? u.number().integer()
-                                        : e === y
-                                        ? u.boolean()
-                                        : e === N
-                                        ? u.date()
-                                        : u.string();
+                                    e === u
+                                        ? h.number().integer()
+                                        : e === o
+                                        ? h.boolean()
+                                        : e === l
+                                        ? h.date()
+                                        : h.string();
                             }
-                            t.isMultiple() && (n = u.array().of(n)),
+                            t.isMultiple() && (n = h.array().of(n)),
                                 (n = t.isMandatory()
                                     ? n.required(
                                           `${t.getDisplayName()} is required`,
@@ -327,62 +341,62 @@
                                     : n.nullable()),
                                 (e[t.getName()] = n);
                         }),
-                        u.object().shape(e)
+                        h.object().shape(e)
                     );
                 }
                 prepareData(e) {
                     const t = {};
-                    return g.ione(e)
+                    return T.ione(e)
                         ? (this.getFields().forEach(n => {
                               const r = n.getName();
                               if (r === a) return;
                               if (!(r in e)) return;
-                              let s = e[r];
+                              let i = e[r];
                               n.isMultiple()
-                                  ? ((s = g.isArray(s)
-                                        ? s.map(e => this.castFieldValue(n, e))
+                                  ? ((i = T.isArray(i)
+                                        ? i.map(e => this.castFieldValue(n, e))
                                         : []),
-                                    n.isReference() && (s = g.unique(s)))
-                                  : (s = this.castFieldValue(n, s)),
-                                  (t[r] = s);
+                                    n.isReference() && (i = T.unique(i)))
+                                  : (i = this.castFieldValue(n, i)),
+                                  (t[r] = i);
                           }),
                           t)
                         : t;
                 }
                 castFieldValue(e, t) {
                     const n = e.getActualType();
-                    if (n === p) t = null == t ? '' : t.toString();
-                    else if (n === y) t = !!t;
-                    else if (n === _)
+                    if (n === c) t = null == t ? '' : t.toString();
+                    else if (n === o) t = !!t;
+                    else if (n === u)
                         (t = parseInt(t, 10)), Number.isNaN(t) && (t = 0);
-                    else if (n === N) {
+                    else if (n === l) {
                         if (null == t) return '';
                         if (t instanceof Date) t = t.toISOString();
                         else if (Number.isNaN(Date.parse(t))) return '';
                     } else
                         e.isReference()
-                            ? g.isString(t) ||
-                              (g.isObject(t)
+                            ? T.isString(t) ||
+                              (T.isObject(t)
                                   ? a in t &&
-                                    ((t = t[a]), g.isne(t) || (t = ''))
+                                    ((t = t[a]), T.isne(t) || (t = ''))
                                   : (t = ''))
                             : (t = '');
                     return t;
                 }
             }
-            class A {
+            class O {
                 constructor(e) {
-                    g.iane(e) || (e = []), (this.schema = e.map(e => new T(e)));
+                    T.iane(e) || (e = []), (this.schema = e.map(e => new R(e)));
                 }
                 checkHealth() {
                     let e = [];
                     const t = this.schema;
-                    if (!g.iane(t)) return e;
+                    if (!T.iane(t)) return e;
                     const n = {};
                     return (
                         t.forEach(t => {
                             const r = t.checkHealth();
-                            g.iane(r) && (e = g.union(e, r)),
+                            T.iane(r) && (e = T.union(e, r)),
                                 t.getName() in n &&
                                     e.push({
                                         message: `Entity "${t.getName()}" met several times`,
@@ -417,7 +431,7 @@
                     let e = [];
                     return (
                         this.schema.forEach(t => {
-                            e = g.union(e, t.getReferences());
+                            e = T.union(e, t.getReferences());
                         }),
                         e
                     );
@@ -454,25 +468,37 @@
                     return 50;
                 }),
                 n.d(t, 'ENTITY_USER_NAME', function() {
-                    return s;
+                    return i;
                 }),
                 n.d(t, 'ENTITY_GROUP_NAME', function() {
-                    return i;
+                    return s;
                 }),
                 n.d(t, 'ENTITY_CODE_FIELD_NAME', function() {
                     return a;
                 }),
+                n.d(t, 'TYPE_STRING', function() {
+                    return c;
+                }),
+                n.d(t, 'TYPE_INTEGER', function() {
+                    return u;
+                }),
+                n.d(t, 'TYPE_BOOLEAN', function() {
+                    return o;
+                }),
+                n.d(t, 'TYPE_DATETIME', function() {
+                    return l;
+                }),
                 n.d(t, 'Schema', function() {
-                    return A;
+                    return O;
                 }),
                 n.d(t, 'CodeField', function() {
-                    return b;
+                    return A;
                 }),
                 n.d(t, 'Field', function() {
-                    return E;
+                    return b;
                 }),
                 n.d(t, 'Entity', function() {
-                    return T;
+                    return R;
                 });
         },
     ]),

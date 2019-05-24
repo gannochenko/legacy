@@ -8,6 +8,10 @@ import {
     TYPE_DATETIME,
     ENTITY_CODE_FIELD_NAME,
 } from 'project-minimum-core';
+
+console.dir(TYPE_STRING);
+console.dir(ENTITY_CODE_FIELD_NAME);
+
 import {
     FormContainer,
     Fields,

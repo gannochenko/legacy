@@ -1,7 +1,7 @@
-import Entity from './entity';
+import { Entity } from './entity';
 import _ from '../lodash';
 
-export default class Schema {
+export class Schema {
     constructor(declaration) {
         if (!_.iane(declaration)) {
             declaration = [];

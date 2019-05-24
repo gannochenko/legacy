@@ -62,7 +62,7 @@
                 return Object.prototype.hasOwnProperty.call(e, t);
             }),
             (n.p = ''),
-            n((n.s = 5))
+            n((n.s = 6))
         );
     })([
         function(e, t) {
@@ -80,6 +80,9 @@
         function(e, t) {
             e.exports = require('lodash.union');
         },
+        function(e, t) {
+            e.exports = require('lodash.uniq');
+        },
         function(e, t, n) {
             'use strict';
             n.r(t);
@@ -96,9 +99,12 @@
                 m = n.n(h),
                 y = n(4),
                 p = n.n(y),
-                d = {
+                d = n(5),
+                g = n.n(d),
+                v = {
                     isArray: Array.isArray,
                     isString: f.a,
+                    isObject: m.a,
                     union: p.a,
                     iane: function(e) {
                         return Array.isArray(e) && e.length > 0;
@@ -109,8 +115,9 @@
                     isne: function(e) {
                         return f()(e) && e.length > 0;
                     },
+                    unique: g.a,
                 };
-            function g(e, t) {
+            function _(e, t) {
                 for (var n = 0; n < t.length; n++) {
                     var r = t[n];
                     (r.enumerable = r.enumerable || !1),
@@ -119,158 +126,154 @@
                         Object.defineProperty(e, r.key, r);
                 }
             }
-            var v = 'string',
-                _ = 'integer',
-                b = 'boolean',
-                N = 'datetime',
-                E = (function() {
-                    function e(t) {
-                        !(function(e, t) {
-                            if (!(e instanceof t))
-                                throw new TypeError(
-                                    'Cannot call a class as a function',
+            var b = (function() {
+                function e(t) {
+                    !(function(e, t) {
+                        if (!(e instanceof t))
+                            throw new TypeError(
+                                'Cannot call a class as a function',
+                            );
+                    })(this, e),
+                        v.ione(t) || (t = {}),
+                        (this.schema = t);
+                }
+                var t, n, r;
+                return (
+                    (t = e),
+                    (n = [
+                        {
+                            key: 'checkHealth',
+                            value: function() {
+                                var e = [],
+                                    t = this.schema;
+                                return (
+                                    v.isne(t.name) ||
+                                        e.push({
+                                            message:
+                                                'Field does not have a name',
+                                            code: 'field_name_empty',
+                                            reference: null,
+                                        }),
+                                    v.isne(this.getActualType()) ||
+                                        e.push({
+                                            message:
+                                                'Field does not have a type',
+                                            code: 'field_type_empty',
+                                            reference: t.name,
+                                        }),
+                                    e
                                 );
-                        })(this, e),
-                            d.ione(t) || (t = {}),
-                            (this.schema = t);
-                    }
-                    var t, n, r;
-                    return (
-                        (t = e),
-                        (n = [
-                            {
-                                key: 'checkHealth',
-                                value: function() {
-                                    var e = [],
-                                        t = this.schema;
-                                    return (
-                                        d.isne(t.name) ||
-                                            e.push({
-                                                message:
-                                                    'Field does not have a name',
-                                                code: 'field_name_empty',
-                                                reference: null,
-                                            }),
-                                        d.isne(this.getActualType()) ||
-                                            e.push({
-                                                message:
-                                                    'Field does not have a type',
-                                                code: 'field_type_empty',
-                                                reference: t.name,
-                                            }),
-                                        e
-                                    );
-                                },
                             },
-                            {
-                                key: 'getType',
-                                value: function() {
-                                    return this.schema.type || null;
-                                },
+                        },
+                        {
+                            key: 'getType',
+                            value: function() {
+                                return this.schema.type || null;
                             },
-                            {
-                                key: 'getActualType',
-                                value: function() {
-                                    var e = this.getType();
-                                    return e
-                                        ? this.isMultiple()
-                                            ? e[0]
-                                            : e
-                                        : null;
-                                },
+                        },
+                        {
+                            key: 'getActualType',
+                            value: function() {
+                                var e = this.getType();
+                                return e
+                                    ? this.isMultiple()
+                                        ? e[0]
+                                        : e
+                                    : null;
                             },
-                            {
-                                key: 'getLength',
-                                value: function() {
-                                    if (this.getType() === v) {
-                                        var e = parseInt(
-                                            this.schema.length,
-                                            10,
-                                        );
-                                        return Number.isNaN(e) ? 255 : e;
-                                    }
-                                    return null;
-                                },
+                        },
+                        {
+                            key: 'getLength',
+                            value: function() {
+                                if (this.getType() === TYPE_STRING) {
+                                    var e = parseInt(this.schema.length, 10);
+                                    return Number.isNaN(e) ? 255 : e;
+                                }
+                                return null;
                             },
-                            {
-                                key: 'getName',
-                                value: function() {
-                                    return this.schema.name;
-                                },
+                        },
+                        {
+                            key: 'getName',
+                            value: function() {
+                                return this.schema.name;
                             },
-                            {
-                                key: 'getDisplayName',
-                                value: function() {
-                                    return d.isne(this.schema.label)
-                                        ? this.schema.label
-                                        : Object(c.uCFirst)(
-                                              this.getName(),
-                                          ).replace(/_/g, ' ');
-                                },
+                        },
+                        {
+                            key: 'getDisplayName',
+                            value: function() {
+                                return v.isne(this.schema.label)
+                                    ? this.schema.label
+                                    : Object(c.uCFirst)(this.getName()).replace(
+                                          /_/g,
+                                          ' ',
+                                      );
                             },
-                            {
-                                key: 'getReferencedEntityName',
-                                value: function() {
-                                    var e = this.getActualType();
-                                    return [v, b, N, _].indexOf(e) >= 0
-                                        ? null
-                                        : e;
-                                },
+                        },
+                        {
+                            key: 'getReferencedEntityName',
+                            value: function() {
+                                var e = this.getActualType();
+                                return [
+                                    TYPE_STRING,
+                                    TYPE_BOOLEAN,
+                                    TYPE_DATETIME,
+                                    TYPE_INTEGER,
+                                ].indexOf(e) >= 0
+                                    ? null
+                                    : e;
                             },
-                            {
-                                key: 'getReferenceFieldName',
-                                value: function() {
-                                    return this.getReferencedEntityName();
-                                },
+                        },
+                        {
+                            key: 'getReferenceFieldName',
+                            value: function() {
+                                return this.getReferencedEntityName();
                             },
-                            {
-                                key: 'isMultiple',
-                                value: function() {
-                                    return d.isArray(this.schema.type);
-                                },
+                        },
+                        {
+                            key: 'isMultiple',
+                            value: function() {
+                                return v.isArray(this.schema.type);
                             },
-                            {
-                                key: 'isReference',
-                                value: function() {
-                                    return d.isne(
-                                        this.getReferencedEntityName(),
-                                    );
-                                },
+                        },
+                        {
+                            key: 'isReference',
+                            value: function() {
+                                return v.isne(this.getReferencedEntityName());
                             },
-                            {
-                                key: 'isSortable',
-                                value: function() {
-                                    return (
-                                        !this.isMultiple() &&
-                                        !this.isReference()
-                                    );
-                                },
+                        },
+                        {
+                            key: 'isSortable',
+                            value: function() {
+                                return (
+                                    !this.isMultiple() && !this.isReference()
+                                );
                             },
-                            {
-                                key: 'isMandatory',
-                                value: function() {
-                                    return !0 === this.schema.required;
-                                },
+                        },
+                        {
+                            key: 'isMandatory',
+                            value: function() {
+                                return !0 === this.schema.required;
                             },
-                            {
-                                key: 'isPreview',
-                                value: function() {
-                                    return !0 === this.schema.preview;
-                                },
+                        },
+                        {
+                            key: 'isPreview',
+                            value: function() {
+                                return !0 === this.schema.preview;
                             },
-                            {
-                                key: 'toJSON',
-                                value: function() {
-                                    return this.schema;
-                                },
+                        },
+                        {
+                            key: 'toJSON',
+                            value: function() {
+                                return this.schema;
                             },
-                        ]) && g(t.prototype, n),
-                        r && g(t, r),
-                        e
-                    );
-                })();
-            function k(e) {
-                return (k =
+                        },
+                    ]) && _(t.prototype, n),
+                    r && _(t, r),
+                    e
+                );
+            })();
+            function E(e) {
+                return (E =
                     'function' == typeof Symbol &&
                     'symbol' == typeof Symbol.iterator
                         ? function(e) {
@@ -285,7 +288,7 @@
                                   : typeof e;
                           })(e);
             }
-            function O(e, t) {
+            function N(e, t) {
                 for (var n = 0; n < t.length; n++) {
                     var r = t[n];
                     (r.enumerable = r.enumerable || !1),
@@ -295,7 +298,7 @@
                 }
             }
             function T(e, t) {
-                return !t || ('object' !== k(t) && 'function' != typeof t)
+                return !t || ('object' !== E(t) && 'function' != typeof t)
                     ? (function(e) {
                           if (void 0 === e)
                               throw new ReferenceError(
@@ -305,8 +308,8 @@
                       })(e)
                     : t;
             }
-            function R(e, t, n) {
-                return (R =
+            function k(e, t, n) {
+                return (k =
                     'undefined' != typeof Reflect && Reflect.get
                         ? Reflect.get
                         : function(e, t, n) {
@@ -316,7 +319,7 @@
                                       !Object.prototype.hasOwnProperty.call(
                                           e,
                                           t,
-                                      ) && null !== (e = A(e));
+                                      ) && null !== (e = O(e));
 
                                   );
                                   return e;
@@ -327,21 +330,21 @@
                               }
                           })(e, t, n || e);
             }
-            function A(e) {
-                return (A = Object.setPrototypeOf
+            function O(e) {
+                return (O = Object.setPrototypeOf
                     ? Object.getPrototypeOf
                     : function(e) {
                           return e.__proto__ || Object.getPrototypeOf(e);
                       })(e);
             }
-            function S(e, t) {
-                return (S =
+            function R(e, t) {
+                return (R =
                     Object.setPrototypeOf ||
                     function(e, t) {
                         return (e.__proto__ = t), e;
                     })(e, t);
             }
-            var w = (function(e) {
+            var A = (function(e) {
                 function t() {
                     return (
                         (function(e, t) {
@@ -350,7 +353,7 @@
                                     'Cannot call a class as a function',
                                 );
                         })(this, t),
-                        T(this, A(t).apply(this, arguments))
+                        T(this, O(t).apply(this, arguments))
                     );
                 }
                 var n, r, i;
@@ -367,15 +370,15 @@
                                 configurable: !0,
                             },
                         })),
-                            t && S(e, t);
-                    })(t, E),
+                            t && R(e, t);
+                    })(t, b),
                     (n = t),
                     (r = [
                         {
                             key: 'checkHealth',
                             value: function() {
-                                var e = R(
-                                        A(t.prototype),
+                                var e = k(
+                                        O(t.prototype),
                                         'checkHealth',
                                         this,
                                     ).call(this),
@@ -387,7 +390,7 @@
                                         code: 'field_code_not_unique',
                                         reference: n.name,
                                     }),
-                                    this.getActualType() !== v &&
+                                    'string' !== this.getActualType() &&
                                         e.push({
                                             message:
                                                 'System field "code" should be of type string',
@@ -414,12 +417,12 @@
                                 );
                             },
                         },
-                    ]) && O(n.prototype, r),
-                    i && O(n, i),
+                    ]) && N(n.prototype, r),
+                    i && N(n, i),
                     t
                 );
             })();
-            function j(e, t) {
+            function S(e, t) {
                 for (var n = 0; n < t.length; n++) {
                     var r = t[n];
                     (r.enumerable = r.enumerable || !1),
@@ -428,7 +431,7 @@
                         Object.defineProperty(e, r.key, r);
                 }
             }
-            var F = (function() {
+            var P = (function() {
                 function e(t) {
                     !(function(e, t) {
                         if (!(e instanceof t))
@@ -436,12 +439,12 @@
                                 'Cannot call a class as a function',
                             );
                     })(this, e),
-                        d.ione(t) || (t = {}),
-                        d.iane(t.schema) || (t.schema = []),
+                        v.ione(t) || (t = {}),
+                        v.iane(t.schema) || (t.schema = []),
                         (this.schema = {
                             name: t.name || '',
                             schema: t.schema.map(function(e) {
-                                return e.name === o ? new w(e) : new E(e);
+                                return e.name === o ? new A(e) : new b(e);
                             }),
                         });
                 }
@@ -454,13 +457,13 @@
                             value: function() {
                                 var e = [],
                                     t = this.schema;
-                                d.isne(t.name) ||
+                                v.isne(t.name) ||
                                     e.push({
                                         message: 'Entity does not have a name',
                                         code: 'entity_name_empty',
                                         reference: null,
                                     }),
-                                    d.iane(t.schema) ||
+                                    v.iane(t.schema) ||
                                         e.push({
                                             message:
                                                 'Entity does not have a single field',
@@ -471,7 +474,7 @@
                                 return (
                                     t.schema.forEach(function(r) {
                                         var i = r.checkHealth();
-                                        d.iane(i) && (e = d.union(e, i)),
+                                        v.iane(i) && (e = v.union(e, i)),
                                             r.getName() in n &&
                                                 e.push({
                                                     message: 'Field "'.concat(
@@ -494,7 +497,7 @@
                                             code: 'entity_code_field_missing',
                                             reference: t.name,
                                         }),
-                                    !d.isne(t.name) ||
+                                    !v.isne(t.name) ||
                                         ('user' !== t.name &&
                                             'group' !== t.name) ||
                                         e.push({
@@ -534,7 +537,7 @@
                             value: function() {
                                 return this.schema.schema
                                     .map(function(e) {
-                                        return d.isne(e.getReferenceFieldName())
+                                        return v.isne(e.getReferenceFieldName())
                                             ? e
                                             : null;
                                     })
@@ -561,7 +564,7 @@
                                 return (
                                     this.schema.schema.find(function(e) {
                                         return (
-                                            e.getType() === v &&
+                                            'string' === e.getType() &&
                                             e.getName() !== o
                                         );
                                     }) || null
@@ -579,11 +582,11 @@
                                         else {
                                             var r = t.getActualType();
                                             n =
-                                                r === _
+                                                'integer' === r
                                                     ? s.number().integer()
-                                                    : r === b
+                                                    : 'boolean' === r
                                                     ? s.boolean()
-                                                    : r === N
+                                                    : 'datetime' === r
                                                     ? s.date()
                                                     : s.string();
                                         }
@@ -607,13 +610,13 @@
                             value: function(e) {
                                 var t = this,
                                     n = {};
-                                return d.ione(e)
+                                return v.ione(e)
                                     ? (this.getFields().forEach(function(r) {
                                           var i = r.getName();
                                           if (i !== o && i in e) {
                                               var a = e[i];
                                               r.isMultiple()
-                                                  ? ((a = d.isArray(a)
+                                                  ? ((a = v.isArray(a)
                                                         ? a.map(function(e) {
                                                               return t.castFieldValue(
                                                                   r,
@@ -622,7 +625,7 @@
                                                           })
                                                         : []),
                                                     r.isReference() &&
-                                                        (a = d.unique(a)))
+                                                        (a = v.unique(a)))
                                                   : (a = t.castFieldValue(
                                                         r,
                                                         a,
@@ -638,34 +641,35 @@
                             key: 'castFieldValue',
                             value: function(e, t) {
                                 var n = e.getActualType();
-                                if (n === v) t = null == t ? '' : t.toString();
-                                else if (n === b) t = !!t;
-                                else if (n === _)
+                                if ('string' === n)
+                                    t = null == t ? '' : t.toString();
+                                else if ('boolean' === n) t = !!t;
+                                else if ('integer' === n)
                                     (t = parseInt(t, 10)),
                                         Number.isNaN(t) && (t = 0);
-                                else if (n === N) {
+                                else if ('datetime' === n) {
                                     if (null == t) return '';
                                     if (t instanceof Date) t = t.toISOString();
                                     else if (Number.isNaN(Date.parse(t)))
                                         return '';
                                 } else
                                     e.isReference()
-                                        ? d.isString(t) ||
-                                          (d.isObject(t)
+                                        ? v.isString(t) ||
+                                          (v.isObject(t)
                                               ? o in t &&
                                                 ((t = t[o]),
-                                                d.isne(t) || (t = ''))
+                                                v.isne(t) || (t = ''))
                                               : (t = ''))
                                         : (t = '');
                                 return t;
                             },
                         },
-                    ]) && j(t.prototype, n),
-                    r && j(t, r),
+                    ]) && S(t.prototype, n),
+                    r && S(t, r),
                     e
                 );
             })();
-            function P(e, t) {
+            function j(e, t) {
                 for (var n = 0; n < t.length; n++) {
                     var r = t[n];
                     (r.enumerable = r.enumerable || !1),
@@ -674,7 +678,7 @@
                         Object.defineProperty(e, r.key, r);
                 }
             }
-            var D = (function() {
+            var w = (function() {
                 function e(t) {
                     !(function(e, t) {
                         if (!(e instanceof t))
@@ -682,9 +686,9 @@
                                 'Cannot call a class as a function',
                             );
                     })(this, e),
-                        d.iane(t) || (t = []),
+                        v.iane(t) || (t = []),
                         (this.schema = t.map(function(e) {
-                            return new F(e);
+                            return new P(e);
                         }));
                 }
                 var t, n, r;
@@ -697,12 +701,12 @@
                                 var e = this,
                                     t = [],
                                     n = this.schema;
-                                if (!d.iane(n)) return t;
+                                if (!v.iane(n)) return t;
                                 var r = {};
                                 return (
                                     n.forEach(function(e) {
                                         var n = e.checkHealth();
-                                        d.iane(n) && (t = d.union(t, n)),
+                                        v.iane(n) && (t = v.union(t, n)),
                                             e.getName() in r &&
                                                 t.push({
                                                     message: 'Entity "'.concat(
@@ -759,7 +763,7 @@
                                 var e = [];
                                 return (
                                     this.schema.forEach(function(t) {
-                                        e = d.union(e, t.getReferences());
+                                        e = v.union(e, t.getReferences());
                                     }),
                                     e
                                 );
@@ -771,8 +775,8 @@
                                 return !this.schema.length;
                             },
                         },
-                    ]) && P(t.prototype, n),
-                    r && P(t, r),
+                    ]) && j(t.prototype, n),
+                    r && j(t, r),
                     e
                 );
             })();
@@ -812,17 +816,29 @@
                 n.d(t, 'ENTITY_CODE_FIELD_NAME', function() {
                     return o;
                 }),
-                n.d(t, 'Schema', function() {
-                    return D;
+                n.d(t, 'TYPE_STRING', function() {
+                    return 'string';
                 }),
-                n.d(t, 'CodeField', function() {
+                n.d(t, 'TYPE_INTEGER', function() {
+                    return 'integer';
+                }),
+                n.d(t, 'TYPE_BOOLEAN', function() {
+                    return 'boolean';
+                }),
+                n.d(t, 'TYPE_DATETIME', function() {
+                    return 'datetime';
+                }),
+                n.d(t, 'Schema', function() {
                     return w;
                 }),
+                n.d(t, 'CodeField', function() {
+                    return A;
+                }),
                 n.d(t, 'Field', function() {
-                    return E;
+                    return b;
                 }),
                 n.d(t, 'Entity', function() {
-                    return F;
+                    return P;
                 });
         },
     ]),

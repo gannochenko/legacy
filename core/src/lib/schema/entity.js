@@ -1,12 +1,13 @@
 import { uCFirst, convertToCamel } from 'ew-internals';
 import * as yup from 'yup';
-import Field, {
+import { Field } from './field';
+import {
     TYPE_STRING,
     TYPE_INTEGER,
     TYPE_DATETIME,
     TYPE_BOOLEAN,
-} from './field';
-import CodeField from './code-field';
+} from '../field-types';
+import { CodeField } from './code-field';
 import {
     ENTITY_USER_NAME,
     ENTITY_GROUP_NAME,
@@ -14,7 +15,7 @@ import {
 } from '../entity-types';
 import _ from '../lodash';
 
-export default class Entity {
+export class Entity {
     constructor(declaration) {
         if (!_.ione(declaration)) {
             declaration = {};
