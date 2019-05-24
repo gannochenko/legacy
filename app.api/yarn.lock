@@ -6132,9 +6132,9 @@ progress@^2.0.0:
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
 
 project-minimum-core@^1.0.1:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/project-minimum-core/-/project-minimum-core-1.0.2.tgz#6640d5f7ae55b96d4c0c9ac4850e981de906a852"
-  integrity sha512-dYY0UgvCmPBlACxdtfNzycnqQ9Fss2o5xoMZ98Ey4gteCmJuQz8DTiR3NSUUjaU3qN704QtDt3M/Ev+6cDjdFw==
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/project-minimum-core/-/project-minimum-core-1.0.5.tgz#5447eacef3884a3fb325372a26090ccfdceceb1b"
+  integrity sha512-DCs9kKOYLywD0rKUnvtOVWG/PbKsvgrE0kq18ZiZBjy4auhuVDvFy6qDfZJgR+8aoLGYk0kJAYOR8mRSCk0qMQ==
 
 promise-inflight@^1.0.1:
   version "1.0.1"
