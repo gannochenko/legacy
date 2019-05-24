@@ -6,7 +6,7 @@ function* load() {
         const data = {};
         yield put({ type: reducer.LOAD_SUCCESS, payload: { data } });
     } catch (error) {
-        yield put({ type: reducer.LOAD_FAILURE, payload: error });
+        yield put({ type: reducer.LOAD_FAILURE, payload: [error] });
         if (__DEV__) {
             console.error(error);
         }

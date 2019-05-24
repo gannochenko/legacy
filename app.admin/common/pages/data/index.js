@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
+import { withNotification } from 'ew-internals-ui';
 // import { stringify, parse } from '@m59/qs';
 import { LOAD, UNLOAD, DELETE } from './reducer';
 import { withClient } from '../../lib/client';
@@ -38,6 +39,8 @@ const DataPage = ({
     loading,
     data,
     count,
+    error,
+    notify,
 }) => {
     const entityName = _.get(route, 'match.params.entity_name');
     const entity = schema.getEntity(entityName);
@@ -63,6 +66,17 @@ const DataPage = ({
             },
         });
     }, [entity.getName(), search]);
+
+    // show error
+    useEffect(() => {
+        if (_.iane(error)) {
+            notify({
+                text: error[0].message,
+                type: 'error',
+                code: 'error',
+            });
+        }
+    }, [error]);
 
     // cleanup data on unmount
     useEffect(
@@ -150,6 +164,8 @@ const DataPage = ({
     );
 };
 
-export default withClient(
-    connect(s => ({ ...s.data, schema: s.application.schema }))(DataPage),
+export default withNotification(
+    withClient(
+        connect(s => ({ ...s.data, schema: s.application.schema }))(DataPage),
+    ),
 );

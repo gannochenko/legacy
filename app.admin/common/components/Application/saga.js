@@ -11,12 +11,18 @@ function* load({ client }) {
         if (result.data.structure && !_.iane(result.data.errors)) {
             schema = new Schema(result.data.structure);
         } else {
-            // todo: handle errors
+            yield put({
+                type: reducer.LOAD_FAILURE,
+                payload: result.data.errors,
+            });
+            if (__DEV__) {
+                console.error(result.data.errors);
+            }
         }
 
         yield put({ type: reducer.LOAD_SUCCESS, payload: { user, schema } });
     } catch (error) {
-        yield put({ type: reducer.LOAD_FAILURE, payload: error });
+        yield put({ type: reducer.LOAD_FAILURE, payload: [error] });
         if (__DEV__) {
             console.error(error);
         }

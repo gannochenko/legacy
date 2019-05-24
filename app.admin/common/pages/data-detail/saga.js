@@ -32,7 +32,7 @@ function* load(params) {
             });
         }
     } catch (error) {
-        yield put({ type: reducer.LOAD_FAILURE, payload: error });
+        yield put({ type: reducer.LOAD_FAILURE, payload: [error] });
         if (__DEV__) {
             console.error(error);
         }

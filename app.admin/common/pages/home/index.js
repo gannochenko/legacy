@@ -1,18 +1,29 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { withNotification } from 'ew-internals-ui';
+
 import { LOAD } from './reducer';
-import { withSettings } from '../../lib/settings';
-
-import Button from '../../material-kit/CustomButtons';
 import Layout from '../../components/Layout';
+import { withClient } from '../../lib/client';
 
-const HomePage = ({ dispatch, settings }) => {
+const HomePage = ({ dispatch, settings, error, notify }) => {
     useEffect(() => {
         dispatch({
             type: LOAD,
             settings,
         });
     }, []);
+
+    // show error
+    useEffect(() => {
+        if (_.iane(error)) {
+            notify({
+                text: error[0].message,
+                type: 'error',
+                code: 'error',
+            });
+        }
+    }, [error]);
 
     return (
         <Layout>
@@ -21,4 +32,4 @@ const HomePage = ({ dispatch, settings }) => {
     );
 };
 
-export default withSettings(connect(x => x.home)(HomePage));
+export default withNotification(withClient(connect(x => x.home)(HomePage)));

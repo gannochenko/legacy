@@ -5,14 +5,26 @@ import { withSettings } from '../../lib/settings';
 
 // import Button from '../../material-kit/CustomButtons';
 import Layout from '../../components/Layout';
+import { withNotification } from 'ew-internals-ui';
 
-const SchemaPage = ({ dispatch, settings }) => {
+const SchemaPage = ({ dispatch, settings, error, notify }) => {
     useEffect(() => {
         dispatch({
             type: LOAD,
             settings,
         });
     }, []);
+
+    // show error
+    useEffect(() => {
+        if (_.iane(error)) {
+            notify({
+                text: error[0].message,
+                type: 'error',
+                code: 'error',
+            });
+        }
+    }, [error]);
 
     return (
         <Layout>
@@ -21,4 +33,6 @@ const SchemaPage = ({ dispatch, settings }) => {
     );
 };
 
-export default withSettings(connect(x => x.schema)(SchemaPage));
+export default withNotification(
+    withSettings(connect(x => x.schema)(SchemaPage)),
+);
