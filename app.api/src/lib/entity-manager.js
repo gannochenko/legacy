@@ -4,7 +4,7 @@ import { getRefName, getRefTableName, getTableName } from './entity-util';
 
 export default class EntityManager {
     constructor(schemaProvider) {
-        this._schemaProvider = schemaProvider;
+        this.schemaProvider = schemaProvider;
     }
 
     /**
@@ -14,7 +14,7 @@ export default class EntityManager {
     async get() {
         if (!this._list) {
             const result = {};
-            (await this._schemaProvider.get()).forEach(entity => {
+            (await this.schemaProvider.get()).forEach(entity => {
                 this.getForEntity(entity, result);
             });
             this._list = result;
@@ -35,7 +35,7 @@ export default class EntityManager {
      * @returns {EntitySchema}
      */
     getForEntity(entity, result) {
-        const sp = this._schemaProvider;
+        const sp = this.schemaProvider;
 
         // get the entity itself
         const columns = {

@@ -76,6 +76,7 @@
         "lodash.isstring": "^4.0.1",
         "lodash.random": "^3.2.0",
         "lodash.union": "^4.6.0",
+        "lodash.uniq": "^4.5.0",
         "md5": "^2.2.1",
         "merge-graphql-schemas": "^1.5.8",
         "moment": "^2.24.0",
@@ -85,7 +86,8 @@
         "redis-tag-cache": "^1.2.1",
         "reflect-metadata": "^0.1.13",
         "typeorm": "^0.2.14",
-        "uuid": "^3.3.2"
+        "uuid": "^3.3.2",
+        "yup": "^0.27.0"
     },
     "husky": {
         "hooks": {

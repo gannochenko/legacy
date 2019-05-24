@@ -18,6 +18,10 @@ export const schema = {
             type: 'json',
             nullable: false,
         },
+        version: {
+            type: 'int',
+            defaultValue: 0,
+        },
     },
 };
 export default new EntitySchema(schema);

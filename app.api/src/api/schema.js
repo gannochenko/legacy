@@ -1,7 +1,23 @@
 import { wrapError } from 'ew-internals';
-import SchemaEntity from '../entity/schema';
-import Schema from '../lib/schema';
-import loadSchema from '../lib/schema-loader';
+import { Schema } from 'project-minimum-core';
+import SchemaStore from '../lib/schema-store';
+
+const sendResult = (res, result, code = null) => {
+    let status = 200;
+    if (code) {
+        status = code;
+    } else {
+        if (result.errors.find(error => error.type === 'internal')) {
+            status = 500;
+        } else if (result.errors.find(error => error.type === 'request')) {
+            status = 400;
+        }
+    }
+    return res
+        .header('Content-Type', 'application/json')
+        .status(status)
+        .send(JSON.stringify(result));
+};
 
 export default (app, params = {}) => {
     const { connectionManager } = params;
@@ -16,7 +32,6 @@ export default (app, params = {}) => {
                 errors: [],
                 entity: null,
             };
-            res.header('Content-Type', 'application/json');
 
             const entity = _.get(req, 'params.entity');
             const type = _.get(req, 'params.type');
@@ -24,14 +39,17 @@ export default (app, params = {}) => {
                 result.errors.push({
                     message: 'Illegal schema type',
                     code: 'illegal_schema_type',
+                    type: 'request',
                 });
-                return res.status(400).send('{}'); // todo: send something meaningful
+                return sendResult(res, result);
             }
 
-            const schema = await loadSchema(type, connectionManager);
-            result.entity = schema.getEntity(entity);
+            const schema = await SchemaStore.load(type, connectionManager);
+            if (schema) {
+                result.entity = schema.getEntity(entity);
+            }
 
-            return res.status(200).send(JSON.stringify(result));
+            return sendResult(res, result, !result.entity ? 404 : null);
         }),
     );
 
@@ -45,19 +63,19 @@ export default (app, params = {}) => {
                 errors: [],
                 structure: null,
             };
-            res.header('Content-Type', 'application/json');
 
             const type = _.get(req, 'params.type');
             if (type !== 'draft' && type !== 'actual') {
                 result.errors.push({
                     message: 'Illegal schema type',
                     code: 'illegal_schema_type',
+                    type: 'request',
                 });
-                return res.status(400).send('{}'); // todo: send something meaningful
+                return sendResult(res, result);
             }
 
-            result.structure = await loadSchema(type, connectionManager);
-            return res.status(200).send(JSON.stringify(result));
+            result.structure = await SchemaStore.load(type, connectionManager);
+            return sendResult(res, result, !result.structure ? 404 : null);
         }),
     );
 
@@ -70,44 +88,21 @@ export default (app, params = {}) => {
             const result = {
                 errors: [],
             };
-            res.header('Content-Type', 'application/json');
 
-            // replace an actual schema with a draft, check first
-            const connection = await connectionManager.getSystem();
-            const repo = connection.getRepository(SchemaEntity);
-
-            const draft = await repo.findOne({
-                draft: true,
-            });
-
-            if (draft) {
-                const { structure } = draft;
-                const schema = new Schema(structure);
-                result.errors = schema.checkHealth();
-
-                if (!_.iane(result.errors)) {
-                    let current = await repo.findOne({
-                        draft: false,
-                    });
-
-                    if (current) {
-                        repo.merge(current, {
-                            structure,
-                        });
-                    } else {
-                        current = repo.create({
-                            draft: false,
-                            structure,
-                        });
-                    }
-
-                    await repo.save(current);
-
-                    // todo: tell all nodes to re-start
-                }
+            // replace an actual schema with a draft
+            const draftSchema = await SchemaStore.load(
+                'draft',
+                connectionManager,
+            );
+            if (draftSchema) {
+                result.errors = await SchemaStore.put(
+                    'actual',
+                    draftSchema,
+                    connectionManager,
+                );
             }
 
-            return res.status(200).send(JSON.stringify(result));
+            return sendResult(res, result);
         }),
     );
 
@@ -124,33 +119,13 @@ export default (app, params = {}) => {
 
             const structure = _.get(req, 'body.structure');
             const schema = new Schema(structure);
-            result.errors = schema.checkHealth();
+            result.errors = await SchemaStore.put(
+                'draft',
+                schema,
+                connectionManager,
+            );
 
-            if (!_.iane(result.errors)) {
-                const connection = await connectionManager.getSystem();
-                const repo = connection.getRepository(SchemaEntity);
-
-                let draft = await repo.findOne({
-                    draft: true,
-                });
-
-                if (draft) {
-                    repo.merge(draft, {
-                        structure,
-                    });
-                } else {
-                    draft = repo.create({
-                        draft: true,
-                        structure,
-                    });
-                }
-
-                await repo.save(draft);
-            }
-
-            res.header('Content-Type', 'application/json')
-                .status(200)
-                .send(JSON.stringify(result));
+            return sendResult(res, result);
         }),
     );
 };

@@ -1,6 +1,7 @@
 /* eslint import/no-unresolved: 0 */
 
 import { uCFirst } from 'ew-internals';
+import * as yup from 'yup';
 import { DB_VARCHAR_DEF_LENGTH } from '../constants';
 import {
     TYPE_STRING,
@@ -15,19 +16,39 @@ export class Field {
         if (!_.ione(declaration)) {
             declaration = {};
         }
-        this.schema = declaration;
+        this.schema = {
+            ...declaration.name,
+            ...declaration.type,
+            ...declaration.label,
+            ...declaration.length,
+            ...declaration.required,
+            ...declaration.unique,
+            ...declaration.preview,
+        };
     }
 
     checkHealth() {
         const errors = [];
         const { schema } = this;
+        const { name, type, label, length, required, unique, preview } = schema;
 
-        // check that field has at least name and type
-        if (!_.isne(schema.name)) {
+        // use yup here...
+
+        // check that field has name
+        if (!_.isne(name)) {
             errors.push({
                 message: 'Field does not have a name',
                 code: 'field_name_empty',
                 reference: null,
+            });
+        }
+
+        if (!_.isne(type) && !(_.iane(type) && _.isne(type[0]))) {
+            errors.push({
+                message:
+                    'Type should be a string or an array of one string element',
+                code: 'field_type_illegal',
+                reference: schema.name,
             });
         }
 
@@ -40,6 +61,24 @@ export class Field {
         }
 
         return errors;
+    }
+
+    getFieldValidator() {
+        if (!this.fieldValidator) {
+            this.fieldValidator = {
+                name: yup
+                    .string('Field name should be a string')
+                    .required('Field should have a name'),
+                type: yup.shape().required('Field should have a type'),
+                label: yup.oneOf(),
+                length: yup.number(),
+                required: yup.boolean(),
+                unique: yup.boolean(),
+                preview: yup.boolean(),
+            };
+        }
+
+        return this.fieldValidator;
     }
 
     getType() {

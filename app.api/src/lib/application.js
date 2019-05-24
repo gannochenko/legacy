@@ -7,7 +7,6 @@ import Cache from './cache';
 import ConnectionManager from './connection-manager';
 import SchemaProvider from './schema-provider';
 
-
 import attachGraphQLMiddleware from './apollo';
 import attachHomeAPI from '../api/home';
 import attachSyncAPI from '../api/sync';
@@ -77,7 +76,6 @@ export default class Application {
         // catching async unhandled rejections
         process
             .on('unhandledRejection', err => {
-                console.dir(err);
                 logger.error('Unhandled rejection', err);
             })
             .on('uncaughtException', err => {
@@ -86,7 +84,7 @@ export default class Application {
 
         // catching normal unhandled exceptions
         app.use((err, req, res, next) => {
-            logger.error('Unhandled exception', err);
+            logger.error('Uncaught exception', err);
             res.send('Nasty error'); // todo: explain here
         });
     }
