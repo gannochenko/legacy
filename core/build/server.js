@@ -102,8 +102,8 @@
                 p = n.n(g),
                 _ = n(4),
                 y = n.n(_),
-                E = n(5),
-                N = n.n(E),
+                N = n(5),
+                E = n.n(N),
                 T = {
                     isArray: Array.isArray,
                     isString: d.a,
@@ -112,7 +112,7 @@
                     iane: e => Array.isArray(e) && e.length > 0,
                     ione: e => p()(e) && Object.keys(e).length > 0,
                     isne: e => d()(e) && e.length > 0,
-                    unique: N.a,
+                    unique: E.a,
                 };
             class b {
                 constructor(e) {
@@ -120,7 +120,7 @@
                 }
                 checkHealth() {
                     const e = [],
-                        t = this.schema;
+                        { schema: t } = this;
                     return (
                         T.isne(t.name) ||
                             e.push({
@@ -145,7 +145,7 @@
                     return e ? (this.isMultiple() ? e[0] : e) : null;
                 }
                 getLength() {
-                    if (this.getType() === TYPE_STRING) {
+                    if (this.getType() === c) {
                         const e = parseInt(this.schema.length, 10);
                         return Number.isNaN(e) ? r : e;
                     }
@@ -161,14 +161,7 @@
                 }
                 getReferencedEntityName() {
                     const e = this.getActualType();
-                    return [
-                        TYPE_STRING,
-                        TYPE_BOOLEAN,
-                        TYPE_DATETIME,
-                        TYPE_INTEGER,
-                    ].indexOf(e) >= 0
-                        ? null
-                        : e;
+                    return [c, o, l, u].indexOf(e) >= 0 ? null : e;
                 }
                 getReferenceFieldName() {
                     return this.getReferencedEntityName();
@@ -231,11 +224,12 @@
             }
             class R {
                 constructor(e) {
-                    T.ione(e) || (e = {}),
-                        T.iane(e.schema) || (e.schema = []),
+                    let t = e;
+                    T.ione(t) || (t = {}),
+                        T.iane(t.schema) || (t.schema = []),
                         (this.schema = {
-                            name: e.name || '',
-                            schema: e.schema.map(e =>
+                            name: t.name || '',
+                            schema: t.schema.map(e =>
                                 e.name === a ? new A(e) : new b(e),
                             ),
                         });
@@ -365,23 +359,24 @@
                 }
                 castFieldValue(e, t) {
                     const n = e.getActualType();
-                    if (n === c) t = null == t ? '' : t.toString();
-                    else if (n === o) t = !!t;
+                    let r = t;
+                    if (n === c) r = null == r ? '' : r.toString();
+                    else if (n === o) r = !!r;
                     else if (n === u)
-                        (t = parseInt(t, 10)), Number.isNaN(t) && (t = 0);
+                        (r = parseInt(r, 10)), Number.isNaN(r) && (r = 0);
                     else if (n === l) {
-                        if (null == t) return '';
-                        if (t instanceof Date) t = t.toISOString();
-                        else if (Number.isNaN(Date.parse(t))) return '';
+                        if (null == r) return '';
+                        if (r instanceof Date) r = r.toISOString();
+                        else if (Number.isNaN(Date.parse(r))) return '';
                     } else
                         e.isReference()
-                            ? T.isString(t) ||
-                              (T.isObject(t)
-                                  ? a in t &&
-                                    ((t = t[a]), T.isne(t) || (t = ''))
-                                  : (t = ''))
-                            : (t = '');
-                    return t;
+                            ? T.isString(r) ||
+                              (T.isObject(r)
+                                  ? a in r &&
+                                    ((r = r[a]), T.isne(r) || (r = ''))
+                                  : (r = ''))
+                            : (r = '');
+                    return r;
                 }
             }
             class O {
@@ -390,7 +385,7 @@
                 }
                 checkHealth() {
                     let e = [];
-                    const t = this.schema;
+                    const { schema: t } = this;
                     if (!T.iane(t)) return e;
                     const n = {};
                     return (

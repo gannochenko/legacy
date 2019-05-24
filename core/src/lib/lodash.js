@@ -1,3 +1,5 @@
+/* eslint import/no-unresolved: 0 */
+
 import isString from 'lodash.isstring';
 import isObject from 'lodash.isobject';
 import union from 'lodash.union';

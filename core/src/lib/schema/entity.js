@@ -1,3 +1,5 @@
+/* eslint import/no-unresolved: 0 */
+
 import { uCFirst, convertToCamel } from 'ew-internals';
 import * as yup from 'yup';
 import { Field } from './field';
@@ -17,16 +19,17 @@ import _ from '../lodash';
 
 export class Entity {
     constructor(declaration) {
-        if (!_.ione(declaration)) {
-            declaration = {};
+        let safeDeclaration = declaration;
+        if (!_.ione(safeDeclaration)) {
+            safeDeclaration = {};
         }
-        if (!_.iane(declaration.schema)) {
-            declaration.schema = [];
+        if (!_.iane(safeDeclaration.schema)) {
+            safeDeclaration.schema = [];
         }
 
         this.schema = {
-            name: declaration.name || '',
-            schema: declaration.schema.map(field =>
+            name: safeDeclaration.name || '',
+            schema: safeDeclaration.schema.map(field =>
                 field.name === ENTITY_CODE_FIELD_NAME
                     ? new CodeField(field)
                     : new Field(field),
@@ -227,46 +230,47 @@ export class Entity {
      */
     castFieldValue(field, value) {
         const type = field.getActualType();
+        let safeValue = value;
         if (type === TYPE_STRING) {
-            if (value === undefined || value === null) {
-                value = '';
+            if (safeValue === undefined || safeValue === null) {
+                safeValue = '';
             } else {
-                value = value.toString();
+                safeValue = safeValue.toString();
             }
         } else if (type === TYPE_BOOLEAN) {
-            value = !!value;
+            safeValue = !!safeValue;
         } else if (type === TYPE_INTEGER) {
-            value = parseInt(value, 10);
-            if (Number.isNaN(value)) {
-                value = 0;
+            safeValue = parseInt(safeValue, 10);
+            if (Number.isNaN(safeValue)) {
+                safeValue = 0;
             }
         } else if (type === TYPE_DATETIME) {
-            if (value === undefined || value === null) {
+            if (safeValue === undefined || safeValue === null) {
                 return '';
             }
 
-            if (value instanceof Date) {
-                value = value.toISOString();
-            } else if (Number.isNaN(Date.parse(value))) {
+            if (safeValue instanceof Date) {
+                safeValue = safeValue.toISOString();
+            } else if (Number.isNaN(Date.parse(safeValue))) {
                 return '';
             }
         } else if (field.isReference()) {
-            if (_.isString(value)) {
+            if (_.isString(safeValue)) {
                 // all good
-            } else if (_.isObject(value)) {
-                if (ENTITY_CODE_FIELD_NAME in value) {
-                    value = value[ENTITY_CODE_FIELD_NAME];
-                    if (!_.isne(value)) {
-                        value = '';
+            } else if (_.isObject(safeValue)) {
+                if (ENTITY_CODE_FIELD_NAME in safeValue) {
+                    safeValue = safeValue[ENTITY_CODE_FIELD_NAME];
+                    if (!_.isne(safeValue)) {
+                        safeValue = '';
                     }
                 }
             } else {
-                value = '';
+                safeValue = '';
             }
         } else {
-            value = '';
+            safeValue = '';
         }
 
-        return value;
+        return safeValue;
     }
 }

@@ -11,7 +11,7 @@ export class Schema {
 
     checkHealth() {
         let errors = [];
-        const schema = this.schema;
+        const { schema } = this;
 
         if (!_.iane(schema)) {
             // nothing to check

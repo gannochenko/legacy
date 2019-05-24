@@ -1,5 +1,13 @@
+/* eslint import/no-unresolved: 0 */
+
 import { uCFirst } from 'ew-internals';
 import { DB_VARCHAR_DEF_LENGTH } from '../constants';
+import {
+    TYPE_STRING,
+    TYPE_BOOLEAN,
+    TYPE_DATETIME,
+    TYPE_INTEGER,
+} from '../field-types';
 import _ from '../lodash';
 
 export class Field {
@@ -12,7 +20,7 @@ export class Field {
 
     checkHealth() {
         const errors = [];
-        const schema = this.schema;
+        const { schema } = this;
 
         // check that field has at least name and type
         if (!_.isne(schema.name)) {

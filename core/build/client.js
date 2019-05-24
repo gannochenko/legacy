@@ -91,33 +91,37 @@
                 a = ''.concat('eq_', 'migrations'),
                 u = ''.concat('eq_', 'schema'),
                 o = 'code',
-                c = n(1),
-                s = n(0),
-                l = n(2),
-                f = n.n(l),
-                h = n(3),
-                m = n.n(h),
-                y = n(4),
+                c = 'string',
+                s = 'integer',
+                l = 'boolean',
+                f = 'datetime',
+                h = n(1),
+                m = n(0),
+                y = n(2),
                 p = n.n(y),
-                d = n(5),
+                d = n(3),
                 g = n.n(d),
-                v = {
+                v = n(4),
+                _ = n.n(v),
+                b = n(5),
+                E = n.n(b),
+                N = {
                     isArray: Array.isArray,
-                    isString: f.a,
-                    isObject: m.a,
-                    union: p.a,
+                    isString: p.a,
+                    isObject: g.a,
+                    union: _.a,
                     iane: function(e) {
                         return Array.isArray(e) && e.length > 0;
                     },
                     ione: function(e) {
-                        return m()(e) && Object.keys(e).length > 0;
+                        return g()(e) && Object.keys(e).length > 0;
                     },
                     isne: function(e) {
-                        return f()(e) && e.length > 0;
+                        return p()(e) && e.length > 0;
                     },
-                    unique: g.a,
+                    unique: E.a,
                 };
-            function _(e, t) {
+            function k(e, t) {
                 for (var n = 0; n < t.length; n++) {
                     var r = t[n];
                     (r.enumerable = r.enumerable || !1),
@@ -126,7 +130,7 @@
                         Object.defineProperty(e, r.key, r);
                 }
             }
-            var b = (function() {
+            var T = (function() {
                 function e(t) {
                     !(function(e, t) {
                         if (!(e instanceof t))
@@ -134,7 +138,7 @@
                                 'Cannot call a class as a function',
                             );
                     })(this, e),
-                        v.ione(t) || (t = {}),
+                        N.ione(t) || (t = {}),
                         (this.schema = t);
                 }
                 var t, n, r;
@@ -147,14 +151,14 @@
                                 var e = [],
                                     t = this.schema;
                                 return (
-                                    v.isne(t.name) ||
+                                    N.isne(t.name) ||
                                         e.push({
                                             message:
                                                 'Field does not have a name',
                                             code: 'field_name_empty',
                                             reference: null,
                                         }),
-                                    v.isne(this.getActualType()) ||
+                                    N.isne(this.getActualType()) ||
                                         e.push({
                                             message:
                                                 'Field does not have a type',
@@ -185,7 +189,7 @@
                         {
                             key: 'getLength',
                             value: function() {
-                                if (this.getType() === TYPE_STRING) {
+                                if (this.getType() === c) {
                                     var e = parseInt(this.schema.length, 10);
                                     return Number.isNaN(e) ? 255 : e;
                                 }
@@ -201,9 +205,9 @@
                         {
                             key: 'getDisplayName',
                             value: function() {
-                                return v.isne(this.schema.label)
+                                return N.isne(this.schema.label)
                                     ? this.schema.label
-                                    : Object(c.uCFirst)(this.getName()).replace(
+                                    : Object(h.uCFirst)(this.getName()).replace(
                                           /_/g,
                                           ' ',
                                       );
@@ -213,14 +217,7 @@
                             key: 'getReferencedEntityName',
                             value: function() {
                                 var e = this.getActualType();
-                                return [
-                                    TYPE_STRING,
-                                    TYPE_BOOLEAN,
-                                    TYPE_DATETIME,
-                                    TYPE_INTEGER,
-                                ].indexOf(e) >= 0
-                                    ? null
-                                    : e;
+                                return [c, l, f, s].indexOf(e) >= 0 ? null : e;
                             },
                         },
                         {
@@ -232,13 +229,13 @@
                         {
                             key: 'isMultiple',
                             value: function() {
-                                return v.isArray(this.schema.type);
+                                return N.isArray(this.schema.type);
                             },
                         },
                         {
                             key: 'isReference',
                             value: function() {
-                                return v.isne(this.getReferencedEntityName());
+                                return N.isne(this.getReferencedEntityName());
                             },
                         },
                         {
@@ -267,13 +264,13 @@
                                 return this.schema;
                             },
                         },
-                    ]) && _(t.prototype, n),
-                    r && _(t, r),
+                    ]) && k(t.prototype, n),
+                    r && k(t, r),
                     e
                 );
             })();
-            function E(e) {
-                return (E =
+            function O(e) {
+                return (O =
                     'function' == typeof Symbol &&
                     'symbol' == typeof Symbol.iterator
                         ? function(e) {
@@ -288,7 +285,7 @@
                                   : typeof e;
                           })(e);
             }
-            function N(e, t) {
+            function R(e, t) {
                 for (var n = 0; n < t.length; n++) {
                     var r = t[n];
                     (r.enumerable = r.enumerable || !1),
@@ -297,8 +294,8 @@
                         Object.defineProperty(e, r.key, r);
                 }
             }
-            function T(e, t) {
-                return !t || ('object' !== E(t) && 'function' != typeof t)
+            function A(e, t) {
+                return !t || ('object' !== O(t) && 'function' != typeof t)
                     ? (function(e) {
                           if (void 0 === e)
                               throw new ReferenceError(
@@ -308,8 +305,8 @@
                       })(e)
                     : t;
             }
-            function k(e, t, n) {
-                return (k =
+            function S(e, t, n) {
+                return (S =
                     'undefined' != typeof Reflect && Reflect.get
                         ? Reflect.get
                         : function(e, t, n) {
@@ -319,7 +316,7 @@
                                       !Object.prototype.hasOwnProperty.call(
                                           e,
                                           t,
-                                      ) && null !== (e = O(e));
+                                      ) && null !== (e = j(e));
 
                                   );
                                   return e;
@@ -330,21 +327,21 @@
                               }
                           })(e, t, n || e);
             }
-            function O(e) {
-                return (O = Object.setPrototypeOf
+            function j(e) {
+                return (j = Object.setPrototypeOf
                     ? Object.getPrototypeOf
                     : function(e) {
                           return e.__proto__ || Object.getPrototypeOf(e);
                       })(e);
             }
-            function R(e, t) {
-                return (R =
+            function w(e, t) {
+                return (w =
                     Object.setPrototypeOf ||
                     function(e, t) {
                         return (e.__proto__ = t), e;
                     })(e, t);
             }
-            var A = (function(e) {
+            var P = (function(e) {
                 function t() {
                     return (
                         (function(e, t) {
@@ -353,7 +350,7 @@
                                     'Cannot call a class as a function',
                                 );
                         })(this, t),
-                        T(this, O(t).apply(this, arguments))
+                        A(this, j(t).apply(this, arguments))
                     );
                 }
                 var n, r, i;
@@ -370,15 +367,15 @@
                                 configurable: !0,
                             },
                         })),
-                            t && R(e, t);
-                    })(t, b),
+                            t && w(e, t);
+                    })(t, T),
                     (n = t),
                     (r = [
                         {
                             key: 'checkHealth',
                             value: function() {
-                                var e = k(
-                                        O(t.prototype),
+                                var e = S(
+                                        j(t.prototype),
                                         'checkHealth',
                                         this,
                                     ).call(this),
@@ -390,7 +387,7 @@
                                         code: 'field_code_not_unique',
                                         reference: n.name,
                                     }),
-                                    'string' !== this.getActualType() &&
+                                    this.getActualType() !== c &&
                                         e.push({
                                             message:
                                                 'System field "code" should be of type string',
@@ -417,12 +414,12 @@
                                 );
                             },
                         },
-                    ]) && N(n.prototype, r),
-                    i && N(n, i),
+                    ]) && R(n.prototype, r),
+                    i && R(n, i),
                     t
                 );
             })();
-            function S(e, t) {
+            function F(e, t) {
                 for (var n = 0; n < t.length; n++) {
                     var r = t[n];
                     (r.enumerable = r.enumerable || !1),
@@ -431,20 +428,21 @@
                         Object.defineProperty(e, r.key, r);
                 }
             }
-            var P = (function() {
+            var D = (function() {
                 function e(t) {
                     !(function(e, t) {
                         if (!(e instanceof t))
                             throw new TypeError(
                                 'Cannot call a class as a function',
                             );
-                    })(this, e),
-                        v.ione(t) || (t = {}),
-                        v.iane(t.schema) || (t.schema = []),
+                    })(this, e);
+                    var n = t;
+                    N.ione(n) || (n = {}),
+                        N.iane(n.schema) || (n.schema = []),
                         (this.schema = {
-                            name: t.name || '',
-                            schema: t.schema.map(function(e) {
-                                return e.name === o ? new A(e) : new b(e);
+                            name: n.name || '',
+                            schema: n.schema.map(function(e) {
+                                return e.name === o ? new P(e) : new T(e);
                             }),
                         });
                 }
@@ -457,13 +455,13 @@
                             value: function() {
                                 var e = [],
                                     t = this.schema;
-                                v.isne(t.name) ||
+                                N.isne(t.name) ||
                                     e.push({
                                         message: 'Entity does not have a name',
                                         code: 'entity_name_empty',
                                         reference: null,
                                     }),
-                                    v.iane(t.schema) ||
+                                    N.iane(t.schema) ||
                                         e.push({
                                             message:
                                                 'Entity does not have a single field',
@@ -474,7 +472,7 @@
                                 return (
                                     t.schema.forEach(function(r) {
                                         var i = r.checkHealth();
-                                        v.iane(i) && (e = v.union(e, i)),
+                                        N.iane(i) && (e = N.union(e, i)),
                                             r.getName() in n &&
                                                 e.push({
                                                     message: 'Field "'.concat(
@@ -497,7 +495,7 @@
                                             code: 'entity_code_field_missing',
                                             reference: t.name,
                                         }),
-                                    !v.isne(t.name) ||
+                                    !N.isne(t.name) ||
                                         ('user' !== t.name &&
                                             'group' !== t.name) ||
                                         e.push({
@@ -519,7 +517,7 @@
                         {
                             key: 'getCamelName',
                             value: function() {
-                                return Object(c.convertToCamel)(
+                                return Object(h.convertToCamel)(
                                     this.getName().toLowerCase(),
                                 );
                             },
@@ -527,7 +525,7 @@
                         {
                             key: 'getDisplayName',
                             value: function() {
-                                return Object(c.uCFirst)(
+                                return Object(h.uCFirst)(
                                     this.getName(),
                                 ).replace(/_/g, ' ');
                             },
@@ -537,7 +535,7 @@
                             value: function() {
                                 return this.schema.schema
                                     .map(function(e) {
-                                        return v.isne(e.getReferenceFieldName())
+                                        return N.isne(e.getReferenceFieldName())
                                             ? e
                                             : null;
                                     })
@@ -564,7 +562,7 @@
                                 return (
                                     this.schema.schema.find(function(e) {
                                         return (
-                                            'string' === e.getType() &&
+                                            e.getType() === c &&
                                             e.getName() !== o
                                         );
                                     }) || null
@@ -578,19 +576,19 @@
                                 return (
                                     this.schema.schema.forEach(function(t) {
                                         var n = null;
-                                        if (t.isReference()) n = s.string();
+                                        if (t.isReference()) n = m.string();
                                         else {
                                             var r = t.getActualType();
                                             n =
-                                                'integer' === r
-                                                    ? s.number().integer()
-                                                    : 'boolean' === r
-                                                    ? s.boolean()
-                                                    : 'datetime' === r
-                                                    ? s.date()
-                                                    : s.string();
+                                                r === s
+                                                    ? m.number().integer()
+                                                    : r === l
+                                                    ? m.boolean()
+                                                    : r === f
+                                                    ? m.date()
+                                                    : m.string();
                                         }
-                                        t.isMultiple() && (n = s.array().of(n)),
+                                        t.isMultiple() && (n = m.array().of(n)),
                                             (n = t.isMandatory()
                                                 ? n.required(
                                                       ''.concat(
@@ -601,7 +599,7 @@
                                                 : n.nullable()),
                                             (e[t.getName()] = n);
                                     }),
-                                    s.object().shape(e)
+                                    m.object().shape(e)
                                 );
                             },
                         },
@@ -610,13 +608,13 @@
                             value: function(e) {
                                 var t = this,
                                     n = {};
-                                return v.ione(e)
+                                return N.ione(e)
                                     ? (this.getFields().forEach(function(r) {
                                           var i = r.getName();
                                           if (i !== o && i in e) {
                                               var a = e[i];
                                               r.isMultiple()
-                                                  ? ((a = v.isArray(a)
+                                                  ? ((a = N.isArray(a)
                                                         ? a.map(function(e) {
                                                               return t.castFieldValue(
                                                                   r,
@@ -625,7 +623,7 @@
                                                           })
                                                         : []),
                                                     r.isReference() &&
-                                                        (a = v.unique(a)))
+                                                        (a = N.unique(a)))
                                                   : (a = t.castFieldValue(
                                                         r,
                                                         a,
@@ -640,36 +638,36 @@
                         {
                             key: 'castFieldValue',
                             value: function(e, t) {
-                                var n = e.getActualType();
-                                if ('string' === n)
-                                    t = null == t ? '' : t.toString();
-                                else if ('boolean' === n) t = !!t;
-                                else if ('integer' === n)
-                                    (t = parseInt(t, 10)),
-                                        Number.isNaN(t) && (t = 0);
-                                else if ('datetime' === n) {
-                                    if (null == t) return '';
-                                    if (t instanceof Date) t = t.toISOString();
-                                    else if (Number.isNaN(Date.parse(t)))
+                                var n = e.getActualType(),
+                                    r = t;
+                                if (n === c) r = null == r ? '' : r.toString();
+                                else if (n === l) r = !!r;
+                                else if (n === s)
+                                    (r = parseInt(r, 10)),
+                                        Number.isNaN(r) && (r = 0);
+                                else if (n === f) {
+                                    if (null == r) return '';
+                                    if (r instanceof Date) r = r.toISOString();
+                                    else if (Number.isNaN(Date.parse(r)))
                                         return '';
                                 } else
                                     e.isReference()
-                                        ? v.isString(t) ||
-                                          (v.isObject(t)
-                                              ? o in t &&
-                                                ((t = t[o]),
-                                                v.isne(t) || (t = ''))
-                                              : (t = ''))
-                                        : (t = '');
-                                return t;
+                                        ? N.isString(r) ||
+                                          (N.isObject(r)
+                                              ? o in r &&
+                                                ((r = r[o]),
+                                                N.isne(r) || (r = ''))
+                                              : (r = ''))
+                                        : (r = '');
+                                return r;
                             },
                         },
-                    ]) && S(t.prototype, n),
-                    r && S(t, r),
+                    ]) && F(t.prototype, n),
+                    r && F(t, r),
                     e
                 );
             })();
-            function j(e, t) {
+            function I(e, t) {
                 for (var n = 0; n < t.length; n++) {
                     var r = t[n];
                     (r.enumerable = r.enumerable || !1),
@@ -678,7 +676,7 @@
                         Object.defineProperty(e, r.key, r);
                 }
             }
-            var w = (function() {
+            var M = (function() {
                 function e(t) {
                     !(function(e, t) {
                         if (!(e instanceof t))
@@ -686,9 +684,9 @@
                                 'Cannot call a class as a function',
                             );
                     })(this, e),
-                        v.iane(t) || (t = []),
+                        N.iane(t) || (t = []),
                         (this.schema = t.map(function(e) {
-                            return new P(e);
+                            return new D(e);
                         }));
                 }
                 var t, n, r;
@@ -701,12 +699,12 @@
                                 var e = this,
                                     t = [],
                                     n = this.schema;
-                                if (!v.iane(n)) return t;
+                                if (!N.iane(n)) return t;
                                 var r = {};
                                 return (
                                     n.forEach(function(e) {
                                         var n = e.checkHealth();
-                                        v.iane(n) && (t = v.union(t, n)),
+                                        N.iane(n) && (t = N.union(t, n)),
                                             e.getName() in r &&
                                                 t.push({
                                                     message: 'Entity "'.concat(
@@ -763,7 +761,7 @@
                                 var e = [];
                                 return (
                                     this.schema.forEach(function(t) {
-                                        e = v.union(e, t.getReferences());
+                                        e = N.union(e, t.getReferences());
                                     }),
                                     e
                                 );
@@ -775,8 +773,8 @@
                                 return !this.schema.length;
                             },
                         },
-                    ]) && j(t.prototype, n),
-                    r && j(t, r),
+                    ]) && I(t.prototype, n),
+                    r && I(t, r),
                     e
                 );
             })();
@@ -817,28 +815,28 @@
                     return o;
                 }),
                 n.d(t, 'TYPE_STRING', function() {
-                    return 'string';
+                    return c;
                 }),
                 n.d(t, 'TYPE_INTEGER', function() {
-                    return 'integer';
+                    return s;
                 }),
                 n.d(t, 'TYPE_BOOLEAN', function() {
-                    return 'boolean';
+                    return l;
                 }),
                 n.d(t, 'TYPE_DATETIME', function() {
-                    return 'datetime';
+                    return f;
                 }),
                 n.d(t, 'Schema', function() {
-                    return w;
+                    return M;
                 }),
                 n.d(t, 'CodeField', function() {
-                    return A;
+                    return P;
                 }),
                 n.d(t, 'Field', function() {
-                    return b;
+                    return T;
                 }),
                 n.d(t, 'Entity', function() {
-                    return P;
+                    return D;
                 });
         },
     ]),
