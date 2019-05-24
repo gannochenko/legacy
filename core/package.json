@@ -1,6 +1,6 @@
 {
     "name": "project-minimum-core",
-    "version": "1.0.1",
+    "version": "1.0.5",
     "description": "Some core stuff for the Project Minimum microservices",
     "main": "index.js",
     "browser": {
