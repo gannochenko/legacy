@@ -6,8 +6,9 @@
     },
     "scripts": {
         "dev": "webpack --config webpack.js --mode development --watch",
-        "test.u": "jest -c ./jest/config.unit.js --forceExit",
-        "test.i": "jest -c ./jest/config.integration.js --runInBand --forceExit",
+        "test.u": "jest -c ./jest/config.unit.js",
+        "test.u.dev": "jest -c ./jest/config.unit.js --watch",
+        "test.i": "jest -c ./jest/config.integration.js --runInBand",
         "build": "webpack --config webpack.js --mode production",
         "start": "node ./build/index.js",
         "lint": "eslint ./src/",
@@ -17,10 +18,6 @@
     "keywords": [],
     "author": "gannochenko.sv@gmail.com",
     "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/awesome1888/boilerplate_express"
-    },
     "devDependencies": {
         "@babel/core": "^7.3.4",
         "@babel/plugin-proposal-object-rest-spread": "^7.3.4",
