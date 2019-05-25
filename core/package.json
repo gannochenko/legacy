@@ -15,6 +15,7 @@
         "build.server.dev": "webpack --config webpack.server.js --mode development --watch",
         "build.client.dev": "webpack --config webpack.client.js --mode development --watch",
         "test.u": "jest -c ./jest/config.unit.js --forceExit",
+        "test.u.dev": "jest -c ./jest/config.unit.js --watch",
         "lint": "eslint ./"
     },
     "keywords": [],
@@ -33,6 +34,7 @@
         "babel-eslint": "^10.0.1",
         "babel-loader": "^8.0.6",
         "babel-plugin-styled-components": "^1.10.0",
+        "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
         "eslint": "^5.16.0",
         "eslint-config-airbnb-base": "^13.1.0",
         "eslint-config-prettier": "^4.3.0",
