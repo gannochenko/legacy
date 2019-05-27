@@ -2,8 +2,8 @@ import { Field } from './field';
 import { TYPE_STRING } from '../field-types';
 
 export class CodeField extends Field {
-    checkHealth() {
-        const errors = super.checkHealth();
+    async checkHealth() {
+        const errors = await super.checkHealth();
         const { schema } = this;
 
         // // check that it is mandatory

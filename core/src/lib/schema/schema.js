@@ -9,7 +9,7 @@ export class Schema {
         this.schema = declaration.map(entity => new Entity(entity));
     }
 
-    checkHealth() {
+    async checkHealth() {
         let errors = [];
         const { schema } = this;
 

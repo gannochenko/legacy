@@ -16,73 +16,85 @@ export class Field {
         if (!_.ione(declaration)) {
             declaration = {};
         }
-        this.schema = {
-            ...declaration.name,
-            ...declaration.type,
-            ...declaration.label,
-            ...declaration.length,
-            ...declaration.required,
-            ...declaration.unique,
-            ...declaration.preview,
+        this.declaration = {
+            name: declaration.name,
+            type: declaration.type,
+            label: declaration.label,
+            length: declaration.length,
+            required: declaration.required,
+            unique: declaration.unique,
+            preview: declaration.preview,
         };
     }
 
-    checkHealth() {
+    async checkHealth() {
         const errors = [];
-        const { schema } = this;
-        const { name, type, label, length, required, unique, preview } = schema;
+        const { declaration } = this;
+        const { type } = declaration;
 
-        // use yup here...
+        const validator = this.getValidator();
 
-        // check that field has name
-        if (!_.isne(name)) {
-            errors.push({
-                message: 'Field does not have a name',
-                code: 'field_name_empty',
-                reference: null,
+        try {
+            await validator.validate(declaration, {
+                abortEarly: false,
             });
+        } catch (validationErrors) {
+            if (validationErrors instanceof yup.ValidationError) {
+                validationErrors.inner.forEach(errorItem => {
+                    errors.push({
+                        message: errorItem.message,
+                        code: `field_${errorItem.path}_illegal`,
+                        reference: errorItem.path,
+                    });
+                });
+            } else {
+                throw validationErrors;
+            }
         }
 
-        if (!_.isne(type) && !(_.iane(type) && _.isne(type[0]))) {
+        // check if type is string or [string]
+        if (
+            !_.isne(type) &&
+            !(_.isArray(type) && type.length === 1 && _.isne(type[0]))
+        ) {
             errors.push({
                 message:
-                    'Type should be a string or an array of one string element',
-                code: 'field_type_illegal',
-                reference: schema.name,
-            });
-        }
-
-        if (!_.isne(this.getActualType())) {
-            errors.push({
-                message: 'Field does not have a type',
-                code: 'field_type_empty',
-                reference: schema.name,
+                    'Field type should be of type string or an array of one string',
+                code: `field_type_illegal`,
+                reference: 'type',
             });
         }
 
         return errors;
     }
 
-    getFieldValidator() {
+    getValidator() {
         if (!this.fieldValidator) {
-            this.fieldValidator = {
+            this.fieldValidator = yup.object().shape({
                 name: yup
                     .string('Field name should be a string')
+                    .strict(true)
                     .required('Field should have a name'),
-                type: yup.shape().required('Field should have a type'),
-                label: yup.oneOf(),
-                length: yup.number(),
-                required: yup.boolean(),
-                unique: yup.boolean(),
-                preview: yup.boolean(),
-            };
+                // // it is impossible in yup to write like this =(((
+                // type: yup.mixed().oneOf([
+                //     yup.string(),
+                //     yup.array().of(yup.string()).min(1).max(1),
+                // ], 'Field type should be of type string or an array of one string'),
+                label: yup
+                    .string('Field label should be a string')
+                    .strict(true),
+                length: yup.number('Field length should be a number'),
+                required: yup.boolean('Field required flag should be boolean'),
+                unique: yup.boolean('Field unique flag should be boolean'),
+                preview: yup.boolean('Field preview flag should be boolean'),
+            });
         }
 
         return this.fieldValidator;
     }
 
     getType() {
-        return this.schema.type || null;
+        return this.declaration.type || null;
     }
 
     getActualType() {
@@ -97,7 +109,7 @@ export class Field {
     getLength() {
         const type = this.getType();
         if (type === TYPE_STRING) {
-            const length = parseInt(this.schema.length, 10);
+            const length = parseInt(this.declaration.length, 10);
             if (Number.isNaN(length)) {
                 return DB_VARCHAR_DEF_LENGTH;
             }
@@ -109,12 +121,12 @@ export class Field {
     }
 
     getName() {
-        return this.schema.name;
+        return this.declaration.name;
     }
 
     getDisplayName() {
-        return _.isne(this.schema.label)
-            ? this.schema.label
+        return _.isne(this.declaration.label)
+            ? this.declaration.label
             : uCFirst(this.getName()).replace(/_/g, ' ');
     }
 
@@ -139,8 +151,12 @@ export class Field {
         return this.getReferencedEntityName();
     }
 
+    getDeclaration() {
+        return this.declaration;
+    }
+
     isMultiple() {
-        return _.isArray(this.schema.type);
+        return _.isArray(this.declaration.type);
     }
 
     isReference() {
@@ -152,14 +168,14 @@ export class Field {
     }
 
     isMandatory() {
-        return this.schema.required === true;
+        return this.declaration.required === true;
     }
 
     isPreview() {
-        return this.schema.preview === true;
+        return this.declaration.preview === true;
     }
 
     toJSON() {
-        return this.schema;
+        return this.declaration;
     }
 }

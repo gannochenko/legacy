@@ -37,55 +37,16 @@ export class Entity {
         };
     }
 
-    checkHealth() {
+    async checkHealth() {
         let errors = [];
         const { schema } = this;
 
-        // check that field has a name
+        // check that entity has a name
         if (!_.isne(schema.name)) {
             errors.push({
                 message: 'Entity does not have a name',
                 code: 'entity_name_empty',
                 reference: null,
-            });
-        }
-
-        // check schema
-        if (!_.iane(schema.schema)) {
-            errors.push({
-                message: 'Entity does not have a single field',
-                code: 'entityschema_empty',
-                reference: schema.name,
-            });
-        }
-
-        // todo: check if "code" field is still present
-
-        // check health of each field
-        const times = {};
-        schema.schema.forEach(field => {
-            const fErrors = field.checkHealth();
-            if (_.iane(fErrors)) {
-                errors = _.union(errors, fErrors);
-            }
-
-            if (field.getName() in times) {
-                errors.push({
-                    message: `Field "${field.getName()}" met several times`,
-                    code: 'entity_field_duplicate',
-                    reference: schema.name,
-                });
-            }
-
-            times[field.getName()] =
-                field.getName() in times ? times[field.getName()] + 1 : 1;
-        });
-
-        if (!(ENTITY_CODE_FIELD_NAME in times)) {
-            errors.push({
-                message: `System field "code" is missing`,
-                code: 'entity_code_field_missing',
-                reference: schema.name,
             });
         }
 
@@ -101,6 +62,53 @@ export class Entity {
                 reference: schema.name,
             });
         }
+
+        // check schema
+
+        if (!_.iane(schema.schema)) {
+            errors.push({
+                message: 'Entity does not have a single field',
+                code: 'entityschema_empty',
+                reference: schema.name,
+            });
+        }
+
+        const times = {};
+        schema.schema.forEach(field => {
+            // const fErrors = field.checkHealth();
+            // if (_.iane(fErrors)) {
+            //     ;
+            // }
+
+            times[field.getName()] =
+                field.getName() in times ? times[field.getName()] + 1 : 1;
+        });
+
+        if (!(ENTITY_CODE_FIELD_NAME in times)) {
+            errors.push({
+                message: `System field "code" is missing`,
+                code: 'entity_code_field_missing',
+                reference: schema.name,
+            });
+        }
+
+        Object.keys(times).forEach(key => {
+            if (times[key] > 1) {
+                errors.push({
+                    message: `Field "${times[key]}" met several times`,
+                    code: 'entity_field_duplicate',
+                    reference: schema.name,
+                });
+            }
+        });
+
+        await Promise.all(
+            schema.schema.map(field =>
+                field.checkHealth().then(fieldErrors => {
+                    errors = _.union(errors, fieldErrors);
+                }),
+            ),
+        );
 
         return errors;
     }
