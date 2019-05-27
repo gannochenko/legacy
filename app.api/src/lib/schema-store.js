@@ -5,15 +5,15 @@ class SchemaStore {
     static async load(type, connectionManager) {
         const connection = await connectionManager.getSystem();
 
-        const structure = await connection.getRepository(SchemaEntity).findOne({
+        const schema = await connection.getRepository(SchemaEntity).findOne({
             draft: type === 'draft',
         });
 
-        if (!structure) {
+        if (!schema) {
             return null;
         }
 
-        return new Schema(structure.structure);
+        return new Schema(schema);
     }
 
     static async put(type, schema, connectionManager) {
@@ -27,21 +27,18 @@ class SchemaStore {
                 draft: false,
             });
             if (current) {
+                const currentSchema = new Schema(current);
                 // have current => update
-                let version = parseInt(current.version, 10);
-                if (Number.isNaN(version)) {
-                    version = 0;
-                }
                 repo.merge(current, {
-                    version: version + 1,
-                    structure: schema.get(),
+                    version: currentSchema.getVersion() + 1,
+                    declaration: schema.getSchema(),
                 });
             } else {
                 // else => create
                 current = repo.create({
                     draft: false,
                     version: 0,
-                    structure: schema.get(),
+                    declaration: schema.getSchema(),
                 });
             }
 

@@ -60,8 +60,8 @@ export class Field {
             errors.push({
                 message:
                     'Field type should be of type string or an array of one string',
-                code: `field_illegal`,
-                fieldName: 'type',
+                code: `field_type_illegal`,
+                fieldName: declaration.name || '',
             });
         }
 

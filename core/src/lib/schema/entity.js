@@ -27,7 +27,7 @@ export class Entity {
             safeDeclaration.schema = [];
         }
 
-        this.schema = {
+        this.declaration = {
             name: safeDeclaration.name || '',
             schema: safeDeclaration.schema.map(field =>
                 field.name === ENTITY_CODE_FIELD_NAME
@@ -39,10 +39,10 @@ export class Entity {
 
     async checkHealth() {
         const errors = [];
-        const { schema } = this;
+        const { declaration } = this;
 
         // check that entity has a name
-        if (!_.isne(schema.name)) {
+        if (!_.isne(declaration.name)) {
             errors.push({
                 message: 'Entity does not have a name',
                 code: 'entity_name_empty',
@@ -52,29 +52,29 @@ export class Entity {
 
         // check that entity does not have a reserved name
         if (
-            _.isne(schema.name) &&
-            (schema.name === ENTITY_USER_NAME ||
-                schema.name === ENTITY_GROUP_NAME)
+            _.isne(declaration.name) &&
+            (declaration.name === ENTITY_USER_NAME ||
+                declaration.name === ENTITY_GROUP_NAME)
         ) {
             errors.push({
                 message: 'Entity name is a reserved name',
                 code: 'entity_name_reserved',
-                entityName: schema.name,
+                entityName: declaration.name,
             });
         }
 
         // check schema
 
-        if (!_.iane(schema.schema)) {
+        if (!_.iane(declaration.schema)) {
             errors.push({
                 message: 'Entity does not have a single field',
                 code: 'entity_schema_empty',
-                entityName: schema.name,
+                entityName: declaration.name,
             });
         }
 
         const times = {};
-        schema.schema.forEach(field => {
+        declaration.schema.forEach(field => {
             times[field.getName()] =
                 field.getName() in times ? times[field.getName()] + 1 : 1;
         });
@@ -83,7 +83,7 @@ export class Entity {
             errors.push({
                 message: `System field "code" is missing`,
                 code: 'entity_code_field_missing',
-                entityName: schema.name,
+                entityName: declaration.name,
             });
         }
 
@@ -92,18 +92,19 @@ export class Entity {
                 errors.push({
                     message: `Field "${times[key]}" met several times`,
                     code: 'entity_field_duplicate',
-                    entityName: schema.name,
+                    fieldName: times[key],
+                    entityName: declaration.name,
                 });
             }
         });
 
         await Promise.all(
-            schema.schema.map(field =>
+            declaration.schema.map(field =>
                 field.checkHealth().then(fieldErrors => {
                     fieldErrors.forEach(fieldError => {
                         errors.push(
                             Object.assign({}, fieldError, {
-                                entityName: schema.name,
+                                entityName: declaration.name,
                             }),
                         );
                     });
@@ -115,7 +116,7 @@ export class Entity {
     }
 
     getName() {
-        return this.schema.name;
+        return this.declaration.name;
     }
 
     getCamelName() {
@@ -127,7 +128,7 @@ export class Entity {
     }
 
     getReferences() {
-        return this.schema.schema
+        return this.declaration.schema
             .map(field =>
                 _.isne(field.getReferenceFieldName()) ? field : null,
             )
@@ -135,17 +136,17 @@ export class Entity {
     }
 
     getFields() {
-        return this.schema.schema;
+        return this.declaration.schema;
     }
 
     toJSON() {
-        return this.schema;
+        return this.declaration;
     }
 
     // aux
     getPresentationField() {
         return (
-            this.schema.schema.find(
+            this.declaration.schema.find(
                 field =>
                     field.getType() === TYPE_STRING &&
                     field.getName() !== ENTITY_CODE_FIELD_NAME,
@@ -155,7 +156,7 @@ export class Entity {
 
     getValidator() {
         const shape = {};
-        this.schema.schema.forEach(field => {
+        this.declaration.schema.forEach(field => {
             let rule = null;
 
             // type

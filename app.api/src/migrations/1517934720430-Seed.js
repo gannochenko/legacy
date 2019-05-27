@@ -36,7 +36,7 @@ export class Seed1517934720430 {
                         unsigned: true,
                     },
                     {
-                        name: 'structure',
+                        name: 'declaration',
                         type: 'json',
                         isNullable: false,
                         isGenerated: false,

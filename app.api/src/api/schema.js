@@ -2,17 +2,17 @@ import { wrapError } from 'ew-internals';
 import { Schema } from 'project-minimum-core';
 import SchemaStore from '../lib/schema-store';
 
-const sendResult = (res, result, code = null) => {
+// todo: move sendJSONResult() to ew-internals
+const sendJSONResult = (res, result, code = null) => {
     let status = 200;
     if (code) {
         status = code;
-    } else {
-        if (result.errors.find(error => error.type === 'internal')) {
-            status = 500;
-        } else if (result.errors.find(error => error.type === 'request')) {
-            status = 400;
-        }
+    } else if (result.errors.find(error => error.type === 'internal')) {
+        status = 500;
+    } else if (result.errors.find(error => error.type === 'request')) {
+        status = 400;
     }
+
     return res
         .header('Content-Type', 'application/json')
         .status(status)
@@ -41,7 +41,7 @@ export default (app, params = {}) => {
                     code: 'illegal_schema_type',
                     type: 'request',
                 });
-                return sendResult(res, result);
+                return sendJSONResult(res, result);
             }
 
             const schema = await SchemaStore.load(type, connectionManager);
@@ -49,7 +49,7 @@ export default (app, params = {}) => {
                 result.entity = schema.getEntity(entity);
             }
 
-            return sendResult(res, result, !result.entity ? 404 : null);
+            return sendJSONResult(res, result, !result.entity ? 404 : null);
         }),
     );
 
@@ -61,7 +61,7 @@ export default (app, params = {}) => {
         wrapError(async (req, res) => {
             const result = {
                 errors: [],
-                structure: null,
+                schema: null,
             };
 
             const type = _.get(req, 'params.type');
@@ -71,11 +71,11 @@ export default (app, params = {}) => {
                     code: 'illegal_schema_type',
                     type: 'request',
                 });
-                return sendResult(res, result);
+                return sendJSONResult(res, result);
             }
 
-            result.structure = await SchemaStore.load(type, connectionManager);
-            return sendResult(res, result, !result.structure ? 404 : null);
+            result.schema = await SchemaStore.load(type, connectionManager);
+            return sendJSONResult(res, result, !result.schema ? 404 : null);
         }),
     );
 
@@ -102,7 +102,7 @@ export default (app, params = {}) => {
                 );
             }
 
-            return sendResult(res, result);
+            return sendJSONResult(res, result);
         }),
     );
 
@@ -125,7 +125,7 @@ export default (app, params = {}) => {
                 connectionManager,
             );
 
-            return sendResult(res, result);
+            return sendJSONResult(res, result);
         }),
     );
 };
