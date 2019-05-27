@@ -43,8 +43,8 @@ export class Field {
                 validationErrors.inner.forEach(errorItem => {
                     errors.push({
                         message: errorItem.message,
-                        code: `field_${errorItem.path}_illegal`,
-                        field: errorItem.path,
+                        code: `field_illegal`,
+                        fieldName: errorItem.path,
                     });
                 });
             } else {
@@ -60,8 +60,8 @@ export class Field {
             errors.push({
                 message:
                     'Field type should be of type string or an array of one string',
-                code: `field_type_illegal`,
-                field: 'type',
+                code: `field_illegal`,
+                fieldName: 'type',
             });
         }
 

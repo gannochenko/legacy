@@ -38,7 +38,7 @@ export class Entity {
     }
 
     async checkHealth() {
-        let errors = [];
+        const errors = [];
         const { schema } = this;
 
         // check that entity has a name
@@ -46,7 +46,7 @@ export class Entity {
             errors.push({
                 message: 'Entity does not have a name',
                 code: 'entity_name_empty',
-                reference: null,
+                entityName: '',
             });
         }
 
@@ -59,7 +59,7 @@ export class Entity {
             errors.push({
                 message: 'Entity name is a reserved name',
                 code: 'entity_name_reserved',
-                reference: schema.name,
+                entityName: schema.name,
             });
         }
 
@@ -68,8 +68,8 @@ export class Entity {
         if (!_.iane(schema.schema)) {
             errors.push({
                 message: 'Entity does not have a single field',
-                code: 'entityschema_empty',
-                reference: schema.name,
+                code: 'entity_schema_empty',
+                entityName: schema.name,
             });
         }
 
@@ -83,7 +83,7 @@ export class Entity {
             errors.push({
                 message: `System field "code" is missing`,
                 code: 'entity_code_field_missing',
-                reference: schema.name,
+                entityName: schema.name,
             });
         }
 
@@ -92,7 +92,7 @@ export class Entity {
                 errors.push({
                     message: `Field "${times[key]}" met several times`,
                     code: 'entity_field_duplicate',
-                    reference: schema.name,
+                    entityName: schema.name,
                 });
             }
         });
@@ -100,7 +100,13 @@ export class Entity {
         await Promise.all(
             schema.schema.map(field =>
                 field.checkHealth().then(fieldErrors => {
-                    errors = _.union(errors, fieldErrors);
+                    fieldErrors.forEach(fieldError => {
+                        errors.push(
+                            Object.assign({}, fieldError, {
+                                entityName: schema.name,
+                            }),
+                        );
+                    });
                 }),
             ),
         );
