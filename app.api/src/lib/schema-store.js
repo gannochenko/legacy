@@ -17,7 +17,7 @@ class SchemaStore {
     }
 
     static async put(type, schema, connectionManager) {
-        const errors = schema.checkHealth();
+        const errors = await schema.checkHealth();
         if (!_.iane(errors)) {
             const connection = await connectionManager.getSystem();
             const repo = connection.getRepository(SchemaEntity);

@@ -44,7 +44,7 @@ export class Field {
                     errors.push({
                         message: errorItem.message,
                         code: `field_${errorItem.path}_illegal`,
-                        reference: errorItem.path,
+                        field: errorItem.path,
                     });
                 });
             } else {
@@ -61,7 +61,7 @@ export class Field {
                 message:
                     'Field type should be of type string or an array of one string',
                 code: `field_type_illegal`,
-                reference: 'type',
+                field: 'type',
             });
         }
 

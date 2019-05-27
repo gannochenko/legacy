@@ -20,7 +20,7 @@ describe('Field', () => {
         ]);
     });
 
-    it('should report unhealthy on corrupted declaration', async () => {
+    it('should report invalid health check', async () => {
         const field = new Field({
             type: ['a', 'a'],
             name: undefined,

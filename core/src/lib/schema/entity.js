@@ -75,11 +75,6 @@ export class Entity {
 
         const times = {};
         schema.schema.forEach(field => {
-            // const fErrors = field.checkHealth();
-            // if (_.iane(fErrors)) {
-            //     ;
-            // }
-
             times[field.getName()] =
                 field.getName() in times ? times[field.getName()] + 1 : 1;
         });
