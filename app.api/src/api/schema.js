@@ -30,7 +30,7 @@ export default (app, params = {}) => {
         wrapError(async (req, res) => {
             const result = {
                 errors: [],
-                entity: null,
+                data: null,
             };
 
             const entity = _.get(req, 'params.entity');
@@ -46,10 +46,10 @@ export default (app, params = {}) => {
 
             const schema = await SchemaStore.load(type, connectionManager);
             if (schema) {
-                result.entity = schema.getEntity(entity);
+                result.data = schema.getEntity(entity);
             }
 
-            return sendJSONResult(res, result, !result.entity ? 404 : null);
+            return sendJSONResult(res, result, !result.data ? 404 : null);
         }),
     );
 
@@ -61,7 +61,7 @@ export default (app, params = {}) => {
         wrapError(async (req, res) => {
             const result = {
                 errors: [],
-                schema: null,
+                data: null,
             };
 
             const type = _.get(req, 'params.type');
@@ -74,8 +74,9 @@ export default (app, params = {}) => {
                 return sendJSONResult(res, result);
             }
 
-            result.schema = await SchemaStore.load(type, connectionManager);
-            return sendJSONResult(res, result, !result.schema ? 404 : null);
+            result.data = await SchemaStore.load(type, connectionManager);
+            console.dir(result);
+            return sendJSONResult(res, result, !result.data ? 404 : null);
         }),
     );
 
@@ -117,11 +118,10 @@ export default (app, params = {}) => {
                 errors: [],
             };
 
-            const structure = _.get(req, 'body.structure');
-            const schema = new Schema(structure);
+            const schema = _.get(req, 'body.schema');
             result.errors = await SchemaStore.put(
                 'draft',
-                schema,
+                new Schema({ schema }).getSchema(), // todo: this makes a vulnerability
                 connectionManager,
             );
 
