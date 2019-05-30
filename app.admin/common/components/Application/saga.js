@@ -8,8 +8,8 @@ function* load({ client }) {
 
         const result = yield call(() => client.get(`schema/draft`));
         let schema = null;
-        if (result.data.structure && !_.iane(result.data.errors)) {
-            schema = new Schema(result.data.structure);
+        if (!_.iane(result.data.errors)) {
+            schema = new Schema(result.data.data);
         } else {
             yield put({
                 type: reducer.LOAD_FAILURE,

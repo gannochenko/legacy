@@ -28,7 +28,7 @@ export class Client {
 
     async get(path) {
         const url = await this.getUrl();
-        return await Axios.get(`${url}/${path}`);
+        return Axios.get(`${url}/${path}`);
     }
 
     /**

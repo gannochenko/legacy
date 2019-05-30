@@ -12,7 +12,7 @@ const Menu = ({ schema }) => {
             {!schema.isEmpty() && (
                 <Section>
                     <Title>Content</Title>
-                    {schema.get().map(entity => (
+                    {schema.getSchema().map(entity => (
                         <Item
                             to={`/data/${encodeURIComponent(entity.getName())}`}
                             key={entity.getName()}

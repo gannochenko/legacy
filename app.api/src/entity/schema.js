@@ -14,7 +14,7 @@ export const schema = {
             type: 'boolean',
             nullable: false,
         },
-        structure: {
+        schema: {
             type: 'json',
             nullable: false,
         },
