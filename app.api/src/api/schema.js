@@ -75,7 +75,6 @@ export default (app, params = {}) => {
             }
 
             result.data = await SchemaStore.load(type, connectionManager);
-            console.dir(result);
             return sendJSONResult(res, result, !result.data ? 404 : null);
         }),
     );

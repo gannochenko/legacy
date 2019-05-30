@@ -17,6 +17,8 @@ import HomePage from '../../pages/home';
 import DataPage from '../../pages/data';
 import DataDetailPage from '../../pages/data-detail';
 import SchemaPage from '../../pages/schema';
+import NotFoundPage from '../../pages/404';
+import ForbiddenPage from '../../pages/403';
 
 const Application = ({ dispatch, ready, client, history, theme }) => {
     useEffect(() => {
@@ -45,22 +47,30 @@ const Application = ({ dispatch, ready, client, history, theme }) => {
                                     render={route => <HomePage route={route} />}
                                 />
                                 <Route
-                                    exact
                                     path="/data/:entity_name/:code"
                                     render={route => (
                                         <DataDetailPage route={route} />
                                     )}
                                 />
                                 <Route
-                                    exact
                                     path="/data/:entity_name"
                                     render={route => <DataPage route={route} />}
                                 />
                                 <Route
-                                    exact
                                     path="/schema"
                                     render={route => (
                                         <SchemaPage route={route} />
+                                    )}
+                                />
+                                <Route
+                                    path="/403"
+                                    render={route => (
+                                        <ForbiddenPage route={route} />
+                                    )}
+                                />
+                                <Route
+                                    render={route => (
+                                        <NotFoundPage route={route} />
                                     )}
                                 />
                             </Switch>
