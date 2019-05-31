@@ -7,6 +7,7 @@
         "./build/server.js": "./build/client.js"
     },
     "scripts": {
+        "prepare": "install-self-peers -- --ignore-scripts",
         "start": "npm-run-all --parallel build:*:dev",
         "build": "npm-run-all --parallel build:*:prod",
         "build:server:prod": "webpack --config webpack.server.js --mode production",
@@ -32,6 +33,7 @@
         "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
         "@babel/preset-env": "^7.4.4",
         "@babel/preset-react": "^7.0.0",
+        "@team-griffin/install-self-peers": "^1.1.1",
         "babel-eslint": "^10.0.1",
         "babel-loader": "^8.0.6",
         "babel-plugin-styled-components": "^1.10.0",
