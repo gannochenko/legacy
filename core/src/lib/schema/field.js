@@ -72,7 +72,8 @@ export class Field {
         if (!this.fieldValidator) {
             this.fieldValidator = yup.object().shape({
                 name: yup
-                    .string('Field name should be a string')
+                    .string()
+                    .typeError('Field name should be a string')
                     .strict(true)
                     .required('Field should have a name'),
                 // // it is impossible in yup to write like this =(((
@@ -81,12 +82,21 @@ export class Field {
                 //     yup.array().of(yup.string()).min(1).max(1),
                 // ], 'Field type should be of type string or an array of one string'),
                 label: yup
-                    .string('Field label should be a string')
+                    .string()
+                    .typeError('Field label should be a string')
                     .strict(true),
-                length: yup.number('Field length should be a number'),
-                required: yup.boolean('Field required flag should be boolean'),
-                unique: yup.boolean('Field unique flag should be boolean'),
-                preview: yup.boolean('Field preview flag should be boolean'),
+                length: yup
+                    .number()
+                    .typeError('Field length should be a number'),
+                required: yup
+                    .boolean()
+                    .typeError('Field required flag should be boolean'),
+                unique: yup
+                    .boolean()
+                    .typeError('Field unique flag should be boolean'),
+                preview: yup
+                    .boolean()
+                    .typeError('Field preview flag should be boolean'),
             });
         }
 
