@@ -9,6 +9,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    opacity: 1;
+    transition: opacity 500ms ease;
+}
+
+.splash_dismissed {
+    opacity: 0;
 }
 
 .splash__central {
@@ -26,7 +32,8 @@
 }
 
 .splash__progress-indicator {
-    width: 70%;
+    width: 0%;
     background-color: lightgray;
     height: 0.2rem;
+    transition: width 200ms ease;
 }

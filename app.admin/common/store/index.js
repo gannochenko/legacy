@@ -8,7 +8,7 @@ import logger from 'redux-logger';
 import reducers from './reducers';
 import sagas from './sagas';
 
-export const createStore = ({ history }) => {
+export const createStore = ({ history, onChange }) => {
     const saga = createSagaMiddleware();
     const store = createRawStore(
         combineReducers(
@@ -26,5 +26,12 @@ export const createStore = ({ history }) => {
         yield all(sagas.map(saga => fork(saga)));
     });
 
-    return { store, saga };
+    let unsubscribe = null;
+    if (_.isFunction(onChange)) {
+        unsubscribe = store.subscribe(() => {
+            onChange({ store, unsubscribe });
+        });
+    }
+
+    return { store, saga, unsubscribe };
 };

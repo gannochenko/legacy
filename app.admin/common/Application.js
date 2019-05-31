@@ -11,7 +11,14 @@ import { createStore } from './store';
 import theme from './style/theme';
 
 const history = createHistory();
-const { store, saga } = createStore({ history });
+const { store, saga, unsubscribe } = createStore({
+    history,
+    onChange: ({ store: changeStore }) => {
+        console.dir('change!');
+        console.dir(changeStore.getState());
+        console.dir(window.__splash);
+    },
+});
 const settings = createSettings();
 const client = createClient(settings);
 
