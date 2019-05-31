@@ -56,7 +56,7 @@ module.exports = (env, argv) => {
                     exclude: /node_modules/,
                 },
                 {
-                    test: /\.(txt|html)$/,
+                    test: /\.(txt|html|css)$/,
                     use: 'raw-loader',
                 },
                 {

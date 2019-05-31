@@ -2,11 +2,13 @@ import express from 'express';
 import React from 'react';
 import cors from 'cors';
 import helmet from 'helmet';
+import path from 'path';
 
 import { Settings, logger } from 'ew-internals';
 
-import { renderToString } from 'react-dom/server';
+// import { renderToString } from 'react-dom/server';
 // import Application from "../common/Application";
+import { get as getSplash } from '../common/splash';
 
 const app = express();
 const settings = new Settings();
@@ -66,14 +68,16 @@ app.use(
 );
 
 app.use(helmet());
-app.use(express.static(process.cwd() + '/public/'));
+app.use(express.static(path.join(process.cwd(), 'public')));
 
 // todo: use renderer here
 app.get('*', async (req, res) => {
     // todo: ssr is not ready yet
-    let application = ''; // renderToString(<Application />);
+    const application = ''; // renderToString(<Application />);
 
-    let html = `<!doctype html>
+    const splash = getSplash();
+
+    const html = `<!doctype html>
     <html lang="">
         <head>
             <meta charset="utf-8">
@@ -81,8 +85,11 @@ app.get('*', async (req, res) => {
             <title>Admin</title>
             <meta name="description" content="">
             <meta name="viewport" content="width=device-width, initial-scale=1">
+            <style type="text/css">${splash.css}</style>
         </head>
         <body>
+            ${splash.html}
+            <script type="text/javascript">${splash.js}</script>
             <div id="root">${application}</div>
             <script>
                 window.__settings = ${JSON.stringify(
