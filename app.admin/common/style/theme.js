@@ -95,4 +95,8 @@ export default {
             },
         },
     },
+
+    progressBar: {
+        color: palette.sumacDyed,
+    },
 };
