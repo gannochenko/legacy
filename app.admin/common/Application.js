@@ -7,17 +7,14 @@ import { createHistory } from './lib/history';
 import { Context as ClientContext, createClient } from './lib/client';
 import ApplicationUI from './components/Application';
 import { createStore } from './store';
+import { dismissOnReady } from './splash/client';
 
 import theme from './style/theme';
 
 const history = createHistory();
 const { store, saga, unsubscribe } = createStore({
     history,
-    onChange: ({ store: changeStore }) => {
-        console.dir('change!');
-        console.dir(changeStore.getState());
-        console.dir(window.__splash);
-    },
+    onChange: dismissOnReady,
 });
 const settings = createSettings();
 const client = createClient(settings);

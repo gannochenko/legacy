@@ -8,7 +8,7 @@ import { Settings, logger } from 'ew-internals';
 
 // import { renderToString } from 'react-dom/server';
 // import Application from "../common/Application";
-import { get as getSplash } from '../common/splash';
+import { get as getSplash } from '../common/splash/server';
 
 const app = express();
 const settings = new Settings();
