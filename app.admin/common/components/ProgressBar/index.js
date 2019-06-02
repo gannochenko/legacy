@@ -1,19 +1,81 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { func, object, bool, number } from 'prop-types';
+import { object, number } from 'prop-types';
 import { ProgressBarContainer, Progress } from './style';
 
-const ProgressBar = ({ state, steps }) => {
-    if (!window.__progressBarUnlocked) {
-        return null;
+class ProgressBar extends React.Component {
+    constructor(props) {
+        super(props);
+        this.loadingBefore = false;
+        this.timer = null;
+        this.fadeTimer = null;
+        this.step = 0;
+
+        this.state = {
+            loading: false,
+            width: 0,
+            shown: false,
+            fading: false,
+        };
     }
 
-    const [loadingBefore, setLoadingBefore] = useState(false);
-    const [width, setWidth] = useState(0);
-    const [shown, setShown] = useState(false);
-    const [fading, setFading] = useState(false);
+    componentDidUpdate() {
+        const loadingNow = this.isLoading(this.props);
 
-    const loadingNow = useMemo(() => {
+        if (loadingNow !== this.loadingBefore) {
+            if (!this.loadingBefore && loadingNow) {
+                // restart the process
+                const { stepCount } = this.props;
+
+                clearTimeout(this.fadeTimer);
+                this.step = 0;
+                this.setState(
+                    {
+                        width: 0,
+                        fading: false,
+                        shown: true,
+                    },
+                    () => {
+                        const makeStep = () => {
+                            this.timer = setTimeout(
+                                () => {
+                                    this.setState(({ width }) => ({
+                                        width:
+                                            width + Math.floor(100 / stepCount),
+                                    }));
+                                    this.step += 1;
+                                    if (this.step + 1 < stepCount - 1) {
+                                        makeStep();
+                                    }
+                                },
+                                this.step
+                                    ? Math.floor(Math.random() * 1000)
+                                    : 50,
+                            );
+                        };
+                        makeStep();
+                    },
+                );
+            } else if (this.loadingBefore && !loadingNow) {
+                // end the process
+                clearTimeout(this.timer);
+                this.setState({
+                    width: 100,
+                    fading: true,
+                });
+                this.fadeTimer = setTimeout(() => {
+                    this.setState({
+                        shown: false,
+                    });
+                }, 1000);
+            }
+        }
+
+        this.loadingBefore = loadingNow;
+    }
+
+    isLoading(props) {
+        const { state } = props;
         let hasLoading = false;
         const pageCodes = Object.keys(state);
         for (let i = 0; i < pageCodes.length; i++) {
@@ -24,43 +86,31 @@ const ProgressBar = ({ state, steps }) => {
         }
 
         return hasLoading;
-    }, [state]);
+    }
 
-    useEffect(() => {
-        if (loadingNow !== loadingBefore) {
-            if (!loadingBefore && loadingNow) {
-                // restart the process
-                console.dir('start');
-                setShown(true);
-                setFading(false);
-                setWidth(30);
-            } else if (loadingBefore && !loadingNow) {
-                // end the process
-                console.dir('stop');
-                setFading(true);
-                setWidth(100);
-                setTimeout(() => {
-                    setShown(false);
-                }, 1000);
-            }
-
-            setLoadingBefore(loadingNow);
+    render() {
+        if (!window.__progressBarUnlocked) {
+            return null;
         }
-    }, [loadingBefore, loadingNow]);
 
-    return (
-        <ProgressBarContainer>
-            {shown && <Progress width={width} fading={fading} />}
-        </ProgressBarContainer>
-    );
-};
+        const { shown, width, fading } = this.state;
+
+        return (
+            <ProgressBarContainer>
+                {shown && <Progress width={width} fading={fading} />}
+            </ProgressBarContainer>
+        );
+    }
+}
 
 ProgressBar.propTypes = {
-    steps: number,
+    stepCount: number,
+    state: object,
 };
 
 ProgressBar.defaultProps = {
-    steps: 15,
+    stepCount: 15,
+    state: {},
 };
 
 export default connect(s => ({ state: s }))(ProgressBar);

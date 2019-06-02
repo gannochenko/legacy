@@ -38,10 +38,12 @@ const reducer = (state = initialState, action) => {
             return { ...initialState };
         case DELETE_SUCCESS:
             return {
+                ...state,
                 error: null,
             };
         case DELETE_FAILURE:
             return {
+                ...state,
                 error: action.payload,
             };
         default:
