@@ -42,9 +42,7 @@ const DataPage = ({
     error,
     notify,
 }) => {
-    const entityName = _.get(route, 'match.params.entity_name');
-    const entity = schema.getEntity(entityName);
-
+    const entity = schema.getEntity(_.get(route, 'match.params.entity_name'));
     if (!entity) {
         return null;
     }

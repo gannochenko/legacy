@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Button from '../../material-kit/CustomButtons';
 import {
     Container,
@@ -109,13 +109,16 @@ const List = ({
     openConfirmModal,
 }) => {
     sort = sort || {};
+
+    const columns = useMemo(() => entity.getFields(), [data]);
+
     return (
         <Container>
             <Table cellPadding="0" cellSpacing="0">
                 <THead>
                     <TR>
                         <ActionTH />
-                        {entity.getFields().map(field => (
+                        {columns.map(field => (
                             <TH key={field.getName()}>
                                 <HeaderLink
                                     sortable={field.isSortable()}
