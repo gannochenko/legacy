@@ -13,12 +13,6 @@ function* load(params) {
             });
         });
 
-        yield call(() => {
-            return new Promise(resolve => {
-                setTimeout(resolve, 3000);
-            });
-        });
-
         const result = _.get(apolloResult, `data.${queryName}`);
         if (_.iane(result.errors)) {
             yield put({

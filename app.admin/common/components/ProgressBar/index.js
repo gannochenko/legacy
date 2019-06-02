@@ -78,7 +78,7 @@ class ProgressBar extends React.Component {
         const { state } = props;
         let hasLoading = false;
         const pageCodes = Object.keys(state);
-        for (let i = 0; i < pageCodes.length; i++) {
+        for (let i = 0; i < pageCodes.length; i += 1) {
             if (state[pageCodes[i]].loading) {
                 hasLoading = true;
                 break;
