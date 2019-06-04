@@ -21,8 +21,14 @@ class ProgressBar extends React.Component {
 
     componentDidUpdate() {
         const loadingNow = this.isLoading(this.props);
+        const { shown } = this.state;
 
         if (loadingNow !== this.loadingBefore) {
+            // preventing the transition from playing backward
+            if (loadingNow && shown) {
+                return;
+            }
+
             if (!this.loadingBefore && loadingNow) {
                 // restart the process
                 const { stepCount } = this.props;
