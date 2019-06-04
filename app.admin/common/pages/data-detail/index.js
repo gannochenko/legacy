@@ -84,15 +84,14 @@ const DataPage = ({
 
     data = data || {};
 
+    let displayCode = '';
+    if (ready) {
+        displayCode = data.code ? data.code : 'new';
+    }
+
     return (
         <Layout
-            title={
-                ready
-                    ? `${entity.getDisplayName()}${
-                          data.code ? `: ${data.code}` : ': new'
-                      }`
-                    : ''
-            }
+            title={`${entity.getDisplayName()}: ${displayCode}`}
             // actions={
             //     <>
             //        <Button

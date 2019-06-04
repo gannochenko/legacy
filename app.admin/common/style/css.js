@@ -10,7 +10,6 @@ export const makeCss = ({ theme, prepend, append }) => `
         -webkit-tap-highlight-color: transparent;
         -ms-text-size-adjust: 100%;
         -webkit-text-size-adjust: 100%;
-        word-break: break-word;
     }
     
     body {
@@ -231,6 +230,10 @@ export const makeCss = ({ theme, prepend, append }) => `
     [aria-hidden="false"][hidden]:not(:focus) {
       clip: rect(0, 0, 0, 0);
       position: absolute;
+    }
+
+    td {
+        word-break: break-word;
     }
 
     ${append || ''}
