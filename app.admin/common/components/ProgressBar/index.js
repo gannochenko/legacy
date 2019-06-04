@@ -7,6 +7,7 @@ class ProgressBar extends React.Component {
     constructor(props) {
         super(props);
         this.loadingBefore = false;
+        this.startTimer = null;
         this.timer = null;
         this.fadeTimer = null;
         this.step = 0;
@@ -22,6 +23,7 @@ class ProgressBar extends React.Component {
     componentDidUpdate() {
         const loadingNow = this.isLoading(this.props);
         const { shown } = this.state;
+        const { debounceTolerance } = this.props;
 
         if (loadingNow !== this.loadingBefore) {
             // preventing the transition from playing backward
@@ -30,40 +32,48 @@ class ProgressBar extends React.Component {
             }
 
             if (!this.loadingBefore && loadingNow) {
-                // restart the process
-                const { stepCount } = this.props;
+                if (this.startTimer) {
+                    return;
+                }
+                this.startTimer = setTimeout(() => {
+                    // restart the process
+                    const { stepCount } = this.props;
 
-                clearTimeout(this.fadeTimer);
-                this.step = 0;
-                this.setState(
-                    {
-                        width: 0,
-                        fading: false,
-                        shown: true,
-                    },
-                    () => {
-                        const makeStep = () => {
-                            this.timer = setTimeout(
-                                () => {
-                                    this.setState(({ width }) => ({
-                                        width:
-                                            width + Math.floor(100 / stepCount),
-                                    }));
-                                    this.step += 1;
-                                    if (this.step + 1 < stepCount - 1) {
-                                        makeStep();
-                                    }
-                                },
-                                this.step
-                                    ? Math.floor(Math.random() * 1000)
-                                    : 50,
-                            );
-                        };
-                        makeStep();
-                    },
-                );
+                    clearTimeout(this.fadeTimer);
+                    this.step = 0;
+                    this.setState(
+                        {
+                            width: 0,
+                            fading: false,
+                            shown: true,
+                        },
+                        () => {
+                            const makeStep = () => {
+                                this.timer = setTimeout(
+                                    () => {
+                                        this.setState(({ width }) => ({
+                                            width:
+                                                width +
+                                                Math.floor(100 / stepCount),
+                                        }));
+                                        this.step += 1;
+                                        if (this.step + 1 < stepCount - 1) {
+                                            makeStep();
+                                        }
+                                    },
+                                    this.step
+                                        ? Math.floor(Math.random() * 1000)
+                                        : 50,
+                                );
+                            };
+                            makeStep();
+                        },
+                    );
+                }, debounceTolerance);
             } else if (this.loadingBefore && !loadingNow) {
                 // end the process
+                clearTimeout(this.startTimer);
+                this.startTimer = null;
                 clearTimeout(this.timer);
                 this.setState({
                     width: 100,
@@ -111,11 +121,13 @@ class ProgressBar extends React.Component {
 
 ProgressBar.propTypes = {
     stepCount: number,
+    debounceTolerance: number,
     state: object,
 };
 
 ProgressBar.defaultProps = {
     stepCount: 15,
+    debounceTolerance: 200,
     state: {},
 };
 
