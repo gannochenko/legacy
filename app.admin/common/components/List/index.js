@@ -171,7 +171,7 @@ const List = ({
                                             {() => <Actions />}
                                         </DropPanel>
                                     </ActionTD>
-                                    {entity.getFields().map(field => {
+                                    {columns.map(field => {
                                         const Cell = getCellComponent(field);
                                         return (
                                             <TD
