@@ -13,7 +13,7 @@ export const withClient = Component => {
 
 export class Client {
     constructor(settings) {
-        this._settings = settings;
+        this.settings = settings;
     }
 
     async query(parameters) {
@@ -36,18 +36,23 @@ export class Client {
      * @returns {ApolloClient}
      */
     async getApollo() {
-        if (!this._apollo) {
-            this._apollo = new ApolloClient({
+        if (!this.apollo) {
+            this.apollo = new ApolloClient({
                 uri: `${await this.getUrl()}/graphql`,
                 cache: new InMemoryCache(),
             });
         }
 
-        return this._apollo;
+        return this.apollo;
     }
 
     async getUrl() {
-        return this._settings.get('api.url');
+        let url = await this.settings.get('api.url');
+        if (__DEV__) {
+            url = url.replace('localhost', document.location.hostname);
+        }
+
+        return url;
     }
 }
 

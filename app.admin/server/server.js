@@ -74,8 +74,12 @@ app.use(express.static(path.join(process.cwd(), 'public')));
 app.get('*', async (req, res) => {
     // todo: ssr is not ready yet
     const application = ''; // renderToString(<Application />);
-
     const splash = getSplash();
+
+    let clientScript = '<script src="/client.js"></script>';
+    if (__DEV__) {
+        clientScript = `<script>document.write('<sc'+'ript src="http://'+document.location.hostname+':3001/client.js"></sc'+'ript>')</script>`;
+    }
 
     const html = `<!doctype html>
     <html lang="">
@@ -96,7 +100,7 @@ app.get('*', async (req, res) => {
                     await settings.forward(['api.url']),
                 )};
             </script>
-            <script src="http://localhost:3001/client.js"></script>
+            ${clientScript}
         </body>
     </html>`;
 

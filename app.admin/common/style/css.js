@@ -23,8 +23,9 @@ export const makeCss = ({ theme, prepend, append }) => `
         font-family: Montserrat, sans-serif;
         min-width: 320px;
         background-color: ${theme.body.background.color};
+        overflow-x: hidden;
     }
-    
+
     html, body, #root {
         height: 100%;
     }
