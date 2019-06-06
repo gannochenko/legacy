@@ -10,7 +10,7 @@ const grid = {
     },
 };
 
-export default {
+const theme = {
     // general settings
     font: {
         normal: '1rem',
@@ -100,3 +100,5 @@ export default {
         color: palette.sumacDyed,
     },
 };
+
+export default theme;

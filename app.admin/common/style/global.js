@@ -4,10 +4,12 @@ import { fgColor, fontMaterialIcons } from 'sc-companion';
 import makeCss from './css';
 
 export const ThemeContext = React.createContext();
-export const withTheme = Component => {
+export const withTheme = (Component, path = null) => {
     return props => (
         <ThemeContext.Consumer>
-            {value => <Component {...props} theme={value} />}
+            {value => (
+                <Component {...props} theme={path ? value[path] : value} />
+            )}
         </ThemeContext.Consumer>
     );
 };
