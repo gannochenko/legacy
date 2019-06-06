@@ -4,22 +4,22 @@
     "eslint:recommended",
     "airbnb-base",
     "prettier",
+    "prettier/react",
     "plugin:import/errors",
-    "plugin:import/warnings"
+    "plugin:import/warnings",
+    "plugin:react/recommended"
   ],
-  "plugins": ["prettier", "import"],
+  "plugins": ["prettier", "react", "import", "jsx-a11y", "react-hooks"],
   "rules": {
     "prettier/prettier": "warn",
     "import/prefer-default-export": "off",
     "no-param-reassign": "off",
     "class-methods-use-this": "off",
     "no-use-before-define": ["error", { "functions": false }],
-    "no-underscore-dangle": ["error", { "allow": ["__DEV__", "__TEST__", "_"] }]
+    "no-underscore-dangle": ["error", { "allow": ["__DEV__", "_"] }]
   },
   "globals": {
     "__DEV__": true,
-    "__TEST__": true,
-    "logger": true,
     "_": true
   }
 }
