@@ -3258,9 +3258,9 @@ evp_bytestokey@^1.0.0, evp_bytestokey@^1.0.3:
     safe-buffer "^5.1.1"
 
 ew-internals-ui@^1.0.11:
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/ew-internals-ui/-/ew-internals-ui-1.0.11.tgz#5c5d38c675afba3f87c7dca1f847d219c13c309e"
-  integrity sha512-dkJ6nGx6tWegE8RMsyn50UGG2VVSLJvE4FE+a5DGHn3b0O+YRkTbWzIXwyWLApsg6/o+njxZkQV3WizBr/0Xww==
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/ew-internals-ui/-/ew-internals-ui-1.0.12.tgz#047c259bec570dfe56de7cd947991b1dd9cc083e"
+  integrity sha512-0tQGI7Gurc6AayM1yv9SUzp1RU3kAMdoKp4FBf5xdrBnUJ7mDVOlBkMtYS45zIAfDTQD3Lsk/Np2JaaMKmU9gg==
 
 ew-internals@^1.0.8:
   version "1.0.8"

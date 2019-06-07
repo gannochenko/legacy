@@ -99,6 +99,7 @@ module.exports = (env, argv) => {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Headers': '*',
             },
+            overlay: true,
         },
         output: {
             path: path.join(__dirname, '.build'),

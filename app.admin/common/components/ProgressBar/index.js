@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { object, number } from 'prop-types';
-import { ProgressBarContainer, Progress } from './style';
+import { object, number, func, bool } from 'prop-types';
+import { defaultTheme, ProgressBarContainer, Progress } from './style';
 
-class ProgressBar extends React.Component {
+export class ProgressBarComponent extends React.Component {
     constructor(props) {
         super(props);
         this.loadingBefore = false;
@@ -23,7 +23,11 @@ class ProgressBar extends React.Component {
     componentDidUpdate() {
         const loadingNow = this.isLoading(this.props);
         const { shown } = this.state;
-        const { debounceTolerance } = this.props;
+        const {
+            debounceTolerance,
+            fadeTimeout,
+            maximumStepDuration,
+        } = this.props;
 
         if (loadingNow !== this.loadingBefore) {
             // preventing the transition from playing backward
@@ -62,7 +66,10 @@ class ProgressBar extends React.Component {
                                         }
                                     },
                                     this.step
-                                        ? Math.floor(Math.random() * 1000)
+                                        ? Math.floor(
+                                              Math.random() *
+                                                  maximumStepDuration,
+                                          )
                                         : 50,
                                 );
                             };
@@ -83,7 +90,7 @@ class ProgressBar extends React.Component {
                     this.setState({
                         shown: false,
                     });
-                }, 1000);
+                }, fadeTimeout);
             }
         }
 
@@ -105,30 +112,47 @@ class ProgressBar extends React.Component {
     }
 
     render() {
-        if (!window.__progressBarUnlocked) {
+        const { observeGlobalLock, children, theme } = this.props;
+        if (observeGlobalLock && !window.splashProgressBarUnlocked) {
             return null;
         }
 
         const { shown, width, fading } = this.state;
 
+        if (children) {
+            return children({ shown, width, fading });
+        }
+
         return (
-            <ProgressBarContainer>
-                {shown && <Progress width={width} fading={fading} />}
+            <ProgressBarContainer theme={theme}>
+                {shown && (
+                    <Progress width={width} fading={fading} theme={theme} />
+                )}
             </ProgressBarContainer>
         );
     }
 }
 
-ProgressBar.propTypes = {
+ProgressBarComponent.propTypes = {
+    theme: object,
+    children: func,
     stepCount: number,
     debounceTolerance: number,
     state: object,
+    observeGlobalLock: bool,
+    fadeTimeout: number,
+    maximumStepDuration: number,
 };
 
-ProgressBar.defaultProps = {
+ProgressBarComponent.defaultProps = {
+    theme: defaultTheme,
+    children: null,
     stepCount: 15,
     debounceTolerance: 200,
     state: {},
+    observeGlobalLock: false,
+    fadeTimeout: 1000,
+    maximumStepDuration: 1000,
 };
 
-export default connect(s => ({ state: s }))(ProgressBar);
+export default connect(s => ({ state: s }))(ProgressBarComponent);

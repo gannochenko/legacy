@@ -1,4 +1,4 @@
-export const makeCss = ({ theme, prepend, append }) => `
+const makeCss = ({ theme, prepend, append }) => `
     ${prepend || ''}
     @import url('https://fonts.googleapis.com/css?family=Montserrat');
     

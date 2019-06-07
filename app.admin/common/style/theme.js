@@ -97,7 +97,10 @@ const theme = {
     },
 
     progressBar: {
-        color: palette.sumacDyed,
+        bar: {
+            color: palette.sumacDyed,
+        },
+        color: 'transparent',
     },
 };
 
