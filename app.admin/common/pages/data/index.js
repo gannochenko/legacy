@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { withNotification } from 'ew-internals-ui';
-// import { stringify, parse } from '@m59/qs';
+import { useErrorNotification, useUnload } from '../../lib/hooks';
 import { LOAD, UNLOAD, DELETE } from './reducer';
 import { withClient } from '../../lib/client';
 import List from '../../components/List';
@@ -42,6 +42,10 @@ const DataPage = ({
     error,
     notify,
 }) => {
+    if (!schema) {
+        return null;
+    }
+
     const entity = schema.getEntity(_.get(route, 'match.params.entity_name'));
     if (!entity) {
         return null;
@@ -50,7 +54,6 @@ const DataPage = ({
     const search = useMemo(() => parseSearch(route.location.search), [
         route.location.search,
     ]);
-
     const pageParams = extractPageParameters(search);
 
     // load data on component mount
@@ -64,27 +67,8 @@ const DataPage = ({
             },
         });
     }, [entity.getName(), search]);
-
-    // show error
-    useEffect(() => {
-        if (_.iane(error)) {
-            notify({
-                text: error[0].message,
-                type: 'error',
-                code: 'error',
-            });
-        }
-    }, [error]);
-
-    // cleanup data on unmount
-    useEffect(
-        () => () => {
-            dispatch({
-                type: UNLOAD,
-            });
-        },
-        [],
-    );
+    useErrorNotification(error, notify);
+    useUnload(dispatch, UNLOAD);
 
     return (
         <Layout

@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { LOAD, UNLOAD, SAVE, LOAD_SUCCESS, DELETE } from './reducer';
+import { useErrorNotification, useUnload } from '../../lib/hooks';
 import { withClient } from '../../lib/client';
 import { withNotification } from 'ew-internals-ui';
 import Form from '../../components/Form';
@@ -21,6 +22,10 @@ const DataPage = ({
     error,
     saveCounter,
 }) => {
+    if (!schema) {
+        return null;
+    }
+
     const entityName = _.get(route, 'match.params.entity_name');
     const code = _.get(route, 'match.params.code');
     const entity = schema.getEntity(entityName);
@@ -50,27 +55,8 @@ const DataPage = ({
             });
         }
     }, [entity.getName(), code]);
-
-    // cleanup data on unmount
-    useEffect(
-        () => () => {
-            dispatch({
-                type: UNLOAD,
-            });
-        },
-        [],
-    );
-
-    useEffect(() => {
-        if (_.iane(error)) {
-            notify({
-                text: error[0].message,
-                type: 'error',
-                code: 'error',
-            });
-        }
-    }, [error]);
-
+    useErrorNotification(error, notify);
+    useUnload(dispatch, UNLOAD);
     useEffect(() => {
         if (saveCounter) {
             notify({

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Provider } from 'react-redux';
+import { Notification, NotificationContext } from 'ew-internals-ui';
 
 import { ThemeContext } from './style/global';
 import { Context as SettingsContext, createSettings } from './lib/settings';
@@ -19,20 +20,30 @@ const { store, saga, unsubscribe } = createStore({
 const settings = createSettings();
 const client = createClient(settings);
 
-const Application = () => (
-    <ThemeContext.Provider value={theme}>
-        <SettingsContext.Provider value={settings}>
-            <ClientContext.Provider value={client}>
-                <Provider store={store}>
-                    <ApplicationUI
-                        history={history}
-                        theme={theme}
-                        client={client}
-                    />
-                </Provider>
-            </ClientContext.Provider>
-        </SettingsContext.Provider>
-    </ThemeContext.Provider>
-);
+const Application = () => {
+    const notificationRef = useRef();
+
+    return (
+        <ThemeContext.Provider value={theme}>
+            <SettingsContext.Provider value={settings}>
+                <ClientContext.Provider value={client}>
+                    <Provider store={store}>
+                        <Notification
+                            ref={notificationRef}
+                            theme={theme.notifications}
+                        />
+                        <NotificationContext.Provider value={notificationRef}>
+                            <ApplicationUI
+                                history={history}
+                                theme={theme}
+                                client={client}
+                            />
+                        </NotificationContext.Provider>
+                    </Provider>
+                </ClientContext.Provider>
+            </SettingsContext.Provider>
+        </ThemeContext.Provider>
+    );
+};
 
 export default Application;
