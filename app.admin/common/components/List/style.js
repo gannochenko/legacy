@@ -8,6 +8,7 @@ import {
     ellipsis,
     bgColor,
 } from 'sc-companion';
+import { DropPanel } from 'ew-internals-ui';
 import { withTheme } from '../../style/global';
 
 const thPadding = '1rem';
@@ -97,3 +98,5 @@ export const ItemAction = styled.div`
 export const ButtonWrap = styled.div`
     display: inline-block;
 `;
+
+export const ActionPanel = withTheme(DropPanel, 'dropPanel');

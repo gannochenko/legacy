@@ -17,6 +17,7 @@ import {
     ItemActions,
     ItemAction,
     ButtonWrap,
+    ActionPanel,
 } from './style';
 
 import { TYPE_STRING, TYPE_DATETIME, TYPE_BOOLEAN } from 'project-minimum-core';
@@ -157,7 +158,7 @@ const List = ({
                             return (
                                 <TR key={item.code}>
                                     <ActionTD>
-                                        <DropPanel
+                                        <ActionPanel
                                             panel={({ closePanel }) =>
                                                 renderItemActions(
                                                     item,
@@ -169,7 +170,7 @@ const List = ({
                                             openOnChildrenClick
                                         >
                                             {() => <Actions />}
-                                        </DropPanel>
+                                        </ActionPanel>
                                     </ActionTD>
                                     {columns.map(field => {
                                         const Cell = getCellComponent(field);

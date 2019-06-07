@@ -47,6 +47,7 @@ export default withTheme(({ field, value, error, onChange, theme }) => {
                         )}
                         theme={theme.dropPanel}
                         ref={dpRef}
+                        openOnChildrenClick={false}
                     >
                         {() => (
                             <Input

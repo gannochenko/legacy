@@ -10,7 +10,7 @@ const grid = {
     },
 };
 
-export default {
+const theme = {
     // general settings
     font: {
         normal: '1rem',
@@ -97,6 +97,11 @@ export default {
     },
 
     progressBar: {
-        color: palette.sumacDyed,
+        bar: {
+            color: palette.sumacDyed,
+        },
+        color: 'transparent',
     },
 };
+
+export default theme;

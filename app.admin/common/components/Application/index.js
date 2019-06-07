@@ -9,10 +9,10 @@ import {
     Modal,
     ModalContext,
 } from 'ew-internals-ui';
+import { MainProgressBar } from './style';
 
 import { LOAD } from './reducer';
 import { GlobalStyle } from '../../style/global';
-import ProgressBar from '../ProgressBar';
 
 import HomePage from '../../pages/home';
 import DataPage from '../../pages/data';
@@ -37,7 +37,7 @@ const Application = ({ dispatch, ready, client, history, theme }) => {
             <GlobalStyle />
             <Notification ref={notificationRef} theme={theme.notifications} />
             <Modal ref={modalRef} theme={theme.modal} active />
-            <ProgressBar />
+            <MainProgressBar observeGlobalLock />
             <NotificationContext.Provider value={notificationRef}>
                 <ModalContext.Provider value={modalRef}>
                     {ready && (

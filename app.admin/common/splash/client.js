@@ -7,7 +7,7 @@ export const dismissOnReady = ({ store, unsubscribe }) => {
                 const pageCode = pageCodes[i];
                 if (pageCode !== 'application' && state[pageCode].ready) {
                     window.__splash.dismiss();
-                    window.__progressBarUnlocked = true;
+                    window.splashProgressBarUnlocked = true;
                     unsubscribe();
                     break;
                 }
