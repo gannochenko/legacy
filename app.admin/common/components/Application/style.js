@@ -1,4 +1,4 @@
-import ProgressBar from '../ProgressBar';
+import { ProgressBar } from 'ew-internals-ui';
 
 import { withTheme } from '../../style/global';
 
