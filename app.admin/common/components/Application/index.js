@@ -3,6 +3,7 @@ import { Switch } from 'react-router';
 import { ConnectedRouter } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
+import { object, func, bool } from 'prop-types';
 import { Modal, ModalContext, withNotification } from 'ew-internals-ui';
 import { MainProgressBar } from './style';
 import {
@@ -87,6 +88,24 @@ const Application = ({
             </ModalContext.Provider>
         </>
     );
+};
+
+Application.propTypes = {
+    dispatch: func.isRequired,
+    settings: object.isRequired,
+    ready: bool,
+    history: object.isRequired,
+    client: object.isRequired,
+    theme: object.isRequired,
+    error: object,
+    notify: func.isRequired,
+    offline: bool,
+};
+
+Application.defaultProps = {
+    ready: false,
+    error: null,
+    offline: null,
 };
 
 export default withNotification(connect(s => s.application)(Application));

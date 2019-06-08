@@ -54,9 +54,9 @@ export const useNetworkNotification = (offline, notify) => {
         } else if (offline === false) {
             notify({
                 text: 'We are back on-line!',
-                icon: 'cloud_off',
+                icon: 'cloud_queue',
                 code: 'connection_error',
-                closeable: false,
+                closeable: true,
                 lifeTime: 3000,
             });
         }

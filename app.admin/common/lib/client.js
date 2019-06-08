@@ -4,11 +4,13 @@ import Axios from 'axios';
 
 export const Context = React.createContext();
 export const withClient = Component => {
-    return props => (
+    const ComponentWithClient = props => (
         <Context.Consumer>
             {value => <Component {...props} client={value} />}
         </Context.Consumer>
     );
+
+    return ComponentWithClient;
 };
 
 export class Client {

@@ -30,7 +30,7 @@
             );
         };
         makeStep();
-        window.__splash = {
+        window.splash = {
             dismiss: dismiss,
         };
     }
