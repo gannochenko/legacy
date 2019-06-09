@@ -7,6 +7,9 @@ import {
 
 import moment from 'moment';
 
+/**
+ * @deprecated
+ */
 export default class Validator {
     /**
      * todo: different locales

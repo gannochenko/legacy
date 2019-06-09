@@ -77,14 +77,14 @@ export default class EntityManager {
         };
         const references = [];
         entity.getFields().forEach(field => {
-            if (field.isMultiple() && field.getReferencedEntityName()) {
+            if (field.isReference() && field.isMultiple()) {
                 // collect multiple references, don't create fields for it
                 references.push(field);
                 return;
             }
 
             const column = {
-                type: this.getDBType(field),
+                type: field.isReference() ? 'integer' : this.getDBType(field),
                 nullable: !field.isMandatory(),
                 array: field.isMultiple(),
             };
@@ -94,10 +94,10 @@ export default class EntityManager {
                 column.length = length;
             }
 
-            columns[field.name] = column;
+            columns[field.getName()] = column;
         });
 
-        result[entity.name] = new EntitySchema({
+        result[entity.getName()] = new EntitySchema({
             name: this.constructor.getTableName(entity),
             columns,
         });

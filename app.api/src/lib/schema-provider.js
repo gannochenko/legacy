@@ -4,6 +4,7 @@ import { convertToCamel } from './util';
 
 /**
  * todo: this class should produce complex object, with prototypes
+ * @deprecated
  */
 export default class SchemaProvider {
     async get() {

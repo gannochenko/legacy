@@ -6,7 +6,7 @@ export const schema = {
     columns: {
         id: {
             primary: true,
-            type: 'int',
+            type: 'integer',
             generated: 'increment',
             nullable: false,
         },
@@ -19,7 +19,7 @@ export const schema = {
             nullable: false,
         },
         version: {
-            type: 'int',
+            type: 'integer',
             defaultValue: 0,
         },
     },

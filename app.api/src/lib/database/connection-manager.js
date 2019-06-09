@@ -1,14 +1,14 @@
 import { createConnection } from 'typeorm';
 
-import SchemaEntity from '../entity/schema';
-import migrations from '../migrations';
-import { DB_MIGRATION_TABLE_NAME } from '../constants';
-import { injectPassword } from './util';
+import SchemaEntity from '../../entity/schema';
+import migrations from '../../migrations/index';
+import { DB_MIGRATION_TABLE_NAME } from '../../constants';
+import { injectPassword } from '../util';
 
 export default class ConnectionManager {
     constructor({ settings }) {
-        this._settings = settings;
-        this._connections = {};
+        this.settings = settings;
+        this.connections = {};
     }
 
     /**
@@ -18,14 +18,14 @@ export default class ConnectionManager {
      * @returns {Promise<*>}
      */
     async get({ entities, preConnect }) {
-        if (!this._connections.entity) {
-            this._connections.entity = this.make({
-                settings: this._settings,
+        if (!this.connections.entity) {
+            this.connections.entity = this.make({
+                settings: this.settings,
                 entities,
                 preConnect,
             });
         }
-        return this._connections.entity;
+        return this.connections.entity;
     }
 
     /**
@@ -33,9 +33,9 @@ export default class ConnectionManager {
      * @returns {Promise<void>}
      */
     async close() {
-        if (this._connections.entity) {
-            await this._connections.entity.close();
-            this._connections.entity = null;
+        if (this.connections.entity) {
+            await this.connections.entity.close();
+            this.connections.entity = null;
         }
     }
 
@@ -44,10 +44,10 @@ export default class ConnectionManager {
      * @returns {Promise<*|CacheConfigurator.simple|buttonStyle.simple|{'&,&:focus,&:hover,&:visited', '&$primary', '&$info', '&$success', '&$warning', '&$rose', '&$danger', '&$twitter', '&$facebook', '&$google', '&$github'}>}
      */
     async getSystem() {
-        if (!this._connections.simple) {
-            this._connections.simple = this.make({
+        if (!this.connections.simple) {
+            this.connections.simple = this.make({
                 name: 'system',
-                settings: this._settings,
+                settings: this.settings,
                 entities: [
                     SchemaEntity,
                     // todo: user entity, group entity
@@ -56,12 +56,12 @@ export default class ConnectionManager {
                 migrations,
             });
         }
-        return this._connections.simple;
+        return this.connections.simple;
     }
 
     async invalidateConnections() {
         await this.close();
-        this._connections = {};
+        this.connections = {};
     }
 
     async make(params = {}) {
@@ -74,7 +74,7 @@ export default class ConnectionManager {
         const password = await settings.get('db.password', null);
         const sUrl = injectPassword(url, password);
 
-        return await createConnection({
+        return createConnection({
             ...params,
             url: sUrl,
             type: 'postgres',

@@ -4,7 +4,7 @@ import helmet from 'helmet';
 
 import { Settings } from 'ew-internals';
 import Cache from './cache';
-import ConnectionManager from './connection-manager';
+import ConnectionManager from './database/connection-manager';
 import SchemaProvider from './schema-provider';
 
 import attachGraphQLMiddleware from './apollo';

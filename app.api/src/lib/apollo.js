@@ -26,11 +26,10 @@ const getServer = async ({ cache, schemaProvider, connectionManager }) => {
 
         const schema = await SchemaStore.load('actual', connectionManager);
         const databaseEntityManager = new DatabaseEntityManager(schema);
-        console.dir(await databaseEntityManager.get());
 
         const entityManager = new EntityManager(schemaProvider);
         const connection = await connectionManager.get({
-            entities: Object.values(await entityManager.get()),
+            entities: Object.values(await databaseEntityManager.get()),
             preConnect: true,
         });
 
