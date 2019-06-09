@@ -2,7 +2,7 @@ import DataLoader from 'dataloader';
 
 export default class DataLoaderPool {
     constructor() {
-        this._pool = {};
+        this.pool = {};
     }
 
     get(loaderId, fn) {
@@ -10,10 +10,10 @@ export default class DataLoaderPool {
             return null;
         }
 
-        if (!this._pool[loaderId]) {
-            this._pool[loaderId] = new DataLoader(fn);
+        if (!this.pool[loaderId]) {
+            this.pool[loaderId] = new DataLoader(fn);
         }
 
-        return this._pool[loaderId];
+        return this.pool[loaderId];
     }
 }

@@ -5,9 +5,11 @@ import accepts from 'accepts';
 import { mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import uuid from 'uuid/v4';
 
+import SchemaStore from '../lib/schema-store';
 import GQLGenerator from './gql-generator';
 import ResolverGenerator from './resolver-generator';
 import EntityManager from './entity-manager';
+import DatabaseEntityManager from './database/entity-manager';
 import DataLoaderPool from './data-loader-pool';
 
 import typeDefs from '../graphql/types/index';
@@ -21,6 +23,10 @@ const getServer = async ({ cache, schemaProvider, connectionManager }) => {
             await server.stop();
             await connectionManager.close();
         }
+
+        const schema = await SchemaStore.load('actual', connectionManager);
+        const databaseEntityManager = new DatabaseEntityManager(schema);
+        console.dir(await databaseEntityManager.get());
 
         const entityManager = new EntityManager(schemaProvider);
         const connection = await connectionManager.get({
@@ -58,7 +64,6 @@ const getServer = async ({ cache, schemaProvider, connectionManager }) => {
 
 export default (app, params = {}) => {
     // server.applyMiddleware({ app, cors: false });
-    const { cache } = params;
 
     app.use('/graphql', async (req, res, next) => {
         if (__DEV__ && req.method === 'GET') {
@@ -74,9 +79,8 @@ export default (app, params = {}) => {
                 const playground = renderPlaygroundPage({
                     endpoint: '/graphql',
                 });
-                res.write(playground);
-                res.end();
-                return;
+
+                return res.send(playground);
             }
         }
 

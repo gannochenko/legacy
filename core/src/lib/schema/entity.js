@@ -115,14 +115,26 @@ export class Entity {
         return errors;
     }
 
+    /**
+     * Returns entity name, in snake_case
+     * @returns {*|string}
+     */
     getName() {
         return this.declaration.name;
     }
 
+    /**
+     * Returns entity name in CamelCase
+     * @returns {*}
+     */
     getCamelName() {
         return convertToCamel(this.getName().toLowerCase());
     }
 
+    /**
+     * Returns entity name in Readable format with spaces
+     * @returns {*}
+     */
     getDisplayName() {
         return uCFirst(this.getName()).replace(/_/g, ' ');
     }

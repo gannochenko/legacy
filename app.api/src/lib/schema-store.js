@@ -1,5 +1,5 @@
-import SchemaEntity from '../entity/schema';
 import { Schema } from 'project-minimum-core';
+import SchemaEntity from '../entity/schema';
 
 class SchemaStore {
     static async load(type, connectionManager) {

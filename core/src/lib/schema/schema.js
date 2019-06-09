@@ -79,6 +79,14 @@ export class Schema {
         return this.declaration;
     }
 
+    getDeclaration() {
+        return this.declaration;
+    }
+
+    /**
+     * @deprecated
+     * @returns {{schema: Entity[], version: number}|*}
+     */
     get() {
         return this.declaration;
     }

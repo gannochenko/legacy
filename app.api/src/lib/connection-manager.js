@@ -3,7 +3,7 @@ import { createConnection } from 'typeorm';
 import SchemaEntity from '../entity/schema';
 import migrations from '../migrations';
 import { DB_MIGRATION_TABLE_NAME } from '../constants';
-import {injectPassword} from "./util";
+import { injectPassword } from './util';
 
 export default class ConnectionManager {
     constructor({ settings }) {
@@ -11,6 +11,12 @@ export default class ConnectionManager {
         this._connections = {};
     }
 
+    /**
+     * Creates a regular connection to get data over
+     * @param entities
+     * @param preConnect
+     * @returns {Promise<*>}
+     */
     async get({ entities, preConnect }) {
         if (!this._connections.entity) {
             this._connections.entity = this.make({
@@ -22,6 +28,10 @@ export default class ConnectionManager {
         return this._connections.entity;
     }
 
+    /**
+     * Close current regular connection
+     * @returns {Promise<void>}
+     */
     async close() {
         if (this._connections.entity) {
             await this._connections.entity.close();
@@ -29,6 +39,10 @@ export default class ConnectionManager {
         }
     }
 
+    /**
+     * Creates a system connection to get the schema over
+     * @returns {Promise<*|CacheConfigurator.simple|buttonStyle.simple|{'&,&:focus,&:hover,&:visited', '&$primary', '&$info', '&$success', '&$warning', '&$rose', '&$danger', '&$twitter', '&$facebook', '&$google', '&$github'}>}
+     */
     async getSystem() {
         if (!this._connections.simple) {
             this._connections.simple = this.make({

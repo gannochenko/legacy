@@ -2,6 +2,9 @@ import { EntitySchema } from 'typeorm';
 import { DB_CODE_COLUMN_LENGTH } from '../constants';
 import { getRefName, getRefTableName, getTableName } from './entity-util';
 
+/**
+ * @deprecated
+ */
 export default class EntityManager {
     constructor(schemaProvider) {
         this.schemaProvider = schemaProvider;

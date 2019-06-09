@@ -130,10 +130,18 @@ export class Field {
         return null;
     }
 
+    /**
+     * Returns field name, in snake_case
+     * @returns {*|string}
+     */
     getName() {
         return this.declaration.name;
     }
 
+    /**
+     * Returns field name in Readable format with spaces
+     * @returns {*}
+     */
     getDisplayName() {
         return _.isne(this.declaration.label)
             ? this.declaration.label

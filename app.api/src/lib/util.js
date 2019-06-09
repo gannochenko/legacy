@@ -25,13 +25,18 @@ export const decomposeURL = url => {
         return null;
     }
 
-    if (isNaN(parts.port)) {
+    if (Number.isNaN(parts.port)) {
         delete parts.port;
     }
 
     return parts;
 };
 
+/**
+ * @deprecated
+ * @param str
+ * @returns {string}
+ */
 export const convertToCamel = str => {
     str = camel(str.toLowerCase());
     return `${str.substr(0, 1).toUpperCase()}${str.substr(1, str.length - 1)}`;
