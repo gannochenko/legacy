@@ -6,7 +6,7 @@ import { mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import uuid from 'uuid/v4';
 
 import SchemaStore from '../lib/schema-store';
-import GrapgQLType from './gql/type';
+import GQLTypeGenerator from './gql/type-generator';
 import ResolverGenerator from './resolver-generator';
 import EntityManager from './entity-manager';
 import DatabaseEntityManager from './database/entity-manager';
@@ -33,8 +33,7 @@ const getServer = async ({ cache, schemaProvider, connectionManager }) => {
             preConnect: true,
         });
 
-        // create GRAPHQL types
-        const eGQL = await GrapgQLType.make({ schema });
+        const entityTypeDefs = await GQLTypeGenerator.make(schema);
         // create GRAPHQL resolvers
         const eResolver = await ResolverGenerator.make({
             schemaProvider,
@@ -44,7 +43,9 @@ const getServer = async ({ cache, schemaProvider, connectionManager }) => {
 
         // now everything is ready to create the server
         server = new ApolloServer({
-            typeDefs: mergeTypes([...eGQL, ...typeDefs], { all: true }),
+            typeDefs: mergeTypes([...entityTypeDefs, ...typeDefs], {
+                all: true,
+            }),
             resolvers: mergeResolvers([...eResolver, ...resolvers]),
             context: async ({ req, res }) => {
                 return {

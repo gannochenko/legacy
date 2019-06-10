@@ -1,0 +1,212 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GQL Type generator Should generate gql type declaration 1`] = `
+Array [
+  "
+type ImportantPersonResult {
+    errors: [Error]
+    data: ImportantPerson
+}
+
+type ImportantPersonSearchResult {
+    errors: [Error]
+    data: [ImportantPerson]!
+    limit: Int!
+    offset: Int!
+    count: Int
+}
+
+type ImportantPerson {
+    code: String
+    full_name: String
+    tags: [String]
+    lucky_numbers: [Int]
+    birth_date: String
+    has_pets: Boolean
+    pets(
+                filter: IPetFilter
+                sort: IPetSort
+                limit: Int
+                offset: Int
+                page: Int
+                pageSize: Int
+                count: Int
+            ): [Pet]
+    tools(
+                filter: IToolFilter
+                sort: IToolSort
+                limit: Int
+                offset: Int
+                page: Int
+                pageSize: Int
+                count: Int
+            ): [Tool]
+    partner: ImportantPerson
+}
+
+input IImportantPerson {
+    full_name: String
+    tags: [String]
+    lucky_numbers: [Int]
+    birth_date: String
+    has_pets: Boolean
+    pets: [String]
+    tools: [String]
+    partner: String
+}
+
+input IImportantPersonFilter {
+    SYSLogic: FilterLogic
+    SYSSubFilter: [IImportantPersonFilter]
+    code: IFilterFieldValue
+    full_name: IFilterFieldValue
+    tags: IFilterFieldValue
+    lucky_numbers: IFilterFieldValue
+    birth_date: IFilterFieldValue
+    has_pets: IFilterFieldValue
+    pets: IFilterFieldValue
+    tools: IFilterFieldValue
+    partner: IFilterFieldValue
+}
+
+input IImportantPersonSort {
+    code: SortOrder
+    full_name: SortOrder
+    tags: SortOrder
+    lucky_numbers: SortOrder
+    birth_date: SortOrder
+    has_pets: SortOrder
+    pets: SortOrder
+    tools: SortOrder
+    partner: SortOrder
+}
+
+type Query {
+    ImportantPersonGet(code: String!): ImportantPersonResult
+    ImportantPersonFind(
+        filter: IImportantPersonFilter
+        search: String
+        sort: IImportantPersonSort
+        limit: Int
+        offset: Int
+        page: Int
+        pageSize: Int
+        count: Boolean
+    ): ImportantPersonSearchResult
+}
+
+type Mutation {
+    ImportantPersonDelete(code: String!): ImportantPersonResult
+    ImportantPersonPut(code: String, data: IImportantPerson!): ImportantPersonResult
+}
+        ",
+  "
+type PetResult {
+    errors: [Error]
+    data: Pet
+}
+
+type PetSearchResult {
+    errors: [Error]
+    data: [Pet]!
+    limit: Int!
+    offset: Int!
+    count: Int
+}
+
+type Pet {
+    code: String
+    nickname: String
+}
+
+input IPet {
+    nickname: String
+}
+
+input IPetFilter {
+    SYSLogic: FilterLogic
+    SYSSubFilter: [IPetFilter]
+    code: IFilterFieldValue
+    nickname: IFilterFieldValue
+}
+
+input IPetSort {
+    code: SortOrder
+    nickname: SortOrder
+}
+
+type Query {
+    PetGet(code: String!): PetResult
+    PetFind(
+        filter: IPetFilter
+        search: String
+        sort: IPetSort
+        limit: Int
+        offset: Int
+        page: Int
+        pageSize: Int
+        count: Boolean
+    ): PetSearchResult
+}
+
+type Mutation {
+    PetDelete(code: String!): PetResult
+    PetPut(code: String, data: IPet!): PetResult
+}
+        ",
+  "
+type ToolResult {
+    errors: [Error]
+    data: Tool
+}
+
+type ToolSearchResult {
+    errors: [Error]
+    data: [Tool]!
+    limit: Int!
+    offset: Int!
+    count: Int
+}
+
+type Tool {
+    code: String
+    name: String
+}
+
+input ITool {
+    name: String
+}
+
+input IToolFilter {
+    SYSLogic: FilterLogic
+    SYSSubFilter: [IToolFilter]
+    code: IFilterFieldValue
+    name: IFilterFieldValue
+}
+
+input IToolSort {
+    code: SortOrder
+    name: SortOrder
+}
+
+type Query {
+    ToolGet(code: String!): ToolResult
+    ToolFind(
+        filter: IToolFilter
+        search: String
+        sort: IToolSort
+        limit: Int
+        offset: Int
+        page: Int
+        pageSize: Int
+        count: Boolean
+    ): ToolSearchResult
+}
+
+type Mutation {
+    ToolDelete(code: String!): ToolResult
+    ToolPut(code: String, data: ITool!): ToolResult
+}
+        ",
+]
+`;

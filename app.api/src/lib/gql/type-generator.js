@@ -6,8 +6,8 @@ import {
     ENTITY_CODE_FIELD_NAME,
 } from 'project-minimum-core';
 
-export default class Type {
-    static async make({ schema }) {
+export default class TypeGenerator {
+    static async make(schema) {
         const gqlTypes = Object.values(await schema.getSchema()).map(entity =>
             this.makeForEntity(entity, schema),
         );
