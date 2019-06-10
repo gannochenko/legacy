@@ -4,7 +4,7 @@ import isObject from 'lodash.isobject';
 // const isNumber = require('lodash.isnumber');
 import isFunction from 'lodash.isfunction';
 import union from 'lodash.union';
-// const intersection = require('lodash.intersection');
+import intersection from 'lodash.intersection';
 import difference from 'lodash.difference';
 import get from 'lodash.get';
 import cloneDeep from 'lodash.clonedeep';
@@ -16,6 +16,7 @@ export default {
     isObject,
     isFunction,
     union,
+    intersection,
     difference,
     cloneDeep,
     get,

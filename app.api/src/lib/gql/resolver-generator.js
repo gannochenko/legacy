@@ -1,16 +1,16 @@
 import { getRepository, In, Like } from 'typeorm';
 import uuid from 'uuid/v4';
+import { TYPE_DATETIME, QUERY_FIND_MAX_PAGE_SIZE } from 'project-minimum-core';
 import { getRefName } from '../entity-util';
 import { getASTAt, getSelectionAt } from '../ast';
 
 import Validator from '../validator';
-import { TYPE_DATETIME, QUERY_FIND_MAX_PAGE_SIZE } from 'project-minimum-core';
 
 export default class ResolverGenerator {
     static make(schema, databaseEntityManager, connection) {
-        const entites = Object.values(schema.getSchema());
+        const entities = Object.values(schema.getSchema());
 
-        return entites.map(entity =>
+        return entities.map(entity =>
             this.makeForEntity(
                 entity,
                 schema,
@@ -48,7 +48,7 @@ export default class ResolverGenerator {
                     where: {
                         code: code.trim(),
                     },
-                    select: selectedFields,
+                    select: this.getRealFields(selectedFields, entity),
                 });
             }, result.errors);
 
@@ -685,5 +685,13 @@ export default class ResolverGenerator {
 
     static sanitize(value) {
         return value.replace(/[^a-zA-Z0-9_]/g, '');
+    }
+
+    static getRealFields(fields, entity) {
+        const realFields = entity
+            .getFields()
+            .filter(field => !(field.isReference() && field.isMultiple()))
+            .map(field => field.getName());
+        return _.intersection(fields, realFields);
     }
 }
