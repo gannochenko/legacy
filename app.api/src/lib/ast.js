@@ -1,4 +1,4 @@
-export const getSelectionAt = (ast, path) => {
+export const getASTAt = (ast, path) => {
     path = path.split('.');
     let pos = _.get(ast, 'fieldNodes.0');
 
@@ -20,4 +20,14 @@ export const getSelectionAt = (ast, path) => {
 
     // not found
     return null;
+};
+
+export const getSelectionAt = (ast, path) => {
+    try {
+        return getASTAt(ast, path).selectionSet.selections.map(
+            field => field.name.value,
+        );
+    } catch (e) {
+        return {};
+    }
 };

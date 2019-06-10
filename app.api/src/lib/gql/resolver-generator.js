@@ -1,7 +1,7 @@
 import { getRepository, In, Like } from 'typeorm';
 import uuid from 'uuid/v4';
 import { getRefName } from '../entity-util';
-import { getSelectionAt } from '../ast';
+import { getASTAt, getSelectionAt } from '../ast';
 
 import Validator from '../validator';
 import { TYPE_DATETIME, QUERY_FIND_MAX_PAGE_SIZE } from 'project-minimum-core';
@@ -23,13 +23,14 @@ export default class ResolverGenerator {
     static makeGetForEntity(entity, schema, databaseEntityManager, connection) {
         const databaseEntity = databaseEntityManager.getByDefinition(entity);
 
-        return async (source, args) => {
+        return async (source, args, context, info) => {
             const result = {
                 errors: [],
                 data: null,
             };
 
             const { code } = args;
+
             if (!_.isne(code)) {
                 result.errors.push({
                     code: 'code_missing',
@@ -38,12 +39,16 @@ export default class ResolverGenerator {
                 return result;
             }
 
+            const selectedFields = getSelectionAt(info, 'data');
             const repository = connection.getRepository(databaseEntity);
 
             let dbItem = null;
             await this.wrap(async () => {
                 dbItem = await repository.findOne({
-                    code: code.trim(),
+                    where: {
+                        code: code.trim(),
+                    },
+                    select: selectedFields,
                 });
             }, result.errors);
 
@@ -147,7 +152,7 @@ export default class ResolverGenerator {
                         })).map(item => this.convertToPlain(item, entity));
                     }, result.errors);
 
-                    if (!!getSelectionAt(info, 'count')) {
+                    if (!!getASTAt(info, 'count')) {
                         // count asked
                         await this.wrap(async () => {
                             result.count = await repo.count({
