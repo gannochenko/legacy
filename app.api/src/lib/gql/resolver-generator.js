@@ -4,7 +4,7 @@ import { getRefName } from '../entity-util';
 import { getSelectionAt } from '../ast';
 
 import Validator from '../validator';
-import { ENTITY_TYPE_DATE, QUERY_FIND_MAX_PAGE_SIZE } from '../../constants';
+import { TYPE_DATETIME, QUERY_FIND_MAX_PAGE_SIZE } from 'project-minimum-core';
 
 export default class ResolverGenerator {
     static async make(schema, databaseEntityManager, connection) {
@@ -19,19 +19,28 @@ export default class ResolverGenerator {
     }
 
     static makeGetForEntity(entity, schema, databaseEntityManager, connection) {
-        return async (source, args, { requestId }) => {
+        const databaseEntity = databaseEntityManager.getByDefinition(entity);
+
+        return async (source, args) => {
             const result = {
                 errors: [],
                 data: null,
             };
 
             const { code } = args;
-            // todo: use connection here
-            const repo = getRepository(dbEntity);
+            if (!_.isne(code)) {
+                result.errors.push({
+                    code: 'code_missing',
+                    message: 'Code is missing in the request',
+                });
+                return result;
+            }
+
+            const repository = connection.getRepository(databaseEntity);
 
             let dbItem = null;
             await this.wrap(async () => {
-                dbItem = await repo.findOne({
+                dbItem = await repository.findOne({
                     code: code.trim(),
                 });
             }, result.errors);
@@ -63,10 +72,6 @@ export default class ResolverGenerator {
      */
     static makeForEntity(entity, schema, databaseEntityManager, connection) {
         const name = entity.getCamelName();
-        const databaseEntity = databaseEntityManager.getByName(
-            entity.getName(),
-        );
-
         return {
             // process query - Get and Find
             Query: {
@@ -359,14 +364,14 @@ export default class ResolverGenerator {
                     return result;
                 },
             },
-            // process reference traversal
-            [name]: this.createReferenceResolvers({
-                entity,
-                dbEntity,
-                entityManager,
-                schemaProvider,
-                connection,
-            }),
+            //// process reference traversal
+            // [name]: this.createReferenceResolvers({
+            //     entity,
+            //     dbEntity,
+            //     entityManager,
+            //     schemaProvider,
+            //     connection,
+            // }),
         };
     }
 
@@ -623,7 +628,7 @@ export default class ResolverGenerator {
     }
 
     static makeWhereFind(filter, search) {
-        let where = {};
+        const where = {};
 
         if (_.isne(search)) {
             // a very basic type of search - by the part of code
@@ -635,21 +640,21 @@ export default class ResolverGenerator {
 
     static convertToPlain(dbItem, entity) {
         const plain = {};
-        entity.schema.forEach(field => {
-            if (
-                field.name in dbItem &&
-                typeof dbItem[field.name] !== 'undefined' &&
-                dbItem[field.name] !== null
-            ) {
-                if (field.type === ENTITY_TYPE_DATE) {
-                    if (dbItem[field.name] instanceof Date) {
-                        plain[field.name] = dbItem[field.name].toISOString();
+        entity.getFields().forEach(field => {
+            const fieldName = field.getName();
+            const fieldType = field.getActualType();
+            const fieldValue = dbItem[fieldName];
+            if (typeof fieldValue !== 'undefined' && fieldValue !== null) {
+                // todo: probably, apollo server is capable of casting Date to String by it's own?
+                if (fieldType === TYPE_DATETIME) {
+                    if (fieldValue instanceof Date) {
+                        plain[fieldName] = fieldValue.toISOString();
                     }
                 } else {
-                    plain[field.name] = dbItem[field.name];
+                    plain[fieldName] = fieldValue;
                 }
             } else {
-                plain[field.name] = null;
+                plain[fieldName] = null;
             }
         });
 
