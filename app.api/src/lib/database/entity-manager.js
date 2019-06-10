@@ -61,12 +61,11 @@ export default class EntityManager {
 
     /**
      * Get all database entities by their schema definition
-     * @returns {Promise<void>}
      */
-    async get() {
+    get() {
         if (!this.entityList) {
             let result = {};
-            (await this.schema.getSchema()).forEach(entity => {
+            this.schema.getSchema().forEach(entity => {
                 result = { ...result, ...this.getForEntity(entity) };
             });
             this.entityList = result;
@@ -75,12 +74,12 @@ export default class EntityManager {
         return this.entityList;
     }
 
-    async getByName(name) {
-        const all = await this.get();
+    getByName(name) {
+        const all = this.get();
         return all[name];
     }
 
-    async getByDefinition(entity, field = null) {
+    getByDefinition(entity, field = null) {
         return this.getByName(this.constructor.getName(entity, field));
     }
 

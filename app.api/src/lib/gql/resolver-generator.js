@@ -7,8 +7,10 @@ import Validator from '../validator';
 import { TYPE_DATETIME, QUERY_FIND_MAX_PAGE_SIZE } from 'project-minimum-core';
 
 export default class ResolverGenerator {
-    static async make(schema, databaseEntityManager, connection) {
-        return Object.values(await schema.getSchema()).map(entity =>
+    static make(schema, databaseEntityManager, connection) {
+        const entites = Object.values(schema.getSchema());
+
+        return entites.map(entity =>
             this.makeForEntity(
                 entity,
                 schema,

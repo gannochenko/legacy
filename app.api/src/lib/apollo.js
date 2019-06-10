@@ -31,8 +31,8 @@ const getServer = async ({ cache, connectionManager }) => {
             preConnect: true,
         });
 
-        const entityTypeDefs = await GQLTypeGenerator.make(schema);
-        const eResolver = await ResolverGenerator.make(
+        const entityTypeDefs = GQLTypeGenerator.make(schema);
+        const eResolver = ResolverGenerator.make(
             schema,
             databaseEntityManager,
             connection,

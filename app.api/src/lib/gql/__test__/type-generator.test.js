@@ -13,7 +13,7 @@ describe('GQL Type generator', () => {
             draft: true,
             version: 2,
         });
-        const gql = await TypeGenerator.make(schema);
+        const gql = TypeGenerator.make(schema);
         expect(gql).toMatchSnapshot();
     });
 });

@@ -7,8 +7,8 @@ import {
 } from 'project-minimum-core';
 
 export default class TypeGenerator {
-    static async make(schema) {
-        const gqlTypes = Object.values(await schema.getSchema()).map(entity =>
+    static make(schema) {
+        const gqlTypes = Object.values(schema.getSchema()).map(entity =>
             this.makeForEntity(entity, schema),
         );
 
