@@ -18,54 +18,64 @@ export default class ResolverGenerator {
         );
     }
 
+    static makeGetForEntity(entity, schema, databaseEntityManager, connection) {
+        return async (source, args, { requestId }) => {
+            const result = {
+                errors: [],
+                data: null,
+            };
+
+            const { code } = args;
+            // todo: use connection here
+            const repo = getRepository(dbEntity);
+
+            let dbItem = null;
+            await this.wrap(async () => {
+                dbItem = await repo.findOne({
+                    code: code.trim(),
+                });
+            }, result.errors);
+
+            if (!result.errors.length) {
+                if (!dbItem) {
+                    result.errors.push({
+                        code: 'not_found',
+                        message: 'Element not found',
+                    });
+                }
+            }
+
+            if (dbItem) {
+                result.data = this.convertToPlain(dbItem, entity);
+            }
+
+            return result;
+        };
+    }
+
     /**
      *
      * @param entity
      * @param schema
      * @param databaseEntityManager
      * @param connection
-     * @returns {{Query: {[p: string]: *}, Mutation: {[p: string]: *}, [p: string]: {}}}
+     * @returns {*}
      */
     static makeForEntity(entity, schema, databaseEntityManager, connection) {
         const name = entity.getCamelName();
+        const databaseEntity = databaseEntityManager.getByName(
+            entity.getName(),
+        );
 
         return {
             // process query - Get and Find
             Query: {
-                [`${name}Get`]: async (source, args, { requestId }) =>
-                    // state,
-                    {
-                        const result = {
-                            errors: [],
-                            data: null,
-                        };
-
-                        const { code } = args;
-                        // todo: use connection here
-                        const repo = getRepository(dbEntity);
-
-                        let dbItem = null;
-                        await this.wrap(async () => {
-                            dbItem = await repo.findOne({
-                                code: code.trim(),
-                            });
-                        }, result.errors);
-
-                        if (!result.errors.length) {
-                            if (!dbItem) {
-                                result.errors.push({
-                                    code: 'not_found',
-                                    message: 'Element not found',
-                                });
-                            }
-                        }
-
-                        if (dbItem) {
-                            result.data = this.convertToPlain(dbItem, entity);
-                        }
-
-                        return result;
-                    },
+                [`${name}Get`]: this.makeGetForEntity(
+                    entity,
+                    schema,
+                    databaseEntityManager,
+                    connection,
+                ),
                 [`${name}Find`]: async (source, args, { requestId }, info) => {
                     const result = {
                         errors: [],

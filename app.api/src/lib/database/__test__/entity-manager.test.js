@@ -19,19 +19,26 @@ describe('DatabaseEntityManager', () => {
     });
     // beforeEach(async () => {
     // });
+    it('should return name', async () => {
+        const person = schema.getEntity('important_person');
+        expect(EntityManager.getName(person)).toEqual('important_person');
+        const singleReference = person
+            .getFields()
+            .find(field => field.getName() === 'partner');
+        expect(EntityManager.getName(person, singleReference)).toEqual(
+            'important_person',
+        );
+        const multipleReference = person
+            .getFields()
+            .find(field => field.getName() === 'pets');
+        expect(EntityManager.getName(person, multipleReference)).toEqual(
+            'important_person_2_pets',
+        );
+    });
     it('should return table name', async () => {
         const person = schema.getEntity('important_person');
         expect(EntityManager.getTableName(person)).toEqual(
             'eq_e_important_person',
-        );
-    });
-    it('should return reference name', async () => {
-        const person = schema.getEntity('important_person');
-        const field = person
-            .getFields()
-            .find(field => field.getName() === 'partner');
-        expect(EntityManager.getRefName(person, field)).toEqual(
-            'important_person_2_partner',
         );
     });
     it('should return reference table name', async () => {
@@ -39,7 +46,7 @@ describe('DatabaseEntityManager', () => {
         const field = person
             .getFields()
             .find(field => field.getName() === 'partner');
-        expect(EntityManager.getRefTableName(person, field)).toEqual(
+        expect(EntityManager.getReferenceTableName(person, field)).toEqual(
             'eq_ref_45ccc121bbf86594e7decf47a5d36df4',
         );
     });
@@ -65,6 +72,31 @@ describe('DatabaseEntityManager', () => {
             .getFields()
             .find(field => field.getName() === 'lucky_numbers');
         expect(EntityManager.getDBType(integerField)).toEqual('integer');
+    });
+    it('should return db entity by definition', async () => {
+        const manager = new EntityManager(schema);
+        const person = schema.getEntity('important_person');
+        const dbPerson = await manager.getByDefinition(person);
+        expect(dbPerson).toBeInstanceOf(EntitySchema);
+
+        const singleReference = person
+            .getFields()
+            .find(field => field.getName() === 'partner');
+
+        const dbPerson2Partner = await manager.getByDefinition(
+            person,
+            singleReference,
+        );
+        expect(dbPerson2Partner).toBeInstanceOf(EntitySchema);
+
+        const multipleReference = person
+            .getFields()
+            .find(field => field.getName() === 'pets');
+        const dbPerson2Pets = await manager.getByDefinition(
+            person,
+            multipleReference,
+        );
+        expect(dbPerson2Pets).toBeInstanceOf(EntitySchema);
     });
     it('should return database entities against the schema', async () => {
         const manager = new EntityManager(schema);

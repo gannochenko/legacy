@@ -8,7 +8,6 @@ import { graphqlExpress } from './graphql-express';
 import SchemaStore from './schema-store';
 import GQLTypeGenerator from './gql/type-generator';
 import ResolverGenerator from './gql/resolver-generator';
-import EntityManager from './entity-manager';
 import DatabaseEntityManager from './database/entity-manager';
 import DataLoaderPool from './data-loader-pool';
 
@@ -17,7 +16,7 @@ import resolvers from '../graphql/resolvers/index';
 
 let server = null;
 
-const getServer = async ({ cache, schemaProvider, connectionManager }) => {
+const getServer = async ({ cache, connectionManager }) => {
     if (!server || !(await cache.get('apollo.server.ready'))) {
         if (server) {
             await server.stop();
@@ -27,7 +26,6 @@ const getServer = async ({ cache, schemaProvider, connectionManager }) => {
         const schema = await SchemaStore.load('actual', connectionManager);
         const databaseEntityManager = new DatabaseEntityManager(schema);
 
-        const entityManager = new EntityManager(schemaProvider);
         const connection = await connectionManager.get({
             entities: Object.values(await databaseEntityManager.get()),
             preConnect: true,

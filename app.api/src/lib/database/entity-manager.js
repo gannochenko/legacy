@@ -11,6 +11,14 @@ import {
  * This class manages database entities on the basis of a schema provided
  */
 export default class EntityManager {
+    static getName(entity, field = null) {
+        if (field && field.isReference() && field.isMultiple()) {
+            return `${entity.getName()}_2_${field.getName()}`;
+        }
+
+        return entity.getName();
+    }
+
     static getTableName(entity) {
         return `${DB_ENTITY_TABLE_PREFIX}${entity.getName()}`.substr(
             0,
@@ -18,11 +26,7 @@ export default class EntityManager {
         );
     }
 
-    static getRefName(entity, field) {
-        return `${entity.getName()}_2_${field.getName()}`;
-    }
-
-    static getRefTableName(entity, field) {
+    static getReferenceTableName(entity, field) {
         return `${DB_REF_TABLE_PREFIX}${md5(
             `${entity.getName()}_${field.getName()}`,
         )}`;
@@ -76,6 +80,10 @@ export default class EntityManager {
         return all[name];
     }
 
+    async getByDefinition(entity, field = null) {
+        return this.getByName(this.constructor.getName(entity, field));
+    }
+
     /**
      * @private
      * @param entity
@@ -122,17 +130,15 @@ export default class EntityManager {
             columns[field.getName()] = column;
         });
 
-        result[entity.getName()] = new EntitySchema({
+        result[this.constructor.getName(entity)] = new EntitySchema({
             name: this.constructor.getTableName(entity),
             columns,
         });
 
         // we do not create any fields for many-to-may relation, but make another entity
         references.forEach(field => {
-            result[
-                this.constructor.getRefName(entity, field)
-            ] = new EntitySchema({
-                name: this.constructor.getRefTableName(entity, field),
+            result[this.constructor.getName(entity, field)] = new EntitySchema({
+                name: this.constructor.getReferenceTableName(entity, field),
                 columns: {
                     self: {
                         type: 'integer',
