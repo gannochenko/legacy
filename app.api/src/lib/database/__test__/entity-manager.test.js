@@ -69,6 +69,49 @@ describe('DatabaseEntityManager', () => {
     it('should return database entities against the schema', async () => {
         const manager = new EntityManager(schema);
         const entities = await manager.get();
-        console.dir(entities);
+
+        expect(entities.important_person).toBeInstanceOf(EntitySchema);
+        expect(entities.important_person_2_pets).toBeInstanceOf(EntitySchema);
+        expect(entities.important_person_2_tools).toBeInstanceOf(EntitySchema);
+        expect(entities.pet).toBeInstanceOf(EntitySchema);
+        expect(entities.tool).toBeInstanceOf(EntitySchema);
+
+        // check important_person
+        expect(entities.important_person.options).toMatchObject({
+            name: 'eq_e_important_person',
+            columns: {
+                id: {
+                    primary: true,
+                    type: 'integer',
+                    generated: 'increment',
+                    nullable: false,
+                },
+                code: {
+                    type: 'varchar',
+                    nullable: true,
+                    array: false,
+                    length: 36,
+                },
+                full_name: {
+                    type: 'varchar',
+                    nullable: false,
+                    array: false,
+                    length: 255,
+                },
+                tags: { type: 'varchar', nullable: true, array: true },
+                lucky_numbers: { type: 'integer', nullable: true, array: true },
+                birth_date: { type: 'timestamp', nullable: true, array: false },
+                has_pets: { type: 'boolean', nullable: true, array: false },
+                partner: { type: 'integer', nullable: true, array: false },
+            },
+        });
+
+        expect(entities.important_person_2_pets.options).toMatchObject({
+            name: 'eq_ref_ba4ed80327568d335915e4452eb0703a',
+            columns: {
+                self: { type: 'integer', nullable: false, primary: true },
+                rel: { type: 'integer', nullable: false, primary: true },
+            },
+        });
     });
 });
