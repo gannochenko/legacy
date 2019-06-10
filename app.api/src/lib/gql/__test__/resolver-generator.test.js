@@ -58,6 +58,18 @@ describe('GQL Resolver Generator', () => {
             return mockData.important_person[0];
         });
         result = await get({}, { code: '4ef6f520-d180-4aee-9517-43214f39660' });
-        console.dir(result);
+        expect(result.errors).toHaveLength(0);
+        expect(result.data).toMatchObject({
+            code: '4ef6f520-d180-4aee-9517-43214f396609',
+            full_name: 'Max Mustermann',
+            tags: ['one', 'two'],
+            lucky_numbers: [123, 456],
+            birth_date: '2019-03-10T07:20:29.084Z',
+            has_pets: true,
+            pets: null,
+            tools: null,
+            partner: 2,
+            id: 1,
+        });
     });
 });

@@ -643,12 +643,22 @@ export default class ResolverGenerator {
         entity.getFields().forEach(field => {
             const fieldName = field.getName();
             const fieldType = field.getActualType();
+            const multiple = field.isMultiple();
             const fieldValue = dbItem[fieldName];
             if (typeof fieldValue !== 'undefined' && fieldValue !== null) {
                 // todo: probably, apollo server is capable of casting Date to String by it's own?
                 if (fieldType === TYPE_DATETIME) {
-                    if (fieldValue instanceof Date) {
-                        plain[fieldName] = fieldValue.toISOString();
+                    if (multiple) {
+                        plain[fieldName] = fieldValue.map(subItem =>
+                            subItem instanceof Date
+                                ? subItem.toISOString()
+                                : null,
+                        );
+                    } else {
+                        plain[fieldName] =
+                            fieldValue instanceof Date
+                                ? fieldValue.toISOString()
+                                : null;
                     }
                 } else {
                     plain[fieldName] = fieldValue;
