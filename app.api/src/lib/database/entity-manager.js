@@ -141,7 +141,7 @@ export default class EntityManager {
             case 'integer':
                 return 'integer';
             case 'datetime':
-                return 'date';
+                return 'timestamp';
             case 'boolean':
                 return 'boolean';
             default:

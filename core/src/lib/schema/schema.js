@@ -99,6 +99,11 @@ export class Schema {
         return this.declaration.version;
     }
 
+    /**
+     * Returns entity by it's name
+     * @param name
+     * @returns {T | undefined}
+     */
     getEntity(name) {
         // todo: make an index here
         return this.declaration.schema.find(

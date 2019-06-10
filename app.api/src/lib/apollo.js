@@ -6,7 +6,7 @@ import { mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import uuid from 'uuid/v4';
 
 import SchemaStore from '../lib/schema-store';
-import GQLGenerator from './gql-generator';
+import GrapgQLType from './gql/type';
 import ResolverGenerator from './resolver-generator';
 import EntityManager from './entity-manager';
 import DatabaseEntityManager from './database/entity-manager';
@@ -34,7 +34,7 @@ const getServer = async ({ cache, schemaProvider, connectionManager }) => {
         });
 
         // create GRAPHQL types
-        const eGQL = await GQLGenerator.make({ schemaProvider });
+        const eGQL = await GrapgQLType.make({ schema });
         // create GRAPHQL resolvers
         const eResolver = await ResolverGenerator.make({
             schemaProvider,
