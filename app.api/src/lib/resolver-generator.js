@@ -7,81 +7,66 @@ import Validator from './validator';
 import { ENTITY_TYPE_DATE, QUERY_FIND_MAX_PAGE_SIZE } from '../constants';
 
 export default class ResolverGenerator {
-    static async make({ schemaProvider, entityManager, connection }) {
-        const entities = await entityManager.get();
-        return Object.values(await schemaProvider.get()).map(entity =>
+    static async make(schema, databaseEntityManager, connection) {
+        return Object.values(await schema.getSchema()).map(entity =>
             this.makeForEntity(
                 entity,
-                entities[entity.name],
-                entityManager,
-                schemaProvider,
+                schema,
+                databaseEntityManager,
                 connection,
             ),
         );
     }
 
     /**
-     * @private
+     *
      * @param entity
-     * @param dbEntity
-     * @param entityManager
-     * @param schemaProvider
+     * @param schema
+     * @param databaseEntityManager
+     * @param connection
+     * @returns {{Query: {[p: string]: *}, Mutation: {[p: string]: *}, [p: string]: {}}}
      */
-    static makeForEntity(
-        entity,
-        dbEntity,
-        entityManager,
-        schemaProvider,
-        connection,
-    ) {
-        const nameCamel = schemaProvider.getCamelEntityName(entity.name);
+    static makeForEntity(entity, schema, databaseEntityManager, connection) {
+        const name = entity.getCamelName();
 
         return {
             // process query - Get and Find
             Query: {
-                [`${nameCamel}Get`]: async (
-                    source,
-                    args,
-                    { requestId },
-                    state,
-                ) => {
-                    const result = {
-                        errors: [],
-                        data: null,
-                    };
+                [`${name}Get`]: async (source, args, { requestId }) =>
+                    // state,
+                    {
+                        const result = {
+                            errors: [],
+                            data: null,
+                        };
 
-                    const { code } = args;
-                    // todo: use connection here
-                    const repo = getRepository(dbEntity);
+                        const { code } = args;
+                        // todo: use connection here
+                        const repo = getRepository(dbEntity);
 
-                    let dbItem = null;
-                    await this.wrap(async () => {
-                        dbItem = await repo.findOne({
-                            code: code.trim(),
-                        });
-                    }, result.errors);
-
-                    if (!result.errors.length) {
-                        if (!dbItem) {
-                            result.errors.push({
-                                code: 'not_found',
-                                message: 'Element not found',
+                        let dbItem = null;
+                        await this.wrap(async () => {
+                            dbItem = await repo.findOne({
+                                code: code.trim(),
                             });
+                        }, result.errors);
+
+                        if (!result.errors.length) {
+                            if (!dbItem) {
+                                result.errors.push({
+                                    code: 'not_found',
+                                    message: 'Element not found',
+                                });
+                            }
                         }
-                    }
 
-                    if (dbItem) {
-                        result.data = this.convertToPlain(dbItem, entity);
-                    }
+                        if (dbItem) {
+                            result.data = this.convertToPlain(dbItem, entity);
+                        }
 
-                    return result;
-                },
-                [`${nameCamel}Find`]: async (
-                    source,
-                    args,
-                    { requestId },
-                    info,
-                ) => {
+                        return result;
+                    },
+                [`${name}Find`]: async (source, args, { requestId }, info) => {
                     const result = {
                         errors: [],
                         data: [],
@@ -159,7 +144,7 @@ export default class ResolverGenerator {
             },
             // process mutation - Put and Delete
             Mutation: {
-                [`${nameCamel}Put`]: async (
+                [`${name}Put`]: async (
                     source,
                     args,
                     { dataSources },
@@ -281,7 +266,7 @@ export default class ResolverGenerator {
 
                     return result;
                 },
-                [`${nameCamel}Delete`]: async (
+                [`${name}Delete`]: async (
                     source,
                     args,
                     { dataSources },
@@ -365,7 +350,7 @@ export default class ResolverGenerator {
                 },
             },
             // process reference traversal
-            [nameCamel]: this.createReferenceResolvers({
+            [name]: this.createReferenceResolvers({
                 entity,
                 dbEntity,
                 entityManager,

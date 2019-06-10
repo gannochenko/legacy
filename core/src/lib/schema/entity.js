@@ -151,6 +151,10 @@ export class Entity {
         return this.declaration.schema;
     }
 
+    getField(name) {
+        return this.declaration.schema[name];
+    }
+
     toJSON() {
         return this.declaration;
     }

@@ -28,6 +28,29 @@ export default class EntityManager {
         )}`;
     }
 
+    /**
+     * Get database type by schema type
+     * https://github.com/typeorm/typeorm/blob/master/src/driver/types/ColumnTypes.ts
+     * @param field
+     * @returns {string}
+     */
+    static getDBType(field) {
+        const type = field.getActualType();
+
+        switch (type) {
+            case 'string':
+                return 'varchar';
+            case 'integer':
+                return 'integer';
+            case 'datetime':
+                return 'timestamp';
+            case 'boolean':
+                return 'boolean';
+            default:
+                return 'string';
+        }
+    }
+
     constructor(schema) {
         this.schema = schema;
     }
@@ -84,7 +107,9 @@ export default class EntityManager {
             }
 
             const column = {
-                type: field.isReference() ? 'integer' : this.getDBType(field),
+                type: field.isReference()
+                    ? 'integer'
+                    : this.constructor.getDBType(field),
                 nullable: !field.isMandatory(),
                 array: field.isMultiple(),
             };
@@ -124,28 +149,5 @@ export default class EntityManager {
         });
 
         return result;
-    }
-
-    /**
-     * Get database type by schema type
-     * https://github.com/typeorm/typeorm/blob/master/src/driver/types/ColumnTypes.ts
-     * @param field
-     * @returns {string}
-     */
-    getDBType(field) {
-        const type = field.getActualType();
-
-        switch (type) {
-            case 'string':
-                return 'varchar';
-            case 'integer':
-                return 'integer';
-            case 'datetime':
-                return 'timestamp';
-            case 'boolean':
-                return 'boolean';
-            default:
-                return 'string';
-        }
     }
 }

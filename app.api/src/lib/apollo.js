@@ -34,12 +34,11 @@ const getServer = async ({ cache, schemaProvider, connectionManager }) => {
         });
 
         const entityTypeDefs = await GQLTypeGenerator.make(schema);
-        // create GRAPHQL resolvers
-        const eResolver = await ResolverGenerator.make({
-            schemaProvider,
-            entityManager,
+        const eResolver = await ResolverGenerator.make(
+            schema,
+            databaseEntityManager,
             connection,
-        });
+        );
 
         // now everything is ready to create the server
         server = new ApolloServer({

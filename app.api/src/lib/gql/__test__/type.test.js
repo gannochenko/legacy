@@ -1,6 +1,6 @@
 import TypeGenerator from '../type-generator';
 import { Schema } from 'project-minimum-core';
-import schemaJSON from './schema';
+import schemaJSON from '../../../__test__/schema';
 
 describe('GQL Type generator', () => {
     // beforeAll(async () => {
