@@ -1,13 +1,13 @@
 import { ApolloServer } from 'apollo-server-express';
 import { renderPlaygroundPage } from '@apollographql/graphql-playground-html';
-import { graphqlExpress } from './graphql-express';
 import accepts from 'accepts';
 import { mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import uuid from 'uuid/v4';
 
-import SchemaStore from '../lib/schema-store';
+import { graphqlExpress } from './graphql-express';
+import SchemaStore from './schema-store';
 import GQLTypeGenerator from './gql/type-generator';
-import ResolverGenerator from './resolver-generator';
+import ResolverGenerator from './gql/resolver-generator';
 import EntityManager from './entity-manager';
 import DatabaseEntityManager from './database/entity-manager';
 import DataLoaderPool from './data-loader-pool';

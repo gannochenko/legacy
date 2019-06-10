@@ -77,7 +77,9 @@ describe('DatabaseEntityManager', () => {
         expect(entities.tool).toBeInstanceOf(EntitySchema);
 
         // check important_person
-        expect(entities.important_person.options).toMatchObject({
+        expect(
+            (await manager.getByName('important_person')).options,
+        ).toMatchObject({
             name: 'eq_e_important_person',
             columns: {
                 id: {
@@ -106,7 +108,9 @@ describe('DatabaseEntityManager', () => {
             },
         });
 
-        expect(entities.important_person_2_pets.options).toMatchObject({
+        expect(
+            (await manager.getByName('important_person_2_pets')).options,
+        ).toMatchObject({
             name: 'eq_ref_ba4ed80327568d335915e4452eb0703a',
             columns: {
                 self: { type: 'integer', nullable: false, primary: true },
