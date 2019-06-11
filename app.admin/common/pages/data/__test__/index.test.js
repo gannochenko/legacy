@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { fireEvent, cleanup, render, prettyDOM } from 'react-testing-library';
+import { fireEvent, cleanup, render, prettyDOM } from '@testing-library/react';
 
 import DataPage from '..';
 

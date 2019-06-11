@@ -1,5 +1,5 @@
 module.exports = {
     verbose: true,
-    rootDir: '../src',
+    rootDir: '../common',
     setupFiles: ['<rootDir>/../jest/setup.js'],
 };
