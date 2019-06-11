@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { withNotification } from 'ew-internals-ui';
+import { push } from 'connected-react-router';
 import { useErrorNotification, useUnload } from '../../lib/hooks';
 import { LOAD, UNLOAD, DELETE } from './reducer';
 import { withClient } from '../../lib/client';
 import List from '../../components/List';
 import { putSearchParameters, parseSearch } from '../../lib/util';
-import { push } from 'connected-react-router';
 import Button from '../../material-kit/CustomButtons';
 
 import Layout from '../../components/Layout';
@@ -16,7 +16,7 @@ const extractPageParameters = search => {
     if (Number.isNaN(page) || page < 1) {
         page = 1;
     }
-    let sort = search.sort;
+    let { sort } = search;
     if (_.isne(sort)) {
         sort = sort.split(':');
     } else {

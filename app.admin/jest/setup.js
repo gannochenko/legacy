@@ -1,3 +1,5 @@
+import 'jest-dom/extend-expect';
+
 import _ from '../common/lib/lodash';
 
 global._ = _;
