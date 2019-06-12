@@ -154,13 +154,13 @@ export default class ResolverGenerator {
             let { code, data } = args;
 
             const repository = connection.getRepository(databaseEntity);
-            const isNewItem = !_.isne(code);
-
             delete data.code; // there is no way to set the code manually
-            // no code - auto-generate
+
+            let isNewItem = false;
             if (!_.isne(code)) {
                 code = uuid();
                 data.code = code;
+                isNewItem = true;
             }
 
             // cast everything that is possible to cast

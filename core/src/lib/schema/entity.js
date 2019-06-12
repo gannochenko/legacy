@@ -209,6 +209,7 @@ export class Entity {
      * Before saving any data tries to cast every value that is possible to cast,
      * to make the API more tolerant and friendly
      * @param data
+     * todo: better to name it "castData"
      */
     prepareData(data) {
         const processed = {};
@@ -231,7 +232,7 @@ export class Entity {
 
             if (field.isMultiple()) {
                 if (!_.isArray(value)) {
-                    value = [];
+                    value = [this.castFieldValue(field, value)];
                 } else {
                     value = value.map(subValue =>
                         this.castFieldValue(field, subValue),
@@ -239,7 +240,7 @@ export class Entity {
                 }
 
                 if (field.isReference()) {
-                    value = _.unique(value);
+                    value = _.unique(value).filter(x => !!x);
                 }
             } else {
                 value = this.castFieldValue(field, value);
@@ -254,9 +255,10 @@ export class Entity {
     castFieldValue(field, value) {
         const type = field.getActualType();
         let safeValue = value;
+
         if (type === TYPE_STRING) {
             if (safeValue === undefined || safeValue === null) {
-                safeValue = '';
+                safeValue = null;
             } else {
                 safeValue = safeValue.toString();
             }
@@ -269,29 +271,39 @@ export class Entity {
             }
         } else if (type === TYPE_DATETIME) {
             if (safeValue === undefined || safeValue === null) {
-                return '';
+                return null;
             }
 
             if (safeValue instanceof Date) {
+                // just a date
                 safeValue = safeValue.toISOString();
-            } else if (Number.isNaN(Date.parse(safeValue))) {
-                return '';
+            } else {
+                const timestamp = Date.parse(safeValue);
+                if (!Number.isNaN(timestamp)) {
+                    // a string representation of a date
+                    safeValue = new Date(timestamp).toISOString();
+                } else if (!Number.isNaN(parseInt(safeValue, 10))) {
+                    // last chance - a timestamp
+                    safeValue = new Date(parseInt(safeValue, 10)).toISOString();
+                } else {
+                    safeValue = null;
+                }
             }
         } else if (field.isReference()) {
             if (_.isString(safeValue)) {
                 // all good
-            } else if (_.isObject(safeValue)) {
-                if (ENTITY_CODE_FIELD_NAME in safeValue) {
-                    safeValue = safeValue[ENTITY_CODE_FIELD_NAME];
-                    if (!_.isne(safeValue)) {
-                        safeValue = '';
-                    }
-                }
+                // } else if (_.isObject(safeValue)) {
+                //     if (ENTITY_CODE_FIELD_NAME in safeValue) {
+                //         safeValue = safeValue[ENTITY_CODE_FIELD_NAME];
+                //         if (!_.isne(safeValue)) {
+                //             safeValue = null;
+                //         }
+                //     }
+            } else if (safeValue !== undefined && safeValue !== null) {
+                safeValue = safeValue.toString();
             } else {
-                safeValue = '';
+                safeValue = null;
             }
-        } else {
-            safeValue = '';
         }
 
         return safeValue;
