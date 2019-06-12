@@ -7,6 +7,7 @@ import DatabaseEntityManager from '../../database/entity-manager';
 import { Schema } from 'project-minimum-core';
 import schemaJSON from '../../../__test__/schema';
 import mockRepository from '../../../__test__/repository.mock';
+import { makeAST } from '../../../__test__/apollo.mock';
 
 let schema = null;
 let databaseManager = null;
@@ -77,10 +78,20 @@ describe('GQL Resolver Generator', () => {
         });
     });
 
-    // it('get(): should limit the amount of selected fields', async () => {
-    //     const get = resolvers[0].Query.ImportantPersonGet;
-    //
-    //     let result = await get({}, { code: '4ef6f520-d180-4aee-9517-43214f396609', }, null, {});
-    //     console.dir(result);
-    // });
+    it('get(): should limit the amount of selected fields', async () => {
+        const get = resolvers[0].Query.ImportantPersonGet;
+
+        let result = await get(
+            {},
+            { code: '4ef6f520-d180-4aee-9517-43214f396609' },
+            null,
+            makeAST('data', ['full_name', 'has_pets']),
+        );
+        expect(result.data).toMatchObject({
+            code: '4ef6f520-d180-4aee-9517-43214f396609',
+            full_name: 'Max Mustermann',
+            has_pets: true,
+            id: 1,
+        });
+    });
 });

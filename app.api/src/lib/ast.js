@@ -1,11 +1,11 @@
 export const getASTAt = (ast, path) => {
-    path = path.split('.');
-    let pos = _.get(ast, 'fieldNodes.0');
+    let node = ast.fieldNodes[0];
 
+    path = path.split('.');
     let i = 0;
-    for (; i < path.length; i++) {
-        if (pos.selectionSet && pos.selectionSet.selections) {
-            pos = pos.selectionSet.selections.find(
+    for (; i < path.length; i += 1) {
+        if (node.selectionSet && node.selectionSet.selections) {
+            node = node.selectionSet.selections.find(
                 f => f.name.value === path[i],
             );
         } else {
@@ -15,7 +15,7 @@ export const getASTAt = (ast, path) => {
 
     if (i === path.length) {
         // found
-        return pos;
+        return node;
     }
 
     // not found

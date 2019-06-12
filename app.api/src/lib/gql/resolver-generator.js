@@ -700,7 +700,7 @@ export default class ResolverGenerator {
         if (!toSelect.includes('id')) {
             toSelect.push('id');
         }
-        if (toSelect.length === 1) {
+        if (!toSelect.includes('code')) {
             toSelect.push('code');
         }
 
