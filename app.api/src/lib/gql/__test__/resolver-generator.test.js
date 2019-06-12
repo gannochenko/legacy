@@ -248,4 +248,36 @@ describe('GQL Resolver Generator', () => {
             message: 'You can not set both search and filter at the same time',
         });
     });
+
+    it('put(): should not allow to set the code from the data argument', async () => {
+        // todo
+    });
+
+    it('put(): should not accept invalid data for saving', async () => {
+        // todo
+    });
+
+    it('put(): should create a new item', async () => {
+        // todo
+    });
+
+    it('put(): should update an existing item', async () => {
+        // todo
+    });
+
+    it('put(): should return an item only when it is asked', async () => {
+        // todo
+    });
+
+    it('put(): should manage multiple relations', async () => {
+        // todo
+    });
+
+    it('put(): should assign a valid uuid code for a new item', async () => {
+        // todo
+    });
+
+    it('put(): should report when trying to update non-existing item', async () => {
+        // todo
+    });
 });

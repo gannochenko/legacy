@@ -205,6 +205,11 @@ export class Entity {
         return yup.object().shape(shape);
     }
 
+    /**
+     * Before saving any data tries to cast every value that is possible to cast,
+     * to make the API more tolerant and friendly
+     * @param data
+     */
     prepareData(data) {
         const processed = {};
 
@@ -246,10 +251,6 @@ export class Entity {
         return processed;
     }
 
-    /**
-     * @private
-     * todo: replace these if-s with a class implementation
-     */
     castFieldValue(field, value) {
         const type = field.getActualType();
         let safeValue = value;

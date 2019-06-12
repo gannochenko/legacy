@@ -141,30 +141,109 @@ export default class ResolverGenerator {
         };
     }
 
-    static getLimitOffset(args) {
-        let { limit, offset, page, pageSize } = args;
+    static makePutForEntity(entity, schema, databaseEntityManager, connection) {
+        const databaseEntity = databaseEntityManager.getByDefinition(entity);
 
-        limit = parseInt(limit, 10);
-        if (Number.isNaN(limit)) {
-            limit = QUERY_FIND_MAX_PAGE_SIZE;
-        }
+        return async (source, args) => {
+            const result = {
+                errors: [],
+                code: null,
+                data: {},
+            };
 
-        offset = parseInt(offset, 10);
-        if (Number.isNaN(offset)) {
-            offset = 0;
-        }
+            let { code, data } = args;
 
-        pageSize = parseInt(pageSize, 10);
-        if (!Number.isNaN(pageSize)) {
-            limit = pageSize;
-        }
+            const repository = connection.getRepository(databaseEntity);
+            const isNewItem = !_.isne(code);
 
-        page = parseInt(page, 10);
-        if (!Number.isNaN(page)) {
-            offset = (page - 1) * limit;
-        }
+            delete data.code; // there is no way to set the code manually
+            // no code - auto-generate
+            if (!_.isne(code)) {
+                code = uuid();
+                data.code = code;
+            }
 
-        return { limit, offset };
+            // validate
+            const vResult = await Validator.validate(entity, data);
+            if (_.iane(vResult)) {
+                result.errors = _.union(result.errors, vResult);
+                return result;
+            }
+
+            const singleReferences = entity
+                .getFields()
+                .filter(field => field.isReference() && !field.isMultiple());
+
+            await this.wrap(async () => {
+                // cast everything that is possible to cast
+                data = entity.prepareData(data);
+
+                // todo: that needs to be optimized: batch this
+                for (let i = 0; i < refs.length; i++) {
+                    const rName = refs[i].name;
+                    if (rName in data) {
+                        if (data[rName] === undefined || data[rName] === null) {
+                            data[rName] = null;
+                            continue;
+                        }
+
+                        data[rName] = data[rName].toString().trim();
+                        if (!data[rName].length) {
+                            data[rName] = null;
+                            continue;
+                        }
+
+                        const refEntityName = refs[i].type;
+                        // need to replace code with id
+                        const refDBEntity = await entityManager.getByName(
+                            refEntityName,
+                        );
+                        const repo = connection.getRepository(refDBEntity);
+                        const refItem = await repo.findOne({
+                            where: { code: data[rName] },
+                            select: ['id'],
+                        });
+                        if (refItem) {
+                            data[rName] = refItem.id;
+                        } else {
+                            data[rName] = null;
+                        }
+                    }
+                }
+
+                let dbItem = null;
+                if (isNewItem) {
+                    dbItem = repository.create(data);
+                } else {
+                    // find id by code
+                    dbItem = await repository.findOne({
+                        code: code.trim(),
+                    });
+                    if (!dbItem) {
+                        result.errors.push({
+                            code: 'not_found',
+                            message: 'Element not found',
+                        });
+                        return;
+                    }
+                    repository.merge(dbItem, data);
+                }
+
+                await repository.save(dbItem);
+                // await this.managerMultipleReferences(
+                //     entity,
+                //     dbItem.id,
+                //     data,
+                //     schemaProvider,
+                //     entityManager,
+                // );
+
+                result.code = code;
+                result.data = this.convertToPlain(dbItem, entity);
+            }, result.errors);
+
+            return result;
+        };
     }
 
     /**
@@ -195,128 +274,7 @@ export default class ResolverGenerator {
             },
             // process mutation - Put and Delete
             Mutation: {
-                [`${name}Put`]: async (
-                    source,
-                    args,
-                    { dataSources },
-                    state,
-                ) => {
-                    const result = {
-                        errors: [],
-                        code: null,
-                        data: {},
-                    };
-
-                    let { code, data } = args;
-                    // todo: use connection here
-                    const repo = getRepository(dbEntity);
-
-                    const isNew = !_.isne(code);
-
-                    delete data.code; // there is no way to set the code manually
-                    // no code - auto-generate
-                    if (!_.isne(code)) {
-                        code = uuid();
-                        data.code = code;
-                    }
-
-                    // validate
-                    const vResult = await Validator.validate(entity, data);
-                    if (_.iane(vResult)) {
-                        result.errors = _.union(result.errors, vResult);
-                    }
-
-                    if (!result.errors.length) {
-                        await this.wrap(async () => {
-                            // todo: run Entity.prepareData() here
-                            // need to replace single references from code to id
-                            // todo: add this to the server side of Entity.prepareData()
-                            // get all single references
-                            const refs = entity.schema
-                                .map(field =>
-                                    !schemaProvider.isMultipleField(field) &&
-                                    _.isne(
-                                        schemaProvider.getReferenceFieldName(
-                                            field,
-                                        ),
-                                    )
-                                        ? field
-                                        : null,
-                                )
-                                .filter(x => x);
-
-                            // todo: that needs to be optimized: batch this
-                            for (let i = 0; i < refs.length; i++) {
-                                const rName = refs[i].name;
-                                if (rName in data) {
-                                    if (
-                                        data[rName] === undefined ||
-                                        data[rName] === null
-                                    ) {
-                                        data[rName] = null;
-                                        continue;
-                                    }
-
-                                    data[rName] = data[rName].toString().trim();
-                                    if (!data[rName].length) {
-                                        data[rName] = null;
-                                        continue;
-                                    }
-
-                                    const refEntityName = refs[i].type;
-                                    // need to replace code with id
-                                    const refDBEntity = await entityManager.getByName(
-                                        refEntityName,
-                                    );
-                                    const repo = connection.getRepository(
-                                        refDBEntity,
-                                    );
-                                    const refItem = await repo.findOne({
-                                        where: { code: data[rName] },
-                                        select: ['id'],
-                                    });
-                                    if (refItem) {
-                                        data[rName] = refItem.id;
-                                    } else {
-                                        data[rName] = null;
-                                    }
-                                }
-                            }
-
-                            let dbItem = null;
-                            if (isNew) {
-                                dbItem = repo.create(data);
-                            } else {
-                                // find id by code
-                                dbItem = await repo.findOne({
-                                    code: code.trim(),
-                                });
-                                if (!dbItem) {
-                                    result.errors.push({
-                                        code: 'not_found',
-                                        message: 'Element not found',
-                                    });
-                                    return;
-                                }
-                                repo.merge(dbItem, data);
-                            }
-
-                            await repo.save(dbItem);
-                            await this.managerMultipleReferences(
-                                entity,
-                                dbItem.id,
-                                data,
-                                schemaProvider,
-                                entityManager,
-                            );
-
-                            result.code = code;
-                            result.data = this.convertToPlain(dbItem, entity);
-                        }, result.errors);
-                    }
-
-                    return result;
-                },
+                [`${name}Put`]: this.makePutForEntity(),
                 [`${name}Delete`]: async (
                     source,
                     args,
@@ -730,5 +688,31 @@ export default class ResolverGenerator {
         }
 
         return toSelect;
+    }
+
+    static getLimitOffset(args) {
+        let { limit, offset, page, pageSize } = args;
+
+        limit = parseInt(limit, 10);
+        if (Number.isNaN(limit)) {
+            limit = QUERY_FIND_MAX_PAGE_SIZE;
+        }
+
+        offset = parseInt(offset, 10);
+        if (Number.isNaN(offset)) {
+            offset = 0;
+        }
+
+        pageSize = parseInt(pageSize, 10);
+        if (!Number.isNaN(pageSize)) {
+            limit = pageSize;
+        }
+
+        page = parseInt(page, 10);
+        if (!Number.isNaN(page)) {
+            offset = (page - 1) * limit;
+        }
+
+        return { limit, offset };
     }
 }
