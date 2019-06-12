@@ -249,19 +249,34 @@ describe('GQL Resolver Generator', () => {
         });
     });
 
+    it('put(): should create a new item', async () => {
+        const put = resolvers[0].Mutation.ImportantPersonPut;
+
+        let result = await put(
+            {},
+            {
+                data: {
+                    full_name: 'hello!',
+                    partner: '4ef6f520-d180-4aee-9517-43214f396609',
+                    has_pets: false,
+                },
+            },
+            null,
+            {},
+        );
+
+        console.dir(result);
+    });
+
+    it('put(): should update an existing item', async () => {
+        // todo
+    });
+
     it('put(): should not allow to set the code from the data argument', async () => {
         // todo
     });
 
     it('put(): should not accept invalid data for saving', async () => {
-        // todo
-    });
-
-    it('put(): should create a new item', async () => {
-        // todo
-    });
-
-    it('put(): should update an existing item', async () => {
         // todo
     });
 

@@ -163,53 +163,62 @@ export default class ResolverGenerator {
                 data.code = code;
             }
 
-            // validate
-            const vResult = await Validator.validate(entity, data);
-            if (_.iane(vResult)) {
-                result.errors = _.union(result.errors, vResult);
-                return result;
-            }
+            // cast everything that is possible to cast
+            data = entity.prepareData(data);
+
+            // // validate
+            // const vResult = await Validator.validate(entity, data);
+            // if (_.iane(vResult)) {
+            //     result.errors = _.union(result.errors, vResult);
+            //     return result;
+            // }
 
             const singleReferences = entity
                 .getFields()
                 .filter(field => field.isReference() && !field.isMultiple());
 
             await this.wrap(async () => {
-                // cast everything that is possible to cast
-                data = entity.prepareData(data);
-
                 // todo: that needs to be optimized: batch this
-                for (let i = 0; i < refs.length; i++) {
-                    const rName = refs[i].name;
-                    if (rName in data) {
-                        if (data[rName] === undefined || data[rName] === null) {
-                            data[rName] = null;
-                            continue;
-                        }
+                const codeToId = {};
 
-                        data[rName] = data[rName].toString().trim();
-                        if (!data[rName].length) {
-                            data[rName] = null;
-                            continue;
-                        }
+                for (let i = 0; i < singleReferences.length; i++) {
+                    const referenceName = singleReferences[i].getName();
+                    const referenceType = singleReferences[i].getActualType();
+                    if (data[referenceName]) {
+                        codeToId[referenceType] = codeToId[referenceType] || {};
+                        codeToId[referenceType][data[referenceName]] = true;
 
-                        const refEntityName = refs[i].type;
-                        // need to replace code with id
-                        const refDBEntity = await entityManager.getByName(
-                            refEntityName,
-                        );
-                        const repo = connection.getRepository(refDBEntity);
-                        const refItem = await repo.findOne({
-                            where: { code: data[rName] },
-                            select: ['id'],
-                        });
-                        if (refItem) {
-                            data[rName] = refItem.id;
-                        } else {
-                            data[rName] = null;
-                        }
+                        // if (data[referenceName] === undefined || data[referenceName] === null) {
+                        //     data[referenceName] = null;
+                        //     continue;
+                        // }
+                        //
+                        // data[referenceName] = data[referenceName].toString().trim();
+                        // if (!data[referenceName].length) {
+                        //     data[referenceName] = null;
+                        //     continue;
+                        // }
+                        //
+                        // const refEntityName = refs[i].type;
+                        // // need to replace code with id
+                        // const refDBEntity = await entityManager.getByName(
+                        //     refEntityName,
+                        // );
+                        // const repo = connection.getRepository(refDBEntity);
+                        // const refItem = await repo.findOne({
+                        //     where: { code: data[referenceName] },
+                        //     select: ['id'],
+                        // });
+                        // if (refItem) {
+                        //     data[referenceName] = refItem.id;
+                        // } else {
+                        //     data[referenceName] = null;
+                        // }
                     }
                 }
+
+                console.dir(codeToId);
+                return result;
 
                 let dbItem = null;
                 if (isNewItem) {
@@ -274,7 +283,12 @@ export default class ResolverGenerator {
             },
             // process mutation - Put and Delete
             Mutation: {
-                [`${name}Put`]: this.makePutForEntity(),
+                [`${name}Put`]: this.makePutForEntity(
+                    entity,
+                    schema,
+                    databaseEntityManager,
+                    connection,
+                ),
                 [`${name}Delete`]: async (
                     source,
                     args,
