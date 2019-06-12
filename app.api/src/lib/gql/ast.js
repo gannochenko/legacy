@@ -1,4 +1,8 @@
 export const getASTAt = (ast, path) => {
+    if (!ast || !ast.fieldNodes || !ast.fieldNodes[0]) {
+        return null;
+    }
+
     let node = ast.fieldNodes[0];
 
     path = path.split('.');

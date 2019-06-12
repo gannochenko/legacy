@@ -6,7 +6,7 @@ import { getRepository, In, Like } from 'typeorm';
 import uuid from 'uuid/v4';
 import { TYPE_DATETIME, QUERY_FIND_MAX_PAGE_SIZE } from 'project-minimum-core';
 import { getRefName } from '../entity-util';
-import { getASTAt, getSelectionAt } from '../ast';
+import { getASTAt, getSelectionAt } from './ast';
 
 import Validator from '../validator';
 
@@ -73,6 +73,100 @@ export default class ResolverGenerator {
         };
     }
 
+    static makeFindForEntity(
+        entity,
+        schema,
+        databaseEntityManager,
+        connection,
+    ) {
+        const databaseEntity = databaseEntityManager.getByDefinition(entity);
+
+        return async (source, args, context, info) => {
+            const result = {
+                errors: [],
+                data: [],
+                limit: QUERY_FIND_MAX_PAGE_SIZE,
+                offset: 0,
+            };
+
+            const { filter, search, sort } = args;
+
+            if (filter !== undefined && search !== undefined) {
+                result.errors.push({
+                    code: 'search_filter_conflict',
+                    message:
+                        'You can not set both search and filter at the same time',
+                });
+
+                return result;
+            }
+
+            const { limit, offset } = this.getLimitOffset(args);
+            if (limit > QUERY_FIND_MAX_PAGE_SIZE) {
+                result.errors.push({
+                    code: 'limit_too_high',
+                    message: 'Limit too high',
+                });
+
+                return result;
+            }
+
+            result.limit = limit;
+            result.offset = offset;
+
+            const selectedFields = getSelectionAt(info, 'data');
+            const repository = connection.getRepository(databaseEntity);
+            const where = this.makeWhereFind(filter, search);
+
+            await this.wrap(async () => {
+                result.data = (await repository.find({
+                    select: this.getRealFields(selectedFields, entity),
+                    where,
+                    order: _.ione(sort) ? sort : {},
+                    skip: result.offset,
+                    take: result.limit,
+                })).map(item => this.convertToPlain(item, entity));
+            }, result.errors);
+
+            if (getASTAt(info, 'count')) {
+                // count asked
+                await this.wrap(async () => {
+                    result.count = await repository.count({
+                        where,
+                    });
+                }, result.errors);
+            }
+
+            return result;
+        };
+    }
+
+    static getLimitOffset(args) {
+        let { limit, offset, page, pageSize } = args;
+
+        // page/pageSize pair has higher priority
+        pageSize = parseInt(pageSize, 10);
+        if (!Number.isNaN(pageSize)) {
+            limit = pageSize;
+        }
+
+        limit = parseInt(limit, 10);
+        if (Number.isNaN(limit)) {
+            limit = QUERY_FIND_MAX_PAGE_SIZE;
+        }
+        page = parseInt(page, 10);
+        if (!Number.isNaN(page)) {
+            offset = (page - 1) * limit;
+        }
+
+        offset = parseInt(offset, 10);
+        if (Number.isNaN(page)) {
+            offset = 0;
+        }
+
+        return { limit, offset };
+    }
+
     /**
      *
      * @param entity
@@ -92,81 +186,12 @@ export default class ResolverGenerator {
                     databaseEntityManager,
                     connection,
                 ),
-                [`${name}Find`]: async (source, args, { requestId }, info) => {
-                    const result = {
-                        errors: [],
-                        data: [],
-                        limit: QUERY_FIND_MAX_PAGE_SIZE,
-                        offset: 0,
-                    };
-
-                    let {
-                        filter,
-                        search,
-                        sort,
-                        limit,
-                        offset,
-                        page,
-                        pageSize,
-                    } = args;
-
-                    if (filter !== undefined && search !== undefined) {
-                        result.errors.push({
-                            code: 'search_filter_conflict',
-                            message:
-                                'You can not set both search and filter at the same time',
-                        });
-
-                        return result;
-                    }
-
-                    // page/pageSize pair has higher priority
-                    if (typeof pageSize !== 'undefined') {
-                        limit = pageSize;
-                    }
-
-                    if (typeof limit === 'undefined') {
-                        limit = QUERY_FIND_MAX_PAGE_SIZE;
-                    } else if (limit > QUERY_FIND_MAX_PAGE_SIZE) {
-                        result.errors.push({
-                            code: 'limit_too_high',
-                            message: 'Limit too high',
-                        });
-
-                        return result;
-                    }
-
-                    if (typeof page !== 'undefined') {
-                        offset = (page - 1) * limit;
-                    }
-
-                    result.limit = limit;
-                    result.offset = offset;
-
-                    // todo: use connection here
-                    const repo = getRepository(dbEntity);
-
-                    await this.wrap(async () => {
-                        result.data = (await repo.find({
-                            // select: {},
-                            where: this.makeWhereFind(filter, search),
-                            order: _.ione(sort) ? sort : {},
-                            skip: result.offset,
-                            take: result.limit,
-                        })).map(item => this.convertToPlain(item, entity));
-                    }, result.errors);
-
-                    if (!!getASTAt(info, 'count')) {
-                        // count asked
-                        await this.wrap(async () => {
-                            result.count = await repo.count({
-                                where: {},
-                            });
-                        }, result.errors);
-                    }
-
-                    return result;
-                },
+                [`${name}Find`]: this.makeFindForEntity(
+                    entity,
+                    schema,
+                    databaseEntityManager,
+                    connection,
+                ),
             },
             // process mutation - Put and Delete
             Mutation: {

@@ -94,4 +94,103 @@ describe('GQL Resolver Generator', () => {
             id: 1,
         });
     });
+
+    it('find(): should produce the resolver', async () => {
+        expect(resolvers[0].Query.ImportantPersonFind).toBeInstanceOf(Function);
+    });
+
+    it('find(): should return effective data', async () => {
+        const find = resolvers[0].Query.ImportantPersonFind;
+
+        let result = await find({}, {}, null, {});
+        expect(result).toMatchObject({
+            errors: [],
+            data: [
+                { code: '4ef6f520-d180-4aee-9517-43214f396609', id: 1 },
+                { code: '9e9c4ee3-d92e-48f2-8235-577806c12534', id: 2 },
+            ],
+            limit: 50,
+            offset: 0,
+        });
+    });
+
+    it('find(): should process limit and offset', async () => {
+        // todo
+    });
+
+    it('find(): should process page and pageCount', async () => {
+        // todo
+    });
+
+    it('find(): should process sort order', async () => {
+        // todo
+    });
+
+    it('find(): should control the maximum amount of items to return', async () => {
+        const find = resolvers[0].Query.ImportantPersonFind;
+
+        let result = await find({}, { limit: 1000 }, null, {});
+
+        expect(result.data).toHaveLength(0);
+        expect(result.errors).toHaveLength(1);
+        expect(result.errors[0]).toMatchObject({
+            code: 'limit_too_high',
+            message: 'Limit too high',
+        });
+    });
+
+    it('find(): should limit the amount of selected fields', async () => {
+        const find = resolvers[0].Query.ImportantPersonFind;
+
+        let result = await find(
+            {},
+            {},
+            null,
+            makeAST('data', ['full_name', 'has_pets']),
+        );
+        expect(result.data).toMatchObject([
+            {
+                code: '4ef6f520-d180-4aee-9517-43214f396609',
+                full_name: 'Max Mustermann',
+                has_pets: true,
+                id: 1,
+            },
+            {
+                code: '9e9c4ee3-d92e-48f2-8235-577806c12534',
+                full_name: 'Mister Twister',
+                has_pets: false,
+                id: 2,
+            },
+        ]);
+    });
+
+    it('find(): should return count by filter', async () => {
+        const find = resolvers[0].Query.ImportantPersonFind;
+
+        let result = await find({}, {}, null, makeAST('count', []));
+
+        expect(result.errors).toHaveLength(0);
+        expect(result.count).toEqual(2);
+    });
+
+    it('find(): should accept filter or search, but not both', async () => {
+        const find = resolvers[0].Query.ImportantPersonFind;
+
+        let result = await find(
+            {},
+            {
+                filter: {},
+                search: 'hello',
+            },
+            null,
+            makeAST('count', []),
+        );
+
+        expect(result.data).toHaveLength(0);
+        expect(result.errors).toHaveLength(1);
+        expect(result.errors[0]).toMatchObject({
+            code: 'search_filter_conflict',
+            message: 'You can not set both search and filter at the same time',
+        });
+    });
 });

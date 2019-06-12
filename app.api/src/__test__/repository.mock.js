@@ -1,7 +1,18 @@
 import mockData from './data.mock';
 
+const limitKeySet = (result, select) => {
+    return result.map(item => {
+        const keyDiff = _.intersection(Object.keys(item), select);
+        const newItem = {};
+        keyDiff.forEach(fieldName => {
+            newItem[fieldName] = item[fieldName];
+        });
+        return newItem;
+    });
+};
+
 const makeRepository = entityName => {
-    const data = mockData[entityName];
+    const data = _.cloneDeep(mockData[entityName]);
 
     const repository = {
         findOne: jest.fn(parameters => {
@@ -13,15 +24,19 @@ const makeRepository = entityName => {
             }
 
             if (result) {
-                const keyDiff = _.intersection(Object.keys(result), select);
-                const newResult = {};
-                keyDiff.forEach(fieldName => {
-                    newResult[fieldName] = result[fieldName];
-                });
-                result = newResult;
+                result = limitKeySet([result], select)[0];
             }
 
             return result;
+        }),
+        find: jest.fn(parameters => {
+            const { where, select, order, skip, take } = parameters;
+            const dataPart = _.cloneDeep(data);
+
+            return limitKeySet(dataPart, select);
+        }),
+        count: jest.fn(parameters => {
+            return data.length;
         }),
     };
     const connection = {
