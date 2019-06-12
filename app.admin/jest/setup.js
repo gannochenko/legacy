@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import _ from '../common/lib/lodash';
 
 global._ = _;

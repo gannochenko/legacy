@@ -72,6 +72,7 @@
         "babel-loader": "^8.0.5",
         "babel-plugin-styled-components": "^1.10.0",
         "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+        "babel-polyfill": "^6.26.0",
         "eslint": "^5.16.0",
         "eslint-config-airbnb-base": "^13.1.0",
         "eslint-config-prettier": "^4.3.0",
