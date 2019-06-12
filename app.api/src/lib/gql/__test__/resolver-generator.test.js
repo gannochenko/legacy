@@ -13,6 +13,7 @@ let schema = null;
 let databaseManager = null;
 let repository = null;
 let resolvers = null;
+let mockedData = null;
 
 describe('GQL Resolver Generator', () => {
     beforeAll(async () => {
@@ -23,10 +24,13 @@ describe('GQL Resolver Generator', () => {
         });
         databaseManager = new DatabaseEntityManager(schema);
 
-        const { repository: mockedRepository, connection } = mockRepository(
-            'important_person',
-        );
+        const {
+            repository: mockedRepository,
+            connection,
+            data,
+        } = mockRepository('important_person');
         repository = mockedRepository;
+        mockedData = data;
 
         resolvers = await ResolverGenerator.make(
             schema,
@@ -104,26 +108,71 @@ describe('GQL Resolver Generator', () => {
 
         let result = await find({}, {}, null, {});
         expect(result).toMatchObject({
-            errors: [],
             data: [
                 { code: '4ef6f520-d180-4aee-9517-43214f396609', id: 1 },
                 { code: '9e9c4ee3-d92e-48f2-8235-577806c12534', id: 2 },
+                { code: '2a98f71a-a3f6-43a1-8196-9a845ba8a54f', id: 3 },
             ],
+            errors: [],
             limit: 50,
             offset: 0,
         });
     });
 
     it('find(): should process limit and offset', async () => {
-        // todo
+        const find = resolvers[0].Query.ImportantPersonFind;
+
+        repository.find.mockClear();
+        let result = await find(
+            {},
+            { limit: 1, offset: 1 },
+            null,
+            makeAST('data', ['full_name']),
+        );
+
+        expect(repository.find.mock.calls).toHaveLength(1);
+        expect(result.limit).toEqual(1);
+        expect(result.offset).toEqual(1);
+        expect(result.data).toHaveLength(1);
+        expect(result.data[0].code).toEqual(
+            '9e9c4ee3-d92e-48f2-8235-577806c12534',
+        );
     });
 
     it('find(): should process page and pageCount', async () => {
-        // todo
+        const find = resolvers[0].Query.ImportantPersonFind;
+
+        repository.find.mockClear();
+        let result = await find(
+            {},
+            { page: 2, pageSize: 1 },
+            null,
+            makeAST('data', ['full_name']),
+        );
+
+        expect(repository.find.mock.calls).toHaveLength(1);
+        expect(result.limit).toEqual(1);
+        expect(result.offset).toEqual(1);
+        expect(result.data).toHaveLength(1);
+        expect(result.data[0].code).toEqual(
+            '9e9c4ee3-d92e-48f2-8235-577806c12534',
+        );
     });
 
     it('find(): should process sort order', async () => {
-        // todo
+        const find = resolvers[0].Query.ImportantPersonFind;
+
+        repository.find.mockClear();
+        let result = await find(
+            {},
+            { sort: { full_name: 'ASC' } },
+            null,
+            makeAST('data', ['full_name']),
+        );
+
+        expect(repository.find.mock.calls[0][0].order).toMatchObject({
+            full_name: 'ASC',
+        });
     });
 
     it('find(): should control the maximum amount of items to return', async () => {
@@ -161,6 +210,12 @@ describe('GQL Resolver Generator', () => {
                 has_pets: false,
                 id: 2,
             },
+            {
+                code: '2a98f71a-a3f6-43a1-8196-9a845ba8a54f',
+                full_name: 'Charley Bale',
+                has_pets: false,
+                id: 3,
+            },
         ]);
     });
 
@@ -170,7 +225,7 @@ describe('GQL Resolver Generator', () => {
         let result = await find({}, {}, null, makeAST('count', []));
 
         expect(result.errors).toHaveLength(0);
-        expect(result.count).toEqual(2);
+        expect(result.count).toEqual(mockedData.length);
     });
 
     it('find(): should accept filter or search, but not both', async () => {

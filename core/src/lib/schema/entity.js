@@ -140,11 +140,7 @@ export class Entity {
     }
 
     getReferences() {
-        return this.declaration.schema
-            .map(field =>
-                _.isne(field.getReferenceFieldName()) ? field : null,
-            )
-            .filter(x => x);
+        return this.declaration.schema.filter(field => field.isReference());
     }
 
     getFields() {

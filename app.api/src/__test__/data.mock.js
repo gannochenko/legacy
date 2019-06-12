@@ -20,5 +20,15 @@ export default {
             lucky_numbers: [5],
             partner: null,
         },
+        {
+            id: 3,
+            code: '2a98f71a-a3f6-43a1-8196-9a845ba8a54f',
+            full_name: 'Charley Bale',
+            tags: null,
+            birth_date: new Date('2019-06-12T15:46:45.021Z'),
+            has_pets: false,
+            lucky_numbers: [3],
+            partner: null,
+        },
     ],
 };

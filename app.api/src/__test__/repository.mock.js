@@ -31,7 +31,7 @@ const makeRepository = entityName => {
         }),
         find: jest.fn(parameters => {
             const { where, select, order, skip, take } = parameters;
-            const dataPart = _.cloneDeep(data);
+            const dataPart = _.cloneDeep(data).splice(skip, take);
 
             return limitKeySet(dataPart, select);
         }),
@@ -48,6 +48,7 @@ const makeRepository = entityName => {
     return {
         repository,
         connection,
+        data,
     };
 };
 

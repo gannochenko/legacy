@@ -91,21 +91,21 @@ export default class ResolverGenerator {
 
             const { filter, search, sort } = args;
 
-            if (filter !== undefined && search !== undefined) {
-                result.errors.push({
-                    code: 'search_filter_conflict',
-                    message:
-                        'You can not set both search and filter at the same time',
-                });
-
-                return result;
-            }
-
             const { limit, offset } = this.getLimitOffset(args);
             if (limit > QUERY_FIND_MAX_PAGE_SIZE) {
                 result.errors.push({
                     code: 'limit_too_high',
                     message: 'Limit too high',
+                });
+
+                return result;
+            }
+
+            if (filter !== undefined && search !== undefined) {
+                result.errors.push({
+                    code: 'search_filter_conflict',
+                    message:
+                        'You can not set both search and filter at the same time',
                 });
 
                 return result;
@@ -144,24 +144,24 @@ export default class ResolverGenerator {
     static getLimitOffset(args) {
         let { limit, offset, page, pageSize } = args;
 
-        // page/pageSize pair has higher priority
+        limit = parseInt(limit, 10);
+        if (Number.isNaN(limit)) {
+            limit = QUERY_FIND_MAX_PAGE_SIZE;
+        }
+
+        offset = parseInt(offset, 10);
+        if (Number.isNaN(offset)) {
+            offset = 0;
+        }
+
         pageSize = parseInt(pageSize, 10);
         if (!Number.isNaN(pageSize)) {
             limit = pageSize;
         }
 
-        limit = parseInt(limit, 10);
-        if (Number.isNaN(limit)) {
-            limit = QUERY_FIND_MAX_PAGE_SIZE;
-        }
         page = parseInt(page, 10);
         if (!Number.isNaN(page)) {
             offset = (page - 1) * limit;
-        }
-
-        offset = parseInt(offset, 10);
-        if (Number.isNaN(page)) {
-            offset = 0;
         }
 
         return { limit, offset };
