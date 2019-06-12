@@ -6,10 +6,12 @@ import ResolverGenerator from '../resolver-generator';
 import DatabaseEntityManager from '../../database/entity-manager';
 import { Schema } from 'project-minimum-core';
 import schemaJSON from '../../../__test__/schema';
-import mockData from '../../../__test__/mock-data';
+import mockRepository from '../../../__test__/repository.mock';
 
 let schema = null;
 let databaseManager = null;
+let repository = null;
+let resolvers = null;
 
 describe('GQL Resolver Generator', () => {
     beforeAll(async () => {
@@ -19,57 +21,66 @@ describe('GQL Resolver Generator', () => {
             version: 2,
         });
         databaseManager = new DatabaseEntityManager(schema);
-    });
-    // beforeEach(async () => {
-    // });
-    it('should produce query get resolver', async () => {
-        const repository = {
-            findOne: jest.fn(),
-        };
-        const connection = {
-            getRepository: jest.fn(() => {
-                return repository;
-            }),
-        };
 
-        const resolvers = await ResolverGenerator.make(
+        const { repository: mockedRepository, connection } = mockRepository(
+            'important_person',
+        );
+        repository = mockedRepository;
+
+        resolvers = await ResolverGenerator.make(
             schema,
             databaseManager,
             connection,
         );
+    });
+    // beforeEach(async () => {
+    // });
+
+    it('get(): should produce the resolver', async () => {
         expect(resolvers[0].Query.ImportantPersonGet).toBeInstanceOf(Function);
+    });
+
+    it('get(): should report code missing', async () => {
         const get = resolvers[0].Query.ImportantPersonGet;
 
         // call with no parameters
         let result = await get({}, {});
         expect(result.errors).toHaveLength(1);
         expect(result.errors[0].code).toEqual('code_missing');
+    });
 
-        // not found
-        result = await get({}, { code: '   does_not_exist' });
+    it('get(): should report not found', async () => {
+        const get = resolvers[0].Query.ImportantPersonGet;
+
+        let result = await get({}, { code: '   does_not_exist' });
         expect(result.errors).toHaveLength(1);
         expect(result.errors[0].code).toEqual('not_found');
-        expect(repository.findOne.mock.calls[0][0].code).toEqual(
-            'does_not_exist',
-        );
-
-        // check the result
-        repository.findOne.mockImplementation(() => {
-            return mockData.important_person[0];
+        expect(repository.findOne.mock.calls[0][0]).toMatchObject({
+            where: { code: 'does_not_exist' },
+            select: ['id', 'code'],
         });
-        result = await get({}, { code: '4ef6f520-d180-4aee-9517-43214f39660' });
+    });
+
+    it('get(): should return effective data', async () => {
+        const get = resolvers[0].Query.ImportantPersonGet;
+
+        let result = await get(
+            {},
+            { code: '4ef6f520-d180-4aee-9517-43214f396609' },
+            null,
+            {},
+        );
         expect(result.errors).toHaveLength(0);
         expect(result.data).toMatchObject({
             code: '4ef6f520-d180-4aee-9517-43214f396609',
-            full_name: 'Max Mustermann',
-            tags: ['one', 'two'],
-            lucky_numbers: [123, 456],
-            birth_date: '2019-03-10T07:20:29.084Z',
-            has_pets: true,
-            pets: null,
-            tools: null,
-            partner: 2,
             id: 1,
         });
     });
+
+    // it('get(): should limit the amount of selected fields', async () => {
+    //     const get = resolvers[0].Query.ImportantPersonGet;
+    //
+    //     let result = await get({}, { code: '4ef6f520-d180-4aee-9517-43214f396609', }, null, {});
+    //     console.dir(result);
+    // });
 });

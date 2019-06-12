@@ -1,3 +1,7 @@
+/**
+ * https://github.com/typeorm/typeorm/blob/master/docs/repository-api.md
+ */
+
 import { getRepository, In, Like } from 'typeorm';
 import uuid from 'uuid/v4';
 import { TYPE_DATETIME, QUERY_FIND_MAX_PAGE_SIZE } from 'project-minimum-core';
@@ -670,7 +674,7 @@ export default class ResolverGenerator {
                 } else {
                     plain[fieldName] = fieldValue;
                 }
-            } else {
+            } else if (fieldName in dbItem) {
                 plain[fieldName] = null;
             }
         });
@@ -692,6 +696,14 @@ export default class ResolverGenerator {
             .getFields()
             .filter(field => !(field.isReference() && field.isMultiple()))
             .map(field => field.getName());
-        return _.intersection(fields, realFields);
+        const toSelect = _.intersection(fields, realFields);
+        if (!toSelect.includes('id')) {
+            toSelect.push('id');
+        }
+        if (toSelect.length === 1) {
+            toSelect.push('code');
+        }
+
+        return toSelect;
     }
 }
