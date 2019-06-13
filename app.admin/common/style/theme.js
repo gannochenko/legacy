@@ -24,7 +24,7 @@ const theme = {
     body: {
         color: palette.black,
         background: {
-            color: palette.white,
+            color: '#fafafa',
         },
     },
     link: {
