@@ -87,13 +87,13 @@ services:
       context: ../app.admin/
       dockerfile: docker/development.dockerfile
     expose:
+      - "8888"
       - "3000"
       - "3001"
-      - "8888"
     ports:
+      - "8888:8888"
       - "3000:3000"
       - "3001:3001"
-      - "8888:8888"
     depends_on: []
     volumes:
       - "../app.admin/:/app/"
