@@ -77,7 +77,7 @@ describe('Entity', () => {
         });
     });
 
-    it('should cast input data: multiple <-> single', async () => {
+    it('should cast and validate input data: multiple <-> single', async () => {
         const main = makeStubEntity();
         const data = main.prepareData({
             string_field: ['A', 'B'],
@@ -86,11 +86,11 @@ describe('Entity', () => {
 
         expect(data).toMatchObject({
             string_field: 'A,B',
-            string_field_m: ['A'],
+            string_field_m: 'A',
         });
     });
 
-    it('should cast input data: string', async () => {
+    it('should cast and validate input data: string', async () => {
         const main = makeStubEntity();
 
         let data = main.prepareData({
@@ -130,7 +130,7 @@ describe('Entity', () => {
         });
     });
 
-    it('should cast input data: boolean', async () => {
+    it('should cast and validate input data: boolean', async () => {
         const main = makeStubEntity();
 
         let data = main.prepareData({
@@ -161,7 +161,7 @@ describe('Entity', () => {
         });
     });
 
-    it('should cast input data: date', async () => {
+    it('should cast and validate input data: date', async () => {
         const main = makeStubEntity();
 
         let data = main.prepareData({
@@ -195,10 +195,13 @@ describe('Entity', () => {
             date_field: 'not_a_date',
             date_field_m: ['not_a_date'],
         });
-        expect(data).toMatchObject({ date_field: null, date_field_m: [null] });
+        expect(data).toMatchObject({
+            date_field: 'not_a_date',
+            date_field_m: ['not_a_date'],
+        });
     });
 
-    it('should cast input data: references', async () => {
+    it('should cast and validate input data: references', async () => {
         const main = makeStubEntity();
 
         let data = main.prepareData({

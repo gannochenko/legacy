@@ -231,9 +231,15 @@ export class Entity {
             let value = data[name];
 
             if (field.isMultiple()) {
-                if (!_.isArray(value)) {
-                    value = [this.castFieldValue(field, value)];
-                } else {
+                // if (!_.isArray(value)) {
+                //     value = [this.castFieldValue(field, value)];
+                // } else {
+                //     value = value.map(subValue =>
+                //         this.castFieldValue(field, subValue),
+                //     );
+                // }
+
+                if (_.isArray(value)) {
                     value = value.map(subValue =>
                         this.castFieldValue(field, subValue),
                     );
@@ -266,9 +272,6 @@ export class Entity {
             safeValue = !!safeValue;
         } else if (type === TYPE_INTEGER) {
             safeValue = parseInt(safeValue, 10);
-            if (Number.isNaN(safeValue)) {
-                safeValue = 0;
-            }
         } else if (type === TYPE_DATETIME) {
             if (safeValue === undefined || safeValue === null) {
                 return null;
@@ -285,21 +288,10 @@ export class Entity {
                 } else if (!Number.isNaN(parseInt(safeValue, 10))) {
                     // last chance - a timestamp
                     safeValue = new Date(parseInt(safeValue, 10)).toISOString();
-                } else {
-                    safeValue = null;
                 }
             }
         } else if (field.isReference()) {
-            if (_.isString(safeValue)) {
-                // all good
-                // } else if (_.isObject(safeValue)) {
-                //     if (ENTITY_CODE_FIELD_NAME in safeValue) {
-                //         safeValue = safeValue[ENTITY_CODE_FIELD_NAME];
-                //         if (!_.isne(safeValue)) {
-                //             safeValue = null;
-                //         }
-                //     }
-            } else if (safeValue !== undefined && safeValue !== null) {
+            if (safeValue !== undefined && safeValue !== null) {
                 safeValue = safeValue.toString();
             } else {
                 safeValue = null;
