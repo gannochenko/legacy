@@ -6,7 +6,7 @@ export const DELETE = 'data.delete';
 export const DELETE_SUCCESS = 'data.delete.success';
 export const DELETE_FAILURE = 'data.delete.failure';
 
-const initialState = {
+export const initialState = {
     loading: false,
     ready: false,
     error: null,

@@ -13,7 +13,7 @@ export const DELETE = 'data-detail.delete';
 export const DELETE_SUCCESS = 'data-detail.delete.success';
 export const DELETE_FAILURE = 'data-detail.delete.failure';
 
-const initialState = {
+export const initialState = {
     loading: false,
     ready: false,
     data: null,
