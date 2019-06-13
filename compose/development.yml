@@ -1,105 +1,108 @@
-version: '3'
+version: "3"
 services:
-    db:
-        image: postgres
-        expose:
-            - '5432'
-        ports:
-            - '5432:5432'
-        environment:
-            POSTGRES_DB: legacy
-            POSTGRES_USER: root
-            POSTGRES_PASSWORD: 123
-    db.gui:
-        image: adminer
-        expose:
-            - '8080'
-        ports:
-            - '8080:8080'
-        depends_on:
-            - db
-        labels:
-            com.list.name: Adminer
-            com.list.sort: '2'
-            com.list.link.endpoint: Browse database|/?pgsql=db&username=root&db=legacy&ns=public
-    cache:
-        build:
-            context: ../infra/cache/
-            dockerfile: Dockerfile
-        expose:
-            - 6379
-        ports:
-            - '6379:6379'
-    cache.gui:
-        image: marian/rebrow
-        expose:
-            - 5001
-        ports:
-            - '5001:5001'
-        depends_on:
-            - cache
-        labels:
-            com.list.name: Redis GUI
-            com.list.sort: '3'
-            com.list.link.endpoint: 'Browse cache|/cache:6379/0/keys/'
-    api:
-        image: 'api:dev'
-        build:
-            context: ../app.api/
-            dockerfile: docker/development.dockerfile
-        expose:
-            - '4001'
-            - '4000'
-        ports:
-            - '4001:4001'
-            - '4000:4000'
-        depends_on:
-            - db
-        volumes:
-            - '../app.api/:/app/'
-        environment:
-            - NODE_ENV=development
-            - DEBUG=gql.*
-            - DEBUG_COLORS=1
-            - DEBUG_HIDE_DATE=1
-            - network.port=4000
-            - 'network.cors=http://localhost:3000'
-            - 'cache.url=redis://cache:6379'
-            - 'db.url=postgres://root:123@db:5432/legacy'
-        labels:
-            com.list.name: Backend
-            com.list.sort: '1'
-            com.list.description: Main server that provides API
-            com.list.link.endpoint: GraphQL endpoint|/graphql
-    container-list:
-        image: awesome1888/container-list
-        expose:
-            - '2000'
-        ports:
-            - '2000:2000'
-        volumes:
-            - '/var/run/docker.sock:/var/run/docker.sock:ro'
-        environment:
-            - PORT=2000
-    admin:
-        image: 'admin:dev'
-        build:
-            context: ../app.admin/
-            dockerfile: docker/development.dockerfile
-        expose:
-            - '3000'
-            - '3001'
-        ports:
-            - '3000:3000'
-            - '3001:3001'
-        depends_on: []
-        volumes:
-            - '../app.admin/:/app/'
-        environment:
-            - NODE_ENV=development
-            - DEBUG_COLORS=1
-            - DEBUG_HIDE_DATE=1
-            - network.cors=
-            - api.url=http://localhost:4000
-        labels:
-            com.list.name: Admin
+  db:
+    image: postgres
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: legacy
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 123
+  db.gui:
+    image: adminer
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    labels:
+      com.list.name: Adminer
+      com.list.sort: "2"
+      com.list.link.endpoint: Browse database|/?pgsql=db&username=root&db=legacy&ns=public
+  cache:
+    build:
+      context: ../infra/cache/
+      dockerfile: Dockerfile
+    expose:
+      - 6379
+    ports:
+      - "6379:6379"
+  cache.gui:
+    image: marian/rebrow
+    expose:
+      - 5001
+    ports:
+      - "5001:5001"
+    depends_on:
+      - cache
+    labels:
+      com.list.name: Redis GUI
+      com.list.sort: "3"
+      com.list.link.endpoint: "Browse cache|/cache:6379/0/keys/"
+  api:
+    image: "api:dev"
+    build:
+      context: ../app.api/
+      dockerfile: docker/development.dockerfile
+    expose:
+      - "4001"
+      - "4000"
+    ports:
+      - "4001:4001"
+      - "4000:4000"
+    depends_on:
+      - db
+    volumes:
+      - "../app.api/:/app/"
+    environment:
+      - NODE_ENV=development
+      - DEBUG=gql.*
+      - DEBUG_COLORS=1
+      - DEBUG_HIDE_DATE=1
+      - network.port=4000
+      - "network.cors=http://localhost:3000"
+      - "cache.url=redis://cache:6379"
+      - "db.url=postgres://root:123@db:5432/legacy"
+    labels:
+      com.list.name: Backend
+      com.list.sort: "1"
+      com.list.description: Main server that provides API
+      com.list.link.endpoint: GraphQL endpoint|/graphql
+  container-list:
+    image: awesome1888/container-list
+    expose:
+      - "2000"
+    ports:
+      - "2000:2000"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    environment:
+      - PORT=2000
+  admin:
+    image: "admin:dev"
+    build:
+      context: ../app.admin/
+      dockerfile: docker/development.dockerfile
+    expose:
+      - "3000"
+      - "3001"
+      - "8888"
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+      - "8888:8888"
+    depends_on: []
+    volumes:
+      - "../app.admin/:/app/"
+    environment:
+      - NODE_ENV=development
+      - DEBUG_COLORS=1
+      - DEBUG_HIDE_DATE=1
+      - network.cors=
+      - api.url=http://localhost:4000
+    labels:
+      com.list.name: Admin
+      com.list.link.analyzer: Bundle analyzer|http://localhost:8888

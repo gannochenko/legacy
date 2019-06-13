@@ -1,5 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+    .BundleAnalyzerPlugin;
 
 module.exports = (env, argv) => {
     env = env || {};
@@ -88,6 +90,10 @@ module.exports = (env, argv) => {
                 __SERVER__: false,
                 __DEV__: development,
                 __TEST__: false,
+            }),
+            new BundleAnalyzerPlugin({
+                analyzerHost: '0.0.0.0',
+                analyzerPort: '8888',
             }),
         ],
         devServer: {
