@@ -1,4 +1,5 @@
 import React from 'react';
+import { object } from 'prop-types';
 import { VerticalTriplet } from 'ew-internals-ui';
 
 import {
@@ -11,10 +12,10 @@ import {
     Header,
     Title,
     Actions,
-} from './style.js';
+} from './style';
 import Menu from '../Menu';
 
-export default ({ children, title, actions }) => (
+const Layout = ({ children, title, actions }) => (
     <VerticalTriplet
         top={
             <Top>
@@ -36,7 +37,7 @@ export default ({ children, title, actions }) => (
             </Left>
             <Right>
                 <Header>
-                    <Title>{title || 'Untitled page'}</Title>
+                    <Title>{title}</Title>
                     {!!actions && <Actions>{actions}</Actions>}
                 </Header>
                 {children}
@@ -44,3 +45,15 @@ export default ({ children, title, actions }) => (
         </Middle>
     </VerticalTriplet>
 );
+
+Layout.propTypes = {
+    title: object,
+    actions: object,
+    children: object,
+};
+
+Layout.defaultProps = {
+    title: 'Untitled page',
+};
+
+export default Layout;
