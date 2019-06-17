@@ -1,7 +1,10 @@
 const webpack = require('webpack');
+const resolve = require('resolve');
 const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
     .BundleAnalyzerPlugin;
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin-alt');
+const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 
 module.exports = (env, argv) => {
     env = env || {};
@@ -18,7 +21,7 @@ module.exports = (env, argv) => {
         target: 'web',
         mode: development ? 'development' : 'production',
         resolve: {
-            extensions: ['.js', '.jsx'],
+            extensions: ['.js', '.jsx', '.ts', '.tsx'],
             symlinks: false,
         },
         devtool: development ? 'source-map' : false,
@@ -30,7 +33,7 @@ module.exports = (env, argv) => {
                     loader: 'graphql-tag/loader',
                 },
                 {
-                    test: /\.jsx?$/,
+                    test: /\.(j|t)sx?$/,
                     use: [
                         {
                             loader: 'babel-loader',
@@ -94,6 +97,31 @@ module.exports = (env, argv) => {
             new BundleAnalyzerPlugin({
                 analyzerHost: '0.0.0.0',
                 analyzerPort: '8888',
+            }),
+            new ForkTsCheckerWebpackPlugin({
+                typescript: resolve.sync('typescript', {
+                    basedir: path.join(__dirname, `node_modules`),
+                }),
+                async: false,
+                checkSyntacticErrors: true,
+                tsconfig: path.join(__dirname, `tsconfig.json`),
+                compilerOptions: {
+                    module: 'esnext',
+                    moduleResolution: 'node',
+                    resolveJsonModule: true,
+                    isolatedModules: true,
+                    noEmit: true,
+                    jsx: 'preserve',
+                },
+                reportFiles: [
+                    '**',
+                    '!**/*.json',
+                    '!**/__test__/**',
+                    '!**/?(*.)(spec|test).*',
+                ],
+                watch: path.join(__dirname, `common`),
+                silent: true,
+                formatter: typescriptFormatter,
             }),
         ],
         devServer: {
