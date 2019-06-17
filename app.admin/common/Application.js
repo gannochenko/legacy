@@ -3,8 +3,8 @@ import { Provider } from 'react-redux';
 import { Notification, NotificationContext } from 'ew-internals-ui';
 
 import { ThemeContext } from './style/global';
-import { Context as SettingsContext, createSettings } from './lib/settings';
 import { createHistory } from './lib/history';
+import { Context as SettingsContext, createSettings } from './lib/settings';
 import { Context as ClientContext, createClient } from './lib/client';
 import ApplicationUI from './components/Application';
 import { createStore } from './store';
