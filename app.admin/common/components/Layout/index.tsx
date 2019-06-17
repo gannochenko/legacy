@@ -14,17 +14,21 @@ import {
 } from './style';
 import Menu from '../Menu';
 
-interface Blah {
+interface LayoutProperties {
     title: string;
     children: ReactNode;
-    actions: ReactNode;
+    actions?: ReactNode;
 }
 
 // let hz = 1;
 // let hzz = 'a';
 // hz = hzz;
 
-const Layout: FunctionComponent<Blah> = ({ children, title, actions }) => (
+const Layout: FunctionComponent<LayoutProperties> = ({
+    children,
+    title = 'Untitled page',
+    actions = null,
+}) => (
     <VerticalTriplet
         top={
             <Top>
@@ -54,9 +58,5 @@ const Layout: FunctionComponent<Blah> = ({ children, title, actions }) => (
         </Middle>
     </VerticalTriplet>
 );
-
-// Layout.defaultProps = {
-//     title: 'Untitled page',
-// };
 
 export default Layout;
