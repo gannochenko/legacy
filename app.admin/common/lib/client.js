@@ -49,7 +49,7 @@ export class Client {
     }
 
     async getUrl() {
-        let url = await this.settings.get('api.url');
+        let url = await this.settings.get('api.url', '');
         if (__DEV__) {
             url = url.replace('localhost', document.location.hostname);
         }

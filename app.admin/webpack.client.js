@@ -3,7 +3,7 @@ const resolve = require('resolve');
 const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
     .BundleAnalyzerPlugin;
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin-alt');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 
 module.exports = (env, argv) => {
@@ -28,59 +28,112 @@ module.exports = (env, argv) => {
         module: {
             rules: [
                 {
-                    test: /\.(graphql|gql)$/,
-                    exclude: /node_modules/,
-                    loader: 'graphql-tag/loader',
-                },
-                {
                     test: /\.(j|t)sx?$/,
+                    enforce: 'pre',
                     use: [
                         {
-                            loader: 'babel-loader',
                             options: {
-                                presets: [
-                                    '@babel/react',
-                                    [
-                                        '@babel/env',
-                                        {
-                                            modules: false,
-                                            targets: {
-                                                browsers: ['last 2 versions'],
-                                            },
-                                        },
-                                    ],
-                                ],
-                                plugins: [
-                                    '@babel/plugin-proposal-object-rest-spread',
-                                    '@babel/plugin-proposal-class-properties',
-                                    'babel-plugin-styled-components',
-                                ],
+                                formatter: require.resolve(
+                                    'react-dev-utils/eslintFormatter',
+                                ),
+                                eslintPath: require.resolve('eslint'),
+                                emitWarning: true,
                             },
+                            loader: require.resolve('eslint-loader'),
                         },
                     ],
-                    include: [
-                        path.join(__dirname, 'client'),
-                        path.join(__dirname, 'common'),
-                    ],
+                    include: path.join(__dirname, `common`),
                 },
                 {
-                    test: /\.(txt|html)$/,
-                    use: 'raw-loader',
-                },
-                {
-                    test: /\.(jpe?g|gif|png|svg|ico)$/i,
-                    use: [
+                    oneOf: [
                         {
-                            loader: 'url-loader',
-                            options: {
-                                limit: 8192,
-                            },
+                            test: /\.(graphql|gql)$/,
+                            exclude: /node_modules/,
+                            loader: 'graphql-tag/loader',
+                        },
+                        {
+                            test: /\.(j|t)sx?$/,
+                            use: [
+                                {
+                                    loader: 'babel-loader',
+                                    options: {
+                                        presets: [
+                                            '@babel/preset-typescript',
+                                            '@babel/react',
+                                            [
+                                                '@babel/env',
+                                                {
+                                                    modules: false,
+                                                    targets: {
+                                                        browsers: [
+                                                            'last 2 versions',
+                                                        ],
+                                                    },
+                                                },
+                                            ],
+                                        ],
+                                        plugins: [
+                                            '@babel/plugin-proposal-object-rest-spread',
+                                            '@babel/plugin-proposal-class-properties',
+                                            'babel-plugin-styled-components',
+                                        ],
+
+                                        // cacheDirectory: true,
+                                        // cacheCompression: isEnvProduction,
+                                        // compact: isEnvProduction,
+                                    },
+                                },
+                            ],
+                            include: [
+                                path.join(__dirname, 'client'),
+                                path.join(__dirname, 'common'),
+                            ],
+                        },
+                        {
+                            test: /\.(jpe?g|gif|png|svg|ico)$/i,
+                            use: [
+                                {
+                                    loader: 'url-loader',
+                                    options: {
+                                        limit: 8192,
+                                    },
+                                },
+                            ],
+                        },
+                        {
+                            // test: /\.(txt|html)$/,
+                            use: 'raw-loader',
                         },
                     ],
                 },
             ],
         },
         plugins: [
+            new ForkTsCheckerWebpackPlugin({
+                typescript: resolve.sync('typescript', {
+                    basedir: path.join(__dirname, `node_modules`),
+                }),
+                async: false,
+                checkSyntacticErrors: true,
+                tsconfig: path.join(__dirname, `tsconfig.json`),
+                compilerOptions: {
+                    module: 'esnext',
+                    //moduleResolution: 'node',
+                    resolveJsonModule: true,
+                    isolatedModules: true,
+                    noEmit: true,
+                    jsx: 'preserve',
+                },
+                reportFiles: [
+                    '**',
+                    '!**/*.json',
+                    '!**/__test__/**',
+                    '!**/?(*.)(spec|test).*',
+                ],
+                watch: path.join(__dirname, `common`),
+                silent: true,
+                formatter: typescriptFormatter,
+            }),
             new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
             new webpack.ProvidePlugin({
                 _: [path.join(__dirname, `common/lib/lodash.js`), 'default'],
@@ -97,31 +150,6 @@ module.exports = (env, argv) => {
             new BundleAnalyzerPlugin({
                 analyzerHost: '0.0.0.0',
                 analyzerPort: '8888',
-            }),
-            new ForkTsCheckerWebpackPlugin({
-                typescript: resolve.sync('typescript', {
-                    basedir: path.join(__dirname, `node_modules`),
-                }),
-                async: false,
-                checkSyntacticErrors: true,
-                tsconfig: path.join(__dirname, `tsconfig.json`),
-                compilerOptions: {
-                    module: 'esnext',
-                    moduleResolution: 'node',
-                    resolveJsonModule: true,
-                    isolatedModules: true,
-                    noEmit: true,
-                    jsx: 'preserve',
-                },
-                reportFiles: [
-                    '**',
-                    '!**/*.json',
-                    '!**/__test__/**',
-                    '!**/?(*.)(spec|test).*',
-                ],
-                watch: path.join(__dirname, `common`),
-                silent: true,
-                formatter: typescriptFormatter,
             }),
         ],
         devServer: {

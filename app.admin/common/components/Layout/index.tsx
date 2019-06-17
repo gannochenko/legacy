@@ -1,5 +1,4 @@
-import React from 'react';
-import { object } from 'prop-types';
+import React, { ReactNode, FunctionComponent } from 'react';
 import { VerticalTriplet } from 'ew-internals-ui';
 
 import {
@@ -15,7 +14,21 @@ import {
 } from './style';
 import Menu from '../Menu';
 
-const Layout = ({ children, title, actions }) => (
+// let i = 10;
+// let m = '1';
+// m = i;
+
+interface Blah {
+    title: string;
+    actions: ReactNode;
+    children: ReactNode;
+}
+
+const Layout: FunctionComponent<Blah> = ({
+    children,
+    title = 'Untitled page',
+    actions = null,
+}) => (
     <VerticalTriplet
         top={
             <Top>
@@ -45,15 +58,5 @@ const Layout = ({ children, title, actions }) => (
         </Middle>
     </VerticalTriplet>
 );
-
-Layout.propTypes = {
-    title: object,
-    actions: object,
-    children: object,
-};
-
-Layout.defaultProps = {
-    title: 'Untitled page',
-};
 
 export default Layout;
