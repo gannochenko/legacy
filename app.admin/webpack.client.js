@@ -31,7 +31,7 @@ module.exports = (env, argv) => {
         module: {
             rules: [
                 {
-                    test: /\.(js|mjs|jsx)$/,
+                    test: /\.(j|t)sx?$/,
                     enforce: 'pre',
                     use: [
                         {
