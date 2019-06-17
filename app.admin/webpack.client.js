@@ -3,7 +3,7 @@ const resolve = require('resolve');
 const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
     .BundleAnalyzerPlugin;
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin-alt');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 
 module.exports = (env, argv) => {
@@ -58,7 +58,6 @@ module.exports = (env, argv) => {
                                     loader: 'babel-loader',
                                     options: {
                                         presets: [
-                                            '@babel/preset-typescript',
                                             '@babel/react',
                                             [
                                                 '@babel/env',
@@ -71,6 +70,7 @@ module.exports = (env, argv) => {
                                                     },
                                                 },
                                             ],
+                                            '@babel/preset-typescript',
                                         ],
                                         plugins: [
                                             '@babel/plugin-proposal-object-rest-spread',
@@ -118,7 +118,7 @@ module.exports = (env, argv) => {
                 tsconfig: path.join(__dirname, `tsconfig.json`),
                 compilerOptions: {
                     module: 'esnext',
-                    //moduleResolution: 'node',
+                    moduleResolution: 'node',
                     resolveJsonModule: true,
                     isolatedModules: true,
                     noEmit: true,
