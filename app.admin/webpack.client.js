@@ -11,6 +11,9 @@ module.exports = (env, argv) => {
     const development =
         argv.mode === 'development' || env.NODE_ENV === 'development';
 
+    const sourceFolder = path.join(__dirname, 'common');
+    const destinationFolder = path.join(__dirname, '.build');
+
     return {
         entry: [
             'react-hot-loader/patch',
@@ -42,7 +45,7 @@ module.exports = (env, argv) => {
                             loader: require.resolve('eslint-loader'),
                         },
                     ],
-                    include: path.join(__dirname, `common`),
+                    include: sourceFolder,
                 },
                 {
                     test: /\.(graphql|gql)$/,
@@ -76,10 +79,7 @@ module.exports = (env, argv) => {
                             },
                         },
                     ],
-                    include: [
-                        path.join(__dirname, 'client'),
-                        path.join(__dirname, 'common'),
-                    ],
+                    include: [path.join(__dirname, 'client'), sourceFolder],
                 },
                 {
                     test: /\.(txt|html)$/,
@@ -101,11 +101,11 @@ module.exports = (env, argv) => {
         plugins: [
             new ForkTsCheckerWebpackPlugin({
                 typescript: resolve.sync('typescript', {
-                    basedir: path.join(__dirname, `node_modules`),
+                    basedir: path.join(__dirname, 'node_modules'),
                 }),
                 async: false,
                 checkSyntacticErrors: true,
-                tsconfig: path.join(__dirname, `tsconfig.json`),
+                tsconfig: path.join(__dirname, 'tsconfig.json'),
                 compilerOptions: {
                     module: 'esnext',
                     moduleResolution: 'node',
@@ -120,7 +120,7 @@ module.exports = (env, argv) => {
                     '!**/__test__/**',
                     '!**/?(*.)(spec|test).*',
                 ],
-                watch: path.join(__dirname, `common`),
+                watch: sourceFolder,
                 silent: true,
                 formatter: typescriptFormatter,
             }),
@@ -154,7 +154,7 @@ module.exports = (env, argv) => {
             overlay: true,
         },
         output: {
-            path: path.join(__dirname, '.build'),
+            path: destinationFolder,
             publicPath: 'http://localhost:3001/',
             filename: 'client.js',
         },
