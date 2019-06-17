@@ -28,6 +28,23 @@ module.exports = (env, argv) => {
         module: {
             rules: [
                 {
+                    test: /\.(js|mjs|jsx)$/,
+                    enforce: 'pre',
+                    use: [
+                        {
+                            options: {
+                                formatter: require.resolve(
+                                    'react-dev-utils/eslintFormatter',
+                                ),
+                                eslintPath: require.resolve('eslint'),
+                                emitWarning: true,
+                            },
+                            loader: require.resolve('eslint-loader'),
+                        },
+                    ],
+                    include: path.join(__dirname, `common`),
+                },
+                {
                     test: /\.(graphql|gql)$/,
                     exclude: /node_modules/,
                     loader: 'graphql-tag/loader',
@@ -109,7 +126,7 @@ module.exports = (env, argv) => {
             }),
             new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
             new webpack.ProvidePlugin({
-                _: [path.join(__dirname, `common/lib/lodash.js`), 'default'],
+                _: [path.join(__dirname, 'common/lib/lodash.js'), 'default'],
             }),
             new webpack.NamedModulesPlugin(),
             new webpack.HotModuleReplacementPlugin(),
