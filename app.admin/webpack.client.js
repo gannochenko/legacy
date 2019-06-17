@@ -1,7 +1,10 @@
 const webpack = require('webpack');
 const path = require('path');
+const resolve = require('resolve');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
     .BundleAnalyzerPlugin;
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin-alt');
+const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 
 module.exports = (env, argv) => {
     env = env || {};
@@ -18,7 +21,7 @@ module.exports = (env, argv) => {
         target: 'web',
         mode: development ? 'development' : 'production',
         resolve: {
-            extensions: ['.js', '.jsx'],
+            extensions: ['.js', '.jsx', '.ts', '.tsx'],
             symlinks: false,
         },
         devtool: development ? 'source-map' : false,
@@ -30,7 +33,7 @@ module.exports = (env, argv) => {
                     loader: 'graphql-tag/loader',
                 },
                 {
-                    test: /\.jsx?$/,
+                    test: /\.(j|t)sx?$/,
                     use: [
                         {
                             loader: 'babel-loader',
@@ -46,6 +49,7 @@ module.exports = (env, argv) => {
                                             },
                                         },
                                     ],
+                                    '@babel/preset-typescript',
                                 ],
                                 plugins: [
                                     '@babel/plugin-proposal-object-rest-spread',
@@ -78,6 +82,31 @@ module.exports = (env, argv) => {
             ],
         },
         plugins: [
+            new ForkTsCheckerWebpackPlugin({
+                typescript: resolve.sync('typescript', {
+                    basedir: path.join(__dirname, `node_modules`),
+                }),
+                async: false,
+                checkSyntacticErrors: true,
+                tsconfig: path.join(__dirname, `tsconfig.json`),
+                compilerOptions: {
+                    module: 'esnext',
+                    moduleResolution: 'node',
+                    resolveJsonModule: true,
+                    isolatedModules: true,
+                    noEmit: true,
+                    jsx: 'preserve',
+                },
+                reportFiles: [
+                    '**',
+                    '!**/*.json',
+                    '!**/__test__/**',
+                    '!**/?(*.)(spec|test).*',
+                ],
+                watch: path.join(__dirname, `common`),
+                silent: true,
+                formatter: typescriptFormatter,
+            }),
             new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
             new webpack.ProvidePlugin({
                 _: [path.join(__dirname, `common/lib/lodash.js`), 'default'],
