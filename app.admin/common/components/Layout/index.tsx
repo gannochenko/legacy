@@ -20,10 +20,6 @@ interface LayoutProperties {
     actions?: ReactNode;
 }
 
-// let hz = 1;
-// let hzz = 'a';
-// hz = hzz;
-
 const Layout: FunctionComponent<LayoutProperties> = ({
     children,
     title = 'Untitled page',
