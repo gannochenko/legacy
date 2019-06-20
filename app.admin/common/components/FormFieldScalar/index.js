@@ -1,10 +1,10 @@
 import React from 'react';
+import { TYPE_INTEGER } from 'project-minimum-core';
 import FormField from '../FormField';
 import FormFieldMultiplier, { Add } from '../FormFieldMultiplier';
-import { Input } from './style.js';
-import { TYPE_INTEGER } from 'project-minimum-core';
+import { Input } from './style';
 
-export default ({ field, value, error, onChange }) => (
+const FormFieldScalar = ({ field, value, error, onChange }) => (
     <FormField
         field={field}
         error={error}
@@ -26,3 +26,5 @@ export default ({ field, value, error, onChange }) => (
         </FormFieldMultiplier>
     </FormField>
 );
+
+export default FormFieldScalar;

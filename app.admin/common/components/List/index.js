@@ -1,5 +1,9 @@
 import React, { useMemo } from 'react';
+import { TYPE_STRING, TYPE_DATETIME, TYPE_BOOLEAN } from 'project-minimum-core';
+import { withModal } from 'ew-internals-ui';
+
 import Button from '../../material-kit/CustomButtons';
+
 import {
     Container,
     Table,
@@ -19,11 +23,7 @@ import {
     ButtonWrap,
     ActionPanel,
 } from './style';
-
-import { TYPE_STRING, TYPE_DATETIME, TYPE_BOOLEAN } from 'project-minimum-core';
-
 import PageNavigation from '../PageNavigation';
-import { withModal, DropPanel } from 'ew-internals-ui';
 
 import ListCellString from '../ListCellString';
 import ListCellReference from '../ListCellReference';

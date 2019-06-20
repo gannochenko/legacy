@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import FormField from '../FormField';
 import FormFieldMultiplier, { Add } from '../FormFieldMultiplier';
-import { Checkbox, Check, InvisibleCheck } from './style.js';
+import { Checkbox, Check } from './style';
 
 const Toggle = ({ field, value, onChange }) => {
     const [checked, setChecked] = useState(!!value);
@@ -39,7 +39,7 @@ const Toggle = ({ field, value, onChange }) => {
     );
 };
 
-export default ({ field, value, error, onChange }) => (
+const FormFieldBoolean = ({ field, value, error, onChange }) => (
     <FormField
         field={field}
         error={error}
@@ -54,3 +54,5 @@ export default ({ field, value, error, onChange }) => (
         </FormFieldMultiplier>
     </FormField>
 );
+
+export default FormFieldBoolean;

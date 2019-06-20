@@ -23,7 +23,7 @@ import {
     SearchItem,
     SearchItemData,
     SearchItemActions,
-} from './style.js';
+} from './style';
 
 export const FormFieldReference = ({
     field,

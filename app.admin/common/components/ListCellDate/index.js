@@ -1,8 +1,8 @@
 import React from 'react';
 import moment from 'moment';
-import { ListCellDate, Empty } from './style.js';
+import { ListCellDateContainer, Empty } from './style';
 
-export default ({ field, value }) => {
+const ListCellDate = ({ field, value }) => {
     if (typeof value === 'undefined' || value === null) {
         return <Empty>&mdash;</Empty>;
     }
@@ -12,5 +12,7 @@ export default ({ field, value }) => {
         ? value.map(item => moment(item).format(format)).join(', ')
         : moment(value).format(format);
 
-    return <ListCellDate>{value}</ListCellDate>;
+    return <ListCellDateContainer>{value}</ListCellDateContainer>;
 };
+
+export default ListCellDate;

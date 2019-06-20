@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { PageNavigation } from './style.js';
+import { PageNavigationContainer } from './style';
 import Button from '../../material-kit/CustomButtons';
 
 const getPageCount = (count, pageSize) => {
@@ -49,7 +49,7 @@ const renderRange = (range, page, onNavigate) => {
     return result;
 };
 
-export default ({ count, page, pageSize, onNavigate }) => {
+const PageNavigation = ({ count, page, pageSize, onNavigate }) => {
     pageSize = pageSize || 10;
 
     const range = useMemo(() => {
@@ -59,7 +59,7 @@ export default ({ count, page, pageSize, onNavigate }) => {
     page = parseInt(page, 10);
 
     return (
-        <PageNavigation>
+        <PageNavigationContainer>
             <Button
                 color="warning"
                 size="sm"
@@ -77,6 +77,8 @@ export default ({ count, page, pageSize, onNavigate }) => {
             >
                 &rarr;
             </Button>
-        </PageNavigation>
+        </PageNavigationContainer>
     );
 };
+
+export default PageNavigation;

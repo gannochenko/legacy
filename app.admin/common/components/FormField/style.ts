@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { align } from 'sc-companion';
 import { withTheme } from '../../style/global';
 
-export const FormField = styled.div`
+export const FormFieldContainer = styled.div`
     max-width: 20rem;
 `;
 

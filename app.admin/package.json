@@ -6,8 +6,8 @@
         "test:u": "jest -c ./jest/config.unit.js --forceExit",
         "test:u:dev": "jest -c ./jest/config.unit.js --watch",
         "test:i": "jest -c ./jest/config.integration.js --runInBand --forceExit",
-        "lint": "eslint ./common/ ./client/ ./server/",
-        "lint:fix": "eslint ./common/ ./client/ ./server/ --fix",
+        "lint": "eslint ./common/ ./client/ ./server/ --ext .js,.jsx,.ts,.tsx",
+        "lint:fix": "eslint ./common/ ./client/ ./server/ --fix --ext .js,.jsx,.ts,.tsx",
         "techdebt": "leasot --exit-nicely --reporter table --skip-unsupported --ignore node_modules,build ./"
     },
     "dependencies": {

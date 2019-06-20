@@ -1,12 +1,14 @@
 import React from 'react';
-import { ListCellString, Empty } from './style.js';
+import { ListCellStringContainer, Empty } from './style';
 
-export default ({ field, value }) => {
+const ListCellString = ({ field, value }) => {
     if (typeof value === 'undefined' || value === null) {
         return <Empty>&mdash;</Empty>;
     }
 
     value = field.isMultiple() ? value.join(', ') : value;
 
-    return <ListCellString>{value}</ListCellString>;
+    return <ListCellStringContainer>{value}</ListCellStringContainer>;
 };
+
+export default ListCellString;

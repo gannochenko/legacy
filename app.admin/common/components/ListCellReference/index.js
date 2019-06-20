@@ -1,7 +1,7 @@
 import React from 'react';
-import { ListCellReference, Empty } from './style.js';
+import { ListCellReferenceContainer, Empty } from './style';
 
-export default ({ field, value }) => {
+const ListCellReference = ({ field, value }) => {
     if (
         typeof value === 'undefined' ||
         value === null ||
@@ -14,5 +14,7 @@ export default ({ field, value }) => {
         ? value.map(item => item.code).join(', ')
         : value.code;
 
-    return <ListCellReference>{value}</ListCellReference>;
+    return <ListCellReferenceContainer>{value}</ListCellReferenceContainer>;
 };
+
+export default ListCellReference;

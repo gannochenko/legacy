@@ -1,11 +1,7 @@
 import styled from 'styled-components';
-// import {
-//   align
-// } from 'sc-companion';
 
-export const ListCellBoolean = styled.div`
+export const ListCellDateContainer = styled.div`
     font-size: 0.6rem;
-    text-align: center;
 `;
 
 export const Empty = styled.div`

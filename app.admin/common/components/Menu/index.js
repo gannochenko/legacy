@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Container, Section, Title, Item } from './style.js';
+import { Container, Section, Title, Item } from './style';
 
 const Menu = ({ schema }) => {
     if (!schema) {

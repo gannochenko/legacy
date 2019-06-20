@@ -1,9 +1,16 @@
-import React, { useState, useMemo } from 'react';
-import { FormField, Footer, Label, Error, Actions, RedStar } from './style.js';
+import React from 'react';
+import {
+    FormFieldContainer,
+    Footer,
+    Label,
+    Error,
+    Actions,
+    RedStar,
+} from './style';
 
-export default ({ field, actions, error, children }) => {
+const FormField = ({ field, actions, error, children }) => {
     return (
-        <FormField>
+        <FormFieldContainer>
             <Label>
                 {field.getDisplayName()}{' '}
                 {field.isMandatory() && <RedStar>*</RedStar>}
@@ -13,6 +20,8 @@ export default ({ field, actions, error, children }) => {
                 <Error>{error || null}</Error>
                 {!!actions && <Actions>{actions}</Actions>}
             </Footer>
-        </FormField>
+        </FormFieldContainer>
     );
 };
+
+export default FormField;

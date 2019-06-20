@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { FieldSet, AddButton } from './style.js';
+import React, { useMemo } from 'react';
+import { FieldSet, AddButton } from './style';
 
 export const Add = ({ field, value, onChange, initialValue }) => {
     if (!field.isMultiple() || !_.isFunction(onChange)) {
@@ -27,7 +27,7 @@ export const Add = ({ field, value, onChange, initialValue }) => {
     );
 };
 
-export default ({ field, value, onChange, children }) => {
+const FormFieldMultiplier = ({ field, value, onChange, children }) => {
     if (field.isMultiple() && !_.isArray(value)) {
         value = [];
     }
@@ -76,3 +76,5 @@ export default ({ field, value, onChange, children }) => {
         </>
     );
 };
+
+export default FormFieldMultiplier;

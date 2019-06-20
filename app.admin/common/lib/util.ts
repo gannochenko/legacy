@@ -21,7 +21,10 @@ export const sanitize = str => str.replace(/[^a-z0-9_-]/gi, '');
 export const escapeQuote = str => str.replace(/"/g, '"');
 
 // todo: move to ew-internals
-export const getCalendar = (date, chosenDate = null) => {
+export const getCalendar = (
+    date: Date,
+    chosenDate: string | Date | null = null,
+) => {
     let b = moment.utc(date);
     let f = moment.utc(date);
 
@@ -29,8 +32,8 @@ export const getCalendar = (date, chosenDate = null) => {
     const timeLine = [];
 
     let isChosenMonthYear = null;
-    let chosenMonth = null;
-    let chosenYear = null;
+    let chosenMonth: number | null = null;
+    let chosenYear: number | null = null;
     if (chosenDate) {
         if (_.isne(chosenDate)) {
             chosenDate = new Date(chosenDate);
@@ -134,10 +137,6 @@ export const getCalendar = (date, chosenDate = null) => {
 };
 
 export const convertLocalDateToUTC = date => {
-    if (!date) {
-        return null;
-    }
-
     return new Date(
         Date.UTC(
             date.getFullYear(),
@@ -151,7 +150,7 @@ export const convertLocalDateToUTC = date => {
     );
 };
 
-export const convertUTCToDate = date => {
+export const convertUTCToDate = (date: Date) => {
     return new Date(
         date.getUTCFullYear(),
         date.getUTCMonth(),

@@ -1,9 +1,9 @@
+import React from 'react';
 import configureStore from 'redux-mock-store';
 import { render as renderTest } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Switch } from 'react-router';
 import { Route } from 'react-router-dom';
-import React from 'react';
 
 export const render = ({ children, reducer, point, state, router = null }) => {
     const mockStore = configureStore([]);

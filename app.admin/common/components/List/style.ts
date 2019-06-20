@@ -4,7 +4,6 @@ import {
     icon,
     align,
     fgColor,
-    group,
     ellipsis,
     bgColor,
 } from 'sc-companion';

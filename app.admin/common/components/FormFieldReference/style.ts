@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { withTheme } from '../../style/global';
 import { stdInput, stdLink, fgColor, icon, align, group } from 'sc-companion';
+import { withTheme } from '../../style/global';
 
 export const List = withTheme(styled.div`
     border-bottom: 1px solid ${props => props.theme.input.color.hout};

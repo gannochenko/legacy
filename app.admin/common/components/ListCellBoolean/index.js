@@ -1,7 +1,7 @@
 import React from 'react';
-import { ListCellBoolean, Empty } from './style.js';
+import { ListCellBooleanContainer, Empty } from './style';
 
-export default ({ field, value }) => {
+const ListCellBoolean = ({ field, value }) => {
     if (typeof value === 'undefined' || value === null) {
         return <Empty>&mdash;</Empty>;
     }
@@ -9,5 +9,7 @@ export default ({ field, value }) => {
     const display = value => (value ? '✅' : '❌');
     value = field.isMultiple() ? value.map(display).join(', ') : display(value);
 
-    return <ListCellBoolean>{value}</ListCellBoolean>;
+    return <ListCellBooleanContainer>{value}</ListCellBooleanContainer>;
 };
+
+export default ListCellBoolean;

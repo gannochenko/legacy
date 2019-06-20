@@ -1,7 +1,7 @@
 import React from 'react';
-import { ListCellCode, Link } from './style.js';
+import { ListCellCodeContainer, Link } from './style';
 
-export default ({ field, value, entity }) => {
+const ListCellCode = ({ field, value, entity }) => {
     if (typeof value === 'undefined' || value === null) {
         return null;
     }
@@ -9,7 +9,7 @@ export default ({ field, value, entity }) => {
     value = field.isMultiple() ? value.join(', ') : value;
 
     return (
-        <ListCellCode>
+        <ListCellCodeContainer>
             <Link
                 to={`/data/${encodeURIComponent(
                     entity.getName(),
@@ -17,6 +17,8 @@ export default ({ field, value, entity }) => {
             >
                 {value}
             </Link>
-        </ListCellCode>
+        </ListCellCodeContainer>
     );
 };
+
+export default ListCellCode;

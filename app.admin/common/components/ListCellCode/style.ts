@@ -3,7 +3,7 @@ import { withTheme } from '../../style/global';
 import { Link as RouterLink } from 'react-router-dom';
 import { stdLink } from 'sc-companion';
 
-export const ListCellCode = styled.div`
+export const ListCellCodeContainer = styled.div`
     font-size: 0.6rem;
 `;
 

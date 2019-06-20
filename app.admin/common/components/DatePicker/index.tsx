@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, FunctionComponent } from 'react';
 import {
     getCalendar,
     convertLocalDateToUTC,
@@ -37,11 +37,19 @@ const monthList = [
 
 const wDays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
-const DatePicker = ({ value, onChange, onDaySelect }) => {
+interface DatePickerProperties {
+    value: Date;
+    onChange: (date: Date) => {};
+    onDaySelect: () => {};
+}
+
+const DatePicker: FunctionComponent<DatePickerProperties> = ({
+    value = Date.now(),
+    onChange = () => {},
+    onDaySelect = () => {},
+}) => {
     const valueUTC = useMemo(() => {
-        return convertLocalDateToUTC(
-            value ? new Date(value) : new Date(Date.now()),
-        );
+        return convertLocalDateToUTC(new Date(value));
     }, [value]);
     const calendar = useMemo(() => {
         return getCalendar(valueUTC, valueUTC);
@@ -54,9 +62,6 @@ const DatePicker = ({ value, onChange, onDaySelect }) => {
             valueUTC.getUTCFullYear(),
         ];
     }, [valueUTC]);
-
-    // console.dir(calendar);
-    // console.dir(`${day}.${month}.${year}`);
 
     return (
         <DatePickerContainer>
@@ -111,9 +116,7 @@ const DatePicker = ({ value, onChange, onDaySelect }) => {
                                             onChange(
                                                 convertUTCToDate(valueUTC),
                                             );
-                                            if (_.isFunction(onDaySelect)) {
-                                                onDaySelect();
-                                            }
+                                            onDaySelect();
                                         }}
                                     >
                                         {day.day}
