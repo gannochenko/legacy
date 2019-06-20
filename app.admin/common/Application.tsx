@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { FunctionComponent, useRef } from 'react';
 import { Provider } from 'react-redux';
 import { Notification, NotificationContext } from 'ew-internals-ui';
 
@@ -13,6 +13,7 @@ import { dismissOnReady } from './splash/client';
 import theme from './style/theme';
 
 const history = createHistory();
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { store, saga, unsubscribe } = createStore({
     history,
     onChange: dismissOnReady,
@@ -20,7 +21,7 @@ const { store, saga, unsubscribe } = createStore({
 const settings = createSettings();
 const client = createClient(settings);
 
-const Application = () => {
+const Application: FunctionComponent<{}> = () => {
     const notificationRef = useRef();
 
     return (
