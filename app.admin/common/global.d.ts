@@ -1,5 +1,5 @@
-//import lodash from './lib/lodash.js';
-
-declare const _: any = {
-    isFunction: (arg: string): boolean => {},
+declare const _ = {
+    isString: (arg: any): boolean => {},
+    isStringNotEmpty: (arg: any): boolean => {},
+    isDate: (arg: any): boolean => {},
 };

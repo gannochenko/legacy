@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { withTheme } from '../../style/global';
 import { Link as RouterLink } from 'react-router-dom';
 import { stdLink } from 'sc-companion';
+import { withTheme } from '../../style/global';
 
 export const ListCellCodeContainer = styled.div`
     font-size: 0.6rem;

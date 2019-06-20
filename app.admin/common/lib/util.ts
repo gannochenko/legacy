@@ -1,12 +1,12 @@
-import { camel } from 'naming-style';
+// import { camel } from 'naming-style';
 import { stringify, parse } from '@m59/qs';
 import moment from 'moment';
 
-// todo: move to ew-internals
-export const convertToCamel = str => {
-    str = camel(str.toLowerCase());
-    return `${str.substr(0, 1).toUpperCase()}${str.substr(1, str.length - 1)}`;
-};
+// // todo: move to ew-internals
+// export const convertToCamel = str => {
+//     str = camel(str.toLowerCase());
+//     return `${str.substr(0, 1).toUpperCase()}${str.substr(1, str.length - 1)}`;
+// };
 
 export const putSearchParameters = (url, params) => {
     return `?${stringify(
@@ -20,29 +20,48 @@ export const parseSearch = url => parse(url.replace(/^\?/, ''));
 export const sanitize = str => str.replace(/[^a-z0-9_-]/gi, '');
 export const escapeQuote = str => str.replace(/"/g, '"');
 
+interface TimeLineItem {
+    key: string;
+    weekDay: number;
+    day: number;
+    month: number;
+    year: number;
+    selected: boolean;
+    currentMonth: boolean;
+}
+
 // todo: move to ew-internals
 export const getCalendar = (
     date: Date,
-    chosenDate: string | Date | null = null,
+    chosen: NullableDate | NullableString = null,
 ) => {
     let b = moment.utc(date);
     let f = moment.utc(date);
 
     const cMonth = f.month();
-    const timeLine = [];
+    const timeLine: TimeLineItem[] = [];
 
-    let isChosenMonthYear = null;
-    let chosenMonth: number | null = null;
-    let chosenYear: number | null = null;
-    if (chosenDate) {
-        if (_.isne(chosenDate)) {
-            chosenDate = new Date(chosenDate);
+    let isChosenMonthYear = false;
+    let chosenMonth: NullableNumber = null;
+    let chosenYear: NullableNumber = null;
+    let chosenDay: NullableNumber = null;
+
+    if (chosen) {
+        let chosenDate: NullableDate = null;
+
+        if (_.isString(chosen)) {
+            chosenDate = new Date(chosen);
+        } else if (_.isDate(chosen)) {
+            chosenDate = chosen as Date;
         }
-        chosenMonth = chosenDate.getUTCMonth();
-        chosenYear = chosenDate.getUTCFullYear();
-        chosenDate = chosenDate.getUTCDate();
-        isChosenMonthYear =
-            b.month() === chosenMonth && b.year() === chosenYear;
+
+        if (chosenDate) {
+            chosenMonth = chosenDate.getUTCMonth();
+            chosenYear = chosenDate.getUTCFullYear();
+            chosenDay = chosenDate.getUTCDate();
+            isChosenMonthYear =
+                b.month() === chosenMonth && b.year() === chosenYear;
+        }
     }
 
     // generate our calendar grid backward
@@ -70,7 +89,7 @@ export const getCalendar = (
             month: b.month(),
             year: b.year(),
             selected:
-                !decreasePad && isChosenMonthYear && b.date() === chosenDate,
+                !decreasePad && isChosenMonthYear && b.date() === chosenDay,
             currentMonth: b.year() === chosenYear && b.month() === chosenMonth,
         });
 
@@ -91,7 +110,7 @@ export const getCalendar = (
             month: f.month(),
             year: f.year(),
             selected:
-                !decreasePad && isChosenMonthYear && f.date() === chosenDate,
+                !decreasePad && isChosenMonthYear && f.date() === chosenDay,
             currentMonth: f.year() === chosenYear && f.month() === chosenMonth,
         });
 
@@ -114,10 +133,10 @@ export const getCalendar = (
     }
 
     // now group by weeks
-    const byWeeks = [];
-    let cWeek = [];
+    const byWeeks: TimeLineItem[][] = [];
+    let cWeek: TimeLineItem[] = [];
     timeLine.forEach(day => {
-        if (day.weekDay === 1 && _.iane(cWeek)) {
+        if (day.weekDay === 1 && cWeek.length) {
             // week starts with monday, monday has number 1
             byWeeks.push(cWeek);
             cWeek = [];
@@ -125,8 +144,8 @@ export const getCalendar = (
 
         cWeek.push(day);
     });
-    // push the last if not empty, just in case...
-    if (_.iane(cWeek)) {
+    // push the last if not empty
+    if (cWeek.length) {
         byWeeks.push(cWeek);
     }
 
@@ -136,7 +155,7 @@ export const getCalendar = (
     };
 };
 
-export const convertLocalDateToUTC = date => {
+export const convertLocalDateToUTC = (date: Date) => {
     return new Date(
         Date.UTC(
             date.getFullYear(),

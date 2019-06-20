@@ -1,5 +1,6 @@
 import React from 'react';
 import { TYPE_INTEGER } from 'project-minimum-core';
+
 import FormField from '../FormField';
 import FormFieldMultiplier, { Add } from '../FormFieldMultiplier';
 import { Input } from './style';

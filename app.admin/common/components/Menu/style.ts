@@ -1,7 +1,7 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { group, ellipsis, stdLink } from 'sc-companion';
 import { withTheme } from '../../style/global';
-import { Link } from 'react-router-dom';
 
 export const Container = withTheme(styled.div`
     padding: 1rem;
