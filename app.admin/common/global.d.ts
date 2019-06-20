@@ -1,5 +1,7 @@
-declare const _ = {
-    isString: (arg: any): boolean => {},
-    isStringNotEmpty: (arg: any): boolean => {},
-    isDate: (arg: any): boolean => {},
-};
+import lodash from './lib/lodash';
+
+declare global {
+    import lodash from './lib/lodash';
+
+    declare const _ = lodash;
+}
