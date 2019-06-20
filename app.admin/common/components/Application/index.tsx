@@ -1,9 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { FunctionComponent, useEffect, useRef } from 'react';
 import { Switch } from 'react-router';
 import { ConnectedRouter } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
-import { object, func, bool } from 'prop-types';
 import { Modal, ModalContext, withNotification } from 'ew-internals-ui';
 import { MainProgressBar } from './style';
 import {
@@ -22,21 +21,34 @@ import SchemaPage from '../../pages/schema';
 import NotFoundPage from '../../pages/404';
 import ForbiddenPage from '../../pages/403';
 
-const Application = ({
-    dispatch,
-    ready,
+interface ApplicationProperties {
+    settings: object;
+    ready?: boolean;
+    history: object;
+    client: object;
+    theme: StringToAnyMap;
+    error?: object;
+    notify: () => {};
+    offline?: boolean;
+
+    dispatch: (action: object) => {};
+    dispatchLoad: (client: object) => {};
+}
+
+const Application: FunctionComponent<ApplicationProperties> = ({
+    ready = false,
     client,
     history,
     theme,
-    error,
+    error = null,
     notify,
-    offline,
+    offline = false,
+
+    dispatch,
+    dispatchLoad,
 }) => {
     useEffect(() => {
-        dispatch({
-            type: LOAD,
-            client,
-        });
+        dispatchLoad(client);
     }, []);
 
     const modalRef = useRef();
@@ -79,9 +91,7 @@ const Application = ({
                                     <ForbiddenPage route={route} />
                                 )}
                             />
-                            <Route
-                                render={route => <NotFoundPage route={route} />}
-                            />
+                            <Route render={() => <NotFoundPage />} />
                         </Switch>
                     </ConnectedRouter>
                 )}
@@ -90,22 +100,18 @@ const Application = ({
     );
 };
 
-Application.propTypes = {
-    dispatch: func.isRequired,
-    settings: object.isRequired,
-    ready: bool,
-    history: object.isRequired,
-    client: object.isRequired,
-    theme: object.isRequired,
-    error: object,
-    notify: func.isRequired,
-    offline: bool,
-};
+const mapDispatchToProps = dispatch => ({
+    dispatch,
+    dispatchLoad: client =>
+        dispatch({
+            type: LOAD,
+            client,
+        }),
+});
 
-Application.defaultProps = {
-    ready: false,
-    error: null,
-    offline: null,
-};
-
-export default withNotification(connect(s => s.application)(Application));
+export default withNotification(
+    connect(
+        s => s.application,
+        mapDispatchToProps,
+    )(Application),
+);
