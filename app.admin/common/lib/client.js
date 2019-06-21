@@ -2,15 +2,19 @@ import React from 'react';
 import ApolloClient, { InMemoryCache } from 'apollo-boost';
 import Axios from 'axios';
 
-export const Context = React.createContext();
+export const Context = React.createContext({});
 export const withClient = Component => {
-    const ComponentWithClient = props => (
+    const WithClient = props => (
         <Context.Consumer>
             {value => <Component {...props} client={value} />}
         </Context.Consumer>
     );
 
-    return ComponentWithClient;
+    const wrappedComponentName =
+        Component.displayName || Component.name || 'Component';
+
+    WithClient.displayName = `withClient(${wrappedComponentName})`;
+    return WithClient;
 };
 
 export class Client {

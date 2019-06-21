@@ -1,5 +1,5 @@
-const makeCss = ({ theme, prepend, append }) => `
-    ${prepend || ''}
+const makeCss = ({ theme, prepend = '', append = '' }) => `
+    ${prepend}
     @import url('https://fonts.googleapis.com/css?family=Montserrat');
     
     html {
@@ -237,7 +237,7 @@ const makeCss = ({ theme, prepend, append }) => `
         word-break: break-word;
     }
 
-    ${append || ''}
+    ${append}
 `;
 
 export default makeCss;

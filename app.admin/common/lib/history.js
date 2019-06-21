@@ -8,11 +8,3 @@ export const createHistory = url => {
               initialEntries: [url],
           });
 };
-export const Context = React.createContext();
-export const withHistory = Component => {
-    return props => (
-        <Context.Consumer>
-            {value => <Component {...props} history={value} />}
-        </Context.Consumer>
-    );
-};
