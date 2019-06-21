@@ -1,6 +1,7 @@
 import React from 'react';
 import ApolloClient, { InMemoryCache } from 'apollo-boost';
 import Axios from 'axios';
+import { Settings } from 'ew-internals';
 
 export const Context = React.createContext({});
 export const withClient = Component => {
@@ -18,21 +19,25 @@ export const withClient = Component => {
 };
 
 export class Client {
-    constructor(settings) {
+    protected settings: Settings;
+
+    protected apollo;
+
+    public constructor(settings) {
         this.settings = settings;
     }
 
-    async query(parameters) {
+    public async query(parameters) {
         const apollo = await this.getApollo();
         return apollo.query({ ...parameters, fetchPolicy: 'network-only' });
     }
 
-    async mutate(...args) {
+    public async mutate(...args) {
         const apollo = await this.getApollo();
         return apollo.mutate(...args);
     }
 
-    async get(path) {
+    public async get(path) {
         const url = await this.getUrl();
         return Axios.get(`${url}/${path}`);
     }
@@ -41,7 +46,7 @@ export class Client {
      * @private
      * @returns {ApolloClient}
      */
-    async getApollo() {
+    public async getApollo() {
         if (!this.apollo) {
             this.apollo = new ApolloClient({
                 uri: `${await this.getUrl()}/graphql`,
@@ -52,7 +57,7 @@ export class Client {
         return this.apollo;
     }
 
-    async getUrl() {
+    public async getUrl() {
         let url = await this.settings.get('api.url');
         if (__DEV__) {
             url = url.replace('localhost', document.location.hostname);
