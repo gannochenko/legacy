@@ -1,46 +1,30 @@
 import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { withNotification } from 'ew-internals-ui';
-import { push } from 'connected-react-router';
-import { useErrorNotification, useUnload } from '../../lib/hooks';
-import { LOAD, UNLOAD, DELETE } from './reducer';
+import { useErrorNotification, useDispatchUnload } from '../../lib/hooks';
+import { UNLOAD } from './reducer';
 import { withClient } from '../../lib/client';
 import List from '../../components/List';
-import { putSearchParameters, parseSearch } from '../../lib/util';
+import { parseSearch } from '../../lib/util';
 import Button from '../../material-kit/CustomButtons';
+import mapDispatchToProps from './dispatch';
+import { extractPageParameters } from './util';
 
 import Layout from '../../components/Layout';
 
-const extractPageParameters = search => {
-    let page = parseInt(search.page, 10);
-    if (Number.isNaN(page) || page < 1) {
-        page = 1;
-    }
-    let { sort } = search;
-    if (_.isne(sort)) {
-        sort = sort.split(':');
-    } else {
-        sort = [];
-    }
-
-    return {
-        page,
-        sort,
-        pageSize: 10,
-    };
-};
-
 const DataPage = ({
-    dispatch,
     client,
     route,
     schema,
-    ready,
-    loading,
     data,
     count,
     error,
     notify,
+    dispatchLoad,
+    dispatchUnload,
+    dispatchNavigateToDetail,
+    dispatchDelete,
+    dispatchUpdateSearch,
 }) => {
     if (!schema) {
         return null;
@@ -58,17 +42,10 @@ const DataPage = ({
 
     // load data on component mount
     useEffect(() => {
-        dispatch({
-            type: LOAD,
-            payload: {
-                client,
-                entity,
-                ...pageParams,
-            },
-        });
+        dispatchLoad(client, entity, pageParams);
     }, [entity.getName(), search]);
+    useDispatchUnload(dispatchUnload);
     useErrorNotification(error, notify);
-    useUnload(dispatch, UNLOAD);
 
     return (
         <Layout
@@ -77,15 +54,7 @@ const DataPage = ({
                 <>
                     <Button
                         type="button"
-                        onClick={() =>
-                            dispatch(
-                                push(
-                                    `/data/${encodeURIComponent(
-                                        entity.getName(),
-                                    )}/new/`,
-                                ),
-                            )
-                        }
+                        onClick={() => dispatchNavigateToDetail(entity)}
                     >
                         Add
                     </Button>
@@ -102,43 +71,21 @@ const DataPage = ({
                     way: pageParams.sort[1] || null,
                 }}
                 onPageChange={page =>
-                    dispatch(
-                        push(
-                            putSearchParameters(route.location.search, {
-                                page,
-                            }),
-                        ),
-                    )
+                    dispatchUpdateSearch(route, {
+                        page,
+                    })
                 }
                 onSortChange={sort =>
-                    dispatch(
-                        push(
-                            putSearchParameters(route.location.search, {
-                                sort: `${sort.field}:${sort.way}`,
-                            }),
-                        ),
-                    )
+                    dispatchUpdateSearch(route, {
+                        sort: `${sort.field}:${sort.way}`,
+                    })
                 }
                 onActionClick={(action, item) => {
                     if (action === 'edit') {
-                        dispatch(
-                            push(
-                                `/data/${encodeURIComponent(
-                                    entity.getName(),
-                                )}/${encodeURIComponent(item.code)}/`,
-                            ),
-                        );
+                        dispatchNavigateToDetail(entity, item.code);
                     }
                     if (action === 'delete') {
-                        dispatch({
-                            type: DELETE,
-                            payload: {
-                                entity,
-                                code: item.code,
-                                client,
-                                ...pageParams,
-                            },
-                        });
+                        dispatchDelete(client, entity, item.code, pageParams);
                     }
                 }}
             />
@@ -148,6 +95,9 @@ const DataPage = ({
 
 export default withNotification(
     withClient(
-        connect(s => ({ ...s.data, schema: s.application.schema }))(DataPage),
+        connect(
+            s => ({ ...s.data, schema: s.application.schema }),
+            mapDispatchToProps,
+        )(DataPage),
     ),
 );

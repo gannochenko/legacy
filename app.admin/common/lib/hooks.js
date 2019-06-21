@@ -31,6 +31,9 @@ export const useErrorNotification = (error, notify) => {
     }, [error]);
 };
 
+/**
+ * @deprecated
+ */
 export const useUnload = (dispatch, actionUnload) => {
     useEffect(
         () => () => {
@@ -40,6 +43,10 @@ export const useUnload = (dispatch, actionUnload) => {
         },
         [],
     );
+};
+
+export const useDispatchUnload = dispatchUnload => {
+    useEffect(() => () => dispatchUnload(), []);
 };
 
 export const useNetworkNotification = (offline, notify) => {
