@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { withNotification } from 'ew-internals-ui';
 import { LOAD, UNLOAD, SAVE, LOAD_SUCCESS, DELETE } from './reducer';
 import { useErrorNotification, useUnload } from '../../lib/hooks';
 import { withClient } from '../../lib/client';
-import { withNotification } from 'ew-internals-ui';
 import Form from '../../components/Form';
 // import Button from '../../material-kit/CustomButtons';
 
@@ -15,7 +15,6 @@ const DataPage = ({
     route,
     schema,
     ready,
-    loading,
     data,
     formData,
     notify,
@@ -76,19 +75,7 @@ const DataPage = ({
     }
 
     return (
-        <Layout
-            title={`${entity.getDisplayName()}: ${displayCode}`}
-            // actions={
-            //     <>
-            //        <Button
-            //            type="button"
-            //            onClick={() => dispatch(push(`/data/${entity.getName()}/new/`))}
-            //        >
-            //            Add
-            //        </Button>
-            //     </>
-            // }
-        >
+        <Layout title={`${entity.getDisplayName()}: ${displayCode}`}>
             {ready && (
                 <Form
                     data={data || {}}

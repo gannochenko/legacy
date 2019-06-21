@@ -2,7 +2,6 @@ import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { withNotification } from 'ew-internals-ui';
 import { useErrorNotification, useDispatchUnload } from '../../lib/hooks';
-import { UNLOAD } from './reducer';
 import { withClient } from '../../lib/client';
 import List from '../../components/List';
 import { parseSearch } from '../../lib/util';

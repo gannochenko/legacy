@@ -1,9 +1,8 @@
-import { LOAD, UNLOAD, DELETE } from './reducer';
 import { push } from 'connected-react-router';
+import { LOAD, UNLOAD, DELETE } from './reducer';
 import { putSearchParameters } from '../../lib/util';
 
 export default dispatch => ({
-    dispatch,
     dispatchLoad: (client, entity, pageParams) =>
         dispatch({
             type: LOAD,
