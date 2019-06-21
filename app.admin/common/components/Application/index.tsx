@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Modal, ModalContext, withNotification } from 'ew-internals-ui';
 import { MainProgressBar } from './style';
+import { ApplicationProperties } from './type';
 import {
     useNetworkMonitor,
     useErrorNotification,
@@ -20,20 +21,6 @@ import DataDetailPage from '../../pages/data-detail';
 import SchemaPage from '../../pages/schema';
 import NotFoundPage from '../../pages/404';
 import ForbiddenPage from '../../pages/403';
-
-interface ApplicationProperties {
-    settings: object;
-    ready?: boolean;
-    history: object;
-    client: object;
-    theme: StringToAnyMap;
-    error?: object;
-    notify: () => {};
-    offline?: boolean;
-
-    dispatch: (action: object) => {};
-    dispatchLoad: (client: object) => {};
-}
 
 const Application: FunctionComponent<ApplicationProperties> = ({
     ready = false,

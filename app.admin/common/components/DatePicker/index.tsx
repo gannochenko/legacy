@@ -19,6 +19,7 @@ import {
     WeekDays,
     WeekDay,
 } from './style';
+import { DatePickerProperties } from './type';
 
 const monthList = [
     'January',
@@ -36,12 +37,6 @@ const monthList = [
 ];
 
 const wDays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
-
-interface DatePickerProperties {
-    value: Date;
-    onChange: (date: Date) => {};
-    onDaySelect: () => {};
-}
 
 const DatePicker: FunctionComponent<DatePickerProperties> = ({
     value = Date.now(),

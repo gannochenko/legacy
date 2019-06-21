@@ -1,4 +1,4 @@
-import React, { FunctionComponent, ReactNode } from 'react';
+import React, { FunctionComponent } from 'react';
 import { VerticalTriplet } from 'ew-internals-ui';
 
 import {
@@ -12,13 +12,9 @@ import {
     Title,
     Actions,
 } from './style';
-import Menu from '../Menu';
+import { LayoutProperties } from './type';
 
-interface LayoutProperties {
-    title: string;
-    children: ReactNode;
-    actions?: ReactNode;
-}
+import Menu from '../Menu';
 
 const Layout: FunctionComponent<LayoutProperties> = ({
     children,
