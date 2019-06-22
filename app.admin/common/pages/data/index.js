@@ -25,26 +25,34 @@ const DataPage = ({
     dispatchDelete,
     dispatchUpdateSearch,
 }) => {
-    if (!schema) {
-        return null;
-    }
-
-    const entity = schema.getEntity(_.get(route, 'match.params.entity_name'));
-    if (!entity) {
-        return null;
-    }
-
     const search = useMemo(() => parseSearch(route.location.search), [
         route.location.search,
     ]);
     const pageParams = extractPageParameters(search);
 
-    // load data on component mount
-    useEffect(() => {
-        dispatchLoad(client, entity, pageParams);
-    }, [entity.getName(), search]);
     useDispatchUnload(dispatchUnload);
     useErrorNotification(error, notify);
+
+    let entity = null;
+    if (schema) {
+        entity = schema.getEntity(_.get(route, 'match.params.entity_name'));
+    }
+
+    let entityName = '';
+    if (entity) {
+        entityName = entity.getName();
+    }
+
+    // load data on component mount
+    useEffect(() => {
+        if (entity) {
+            dispatchLoad(client, entity, pageParams);
+        }
+    }, [entityName, search]);
+
+    if (!entity) {
+        return null;
+    }
 
     return (
         <Layout
