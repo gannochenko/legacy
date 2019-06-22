@@ -8,6 +8,7 @@ function* load() {
     } catch (error) {
         yield put({ type: reducer.LOAD_FAILURE, payload: [error] });
         if (__DEV__) {
+            // eslint-disable-next-line no-console
             console.error(error);
         }
     }

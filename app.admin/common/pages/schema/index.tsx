@@ -4,6 +4,7 @@ import { withNotification } from 'ew-internals-ui';
 
 import { SchemaPageProperties } from './type';
 
+import mapDispatchToProps from './dispatch';
 import { withClient } from '../../lib/client';
 import Layout from '../../components/Layout';
 import { useErrorNotification } from '../../lib/hooks';
@@ -22,4 +23,11 @@ const SchemaPage: FunctionComponent<SchemaPageProperties> = ({
     return <Layout title="Structure here" />;
 };
 
-export default withNotification(withClient(connect(x => x.schema)(SchemaPage)));
+export default withNotification(
+    withClient(
+        connect(
+            x => x.schema,
+            mapDispatchToProps,
+        )(SchemaPage),
+    ),
+);
