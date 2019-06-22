@@ -28,6 +28,7 @@ function* load(params) {
     } catch (error) {
         yield put({ type: reducer.LOAD_FAILURE, payload: [error] });
         if (__DEV__) {
+            // eslint-disable-next-line no-console
             console.error(error);
         }
     }
@@ -60,6 +61,7 @@ function* remove(params) {
     } catch (error) {
         yield put({ type: reducer.DELETE_FAILURE, payload: error });
         if (__DEV__) {
+            // eslint-disable-next-line no-console
             console.error(error);
         }
     }
