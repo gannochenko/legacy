@@ -1,6 +1,7 @@
 export const LOAD = 'schema.load';
 export const LOAD_SUCCESS = 'schema.load.success';
 export const LOAD_FAILURE = 'schema.load.failure';
+export const UNLOAD = 'schema.unload';
 
 const initialState = {
     loading: false,
@@ -27,6 +28,8 @@ const reducer = (state = initialState, action) => {
                 ready: true,
                 error: action.payload,
             };
+        case UNLOAD:
+            return { ...initialState };
         default:
             return state;
     }
