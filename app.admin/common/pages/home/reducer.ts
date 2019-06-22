@@ -1,6 +1,7 @@
 export const LOAD = 'home.load';
 export const LOAD_SUCCESS = 'home.load.success';
 export const LOAD_FAILURE = 'home.load.failure';
+export const UNLOAD = 'home.unload';
 
 const initialState = {
     loading: false,
@@ -27,6 +28,8 @@ const reducer = (state = initialState, action) => {
                 ready: true,
                 error: action.payload,
             };
+        case UNLOAD:
+            return { ...initialState };
         default:
             return state;
     }

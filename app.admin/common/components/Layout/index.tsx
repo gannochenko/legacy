@@ -17,7 +17,7 @@ import { LayoutProperties } from './type';
 import Menu from '../Menu';
 
 const Layout: FunctionComponent<LayoutProperties> = ({
-    children,
+    children = null,
     title = 'Untitled page',
     actions = null,
 }) => (

@@ -82,12 +82,12 @@ const Form = ({
                                 {entity.getFields().map(field => {
                                     const fName = field.getName();
                                     if (fName === ENTITY_CODE_FIELD_NAME) {
-                                        return;
+                                        return null;
                                     }
 
                                     const Field = getField(field);
                                     if (!Field) {
-                                        return;
+                                        return null;
                                     }
 
                                     return (
@@ -122,8 +122,8 @@ const Form = ({
                                                 <span>
                                                     Do you really want to delete
                                                     item {data.code}?<br />
-                                                    You won't be able to un-do
-                                                    this.
+                                                    You won&apos;t be able to
+                                                    un-do this.
                                                 </span>,
                                                 ({ closeModal }) => {
                                                     return [

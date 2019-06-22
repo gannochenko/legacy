@@ -1,4 +1,3 @@
-import { push } from 'connected-react-router';
 import { LOAD, UNLOAD, DELETE, LOAD_SUCCESS, SAVE } from './reducer';
 
 export default dispatch => ({

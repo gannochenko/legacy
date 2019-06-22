@@ -31,20 +31,6 @@ export const useErrorNotification = (error, notify) => {
     }, [error]);
 };
 
-/**
- * @deprecated
- */
-export const useUnload = (dispatch, actionUnload) => {
-    useEffect(
-        () => () => {
-            dispatch({
-                type: actionUnload,
-            });
-        },
-        [],
-    );
-};
-
 export const useDispatchUnload = dispatchUnload => {
     useEffect(() => () => dispatchUnload(), []);
 };

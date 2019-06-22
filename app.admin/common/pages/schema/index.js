@@ -26,11 +26,7 @@ const SchemaPage = ({ dispatch, settings, error, notify }) => {
         }
     }, [error]);
 
-    return (
-        <Layout>
-            <h1>Structure here</h1>
-        </Layout>
-    );
+    return <Layout title="Structure here" />;
 };
 
 export default withNotification(

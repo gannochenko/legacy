@@ -5,9 +5,9 @@ export interface ApplicationProperties {
     client: object;
     theme: StringToAnyMap;
     error?: object;
-    notify: () => {};
+    notify: () => void;
     offline?: boolean;
 
-    dispatch: (action: object) => {};
-    dispatchLoad: (client: object) => {};
+    dispatch: (action: object) => void;
+    dispatchLoad: (client: object) => void;
 }
