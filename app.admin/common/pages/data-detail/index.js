@@ -1,16 +1,15 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withNotification } from 'ew-internals-ui';
-import { LOAD, UNLOAD, SAVE, LOAD_SUCCESS, DELETE } from './reducer';
-import { useErrorNotification, useUnload } from '../../lib/hooks';
+import { useErrorNotification, useDispatchUnload } from '../../lib/hooks';
 import { withClient } from '../../lib/client';
 import Form from '../../components/Form';
-// import Button from '../../material-kit/CustomButtons';
+
+import { mapDispatchToProps } from './dispatch';
 
 import Layout from '../../components/Layout';
 
 const DataPage = ({
-    dispatch,
     client,
     route,
     schema,
@@ -20,42 +19,16 @@ const DataPage = ({
     notify,
     error,
     saveCounter,
+    dispatch,
+    dispatchLoad,
+    dispatchUnload,
+    dispatchSuccess,
+    dispatchDelete,
+    dispatchSave,
 }) => {
-    if (!schema) {
-        return null;
-    }
-
-    const entityName = _.get(route, 'match.params.entity_name');
-    const code = _.get(route, 'match.params.code');
-    const entity = schema.getEntity(entityName);
-
-    if (!entity || !code) {
-        return null;
-    }
-
-    // load data on mount
-    useEffect(() => {
-        if (code !== 'new') {
-            dispatch({
-                type: LOAD,
-                payload: {
-                    client,
-                    entity,
-                    schema,
-                    code,
-                },
-            });
-        } else {
-            dispatch({
-                type: LOAD_SUCCESS,
-                payload: {
-                    data: {},
-                },
-            });
-        }
-    }, [entity.getName(), code]);
     useErrorNotification(error, notify);
-    useUnload(dispatch, UNLOAD);
+    useDispatchUnload(dispatchUnload);
+
     useEffect(() => {
         if (saveCounter) {
             notify({
@@ -66,6 +39,36 @@ const DataPage = ({
             });
         }
     }, [saveCounter]);
+
+    let entity = null;
+    let entityName = '';
+    let code = '';
+
+    if (schema) {
+        code = _.get(route, 'match.params.code');
+        entity = schema.getEntity(_.get(route, 'match.params.entity_name'));
+
+        if (entity) {
+            entityName = entity.getName();
+        }
+    }
+
+    // load data on mount
+    useEffect(() => {
+        if (!entity || !code) {
+            return;
+        }
+
+        if (code !== 'new') {
+            dispatchLoad(client, entity, schema, code);
+        } else {
+            dispatchSuccess();
+        }
+    }, [entityName, code]);
+
+    if (!entity || !code) {
+        return null;
+    }
 
     data = data || {};
 
@@ -84,29 +87,11 @@ const DataPage = ({
                     dispatch={dispatch}
                     formData={formData}
                     onSubmit={(values, formActions) => {
-                        dispatch({
-                            type: SAVE,
-                            payload: {
-                                data: values,
-                                entity,
-                                client,
-                                formActions,
-                                code,
-                            },
-                        });
+                        dispatchSave(client, entity, values, formActions, code);
                     }}
                     onActionClick={action => {
-                        if (action === 'delete') {
-                            if (data.code) {
-                                dispatch({
-                                    type: DELETE,
-                                    payload: {
-                                        entity,
-                                        code: data.code,
-                                        client,
-                                    },
-                                });
-                            }
+                        if (action === 'delete' && data.code) {
+                            dispatchDelete(client, entity, data.code);
                         }
                     }}
                 />
@@ -117,8 +102,9 @@ const DataPage = ({
 
 export default withNotification(
     withClient(
-        connect(s => ({ ...s['data-detail'], schema: s.application.schema }))(
-            DataPage,
-        ),
+        connect(
+            s => ({ ...s['data-detail'], schema: s.application.schema }),
+            mapDispatchToProps,
+        )(DataPage),
     ),
 );
