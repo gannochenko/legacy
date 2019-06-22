@@ -5,7 +5,7 @@ import { useErrorNotification, useDispatchUnload } from '../../lib/hooks';
 import { withClient } from '../../lib/client';
 import Form from '../../components/Form';
 
-import { mapDispatchToProps } from './dispatch';
+import mapDispatchToProps from './dispatch';
 
 import Layout from '../../components/Layout';
 
