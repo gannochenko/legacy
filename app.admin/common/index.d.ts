@@ -2,14 +2,11 @@
  * Add custom type declarations here
  */
 
-type NullableNumber = number | null;
-type NullableString = string | null;
-type NullableDate = Date | null;
-type NullableObject = object | null;
+type Nullable<X> = X | null;
 
 // used when it is required to tell that the passed object contains of string keys, and that is it
 interface StringToAnyMap {
-    [s: string]: NullableObject;
+    [s: string]: Nullable<object>;
 }
 
 declare module '*.svg' {

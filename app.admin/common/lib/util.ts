@@ -33,7 +33,7 @@ interface TimeLineItem {
 // todo: move to ew-internals
 export const getCalendar = (
     date: Date,
-    chosen: NullableDate | NullableString = null,
+    chosen: Nullable<Date> | Nullable<string> = null,
 ) => {
     let b = moment.utc(date);
     let f = moment.utc(date);
@@ -42,12 +42,12 @@ export const getCalendar = (
     const timeLine: TimeLineItem[] = [];
 
     let isChosenMonthYear = false;
-    let chosenMonth: NullableNumber = null;
-    let chosenYear: NullableNumber = null;
-    let chosenDay: NullableNumber = null;
+    let chosenMonth: Nullable<number> = null;
+    let chosenYear: Nullable<number> = null;
+    let chosenDay: Nullable<number> = null;
 
     if (chosen) {
-        let chosenDate: NullableDate = null;
+        let chosenDate: Nullable<Date> = null;
 
         if (_.isString(chosen)) {
             chosenDate = new Date(chosen);
