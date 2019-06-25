@@ -4,10 +4,10 @@ import { fontMaterialIcons } from 'sc-companion';
 import makeCss from './css';
 
 export const ThemeContext = React.createContext({});
-export const withTheme = (Component, path = '') => {
-    const WithTheme = (props, ref) => (
+export const withTheme = (Component, path: string = '') => {
+    const WithTheme = (props: object, ref) => (
         <ThemeContext.Consumer>
-            {value => (
+            {(value: object) => (
                 <Component
                     {...props}
                     ref={ref}
