@@ -1,6 +1,10 @@
-import { applyMiddleware, compose, createStore as createRawStore } from 'redux';
+import {
+    applyMiddleware,
+    compose,
+    createStore as createRawStore,
+    combineReducers,
+} from 'redux';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
-import { combineReducers } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { fork, all } from 'redux-saga/effects';
 import logger from 'redux-logger';
@@ -10,6 +14,10 @@ import sagas from './sagas';
 
 export const createStore = ({ history, onChange }) => {
     const saga = createSagaMiddleware();
+    const middleware = [routerMiddleware(history), saga];
+    if (__DEV__) {
+        middleware.push(logger);
+    }
     const store = createRawStore(
         combineReducers(
             Object.assign(
@@ -20,10 +28,10 @@ export const createStore = ({ history, onChange }) => {
             ),
         ),
         {},
-        compose(applyMiddleware(routerMiddleware(history), saga, logger)),
+        compose(applyMiddleware(...middleware)),
     );
     saga.run(function*() {
-        yield all(sagas.map(saga => fork(saga)));
+        yield all(sagas.map(sagaItem => fork(sagaItem)));
     });
 
     let unsubscribe = null;

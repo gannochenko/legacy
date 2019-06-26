@@ -1,8 +1,3 @@
-import Client from 'ew-internals-ui';
+import { PageProperties } from '../../store/type';
 
-export interface HomePageProperties {
-    client: Client;
-    error: object[];
-    notify: (message: object) => void;
-    dispatchLoad: (client: Client) => void;
-}
+export interface HomePageProperties extends PageProperties {}

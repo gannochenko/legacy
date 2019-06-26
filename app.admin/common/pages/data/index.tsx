@@ -48,7 +48,7 @@ const DataPageComponent: FunctionComponent<DataPageProperties> = ({
 
     // load data on component mount
     useEffect(() => {
-        if (entity && dispatchLoad) {
+        if (entity) {
             dispatchLoad(client, { entity, pageParams });
         }
     }, [entityName, search]);

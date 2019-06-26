@@ -11,9 +11,9 @@ import { HomePageProperties } from './type';
 
 const HomePage: FunctionComponent<HomePageProperties> = ({
     client,
-    error,
-    notify,
-    dispatchLoad,
+    error = null,
+    notify = () => {},
+    dispatchLoad = () => {},
 }) => {
     useEffect(() => {
         dispatchLoad(client);

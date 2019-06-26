@@ -11,9 +11,9 @@ import { useErrorNotification } from '../../lib/hooks';
 
 const SchemaPage: FunctionComponent<SchemaPageProperties> = ({
     client,
-    error,
-    notify,
-    dispatchLoad,
+    error = null,
+    notify = () => {},
+    dispatchLoad = () => {},
 }) => {
     useEffect(() => {
         dispatchLoad(client);
