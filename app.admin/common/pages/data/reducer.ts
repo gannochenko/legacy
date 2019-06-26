@@ -1,3 +1,5 @@
+import { State } from './type';
+
 export const LOAD = 'data.load';
 export const LOAD_SUCCESS = 'data.load.success';
 export const LOAD_FAILURE = 'data.load.failure';
@@ -6,16 +8,15 @@ export const DELETE = 'data.delete';
 export const DELETE_SUCCESS = 'data.delete.success';
 export const DELETE_FAILURE = 'data.delete.failure';
 
-export const initialState = {
+export const initialState: State = {
     loading: false,
     ready: false,
     error: null,
     data: [],
     count: 0,
-    errorDelete: null,
 };
 
-const reducer = (state = initialState, action) => {
+const reducer = (state: State = initialState, action) => {
     switch (action.type) {
         case LOAD:
             return { ...state, loading: true };

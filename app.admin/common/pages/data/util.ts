@@ -1,18 +1,19 @@
-export const extractPageParameters = search => {
-    let page = parseInt(search.page, 10);
+import { RouteLocationSearch } from '../../lib/type';
+
+export const extractPageParameters = (search: RouteLocationSearch) => {
+    let page = parseInt(search.page as string, 10);
     if (Number.isNaN(page) || page < 1) {
         page = 1;
     }
-    let { sort } = search;
-    if (_.isne(sort)) {
-        sort = sort.split(':');
-    } else {
-        sort = [];
+    const { sort } = search;
+    let sortParsed: string[] = [];
+    if (typeof sort === 'string') {
+        sortParsed = sort.split(':');
     }
 
     return {
         page,
-        sort,
+        sort: sortParsed,
         pageSize: 10,
     };
 };

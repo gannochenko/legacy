@@ -3,6 +3,7 @@
  */
 
 type Nullable<X> = X | null;
+type Scalar = string | number | boolean;
 
 // used when it is required to tell that the passed object contains of string keys, and that is it
 interface StringToAnyMap {

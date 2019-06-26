@@ -1,13 +1,12 @@
-export interface ApplicationProperties {
-    settings: object;
-    ready?: boolean;
-    history: object;
-    client: object;
-    theme: StringToAnyMap;
-    error?: object;
-    notify: () => void;
-    offline?: boolean;
+import { ControllerProperties, PageState } from '../../store/type';
 
-    dispatch: (action: object) => void;
-    dispatchLoad: (client: object) => void;
+export interface ApplicationProperties extends ControllerProperties {
+    history: object;
+    offline?: boolean;
+}
+
+export interface State extends PageState {
+    offline: Nullable<boolean>;
+    user: Nullable<object>;
+    schema: Nullable<object>;
 }

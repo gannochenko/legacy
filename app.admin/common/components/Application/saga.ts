@@ -2,7 +2,7 @@ import { takeLatest, put, call } from 'redux-saga/effects';
 import { Schema } from 'project-minimum-core';
 import { LOAD, LOAD_SUCCESS, LOAD_FAILURE } from './reducer';
 
-function* load({ client }) {
+function* load({ payload: { client } }) {
     try {
         const user = {}; // todo
 

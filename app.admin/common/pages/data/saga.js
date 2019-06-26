@@ -2,9 +2,10 @@ import { takeLatest, put, call } from 'redux-saga/effects';
 import * as reducer from './reducer';
 import { buildQueryFind, buildMutationDelete } from './query-builder';
 
-function* load(params) {
-    const { payload } = params || {};
-    const { client } = payload || {};
+// import { Action } from '../../store/type';
+
+function* load({ payload = {} }) {
+    const { client } = payload;
     try {
         const [queryName, query] = buildQueryFind(payload);
         const apolloResult = yield call(() => {
@@ -34,9 +35,8 @@ function* load(params) {
     }
 }
 
-function* remove(params) {
-    const { payload } = params || {};
-    const { client } = payload || {};
+function* remove({ payload = {} }) {
+    const { client } = payload;
 
     try {
         const [mutationName, mutation] = buildMutationDelete(payload);
@@ -55,7 +55,7 @@ function* remove(params) {
         } else {
             yield put({
                 type: reducer.LOAD,
-                payload: params.payload,
+                payload,
             });
         }
     } catch (error) {

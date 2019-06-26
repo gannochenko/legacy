@@ -12,7 +12,8 @@ import {
     useNetworkNotification,
 } from '../../lib/hooks';
 
-import { LOAD, SHOW_OFFLINE, SHOW_ONLINE } from './reducer';
+import { SHOW_OFFLINE, SHOW_ONLINE } from './reducer';
+import mapDispatchToProps from './dispatch';
 import { GlobalStyle } from '../../style/global';
 
 import HomePage from '../../pages/home';
@@ -28,11 +29,10 @@ const Application: FunctionComponent<ApplicationProperties> = ({
     history,
     theme,
     error = null,
-    notify,
+    notify = () => {},
     offline = false,
-
-    dispatch,
-    dispatchLoad,
+    dispatch = () => {},
+    dispatchLoad = () => {},
 }) => {
     useEffect(() => {
         dispatchLoad(client);
@@ -86,15 +86,6 @@ const Application: FunctionComponent<ApplicationProperties> = ({
         </>
     );
 };
-
-const mapDispatchToProps = dispatch => ({
-    dispatch,
-    dispatchLoad: client =>
-        dispatch({
-            type: LOAD,
-            client,
-        }),
-});
 
 export default withNotification(
     connect(

@@ -1,10 +1,13 @@
+import { State } from './type';
+import { Action } from '../../store/type';
+
 export const LOAD = 'application.load';
 export const LOAD_SUCCESS = 'application.load.success';
 export const LOAD_FAILURE = 'application.load.failure';
 export const SHOW_ONLINE = 'application.show-online';
 export const SHOW_OFFLINE = 'application.show-offline';
 
-const initialState = {
+const initialState: State = {
     loading: false,
     ready: false,
     error: null,
@@ -13,7 +16,7 @@ const initialState = {
     offline: null,
 };
 
-const reducer = (state = initialState, action) => {
+const reducer = (state: State = initialState, action: Action) => {
     switch (action.type) {
         case LOAD:
             return { ...state, loading: true };

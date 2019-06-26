@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { FunctionComponent, useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { withNotification } from 'ew-internals-ui';
 import { useErrorNotification, useDispatchUnload } from '../../lib/hooks';
@@ -9,9 +9,12 @@ import Button from '../../material-kit/CustomButtons';
 import mapDispatchToProps from './dispatch';
 import { extractPageParameters } from './util';
 
-import Layout from '../../components/Layout';
+import { DataPageProperties } from './type';
 
-const DataPage = ({
+import Layout from '../../components/Layout';
+import { Entity, EntityItemData } from '../../lib/project-minimum-core';
+
+const DataPageComponent: FunctionComponent<DataPageProperties> = ({
     client,
     route,
     schema,
@@ -25,15 +28,16 @@ const DataPage = ({
     dispatchDelete,
     dispatchUpdateSearch,
 }) => {
-    const search = useMemo(() => parseSearch(route.location.search), [
-        route.location.search,
-    ]);
+    const search = useMemo(
+        () => (route ? parseSearch(route.location.search) : ''),
+        [route],
+    );
     const pageParams = extractPageParameters(search);
 
     useDispatchUnload(dispatchUnload);
     useErrorNotification(error, notify);
 
-    let entity = null;
+    let entity: Nullable<Entity> = null;
     if (schema) {
         entity = schema.getEntity(_.get(route, 'match.params.entity_name'));
     }
@@ -45,8 +49,8 @@ const DataPage = ({
 
     // load data on component mount
     useEffect(() => {
-        if (entity) {
-            dispatchLoad(client, entity, pageParams);
+        if (entity && dispatchLoad) {
+            dispatchLoad(client, { entity, pageParams });
         }
     }, [entityName, search]);
 
@@ -61,7 +65,9 @@ const DataPage = ({
                 <>
                     <Button
                         type="button"
-                        onClick={() => dispatchNavigateToDetail(entity)}
+                        onClick={() =>
+                            dispatchNavigateToDetail(entity as Entity)
+                        }
                     >
                         Add
                     </Button>
@@ -87,12 +93,18 @@ const DataPage = ({
                         sort: `${sort.field}:${sort.way}`,
                     })
                 }
-                onActionClick={(action, item) => {
+                onActionClick={(action: string, item: EntityItemData) => {
+                    const { code } = item;
                     if (action === 'edit') {
-                        dispatchNavigateToDetail(entity, item.code);
+                        dispatchNavigateToDetail(entity as Entity, code);
                     }
                     if (action === 'delete') {
-                        dispatchDelete(client, entity, item.code, pageParams);
+                        dispatchDelete(
+                            client,
+                            entity as Entity,
+                            code,
+                            pageParams,
+                        );
                     }
                 }}
             />
@@ -105,6 +117,6 @@ export default withNotification(
         connect(
             s => ({ ...s.data, schema: s.application.schema }),
             mapDispatchToProps,
-        )(DataPage),
+        )(DataPageComponent),
     ),
 );
