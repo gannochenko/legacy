@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { withNotification } from 'ew-internals-ui';
 import { useErrorNotification, useDispatchUnload } from '../../lib/hooks';
 import { withClient } from '../../lib/client';
-import List from '../../components/List';
 import { parseSearch } from '../../lib/util';
 import Button from '../../material-kit/CustomButtons';
 import mapDispatchToProps from './dispatch';
@@ -11,7 +10,7 @@ import { extractPageParameters } from './util';
 
 import { DataPageProperties } from './type';
 
-import { Layout } from '../../components';
+import { Layout, List } from '../../components';
 import { Entity, EntityItemData } from '../../lib/project-minimum-core';
 
 const DataPageComponent: FunctionComponent<DataPageProperties> = ({

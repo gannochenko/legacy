@@ -23,13 +23,14 @@ import {
     ButtonWrap,
     ActionPanel,
 } from './style';
-import PageNavigation from '../PageNavigation';
-
-import ListCellString from '../ListCellString';
-import ListCellReference from '../ListCellReference';
-import ListCellDate from '../ListCellDate';
-import ListCellCode from '../ListCellCode';
-import ListCellBoolean from '../ListCellBoolean';
+import {
+    ListCellCode,
+    ListCellBoolean,
+    ListCellDate,
+    ListCellReference,
+    ListCellString,
+    PageNavigation,
+} from '..';
 
 const getCellComponent = field => {
     if (field.getName() === 'code') {
@@ -97,7 +98,7 @@ const renderItemActions = (
     );
 };
 
-const List = ({
+const ListComponent = ({
     entity,
     data,
     page,
@@ -212,4 +213,4 @@ const List = ({
     );
 };
 
-export default withModal(List);
+export const List = withModal(ListComponent);

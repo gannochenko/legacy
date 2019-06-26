@@ -1,7 +1,7 @@
 import React from 'react';
 import { ListCellReferenceContainer, Empty } from './style';
 
-const ListCellReference = ({ field, value }) => {
+export const ListCellReference = ({ field, value }) => {
     if (
         typeof value === 'undefined' ||
         value === null ||
@@ -16,5 +16,3 @@ const ListCellReference = ({ field, value }) => {
 
     return <ListCellReferenceContainer>{value}</ListCellReferenceContainer>;
 };
-
-export default ListCellReference;

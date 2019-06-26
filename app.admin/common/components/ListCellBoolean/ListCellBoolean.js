@@ -1,7 +1,7 @@
 import React from 'react';
 import { ListCellBooleanContainer, Empty } from './style';
 
-const ListCellBoolean = ({ field, value }) => {
+export const ListCellBoolean = ({ field, value }) => {
     if (typeof value === 'undefined' || value === null) {
         return <Empty>&mdash;</Empty>;
     }
@@ -11,5 +11,3 @@ const ListCellBoolean = ({ field, value }) => {
 
     return <ListCellBooleanContainer>{value}</ListCellBooleanContainer>;
 };
-
-export default ListCellBoolean;

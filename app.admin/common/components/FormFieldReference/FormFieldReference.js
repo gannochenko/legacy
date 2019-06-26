@@ -1,7 +1,7 @@
 import React, { useRef, useMemo } from 'react';
+import { DropPanel, ScrollPanel } from 'ew-internals-ui';
 import { withClient } from '../../lib/client';
 import { FormField } from '..';
-import { DropPanel, ScrollPanel } from 'ew-internals-ui';
 import { withTheme } from '../../style/global';
 import {
     ITEM_SEARCH,
@@ -25,7 +25,7 @@ import {
     SearchItemActions,
 } from './style';
 
-export const FormFieldReference = ({
+const FormFieldReferenceComponent = ({
     field,
     value,
     error,
@@ -266,4 +266,6 @@ export const FormFieldReference = ({
     );
 };
 
-export default withClient(withTheme(FormFieldReference));
+export const FormFieldReference = withClient(
+    withTheme(FormFieldReferenceComponent),
+);

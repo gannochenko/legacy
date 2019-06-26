@@ -1,7 +1,7 @@
 import React from 'react';
 import { ListCellCodeContainer, Link } from './style';
 
-const ListCellCode = ({ field, value, entity }) => {
+export const ListCellCode = ({ field, value, entity }) => {
     if (typeof value === 'undefined' || value === null) {
         return null;
     }
@@ -20,5 +20,3 @@ const ListCellCode = ({ field, value, entity }) => {
         </ListCellCodeContainer>
     );
 };
-
-export default ListCellCode;

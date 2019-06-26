@@ -74,9 +74,7 @@ const ApplicationComponent: FunctionComponent<ApplicationProperties> = ({
                             />
                             <Route
                                 path="/403"
-                                render={route => (
-                                    <ForbiddenPage route={route} />
-                                )}
+                                render={() => <ForbiddenPage />}
                             />
                             <Route render={() => <NotFoundPage />} />
                         </Switch>

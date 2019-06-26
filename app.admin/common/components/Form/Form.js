@@ -18,10 +18,12 @@ import {
 } from './style';
 import Button from '../../material-kit/CustomButtons';
 
-import FormFieldScalar from '../FormFieldScalar';
-import { FormFieldBoolean } from '..';
-import FormFieldDate from '../FormFieldDate';
-import FormFieldReference from '../FormFieldReference';
+import {
+    FormFieldBoolean,
+    FormFieldReference,
+    FormFieldScalar,
+    FormFieldDate,
+} from '..';
 
 const getField = field => {
     const type = field.getActualType();

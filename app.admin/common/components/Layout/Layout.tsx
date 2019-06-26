@@ -14,7 +14,7 @@ import {
 } from './style';
 import { LayoutProperties } from './type';
 
-import Menu from '../Menu';
+import { Menu } from '..';
 
 export const Layout: FunctionComponent<LayoutProperties> = ({
     children = null,

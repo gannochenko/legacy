@@ -1,7 +1,7 @@
 import React from 'react';
 import { ListCellStringContainer, Empty } from './style';
 
-const ListCellString = ({ field, value }) => {
+export const ListCellString = ({ field, value }) => {
     if (typeof value === 'undefined' || value === null) {
         return <Empty>&mdash;</Empty>;
     }
@@ -10,5 +10,3 @@ const ListCellString = ({ field, value }) => {
 
     return <ListCellStringContainer>{value}</ListCellStringContainer>;
 };
-
-export default ListCellString;

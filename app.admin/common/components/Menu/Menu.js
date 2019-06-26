@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Container, Section, Title, Item } from './style';
 
-const Menu = ({ schema }) => {
+const MenuComponent = ({ schema }) => {
     if (!schema) {
         return null;
     }
@@ -30,4 +30,4 @@ const Menu = ({ schema }) => {
     );
 };
 
-export default connect(s => s.application)(Menu);
+export const Menu = connect(s => s.application)(MenuComponent);

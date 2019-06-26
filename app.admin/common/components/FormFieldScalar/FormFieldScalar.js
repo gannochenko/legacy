@@ -4,7 +4,7 @@ import { TYPE_INTEGER } from 'project-minimum-core';
 import { FormField, FormFieldMultiplier, Add } from '..';
 import { Input } from './style';
 
-const FormFieldScalar = ({ field, value, error, onChange }) => (
+export const FormFieldScalar = ({ field, value, error, onChange }) => (
     <FormField
         field={field}
         error={error}
@@ -26,5 +26,3 @@ const FormFieldScalar = ({ field, value, error, onChange }) => (
         </FormFieldMultiplier>
     </FormField>
 );
-
-export default FormFieldScalar;

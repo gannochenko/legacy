@@ -49,7 +49,7 @@ const renderRange = (range, page, onNavigate) => {
     return result;
 };
 
-const PageNavigation = ({ count, page, pageSize, onNavigate }) => {
+export const PageNavigation = ({ count, page, pageSize, onNavigate }) => {
     pageSize = pageSize || 10;
 
     const range = useMemo(() => {
@@ -80,5 +80,3 @@ const PageNavigation = ({ count, page, pageSize, onNavigate }) => {
         </PageNavigationContainer>
     );
 };
-
-export default PageNavigation;
