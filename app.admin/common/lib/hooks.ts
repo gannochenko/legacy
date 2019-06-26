@@ -1,6 +1,13 @@
 import { useEffect } from 'react';
+import { Dispatch } from '../store/type';
+import { Error } from './type';
+import { Notify } from './ew-internals-ui';
 
-export const useNetworkMonitor = (dispatch, actionOnline, actionOffline) => {
+export const useNetworkMonitor = (
+    dispatch: Dispatch,
+    actionOnline: string,
+    actionOffline: string,
+) => {
     useEffect(() => {
         const onOnline = () => {
             dispatch({ type: actionOnline });
@@ -19,23 +26,32 @@ export const useNetworkMonitor = (dispatch, actionOnline, actionOffline) => {
     }, []);
 };
 
-export const useErrorNotification = (error, notify) => {
+export const useErrorNotification = (
+    errors: Nullable<Error[]>,
+    notify: Notify,
+) => {
     useEffect(() => {
-        if (_.iane(error)) {
-            notify({
-                text: error[0].message,
-                type: 'error',
-                code: 'error',
-            });
+        if (errors) {
+            const error = errors.shift();
+            if (error) {
+                notify({
+                    text: error.message,
+                    type: 'error',
+                    code: 'error',
+                });
+            }
         }
-    }, [error]);
+    }, [errors]);
 };
 
 export const useDispatchUnload = dispatchUnload => {
     useEffect(() => () => dispatchUnload(), []);
 };
 
-export const useNetworkNotification = (offline, notify) => {
+export const useNetworkNotification = (
+    offline: Nullable<boolean>,
+    notify: Notify,
+) => {
     useEffect(() => {
         if (offline === true) {
             notify({

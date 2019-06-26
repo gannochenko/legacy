@@ -1,23 +1,6 @@
 import { Error, Route } from '../lib/type';
 import { Client } from '../lib/client';
-
-export interface ControllerProperties {
-    ready: boolean;
-    client: Client;
-    theme: StringToAnyMap;
-    error?: object;
-    dispatch?: (action: object) => void;
-    dispatchLoad?: (
-        client: Nullable<Client>,
-        parameters?: Nullable<object>,
-    ) => void;
-    dispatchUnload?: () => void;
-    notify?: () => void; // todo: take from ew-internals-ui
-}
-
-export interface PageProperties extends ControllerProperties {
-    route: Route;
-}
+import { Notify } from '../lib/ew-internals-ui';
 
 export interface PageState {
     loading: boolean;
@@ -30,4 +13,26 @@ export interface Action {
     payload?: object;
 }
 
+export interface ControllerProperties {
+    ready: boolean;
+    client: Client;
+    theme: StringToAnyMap;
+    error: Nullable<Error[]>;
+    dispatch?: (action: Action) => void;
+    dispatchLoad?: DispatchLoad;
+    dispatchUnload?: DispatchUnload;
+    notify: Notify;
+}
+
+export interface PageProperties extends ControllerProperties {
+    route: Route;
+}
+
 export type Dispatch = (action: Action) => void;
+
+export type DispatchLoad = (
+    client: Nullable<Client>,
+    parameters?: Nullable<object>,
+) => void;
+
+export type DispatchUnload = () => void;

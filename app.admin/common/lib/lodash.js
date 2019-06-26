@@ -26,9 +26,6 @@ export default {
     isne: arg => {
         return isString(arg) && arg.length > 0;
     },
-    isStringNotEmpty: arg => {
-        return isString(arg) && arg.length > 0;
-    },
     isDate: arg => arg instanceof Date,
     get,
     isFunction,
