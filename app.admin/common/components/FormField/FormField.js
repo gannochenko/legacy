@@ -8,7 +8,7 @@ import {
     RedStar,
 } from './style';
 
-const FormField = ({ field, actions, error, children }) => {
+export const FormField = ({ field, actions, error, children }) => {
     return (
         <FormFieldContainer>
             <Label>
@@ -23,5 +23,3 @@ const FormField = ({ field, actions, error, children }) => {
         </FormFieldContainer>
     );
 };
-
-export default FormField;

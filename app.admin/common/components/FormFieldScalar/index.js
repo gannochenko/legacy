@@ -1,8 +1,7 @@
 import React from 'react';
 import { TYPE_INTEGER } from 'project-minimum-core';
 
-import FormField from '../FormField';
-import FormFieldMultiplier, { Add } from '../FormFieldMultiplier';
+import { FormField, FormFieldMultiplier, Add } from '..';
 import { Input } from './style';
 
 const FormFieldScalar = ({ field, value, error, onChange }) => (

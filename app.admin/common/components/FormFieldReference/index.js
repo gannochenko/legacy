@@ -1,6 +1,6 @@
 import React, { useRef, useMemo } from 'react';
 import { withClient } from '../../lib/client';
-import FormField from '../FormField';
+import { FormField } from '..';
 import { DropPanel, ScrollPanel } from 'ew-internals-ui';
 import { withTheme } from '../../style/global';
 import {

@@ -27,7 +27,7 @@ export const Add = ({ field, value, onChange, initialValue }) => {
     );
 };
 
-const FormFieldMultiplier = ({ field, value, onChange, children }) => {
+export const FormFieldMultiplier = ({ field, value, onChange, children }) => {
     if (field.isMultiple() && !_.isArray(value)) {
         value = [];
     }
@@ -76,5 +76,3 @@ const FormFieldMultiplier = ({ field, value, onChange, children }) => {
         </>
     );
 };
-
-export default FormFieldMultiplier;

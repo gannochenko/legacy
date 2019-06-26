@@ -1,13 +1,11 @@
 import React, { useRef } from 'react';
 import moment from 'moment';
 import { DropPanel } from 'ew-internals-ui';
-import FormField from '../FormField';
-import FormFieldMultiplier, { Add } from '../FormFieldMultiplier';
 import { Input, DatePickerPanel } from './style';
-import { DatePicker } from '..';
+import { FormField, DatePicker, FormFieldMultiplier, Add } from '..';
 import { withTheme } from '../../style/global';
 
-const FormFieldDate = ({ field, value, error, onChange, theme }) => {
+const FormFieldDateComponent = ({ field, value, error, onChange, theme }) => {
     const dpRef = useRef();
 
     return (
@@ -71,4 +69,4 @@ const FormFieldDate = ({ field, value, error, onChange, theme }) => {
     );
 };
 
-export default withTheme(FormFieldDate);
+export const FormFieldDate = withTheme(FormFieldDateComponent);

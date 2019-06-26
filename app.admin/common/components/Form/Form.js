@@ -19,7 +19,7 @@ import {
 import Button from '../../material-kit/CustomButtons';
 
 import FormFieldScalar from '../FormFieldScalar';
-import FormFieldBoolean from '../FormFieldBoolean';
+import { FormFieldBoolean } from '..';
 import FormFieldDate from '../FormFieldDate';
 import FormFieldReference from '../FormFieldReference';
 
