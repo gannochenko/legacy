@@ -1,3 +1,5 @@
+import { Action } from '../../store/type';
+
 export const LOAD = 'data-detail.load';
 export const LOAD_SUCCESS = 'data-detail.load.success';
 export const LOAD_FAILURE = 'data-detail.load.failure';
@@ -22,7 +24,7 @@ export const initialState = {
     saveCounter: 0,
 };
 
-const reducer = (state = initialState, action) => {
+const reducer = (state = initialState, action: Action) => {
     switch (action.type) {
         case LOAD:
             return { ...state, loading: true };

@@ -1,15 +1,18 @@
+import { State } from './type';
+import { Action } from '../../store/type';
+
 export const LOAD = 'home.load';
 export const LOAD_SUCCESS = 'home.load.success';
 export const LOAD_FAILURE = 'home.load.failure';
 export const UNLOAD = 'home.unload';
 
-const initialState = {
+const initialState: State = {
     loading: false,
     ready: false,
     error: null,
 };
 
-const reducer = (state = initialState, action) => {
+const reducer = (state: State = initialState, action: Action) => {
     switch (action.type) {
         case LOAD:
             return { ...state, loading: true };

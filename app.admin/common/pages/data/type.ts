@@ -18,7 +18,7 @@ export interface DataPageProperties extends PageProperties {
 }
 
 export interface State extends PageState {
-    data: any[];
+    data: EntityItemData[];
     count: number;
 }
 
