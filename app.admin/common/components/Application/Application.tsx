@@ -23,7 +23,7 @@ import SchemaPage from '../../pages/schema';
 import NotFoundPage from '../../pages/404';
 import ForbiddenPage from '../../pages/403';
 
-const Application: FunctionComponent<ApplicationProperties> = ({
+const ApplicationComponent: FunctionComponent<ApplicationProperties> = ({
     ready = false,
     client,
     history,
@@ -87,9 +87,9 @@ const Application: FunctionComponent<ApplicationProperties> = ({
     );
 };
 
-export default withNotification(
+export const Application = withNotification(
     connect(
         s => s.application,
         mapDispatchToProps,
-    )(Application),
+    )(ApplicationComponent),
 );

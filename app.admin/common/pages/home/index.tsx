@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withNotification } from 'ew-internals-ui';
 
-import Layout from '../../components/Layout';
+import { Layout } from '../../components';
 import { withClient } from '../../lib/client';
 
 import mapDispatchToProps from './dispatch';

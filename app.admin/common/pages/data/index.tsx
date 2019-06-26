@@ -11,7 +11,7 @@ import { extractPageParameters } from './util';
 
 import { DataPageProperties } from './type';
 
-import Layout from '../../components/Layout';
+import { Layout } from '../../components';
 import { Entity, EntityItemData } from '../../lib/project-minimum-core';
 
 const DataPageComponent: FunctionComponent<DataPageProperties> = ({

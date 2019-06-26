@@ -43,7 +43,7 @@ const getField = field => {
     return null;
 };
 
-const Form = ({
+export const FormComponent = ({
     data,
     schema,
     entity,
@@ -166,4 +166,4 @@ const Form = ({
     );
 };
 
-export default withModal(Form);
+export const Form = withModal(FormComponent);

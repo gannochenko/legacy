@@ -38,7 +38,7 @@ const monthList = [
 
 const wDays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
-const DatePicker: FunctionComponent<DatePickerProperties> = ({
+export const DatePicker: FunctionComponent<DatePickerProperties> = ({
     value = Date.now(),
     onChange = () => {},
     onDaySelect = () => {},
@@ -125,5 +125,3 @@ const DatePicker: FunctionComponent<DatePickerProperties> = ({
         </DatePickerContainer>
     );
 };
-
-export default DatePicker;

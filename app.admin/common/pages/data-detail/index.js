@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { withNotification } from 'ew-internals-ui';
 import { useErrorNotification, useDispatchUnload } from '../../lib/hooks';
 import { withClient } from '../../lib/client';
-import Form from '../../components/Form';
+import { Form } from '../../components';
 
 import mapDispatchToProps from './dispatch';
 
-import Layout from '../../components/Layout';
+import { Layout } from '../../components';
 
 const DataPage = ({
     client,

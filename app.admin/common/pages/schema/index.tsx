@@ -6,7 +6,7 @@ import { SchemaPageProperties } from './type';
 
 import mapDispatchToProps from './dispatch';
 import { withClient } from '../../lib/client';
-import Layout from '../../components/Layout';
+import { Layout } from '../../components';
 import { useErrorNotification } from '../../lib/hooks';
 
 const SchemaPage: FunctionComponent<SchemaPageProperties> = ({

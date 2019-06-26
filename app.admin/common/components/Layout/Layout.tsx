@@ -16,7 +16,7 @@ import { LayoutProperties } from './type';
 
 import Menu from '../Menu';
 
-const Layout: FunctionComponent<LayoutProperties> = ({
+export const Layout: FunctionComponent<LayoutProperties> = ({
     children = null,
     title = 'Untitled page',
     actions = null,
@@ -50,5 +50,3 @@ const Layout: FunctionComponent<LayoutProperties> = ({
         </Middle>
     </VerticalTriplet>
 );
-
-export default Layout;

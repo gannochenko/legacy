@@ -4,7 +4,7 @@ import { DropPanel } from 'ew-internals-ui';
 import FormField from '../FormField';
 import FormFieldMultiplier, { Add } from '../FormFieldMultiplier';
 import { Input, DatePickerPanel } from './style';
-import DatePicker from '../DatePicker';
+import { DatePicker } from '..';
 import { withTheme } from '../../style/global';
 
 const FormFieldDate = ({ field, value, error, onChange, theme }) => {

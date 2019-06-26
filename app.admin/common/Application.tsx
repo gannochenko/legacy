@@ -6,7 +6,7 @@ import { ThemeContext } from './style/global';
 import { createHistory } from './lib/history';
 import { Context as SettingsContext, createSettings } from './lib/settings';
 import { Context as ClientContext, createClient } from './lib/client';
-import ApplicationUI from './components/Application';
+import { Application } from './components';
 import { createStore } from './store';
 import { dismissOnReady } from './splash/client';
 
@@ -21,7 +21,7 @@ const { store, saga, unsubscribe } = createStore({
 const settings = createSettings();
 const client = createClient(settings);
 
-const Application: FunctionComponent<{}> = () => {
+const ApplicationComponent: FunctionComponent<{}> = () => {
     const notificationRef = useRef();
 
     return (
@@ -34,7 +34,7 @@ const Application: FunctionComponent<{}> = () => {
                             theme={theme.notifications}
                         />
                         <NotificationContext.Provider value={notificationRef}>
-                            <ApplicationUI
+                            <Application
                                 history={history}
                                 theme={theme}
                                 client={client}
@@ -47,4 +47,4 @@ const Application: FunctionComponent<{}> = () => {
     );
 };
 
-export default Application;
+export default ApplicationComponent;
