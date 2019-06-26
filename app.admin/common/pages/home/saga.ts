@@ -1,12 +1,12 @@
 import { takeLatest, put } from 'redux-saga/effects';
-import * as reducer from './reducer';
+import { LOAD_SUCCESS, LOAD_FAILURE, LOAD } from './reducer';
 
 function* load() {
     try {
         const data = {};
-        yield put({ type: reducer.LOAD_SUCCESS, payload: { data } });
+        yield put({ type: LOAD_SUCCESS, payload: { data } });
     } catch (error) {
-        yield put({ type: reducer.LOAD_FAILURE, payload: [error] });
+        yield put({ type: LOAD_FAILURE, payload: [error] });
         if (__DEV__) {
             // eslint-disable-next-line no-console
             console.error(error);
@@ -15,5 +15,5 @@ function* load() {
 }
 
 export default function* watcher() {
-    yield takeLatest(reducer.LOAD, load);
+    yield takeLatest(LOAD, load);
 }

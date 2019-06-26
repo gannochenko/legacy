@@ -5,7 +5,7 @@ import makeCss from './css';
 
 export const ThemeContext = React.createContext({});
 export const withTheme = (Component, path: string = '') => {
-    const WithTheme = (props: object, ref) => (
+    const WithTheme = (props, ref) => (
         <ThemeContext.Consumer>
             {(value: object) => (
                 <Component
