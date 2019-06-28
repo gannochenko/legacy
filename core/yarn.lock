@@ -2654,9 +2654,9 @@ evp_bytestokey@^1.0.0, evp_bytestokey@^1.0.3:
     safe-buffer "^5.1.1"
 
 ew-internals@x.x:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/ew-internals/-/ew-internals-1.0.9.tgz#7b96ee674f2cff513ae853e980df7dd635c123dd"
-  integrity sha512-wowFou1zQVS0SRTwO3dpx0wCRzqAEud+GVsIAQOXWtCMulZLImW12R+Po0yku1ZJoFN3DmOTtemN9h5/jWTyLA==
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/ew-internals/-/ew-internals-1.0.10.tgz#0026b6a8ebb8c45ba1e66c5984228decb3579754"
+  integrity sha512-VsQ4ZOJaGp6soEW4WbgvK7/xx1LYW9ihUbIDzp3rmJU9Utcqccm9BrGMXIk07+w5VARU+mv55DCUZFIGcoyRWA==
   dependencies:
     "@babel/polyfill" "^7.2.5"
     naming-style "^1.0.0"

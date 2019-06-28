@@ -244,7 +244,7 @@
                     return this.declaration;
                 }
             }
-            class A extends T {
+            class F extends T {
                 async checkHealth() {
                     const e = await super.checkHealth(),
                         { declaration: t } = this;
@@ -287,7 +287,7 @@
                     );
                 }
             }
-            class F {
+            class v {
                 constructor(e) {
                     let t = e;
                     b.ione(t) || (t = {}),
@@ -295,7 +295,7 @@
                         (this.declaration = {
                             name: t.name || '',
                             schema: t.schema.map(e =>
-                                e.name === s ? new A(e) : new T(e),
+                                e.name === s ? new F(e) : new T(e),
                             ),
                         });
                 }
@@ -395,17 +395,39 @@
                     return (
                         this.declaration.schema.forEach(t => {
                             let n = null;
-                            if (t.isReference()) n = h.string();
+                            if (t.isReference())
+                                n = h
+                                    .string()
+                                    .typeError(
+                                        `Reference field '${t.getDisplayName()}' is not a string`,
+                                    );
                             else {
                                 const e = t.getActualType();
                                 n =
                                     e === o
-                                        ? h.number().integer()
+                                        ? h
+                                              .number()
+                                              .integer()
+                                              .typeError(
+                                                  `Field '${t.getDisplayName()}' is not a number`,
+                                              )
                                         : e === u
-                                        ? h.boolean()
+                                        ? h
+                                              .boolean()
+                                              .typeError(
+                                                  `Field '${t.getDisplayName()}' is not a boolean`,
+                                              )
                                         : e === c
-                                        ? h.date()
-                                        : h.string();
+                                        ? h
+                                              .date()
+                                              .typeError(
+                                                  `Field '${t.getDisplayName()}' is not a date`,
+                                              )
+                                        : h
+                                              .string()
+                                              .typeError(
+                                                  `Field '${t.getDisplayName()}' is not a string`,
+                                              );
                             }
                             t.isMultiple() && (n = h.array().of(n)),
                                 (n = t.isMandatory()
@@ -427,9 +449,10 @@
                               if (!(r in e)) return;
                               let i = e[r];
                               n.isMultiple()
-                                  ? ((i = b.isArray(i)
-                                        ? i.map(e => this.castFieldValue(n, e))
-                                        : [this.castFieldValue(n, i)]),
+                                  ? (b.isArray(i) &&
+                                        (i = (i = i.map(e =>
+                                            this.castFieldValue(n, e),
+                                        )).filter(e => null !== e)),
                                     n.isReference() &&
                                         (i = b.unique(i).filter(e => !!e)))
                                   : (i = this.castFieldValue(n, i)),
@@ -438,38 +461,50 @@
                           t)
                         : t;
                 }
+                async validateData(e) {
+                    let t = null,
+                        n = null;
+                    try {
+                        t = await this.getValidator().validate(e, {
+                            abortEarly: !1,
+                        });
+                    } catch (e) {
+                        n = e.inner.map(e => ({
+                            message: e.message,
+                            field: e.path,
+                        }));
+                    }
+                    return { data: t, errors: n };
+                }
                 castFieldValue(e, t) {
                     const n = e.getActualType();
                     let r = t;
                     if (n === l) r = null == r ? null : r.toString();
                     else if (n === u) r = !!r;
-                    else if (n === o)
-                        (r = parseInt(r, 10)), Number.isNaN(r) && (r = 0);
+                    else if (n === o) r = parseInt(r, 10);
                     else if (n === c) {
                         if (null == r) return null;
                         if (r instanceof Date) r = r.toISOString();
                         else {
                             const e = Date.parse(r);
-                            r = Number.isNaN(e)
-                                ? Number.isNaN(parseInt(r, 10))
-                                    ? null
-                                    : new Date(parseInt(r, 10)).toISOString()
-                                : new Date(e).toISOString();
+                            Number.isNaN(e)
+                                ? Number.isNaN(parseInt(r, 10)) ||
+                                  (r = new Date(parseInt(r, 10)).toISOString())
+                                : (r = new Date(e).toISOString());
                         }
                     } else
                         e.isReference() &&
-                            (b.isString(r) ||
-                                (r = null != r ? r.toString() : null));
+                            (r = null != r ? r.toString() : null);
                     return r;
                 }
             }
-            class S {
+            class A {
                 constructor(e) {
                     b.ione(e) || (e = {}), b.iane(e.schema) || (e.schema = []);
                     let t = parseInt(e.version, 10);
                     Number.isNaN(t) && (t = 0),
                         (this.declaration = {
-                            schema: e.schema.map(e => new F(e)),
+                            schema: e.schema.map(e => new v(e)),
                             version: t,
                         });
                 }
@@ -595,16 +630,16 @@
                     return c;
                 }),
                 n.d(t, 'Schema', function() {
-                    return S;
+                    return A;
                 }),
                 n.d(t, 'CodeField', function() {
-                    return A;
+                    return F;
                 }),
                 n.d(t, 'Field', function() {
                     return T;
                 }),
                 n.d(t, 'Entity', function() {
-                    return F;
+                    return v;
                 });
         },
     ]),

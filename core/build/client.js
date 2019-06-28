@@ -97,29 +97,29 @@
                 f = 'datetime',
                 d = n(1),
                 h = n(0),
-                m = n(2),
-                p = n.n(m),
+                p = n(2),
+                m = n.n(p),
                 y = n(3),
-                v = n.n(y),
-                g = n(4),
-                b = n.n(g),
+                g = n.n(y),
+                v = n(4),
+                b = n.n(v),
                 _ = n(5),
-                N = n.n(_),
-                E = {
+                E = n.n(_),
+                N = {
                     isArray: Array.isArray,
-                    isString: p.a,
-                    isObject: v.a,
+                    isString: m.a,
+                    isObject: g.a,
                     union: b.a,
                     iane: function(e) {
                         return Array.isArray(e) && e.length > 0;
                     },
                     ione: function(e) {
-                        return v()(e) && Object.keys(e).length > 0;
+                        return g()(e) && Object.keys(e).length > 0;
                     },
                     isne: function(e) {
-                        return p()(e) && e.length > 0;
+                        return m()(e) && e.length > 0;
                     },
-                    unique: N.a,
+                    unique: E.a,
                 };
             function k(e, t, n, r, i, a, o) {
                 try {
@@ -147,7 +147,7 @@
                                 'Cannot call a class as a function',
                             );
                     })(this, e),
-                        E.ione(t) || (t = {}),
+                        N.ione(t) || (t = {}),
                         (this.declaration = {
                             name: t.name,
                             type: t.type,
@@ -229,13 +229,13 @@
                                                                 throw e.t0;
                                                             case 16:
                                                                 return (
-                                                                    E.isne(r) ||
-                                                                        (E.isArray(
+                                                                    N.isne(r) ||
+                                                                        (N.isArray(
                                                                             r,
                                                                         ) &&
                                                                             1 ===
                                                                                 r.length &&
-                                                                            E.isne(
+                                                                            N.isne(
                                                                                 r[0],
                                                                             )) ||
                                                                         t.push({
@@ -369,7 +369,7 @@
                         {
                             key: 'getDisplayName',
                             value: function() {
-                                return E.isne(this.declaration.label)
+                                return N.isne(this.declaration.label)
                                     ? this.declaration.label
                                     : Object(d.uCFirst)(this.getName()).replace(
                                           /_/g,
@@ -399,13 +399,13 @@
                         {
                             key: 'isMultiple',
                             value: function() {
-                                return E.isArray(this.declaration.type);
+                                return N.isArray(this.declaration.type);
                             },
                         },
                         {
                             key: 'isReference',
                             value: function() {
-                                return E.isne(this.getReferencedEntityName());
+                                return N.isne(this.getReferencedEntityName());
                             },
                         },
                         {
@@ -439,8 +439,8 @@
                     e
                 );
             })();
-            function T(e) {
-                return (T =
+            function R(e) {
+                return (R =
                     'function' == typeof Symbol &&
                     'symbol' == typeof Symbol.iterator
                         ? function(e) {
@@ -455,7 +455,7 @@
                                   : typeof e;
                           })(e);
             }
-            function R(e, t, n, r, i, a, o) {
+            function T(e, t, n, r, i, a, o) {
                 try {
                     var u = e[a](o),
                         c = u.value;
@@ -464,7 +464,7 @@
                 }
                 u.done ? t(c) : Promise.resolve(c).then(r, i);
             }
-            function S(e, t) {
+            function P(e, t) {
                 for (var n = 0; n < t.length; n++) {
                     var r = t[n];
                     (r.enumerable = r.enumerable || !1),
@@ -473,8 +473,8 @@
                         Object.defineProperty(e, r.key, r);
                 }
             }
-            function P(e, t) {
-                return !t || ('object' !== T(t) && 'function' != typeof t)
+            function S(e, t) {
+                return !t || ('object' !== R(t) && 'function' != typeof t)
                     ? (function(e) {
                           if (void 0 === e)
                               throw new ReferenceError(
@@ -484,8 +484,8 @@
                       })(e)
                     : t;
             }
-            function j(e, t, n) {
-                return (j =
+            function F(e, t, n) {
+                return (F =
                     'undefined' != typeof Reflect && Reflect.get
                         ? Reflect.get
                         : function(e, t, n) {
@@ -495,7 +495,7 @@
                                       !Object.prototype.hasOwnProperty.call(
                                           e,
                                           t,
-                                      ) && null !== (e = A(e));
+                                      ) && null !== (e = x(e));
 
                                   );
                                   return e;
@@ -506,21 +506,21 @@
                               }
                           })(e, t, n || e);
             }
-            function A(e) {
-                return (A = Object.setPrototypeOf
+            function x(e) {
+                return (x = Object.setPrototypeOf
                     ? Object.getPrototypeOf
                     : function(e) {
                           return e.__proto__ || Object.getPrototypeOf(e);
                       })(e);
             }
-            function F(e, t) {
-                return (F =
+            function D(e, t) {
+                return (D =
                     Object.setPrototypeOf ||
                     function(e, t) {
                         return (e.__proto__ = t), e;
                     })(e, t);
             }
-            var q = (function(e) {
+            var j = (function(e) {
                 function t() {
                     return (
                         (function(e, t) {
@@ -529,7 +529,7 @@
                                     'Cannot call a class as a function',
                                 );
                         })(this, t),
-                        P(this, A(t).apply(this, arguments))
+                        S(this, x(t).apply(this, arguments))
                     );
                 }
                 var n, r, i;
@@ -546,7 +546,7 @@
                                 configurable: !0,
                             },
                         })),
-                            t && F(e, t);
+                            t && D(e, t);
                     })(t, O),
                     (n = t),
                     (r = [
@@ -566,8 +566,8 @@
                                                             case 0:
                                                                 return (
                                                                     (e.next = 2),
-                                                                    j(
-                                                                        A(
+                                                                    F(
+                                                                        x(
                                                                             t.prototype,
                                                                         ),
                                                                         'checkHealth',
@@ -655,10 +655,10 @@
                                         return new Promise(function(r, i) {
                                             var a = e.apply(t, n);
                                             function o(e) {
-                                                R(a, r, i, o, u, 'next', e);
+                                                T(a, r, i, o, u, 'next', e);
                                             }
                                             function u(e) {
-                                                R(a, r, i, o, u, 'throw', e);
+                                                T(a, r, i, o, u, 'throw', e);
                                             }
                                             o(void 0);
                                         });
@@ -668,12 +668,12 @@
                                 };
                             })(),
                         },
-                    ]) && S(n.prototype, r),
-                    i && S(n, i),
+                    ]) && P(n.prototype, r),
+                    i && P(n, i),
                     t
                 );
             })();
-            function x(e, t, n, r, i, a, o) {
+            function A(e, t, n, r, i, a, o) {
                 try {
                     var u = e[a](o),
                         c = u.value;
@@ -681,6 +681,22 @@
                     return void n(e);
                 }
                 u.done ? t(c) : Promise.resolve(c).then(r, i);
+            }
+            function q(e) {
+                return function() {
+                    var t = this,
+                        n = arguments;
+                    return new Promise(function(r, i) {
+                        var a = e.apply(t, n);
+                        function o(e) {
+                            A(a, r, i, o, u, 'next', e);
+                        }
+                        function u(e) {
+                            A(a, r, i, o, u, 'throw', e);
+                        }
+                        o(void 0);
+                    });
+                };
             }
             function I(e, t) {
                 for (var n = 0; n < t.length; n++) {
@@ -691,7 +707,7 @@
                         Object.defineProperty(e, r.key, r);
                 }
             }
-            var D = (function() {
+            var M = (function() {
                 function e(t) {
                     !(function(e, t) {
                         if (!(e instanceof t))
@@ -700,12 +716,12 @@
                             );
                     })(this, e);
                     var n = t;
-                    E.ione(n) || (n = {}),
-                        E.iane(n.schema) || (n.schema = []),
+                    N.ione(n) || (n = {}),
+                        N.iane(n.schema) || (n.schema = []),
                         (this.declaration = {
                             name: n.name || '',
                             schema: n.schema.map(function(e) {
-                                return e.name === u ? new q(e) : new O(e);
+                                return e.name === u ? new j(e) : new O(e);
                             }),
                         });
                 }
@@ -716,179 +732,160 @@
                         {
                             key: 'checkHealth',
                             value: (function() {
-                                var e,
-                                    t = ((e = regeneratorRuntime.mark(
-                                        function e() {
-                                            var t, n, r;
-                                            return regeneratorRuntime.wrap(
-                                                function(e) {
-                                                    for (;;)
-                                                        switch (
-                                                            (e.prev = e.next)
-                                                        ) {
-                                                            case 0:
-                                                                return (
-                                                                    (t = []),
-                                                                    (n = this
-                                                                        .declaration),
-                                                                    E.isne(
-                                                                        n.name,
-                                                                    ) ||
-                                                                        t.push({
-                                                                            message:
-                                                                                'Entity does not have a name',
-                                                                            code:
-                                                                                'entity_name_empty',
-                                                                            entityName:
-                                                                                '',
-                                                                        }),
-                                                                    !E.isne(
-                                                                        n.name,
-                                                                    ) ||
-                                                                        ('user' !==
-                                                                            n.name &&
-                                                                            'group' !==
-                                                                                n.name) ||
-                                                                        t.push({
-                                                                            message:
-                                                                                'Entity name is a reserved name',
-                                                                            code:
-                                                                                'entity_name_reserved',
-                                                                            entityName:
-                                                                                n.name,
-                                                                        }),
-                                                                    E.iane(
-                                                                        n.schema,
-                                                                    ) ||
-                                                                        t.push({
-                                                                            message:
-                                                                                'Entity does not have a single field',
-                                                                            code:
-                                                                                'entity_schema_empty',
-                                                                            entityName:
-                                                                                n.name,
-                                                                        }),
-                                                                    (r = {}),
-                                                                    n.schema.forEach(
+                                var e = q(
+                                    regeneratorRuntime.mark(function e() {
+                                        var t, n, r;
+                                        return regeneratorRuntime.wrap(
+                                            function(e) {
+                                                for (;;)
+                                                    switch ((e.prev = e.next)) {
+                                                        case 0:
+                                                            return (
+                                                                (t = []),
+                                                                (n = this
+                                                                    .declaration),
+                                                                N.isne(
+                                                                    n.name,
+                                                                ) ||
+                                                                    t.push({
+                                                                        message:
+                                                                            'Entity does not have a name',
+                                                                        code:
+                                                                            'entity_name_empty',
+                                                                        entityName:
+                                                                            '',
+                                                                    }),
+                                                                !N.isne(
+                                                                    n.name,
+                                                                ) ||
+                                                                    ('user' !==
+                                                                        n.name &&
+                                                                        'group' !==
+                                                                            n.name) ||
+                                                                    t.push({
+                                                                        message:
+                                                                            'Entity name is a reserved name',
+                                                                        code:
+                                                                            'entity_name_reserved',
+                                                                        entityName:
+                                                                            n.name,
+                                                                    }),
+                                                                N.iane(
+                                                                    n.schema,
+                                                                ) ||
+                                                                    t.push({
+                                                                        message:
+                                                                            'Entity does not have a single field',
+                                                                        code:
+                                                                            'entity_schema_empty',
+                                                                        entityName:
+                                                                            n.name,
+                                                                    }),
+                                                                (r = {}),
+                                                                n.schema.forEach(
+                                                                    function(
+                                                                        e,
+                                                                    ) {
+                                                                        r[
+                                                                            e.getName()
+                                                                        ] =
+                                                                            e.getName() in
+                                                                            r
+                                                                                ? r[
+                                                                                      e.getName()
+                                                                                  ] +
+                                                                                  1
+                                                                                : 1;
+                                                                    },
+                                                                ),
+                                                                u in r ||
+                                                                    t.push({
+                                                                        message:
+                                                                            'System field "code" is missing',
+                                                                        code:
+                                                                            'entity_code_field_missing',
+                                                                        entityName:
+                                                                            n.name,
+                                                                    }),
+                                                                Object.keys(
+                                                                    r,
+                                                                ).forEach(
+                                                                    function(
+                                                                        e,
+                                                                    ) {
+                                                                        r[e] >
+                                                                            1 &&
+                                                                            t.push(
+                                                                                {
+                                                                                    message: 'Field "'.concat(
+                                                                                        r[
+                                                                                            e
+                                                                                        ],
+                                                                                        '" met several times',
+                                                                                    ),
+                                                                                    code:
+                                                                                        'entity_field_duplicate',
+                                                                                    fieldName:
+                                                                                        r[
+                                                                                            e
+                                                                                        ],
+                                                                                    entityName:
+                                                                                        n.name,
+                                                                                },
+                                                                            );
+                                                                    },
+                                                                ),
+                                                                (e.next = 11),
+                                                                Promise.all(
+                                                                    n.schema.map(
                                                                         function(
                                                                             e,
                                                                         ) {
-                                                                            r[
-                                                                                e.getName()
-                                                                            ] =
-                                                                                e.getName() in
-                                                                                r
-                                                                                    ? r[
-                                                                                          e.getName()
-                                                                                      ] +
-                                                                                      1
-                                                                                    : 1;
-                                                                        },
-                                                                    ),
-                                                                    u in r ||
-                                                                        t.push({
-                                                                            message:
-                                                                                'System field "code" is missing',
-                                                                            code:
-                                                                                'entity_code_field_missing',
-                                                                            entityName:
-                                                                                n.name,
-                                                                        }),
-                                                                    Object.keys(
-                                                                        r,
-                                                                    ).forEach(
-                                                                        function(
-                                                                            e,
-                                                                        ) {
-                                                                            r[
-                                                                                e
-                                                                            ] >
-                                                                                1 &&
-                                                                                t.push(
-                                                                                    {
-                                                                                        message: 'Field "'.concat(
-                                                                                            r[
-                                                                                                e
-                                                                                            ],
-                                                                                            '" met several times',
-                                                                                        ),
-                                                                                        code:
-                                                                                            'entity_field_duplicate',
-                                                                                        fieldName:
-                                                                                            r[
-                                                                                                e
-                                                                                            ],
-                                                                                        entityName:
-                                                                                            n.name,
+                                                                            return e
+                                                                                .checkHealth()
+                                                                                .then(
+                                                                                    function(
+                                                                                        e,
+                                                                                    ) {
+                                                                                        e.forEach(
+                                                                                            function(
+                                                                                                e,
+                                                                                            ) {
+                                                                                                t.push(
+                                                                                                    Object.assign(
+                                                                                                        {},
+                                                                                                        e,
+                                                                                                        {
+                                                                                                            entityName:
+                                                                                                                n.name,
+                                                                                                        },
+                                                                                                    ),
+                                                                                                );
+                                                                                            },
+                                                                                        );
                                                                                     },
                                                                                 );
                                                                         },
                                                                     ),
-                                                                    (e.next = 11),
-                                                                    Promise.all(
-                                                                        n.schema.map(
-                                                                            function(
-                                                                                e,
-                                                                            ) {
-                                                                                return e
-                                                                                    .checkHealth()
-                                                                                    .then(
-                                                                                        function(
-                                                                                            e,
-                                                                                        ) {
-                                                                                            e.forEach(
-                                                                                                function(
-                                                                                                    e,
-                                                                                                ) {
-                                                                                                    t.push(
-                                                                                                        Object.assign(
-                                                                                                            {},
-                                                                                                            e,
-                                                                                                            {
-                                                                                                                entityName:
-                                                                                                                    n.name,
-                                                                                                            },
-                                                                                                        ),
-                                                                                                    );
-                                                                                                },
-                                                                                            );
-                                                                                        },
-                                                                                    );
-                                                                            },
-                                                                        ),
-                                                                    )
-                                                                );
-                                                            case 11:
-                                                                return e.abrupt(
-                                                                    'return',
-                                                                    t,
-                                                                );
-                                                            case 12:
-                                                            case 'end':
-                                                                return e.stop();
-                                                        }
-                                                },
-                                                e,
-                                                this,
-                                            );
-                                        },
-                                    )),
-                                    function() {
-                                        var t = this,
-                                            n = arguments;
-                                        return new Promise(function(r, i) {
-                                            var a = e.apply(t, n);
-                                            function o(e) {
-                                                x(a, r, i, o, u, 'next', e);
-                                            }
-                                            function u(e) {
-                                                x(a, r, i, o, u, 'throw', e);
-                                            }
-                                            o(void 0);
-                                        });
-                                    });
+                                                                )
+                                                            );
+                                                        case 11:
+                                                            return e.abrupt(
+                                                                'return',
+                                                                t,
+                                                            );
+                                                        case 12:
+                                                        case 'end':
+                                                            return e.stop();
+                                                    }
+                                            },
+                                            e,
+                                            this,
+                                        );
+                                    }),
+                                );
                                 return function() {
-                                    return t.apply(this, arguments);
+                                    return e.apply(this, arguments);
                                 };
                             })(),
                         },
@@ -964,17 +961,54 @@
                                         t,
                                     ) {
                                         var n = null;
-                                        if (t.isReference()) n = h.string();
+                                        if (t.isReference())
+                                            n = h
+                                                .string()
+                                                .typeError(
+                                                    "Reference field '".concat(
+                                                        t.getDisplayName(),
+                                                        "' is not a string",
+                                                    ),
+                                                );
                                         else {
                                             var r = t.getActualType();
                                             n =
                                                 r === l
-                                                    ? h.number().integer()
+                                                    ? h
+                                                          .number()
+                                                          .integer()
+                                                          .typeError(
+                                                              "Field '".concat(
+                                                                  t.getDisplayName(),
+                                                                  "' is not a number",
+                                                              ),
+                                                          )
                                                     : r === s
-                                                    ? h.boolean()
+                                                    ? h
+                                                          .boolean()
+                                                          .typeError(
+                                                              "Field '".concat(
+                                                                  t.getDisplayName(),
+                                                                  "' is not a boolean",
+                                                              ),
+                                                          )
                                                     : r === f
-                                                    ? h.date()
-                                                    : h.string();
+                                                    ? h
+                                                          .date()
+                                                          .typeError(
+                                                              "Field '".concat(
+                                                                  t.getDisplayName(),
+                                                                  "' is not a date",
+                                                              ),
+                                                          )
+                                                    : h
+                                                          .string()
+                                                          .typeError(
+                                                              "Field '".concat(
+                                                                  t.getDisplayName(),
+                                                                  "' is not a string",
+                                                              ),
+                                                          );
                                         }
                                         t.isMultiple() && (n = h.array().of(n)),
                                             (n = t.isMandatory()
@@ -996,27 +1030,25 @@
                             value: function(e) {
                                 var t = this,
                                     n = {};
-                                return E.ione(e)
+                                return N.ione(e)
                                     ? (this.getFields().forEach(function(r) {
                                           var i = r.getName();
                                           if (i !== u && i in e) {
                                               var a = e[i];
                                               r.isMultiple()
-                                                  ? ((a = E.isArray(a)
-                                                        ? a.map(function(e) {
-                                                              return t.castFieldValue(
-                                                                  r,
-                                                                  e,
-                                                              );
-                                                          })
-                                                        : [
-                                                              t.castFieldValue(
-                                                                  r,
-                                                                  a,
-                                                              ),
-                                                          ]),
+                                                  ? (N.isArray(a) &&
+                                                        (a = (a = a.map(
+                                                            function(e) {
+                                                                return t.castFieldValue(
+                                                                    r,
+                                                                    e,
+                                                                );
+                                                            },
+                                                        )).filter(function(e) {
+                                                            return null !== e;
+                                                        })),
                                                     r.isReference() &&
-                                                        (a = E.unique(a).filter(
+                                                        (a = N.unique(a).filter(
                                                             function(e) {
                                                                 return !!e;
                                                             },
@@ -1033,6 +1065,74 @@
                             },
                         },
                         {
+                            key: 'validateData',
+                            value: (function() {
+                                var e = q(
+                                    regeneratorRuntime.mark(function e(t) {
+                                        var n, r;
+                                        return regeneratorRuntime.wrap(
+                                            function(e) {
+                                                for (;;)
+                                                    switch ((e.prev = e.next)) {
+                                                        case 0:
+                                                            return (
+                                                                (n = null),
+                                                                (r = null),
+                                                                (e.prev = 2),
+                                                                (e.next = 5),
+                                                                this.getValidator().validate(
+                                                                    t,
+                                                                    {
+                                                                        abortEarly: !1,
+                                                                    },
+                                                                )
+                                                            );
+                                                        case 5:
+                                                            (n = e.sent),
+                                                                (e.next = 11);
+                                                            break;
+                                                        case 8:
+                                                            (e.prev = 8),
+                                                                (e.t0 = e.catch(
+                                                                    2,
+                                                                )),
+                                                                (r = e.t0.inner.map(
+                                                                    function(
+                                                                        e,
+                                                                    ) {
+                                                                        return {
+                                                                            message:
+                                                                                e.message,
+                                                                            field:
+                                                                                e.path,
+                                                                        };
+                                                                    },
+                                                                ));
+                                                        case 11:
+                                                            return e.abrupt(
+                                                                'return',
+                                                                {
+                                                                    data: n,
+                                                                    errors: r,
+                                                                },
+                                                            );
+                                                        case 12:
+                                                        case 'end':
+                                                            return e.stop();
+                                                    }
+                                            },
+                                            e,
+                                            this,
+                                            [[2, 8]],
+                                        );
+                                    }),
+                                );
+                                return function(t) {
+                                    return e.apply(this, arguments);
+                                };
+                            })(),
+                        },
+                        {
                             key: 'castFieldValue',
                             value: function(e, t) {
                                 var n = e.getActualType(),
@@ -1040,29 +1140,22 @@
                                 if (n === c)
                                     r = null == r ? null : r.toString();
                                 else if (n === s) r = !!r;
-                                else if (n === l)
-                                    (r = parseInt(r, 10)),
-                                        Number.isNaN(r) && (r = 0);
+                                else if (n === l) r = parseInt(r, 10);
                                 else if (n === f) {
                                     if (null == r) return null;
                                     if (r instanceof Date) r = r.toISOString();
                                     else {
                                         var i = Date.parse(r);
-                                        r = Number.isNaN(i)
-                                            ? Number.isNaN(parseInt(r, 10))
-                                                ? null
-                                                : new Date(
-                                                      parseInt(r, 10),
-                                                  ).toISOString()
-                                            : new Date(i).toISOString();
+                                        Number.isNaN(i)
+                                            ? Number.isNaN(parseInt(r, 10)) ||
+                                              (r = new Date(
+                                                  parseInt(r, 10),
+                                              ).toISOString())
+                                            : (r = new Date(i).toISOString());
                                     }
                                 } else
                                     e.isReference() &&
-                                        (E.isString(r) ||
-                                            (r =
-                                                null != r
-                                                    ? r.toString()
-                                                    : null));
+                                        (r = null != r ? r.toString() : null);
                                 return r;
                             },
                         },
@@ -1071,7 +1164,7 @@
                     e
                 );
             })();
-            function M(e, t, n, r, i, a, o) {
+            function C(e, t, n, r, i, a, o) {
                 try {
                     var u = e[a](o),
                         c = u.value;
@@ -1080,7 +1173,7 @@
                 }
                 u.done ? t(c) : Promise.resolve(c).then(r, i);
             }
-            function C(e, t) {
+            function B(e, t) {
                 for (var n = 0; n < t.length; n++) {
                     var r = t[n];
                     (r.enumerable = r.enumerable || !1),
@@ -1089,7 +1182,7 @@
                         Object.defineProperty(e, r.key, r);
                 }
             }
-            var B = (function() {
+            var L = (function() {
                 function e(t) {
                     !(function(e, t) {
                         if (!(e instanceof t))
@@ -1097,13 +1190,13 @@
                                 'Cannot call a class as a function',
                             );
                     })(this, e),
-                        E.ione(t) || (t = {}),
-                        E.iane(t.schema) || (t.schema = []);
+                        N.ione(t) || (t = {}),
+                        N.iane(t.schema) || (t.schema = []);
                     var n = parseInt(t.version, 10);
                     Number.isNaN(n) && (n = 0),
                         (this.declaration = {
                             schema: t.schema.map(function(e) {
-                                return new D(e);
+                                return new M(e);
                             }),
                             version: n,
                         });
@@ -1136,7 +1229,7 @@
                                                                         .declaration),
                                                                     (r =
                                                                         n.schema),
-                                                                    E.iane(r))
+                                                                    N.iane(r))
                                                                 ) {
                                                                     e.next = 5;
                                                                     break;
@@ -1266,10 +1359,10 @@
                                         return new Promise(function(r, i) {
                                             var a = e.apply(t, n);
                                             function o(e) {
-                                                M(a, r, i, o, u, 'next', e);
+                                                C(a, r, i, o, u, 'next', e);
                                             }
                                             function u(e) {
-                                                M(a, r, i, o, u, 'throw', e);
+                                                C(a, r, i, o, u, 'throw', e);
                                             }
                                             o(void 0);
                                         });
@@ -1327,7 +1420,7 @@
                                     this.declaration.schema.forEach(function(
                                         t,
                                     ) {
-                                        e = E.union(e, t.getReferences());
+                                        e = N.union(e, t.getReferences());
                                     }),
                                     e
                                 );
@@ -1339,8 +1432,8 @@
                                 return !this.declaration.schema.length;
                             },
                         },
-                    ]) && C(t.prototype, n),
-                    r && C(t, r),
+                    ]) && B(t.prototype, n),
+                    r && B(t, r),
                     e
                 );
             })();
@@ -1393,16 +1486,16 @@
                     return f;
                 }),
                 n.d(t, 'Schema', function() {
-                    return B;
+                    return L;
                 }),
                 n.d(t, 'CodeField', function() {
-                    return q;
+                    return j;
                 }),
                 n.d(t, 'Field', function() {
                     return O;
                 }),
                 n.d(t, 'Entity', function() {
-                    return D;
+                    return M;
                 });
         },
     ]),
