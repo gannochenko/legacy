@@ -5,14 +5,14 @@ import { mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import uuid from 'uuid/v4';
 
 import { graphqlExpress } from './graphql-express';
-import SchemaStore from './schema-store';
-import GQLTypeGenerator from './gql/type-generator';
-import ResolverGenerator from './gql/resolver-generator';
-import DatabaseEntityManager from './database/entity-manager';
+import SchemaStore from '../../lib/schema-store';
+import GQLTypeGenerator from './type-generator';
+import ResolverGenerator from './resolver-generator';
+import DatabaseEntityManager from 'app.api/src/lib/database/entity-manager';
 import DataLoaderPool from './data-loader-pool';
 
-import typeDefs from '../graphql/types/index';
-import resolvers from '../graphql/resolvers/index';
+import typeDefs from '../../graphql/types';
+import resolvers from '../../graphql/resolvers';
 
 let server = null;
 

@@ -1,11 +1,6 @@
-import {
-    runHttpQuery,
-    convertNodeHttpToRequest,
-} from 'apollo-server-core';
+import { runHttpQuery, convertNodeHttpToRequest } from 'apollo-server-core';
 
-export function graphqlExpress(
-    options,
-) {
+export function graphqlExpress(options) {
     if (!options) {
         throw new Error('Apollo Server requires options.');
     }
@@ -13,7 +8,9 @@ export function graphqlExpress(
     if (arguments.length > 1) {
         // TODO: test this
         throw new Error(
-            `Apollo Server expects exactly one argument, got ${arguments.length}`,
+            `Apollo Server expects exactly one argument, got ${
+                arguments.length
+            }`,
         );
     }
 
@@ -26,14 +23,16 @@ export function graphqlExpress(
         }).then(
             ({ graphqlResponse, responseInit }) => {
                 if (responseInit.headers) {
-                    for (const [name, value] of Object.entries(responseInit.headers)) {
+                    for (const [name, value] of Object.entries(
+                        responseInit.headers,
+                    )) {
                         res.setHeader(name, value);
                     }
                 }
                 res.write(graphqlResponse);
                 res.end();
             },
-            (error) => {
+            error => {
                 if ('HttpQueryError' !== error.name) {
                     return next(error);
                 }

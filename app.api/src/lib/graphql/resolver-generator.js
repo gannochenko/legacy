@@ -8,8 +8,6 @@ import { TYPE_DATETIME, QUERY_FIND_MAX_PAGE_SIZE } from 'project-minimum-core';
 import { getRefName } from '../entity-util';
 import { getASTAt, getSelectionAt } from './ast';
 
-import Validator from '../validator';
-
 export default class ResolverGenerator {
     static make(schema, databaseEntityManager, connection) {
         const entities = Object.values(schema.getSchema());
@@ -165,13 +163,6 @@ export default class ResolverGenerator {
 
             // cast everything that is possible to cast
             data = entity.prepareData(data);
-
-            // // validate
-            // const vResult = await Validator.validate(entity, data);
-            // if (_.iane(vResult)) {
-            //     result.errors = _.union(result.errors, vResult);
-            //     return result;
-            // }
 
             const singleReferences = entity
                 .getFields()

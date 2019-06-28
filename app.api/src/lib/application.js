@@ -7,7 +7,7 @@ import Cache from './cache';
 import ConnectionManager from './database/connection-manager';
 import SchemaProvider from './schema-provider';
 
-import attachGraphQLMiddleware from './apollo';
+import attachGraphQLMiddleware from 'app.api/src/lib/graphql/apollo';
 import attachHomeAPI from '../api/home';
 import attachSyncAPI from '../api/sync';
 import attachSchemaAPI from '../api/schema';
