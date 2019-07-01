@@ -105,10 +105,13 @@ describe('Entity', () => {
         });
         expect(data).toMatchObject({
             string_field: null,
-            string_field_m: [null],
+            string_field_m: [],
         });
         let result = await main.validateData(data);
-        console.log(result);
+        expect(result).toEqual({
+            data: { string_field: null, string_field_m: [] },
+            errors: null,
+        });
 
         data = main.prepareData({
             string_field: undefined,
@@ -116,7 +119,12 @@ describe('Entity', () => {
         });
         expect(data).toMatchObject({
             string_field: null,
-            string_field_m: [null],
+            string_field_m: [],
+        });
+        result = await main.validateData(data);
+        expect(result).toEqual({
+            data: { string_field: null, string_field_m: [] },
+            errors: null,
         });
 
         data = main.prepareData({
@@ -126,6 +134,11 @@ describe('Entity', () => {
         expect(data).toMatchObject({
             string_field: '1000',
             string_field_m: ['1000'],
+        });
+        result = await main.validateData(data);
+        expect(result).toEqual({
+            data: { string_field: '1000', string_field_m: ['1000'] },
+            errors: null,
         });
 
         data = main.prepareData({
@@ -138,6 +151,8 @@ describe('Entity', () => {
         expect(
             data.string_field_m[0].indexOf('Wed Jun 12 2019 20:20:48 GMT+0200'),
         ).toEqual(0);
+        result = await main.validateData(data);
+        expect(result.errors).toEqual(null);
     });
 
     it('should cast and validate input data: boolean', async () => {
@@ -151,6 +166,8 @@ describe('Entity', () => {
             boolean_field: true,
             boolean_field_m: [false],
         });
+        let result = await main.validateData(data);
+        expect(result.errors).toEqual(null);
 
         data = main.prepareData({
             boolean_field: 0,
@@ -160,6 +177,8 @@ describe('Entity', () => {
             boolean_field: false,
             boolean_field_m: [true],
         });
+        result = await main.validateData(data);
+        expect(result.errors).toEqual(null);
 
         data = main.prepareData({
             boolean_field: '0',
@@ -169,6 +188,8 @@ describe('Entity', () => {
             boolean_field: true,
             boolean_field_m: [true],
         });
+        result = await main.validateData(data);
+        expect(result.errors).toEqual(null);
     });
 
     it('should cast and validate input data: date', async () => {
@@ -182,6 +203,8 @@ describe('Entity', () => {
             date_field: '2019-06-12T18:20:48.394Z',
             date_field_m: ['2019-06-12T18:20:48.394Z'],
         });
+        let result = await main.validateData(data);
+        expect(result.errors).toEqual(null);
 
         data = main.prepareData({
             date_field: '2019-06-12T18:20:48.394Z',
@@ -191,6 +214,8 @@ describe('Entity', () => {
             date_field: '2019-06-12T18:20:48.394Z',
             date_field_m: ['2019-06-12T18:20:48.394Z'],
         });
+        result = await main.validateData(data);
+        expect(result.errors).toEqual(null);
 
         data = main.prepareData({
             date_field: '1560364245420',
@@ -200,6 +225,8 @@ describe('Entity', () => {
             date_field: '2019-06-12T18:30:45.420Z',
             date_field_m: ['2019-06-12T18:30:45.420Z'],
         });
+        result = await main.validateData(data);
+        expect(result.errors).toEqual(null);
 
         data = main.prepareData({
             date_field: 'not_a_date',
@@ -209,6 +236,17 @@ describe('Entity', () => {
             date_field: 'not_a_date',
             date_field_m: ['not_a_date'],
         });
+        result = await main.validateData(data);
+        expect(result.errors).toEqual([
+            {
+                field: 'date_field_m[0]',
+                message: "Field 'Date field m' is not a date",
+            },
+            {
+                field: 'date_field',
+                message: "Field 'Date field' is not a date",
+            },
+        ]);
     });
 
     it('should cast and validate input data: references', async () => {
@@ -222,6 +260,8 @@ describe('Entity', () => {
             reference_field: '4ef6f520-d180-4aee-9517-43214f396609',
             reference_field_m: ['4ef6f520-d180-4aee-9517-43214f396609'],
         });
+        let result = await main.validateData(data);
+        expect(result.errors).toEqual(null);
 
         data = main.prepareData({
             reference_field: undefined,
@@ -231,6 +271,8 @@ describe('Entity', () => {
             reference_field: null,
             reference_field_m: [],
         });
+        result = await main.validateData(data);
+        expect(result.errors).toEqual(null);
 
         data = main.prepareData({
             reference_field_m: [
@@ -249,5 +291,8 @@ describe('Entity', () => {
                 'Wed Jun 12 2019 20:30:45 GMT+0200',
             ),
         ).toEqual(0);
+        result = await main.validateData(data);
+        expect(result.errors).toEqual(null);
+        console.log(result);
     });
 });

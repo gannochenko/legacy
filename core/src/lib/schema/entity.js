@@ -173,17 +173,38 @@ export class Entity {
 
             // type
             if (field.isReference()) {
-                rule = yup.string();
+                rule = yup
+                    .string()
+                    .typeError(
+                        `Reference field '${field.getDisplayName()}' is not a string`,
+                    );
             } else {
                 const type = field.getActualType();
                 if (type === TYPE_INTEGER) {
-                    rule = yup.number().integer();
+                    rule = yup
+                        .number()
+                        .integer()
+                        .typeError(
+                            `Field '${field.getDisplayName()}' is not a number`,
+                        );
                 } else if (type === TYPE_BOOLEAN) {
-                    rule = yup.boolean();
+                    rule = yup
+                        .boolean()
+                        .typeError(
+                            `Field '${field.getDisplayName()}' is not a boolean`,
+                        );
                 } else if (type === TYPE_DATETIME) {
-                    rule = yup.date();
+                    rule = yup
+                        .date()
+                        .typeError(
+                            `Field '${field.getDisplayName()}' is not a date`,
+                        );
                 } else {
-                    rule = yup.string();
+                    rule = yup
+                        .string()
+                        .typeError(
+                            `Field '${field.getDisplayName()}' is not a string`,
+                        );
                 }
             }
 
@@ -243,6 +264,9 @@ export class Entity {
                     value = value.map(subValue =>
                         this.castFieldValue(field, subValue),
                     );
+
+                    // remove all nulls, does not make sense to keep them
+                    value = value.filter(x => x !== null);
                 }
 
                 if (field.isReference()) {
@@ -266,7 +290,10 @@ export class Entity {
                 abortEarly: false,
             });
         } catch (validationErrors) {
-            errors = validationErrors;
+            errors = validationErrors.inner.map(error => ({
+                message: error.message,
+                field: error.path,
+            }));
         }
 
         return { data, errors };
