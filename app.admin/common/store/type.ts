@@ -5,7 +5,7 @@ import { Notify } from '../lib/ew-internals-ui';
 export interface PageState {
     loading: boolean;
     ready: boolean;
-    error: Nullable<Error>;
+    error: Nullable<Error[]>;
 }
 
 export interface Action {
@@ -16,7 +16,7 @@ export interface Action {
 export interface ControllerProperties {
     ready: boolean;
     client: Client;
-    theme: StringToAnyMap;
+    theme: StringToNullableObjectMap;
     error: Nullable<Error[]>;
     dispatch?: (action: Action) => void;
     dispatchLoad?: DispatchLoad;

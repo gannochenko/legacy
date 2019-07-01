@@ -86,7 +86,13 @@ describe('Entity', () => {
 
         expect(data).toMatchObject({
             string_field: 'A,B',
-            string_field_m: 'A',
+            string_field_m: 'A', // stays the same
+        });
+
+        const errors = await main.validateData(data);
+        expect(errors).toEqual({
+            data: { string_field_m: null, string_field: 'A,B' },
+            errors: null,
         });
     });
 
@@ -101,6 +107,8 @@ describe('Entity', () => {
             string_field: null,
             string_field_m: [null],
         });
+        let result = await main.validateData(data);
+        console.log(result);
 
         data = main.prepareData({
             string_field: undefined,
@@ -124,10 +132,12 @@ describe('Entity', () => {
             string_field: new Date('2019-06-12T18:20:48.394Z'),
             string_field_m: [new Date('2019-06-12T18:20:48.394Z')],
         });
-        expect(data).toMatchObject({
-            string_field: 'Wed Jun 12 2019 20:20:48 GMT+0200 (EET)',
-            string_field_m: ['Wed Jun 12 2019 20:20:48 GMT+0200 (EET)'],
-        });
+        expect(
+            data.string_field.indexOf('Wed Jun 12 2019 20:20:48 GMT+0200'),
+        ).toEqual(0);
+        expect(
+            data.string_field_m[0].indexOf('Wed Jun 12 2019 20:20:48 GMT+0200'),
+        ).toEqual(0);
     });
 
     it('should cast and validate input data: boolean', async () => {
@@ -230,11 +240,14 @@ describe('Entity', () => {
                 new Date('2019-06-12T18:30:45.420Z'),
             ],
         });
-        expect(data).toMatchObject({
-            reference_field_m: [
-                '4ef6f520-d180-4aee-9517-43214f396609',
-                'Wed Jun 12 2019 20:30:45 GMT+0200 (EET)',
-            ],
-        });
+
+        expect(data.reference_field_m[0]).toEqual(
+            '4ef6f520-d180-4aee-9517-43214f396609',
+        );
+        expect(
+            data.reference_field_m[1].indexOf(
+                'Wed Jun 12 2019 20:30:45 GMT+0200',
+            ),
+        ).toEqual(0);
     });
 });

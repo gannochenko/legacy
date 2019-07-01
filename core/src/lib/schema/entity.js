@@ -258,6 +258,20 @@ export class Entity {
         return processed;
     }
 
+    async validateData(sourceData) {
+        let data = null;
+        let errors = null;
+        try {
+            data = await this.getValidator().validate(sourceData, {
+                abortEarly: false,
+            });
+        } catch (validationErrors) {
+            errors = validationErrors;
+        }
+
+        return { data, errors };
+    }
+
     castFieldValue(field, value) {
         const type = field.getActualType();
         let safeValue = value;
