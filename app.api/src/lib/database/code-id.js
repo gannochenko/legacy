@@ -1,11 +1,38 @@
+import { In } from 'typeorm';
+
 export class CodeId {
-    constructor({ databaseEntityManager, connection } = {}) {
-        this.databaseEntityManager = databaseEntityManager;
+    constructor({ connection } = {}) {
         this.connection = connection;
+
+        this.codeToId = {};
+        this.codeToGet = {};
     }
 
     addCode(code, entityName) {
-        console.log(code + ' ' + entityName);
+        if (this.codeToId[code]) {
+            return;
+        }
+
+        this.codeToGet[entityName] = this.codeToGet[entityName] || [];
+        this.codeToGet[entityName].push(code);
+    }
+
+    getId(code) {
+        return this.codeToId[code] || null;
+    }
+
+    async obtain() {
+        const items = await Promise.all(
+            Object.keys(this.codeToGet).map(entityName => {
+                const repository = this.connection.getRepository(entityName);
+                return repository.find({
+                    where: { code: In(this.codeToGet[entityName]) },
+                    // select: ['id', 'code'],
+                });
+            }),
+        );
+
+        console.log(items);
     }
 }
 

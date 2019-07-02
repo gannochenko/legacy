@@ -183,9 +183,7 @@ export default class ResolverGenerator {
                 .filter(field => field.isReference() && !field.isMultiple());
 
             await this.wrap(async () => {
-                // todo: that needs to be optimized: batch this
                 const codeToId = new CodeId({
-                    databaseEntityManager,
                     connection,
                 });
 
@@ -193,10 +191,20 @@ export default class ResolverGenerator {
                 for (let i = 0; i < singleReferences.length; i += 1) {
                     const reference = singleReferences[i];
                     const referenceFieldName = reference.getName();
-                    const referencedEntityName = reference.getActualType();
+                    const referencedEntityName = reference.getReferencedEntityName();
                     codeToId.addCode(
                         data[referenceFieldName],
                         referencedEntityName,
+                    );
+                }
+
+                await codeToId.obtain();
+
+                for (let i = 0; i < singleReferences.length; i += 1) {
+                    const reference = singleReferences[i];
+                    const referenceFieldName = reference.getName();
+                    data[referenceFieldName] = codeToId.getId(
+                        data[referenceFieldName],
                     );
                 }
 

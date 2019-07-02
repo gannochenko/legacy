@@ -6,7 +6,7 @@ import ResolverGenerator from '../resolver-generator';
 import DatabaseEntityManager from '../../database/entity-manager';
 import { Schema } from 'project-minimum-core';
 import schemaJSON from '../../../__test__/schema';
-import mockRepository from '../../../__test__/repository.mock';
+import { makeConnection } from '../../../__test__/repository.mock';
 import { makeAST } from '../../../__test__/apollo.mock';
 
 let schema = null;
@@ -14,6 +14,7 @@ let databaseManager = null;
 let repository = null;
 let resolvers = null;
 let mockedData = null;
+let connection = null;
 
 describe('GQL Resolver Generator', () => {
     beforeAll(async () => {
@@ -24,13 +25,10 @@ describe('GQL Resolver Generator', () => {
         });
         databaseManager = new DatabaseEntityManager(schema);
 
-        const {
-            repository: mockedRepository,
-            connection,
-            data,
-        } = mockRepository('important_person');
-        repository = mockedRepository;
-        mockedData = data;
+        connection = makeConnection();
+        repository = connection.getRepository({
+            options: { name: 'important_person' },
+        });
 
         resolvers = await ResolverGenerator.make(
             schema,
@@ -225,7 +223,7 @@ describe('GQL Resolver Generator', () => {
         let result = await find({}, {}, null, makeAST('count', []));
 
         expect(result.errors).toHaveLength(0);
-        expect(result.count).toEqual(mockedData.length);
+        expect(result.count).toEqual(3);
     });
 
     it('find(): should accept filter or search, but not both', async () => {
