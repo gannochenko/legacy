@@ -232,7 +232,7 @@ export class Entity {
      * @param data
      * todo: better to name it "castData"
      */
-    prepareData(data) {
+    castData(data) {
         const processed = {};
 
         if (!_.ione(data)) {
@@ -280,6 +280,15 @@ export class Entity {
         });
 
         return processed;
+    }
+
+    /**
+     * @deprecated
+     * @param data
+     * @returns {{}}
+     */
+    prepareData(data) {
+        return this.castData(data);
     }
 
     async validateData(sourceData) {

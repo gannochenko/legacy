@@ -7,6 +7,7 @@ import uuid from 'uuid/v4';
 import { TYPE_DATETIME, QUERY_FIND_MAX_PAGE_SIZE } from 'project-minimum-core';
 import { getRefName } from '../entity-util';
 import { getASTAt, getSelectionAt } from './ast';
+import { CodeId } from '../database/code-id';
 
 export default class ResolverGenerator {
     static make(schema, databaseEntityManager, connection) {
@@ -163,6 +164,19 @@ export default class ResolverGenerator {
 
             // cast everything that is possible to cast
             data = entity.prepareData(data);
+            // then validate
+            const { errors, data: safeData } = await entity.validateData(data);
+            if (errors) {
+                result.errors = errors.map(error => ({
+                    message: error.message,
+                    code: 'validation',
+                    reference: error.field,
+                }));
+
+                return result;
+            }
+
+            data = safeData;
 
             const singleReferences = entity
                 .getFields()
@@ -170,45 +184,22 @@ export default class ResolverGenerator {
 
             await this.wrap(async () => {
                 // todo: that needs to be optimized: batch this
-                const codeToId = {};
+                const codeToId = new CodeId({
+                    databaseEntityManager,
+                    connection,
+                });
 
-                for (let i = 0; i < singleReferences.length; i++) {
-                    const referenceName = singleReferences[i].getName();
-                    const referenceType = singleReferences[i].getActualType();
-                    if (data[referenceName]) {
-                        codeToId[referenceType] = codeToId[referenceType] || {};
-                        codeToId[referenceType][data[referenceName]] = true;
-
-                        // if (data[referenceName] === undefined || data[referenceName] === null) {
-                        //     data[referenceName] = null;
-                        //     continue;
-                        // }
-                        //
-                        // data[referenceName] = data[referenceName].toString().trim();
-                        // if (!data[referenceName].length) {
-                        //     data[referenceName] = null;
-                        //     continue;
-                        // }
-                        //
-                        // const refEntityName = refs[i].type;
-                        // // need to replace code with id
-                        // const refDBEntity = await entityManager.getByName(
-                        //     refEntityName,
-                        // );
-                        // const repo = connection.getRepository(refDBEntity);
-                        // const refItem = await repo.findOne({
-                        //     where: { code: data[referenceName] },
-                        //     select: ['id'],
-                        // });
-                        // if (refItem) {
-                        //     data[referenceName] = refItem.id;
-                        // } else {
-                        //     data[referenceName] = null;
-                        // }
-                    }
+                // translate all single-reference codes to ids
+                for (let i = 0; i < singleReferences.length; i += 1) {
+                    const reference = singleReferences[i];
+                    const referenceFieldName = reference.getName();
+                    const referencedEntityName = reference.getActualType();
+                    codeToId.addCode(
+                        data[referenceFieldName],
+                        referencedEntityName,
+                    );
                 }
 
-                console.dir(codeToId);
                 return result;
 
                 let dbItem = null;
@@ -224,7 +215,7 @@ export default class ResolverGenerator {
                             code: 'not_found',
                             message: 'Element not found',
                         });
-                        return;
+                        return result;
                     }
                     repository.merge(dbItem, data);
                 }
