@@ -15,7 +15,7 @@ export const makeRepository = entityName => {
     const data = _.cloneDeep(mockData[entityName]);
 
     return {
-        findOne: jest.fn(parameters => {
+        findOne: jest.fn(async (parameters = {}) => {
             const { where, select } = parameters;
 
             let result = null;
@@ -29,29 +29,41 @@ export const makeRepository = entityName => {
 
             return result;
         }),
-        find: jest.fn(parameters => {
+        find: jest.fn(async (parameters = {}) => {
             const { where, select, order, skip, take } = parameters;
             const dataPart = _.cloneDeep(data).splice(skip, take);
 
             return filterKeys(dataPart, select);
         }),
-        count: jest.fn(parameters => {
+        count: jest.fn(async (parameters = {}) => {
             return data.length;
         }),
+        create: jest.fn(data => data),
+        merge: jest.fn(),
+        save: jest.fn(data => ({
+            id: 10,
+            ...data,
+        })),
     };
 };
 
 export const makeConnection = () => {
     const repositories = {};
+
+    const getRepository = jest.fn(entity => {
+        const name = entity.options.name.replace('eq_e_', '');
+        if (!repositories[name]) {
+            repositories[name] = makeRepository(name);
+        }
+        return repositories[name];
+    });
+
     return {
-        getRepository: jest.fn(entity => {
-            if (!repositories[entity]) {
-                const name = entity.options.name.replace('eq_e_', '');
-                repositories[entity] = makeRepository(name);
-            }
-            return repositories[entity];
-        }),
+        getRepository,
+        getRepositoryByEntityName: name => {
+            return getRepository({ options: { name } });
+        },
     };
 };
 
-export default makeRepository;
+export const data = mockData;

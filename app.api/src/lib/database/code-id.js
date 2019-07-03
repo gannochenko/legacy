@@ -6,13 +6,17 @@ export class CodeId {
 
         this.codeToId = {};
         this.codeToGet = {};
+        this.entities = {};
     }
 
-    addCode(code, entityName) {
+    addCode(code, entity) {
         if (this.codeToId[code]) {
             return;
         }
 
+        const entityName = entity.options.name;
+
+        this.entities[entityName] = entity;
         this.codeToGet[entityName] = this.codeToGet[entityName] || [];
         this.codeToGet[entityName].push(code);
     }
@@ -22,34 +26,21 @@ export class CodeId {
     }
 
     async obtain() {
-        const items = await Promise.all(
+        await Promise.all(
             Object.keys(this.codeToGet).map(entityName => {
-                const repository = this.connection.getRepository(entityName);
-                return repository.find({
-                    where: { code: In(this.codeToGet[entityName]) },
-                    // select: ['id', 'code'],
-                });
+                const entity = this.entities[entityName];
+                const repository = this.connection.getRepository(entity);
+                return repository
+                    .find({
+                        where: { code: In(this.codeToGet[entityName]) },
+                        // select: ['id', 'code'],
+                    })
+                    .then(items => {
+                        items.forEach(item => {
+                            this.codeToId[item.code] = item.id;
+                        });
+                    });
             }),
         );
-
-        console.log(items);
     }
 }
-
-// const referenceType = singleReferences[i].getActualType();
-
-// const refEntityName = refs[i].type;
-// // need to replace code with id
-// const refDBEntity = await entityManager.getByName(
-//     refEntityName,
-// );
-// const repo = connection.getRepository(refDBEntity);
-// const refItem = await repo.findOne({
-//     where: { code: data[referenceName] },
-//     select: ['id'],
-// });
-// if (refItem) {
-//     data[referenceName] = refItem.id;
-// } else {
-//     data[referenceName] = null;
-// }

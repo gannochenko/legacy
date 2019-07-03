@@ -189,13 +189,14 @@ export default class ResolverGenerator {
 
                 // translate all single-reference codes to ids
                 for (let i = 0; i < singleReferences.length; i += 1) {
-                    const reference = singleReferences[i];
-                    const referenceFieldName = reference.getName();
-                    const referencedEntityName = reference.getReferencedEntityName();
-                    codeToId.addCode(
-                        data[referenceFieldName],
-                        referencedEntityName,
+                    const {
+                        fieldName,
+                        databaseEntity: referenceDatabaseEntity,
+                    } = this.getReferenceAttributes(
+                        singleReferences[i],
+                        databaseEntityManager,
                     );
+                    codeToId.addCode(data[fieldName], referenceDatabaseEntity);
                 }
 
                 await codeToId.obtain();
@@ -207,8 +208,6 @@ export default class ResolverGenerator {
                         data[referenceFieldName],
                     );
                 }
-
-                return result;
 
                 let dbItem = null;
                 if (isNewItem) {
@@ -718,5 +717,15 @@ export default class ResolverGenerator {
         }
 
         return { limit, offset };
+    }
+
+    static getReferenceAttributes(reference, databaseEntityManager) {
+        const fieldName = reference.getName();
+        const referencedEntityName = reference.getReferencedEntityName();
+        const databaseEntity = databaseEntityManager.getByName(
+            referencedEntityName,
+        );
+
+        return { fieldName, databaseEntity };
     }
 }

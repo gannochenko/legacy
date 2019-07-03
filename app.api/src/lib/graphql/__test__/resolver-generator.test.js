@@ -6,14 +6,16 @@ import ResolverGenerator from '../resolver-generator';
 import DatabaseEntityManager from '../../database/entity-manager';
 import { Schema } from 'project-minimum-core';
 import schemaJSON from '../../../__test__/schema';
-import { makeConnection } from '../../../__test__/repository.mock';
+import {
+    makeConnection,
+    data as mockedData,
+} from '../../../__test__/repository.mock';
 import { makeAST } from '../../../__test__/apollo.mock';
 
 let schema = null;
 let databaseManager = null;
 let repository = null;
 let resolvers = null;
-let mockedData = null;
 let connection = null;
 
 describe('GQL Resolver Generator', () => {
@@ -250,6 +252,15 @@ describe('GQL Resolver Generator', () => {
     it('put(): should create a new item', async () => {
         const put = resolvers[0].Mutation.ImportantPersonPut;
 
+        connection
+            .getRepositoryByEntityName('important_person')
+            .find.mockImplementationOnce(async ({ where } = {}) => {
+                const codes = where.code._value;
+                return mockedData.important_person.filter(item =>
+                    codes.includes(item.code),
+                );
+            });
+
         let result = await put(
             {},
             {
@@ -262,8 +273,13 @@ describe('GQL Resolver Generator', () => {
             null,
             {},
         );
-
-        console.dir(result);
+        expect(result.errors).toHaveLength(0);
+        expect(result.code).toHaveLength(36);
+        expect(result.data).toMatchObject({
+            full_name: 'hello!',
+            has_pets: false,
+            partner: 1,
+        });
     });
 
     it('put(): should update an existing item', async () => {
