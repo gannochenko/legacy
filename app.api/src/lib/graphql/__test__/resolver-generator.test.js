@@ -268,6 +268,10 @@ describe('GQL Resolver Generator', () => {
                     full_name: 'hello!',
                     partner: '4ef6f520-d180-4aee-9517-43214f396609',
                     has_pets: false,
+                    pets: [
+                        '01f6f520-d180-4aee-9517-43214f396609',
+                        '02f6f520-d180-4aee-9517-43214f396609',
+                    ],
                 },
             },
             null,

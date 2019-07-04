@@ -31,4 +31,21 @@ export default {
             partner: null,
         },
     ],
+    pets: [
+        {
+            id: 1,
+            code: '01f6f520-d180-4aee-9517-43214f396609',
+            nickname: 'Viva',
+        },
+        {
+            id: 2,
+            code: '02f6f520-d180-4aee-9517-43214f396609',
+            nickname: 'Java',
+        },
+        {
+            id: 3,
+            code: '03f6f520-d180-4aee-9517-43214f396609',
+            nickname: 'Alchie',
+        },
+    ],
 };
