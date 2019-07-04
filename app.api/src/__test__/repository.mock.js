@@ -44,6 +44,7 @@ export const makeRepository = entityName => {
             id: 10,
             ...data,
         })),
+        createQueryBuilder: jest.fn(),
     };
 };
 

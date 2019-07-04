@@ -9,14 +9,14 @@ export class CodeId {
         this.entities = {};
     }
 
-    addCode(code, entity) {
+    addCode(code, databaseEntity) {
         if (this.codeToId[code]) {
             return;
         }
 
-        const entityName = entity.options.name;
+        const entityName = databaseEntity.options.name;
 
-        this.entities[entityName] = entity;
+        this.entities[entityName] = databaseEntity;
         this.codeToGet[entityName] = this.codeToGet[entityName] || [];
         this.codeToGet[entityName].push(code);
     }
@@ -33,7 +33,7 @@ export class CodeId {
                 return repository
                     .find({
                         where: { code: In(this.codeToGet[entityName]) },
-                        // select: ['id', 'code'],
+                        select: ['id', 'code'],
                     })
                     .then(items => {
                         items.forEach(item => {

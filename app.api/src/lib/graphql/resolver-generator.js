@@ -188,14 +188,17 @@ export default class ResolverGenerator {
                 // translate all single-reference codes to ids
                 for (let i = 0; i < singleReferences.length; i += 1) {
                     const {
-                        fieldName,
-                        databaseEntity: referenceDatabaseEntity,
+                        referenceFieldName,
+                        referenceDatabaseEntity,
                     } = this.getReferenceAttributes(
                         singleReferences[i],
                         databaseEntityManager,
                         entity,
                     );
-                    codeToId.addCode(data[fieldName], referenceDatabaseEntity);
+                    codeToId.addCode(
+                        data[referenceFieldName],
+                        referenceDatabaseEntity,
+                    );
                 }
 
                 await codeToId.obtain();
@@ -386,9 +389,9 @@ export default class ResolverGenerator {
         for (let i = 0; i < references.length; i += 1) {
             const referenceField = references[i];
             const {
-                fieldName: referenceFieldName,
-                databaseEntity: referenceDatabaseEntity,
-                tableName: referenceTableName,
+                referenceFieldName,
+                referenceTableName,
+                referencedDatabaseEntity,
             } = this.getReferenceAttributes(
                 referenceField,
                 databaseEntityManager,
@@ -396,61 +399,68 @@ export default class ResolverGenerator {
             );
 
             if (referenceFieldName in data) {
-                // const refTableEntityName = getRefName(entity, referenceField);
-
-                // const refTableDBEntity = await entityManager.getByName(
-                //     refTableEntityName,
+                // const repository = connection.getRepository(
+                //     referenceDatabaseEntity,
+                // );
+                // const queryBuilder = repository.createQueryBuilder(
+                //     referenceTableName,
                 // );
 
-                const repository = connection.getRepository(
-                    referenceDatabaseEntity,
-                );
-                const queryBuilder = repository.createQueryBuilder(
-                    referenceTableName,
-                );
-
-                const values = data[referenceField.name];
+                const values = data[referenceFieldName];
                 let ids = [];
 
-                if (_.iane(values)) {
-                    const refEntityName = schemaProvider.getReferenceFieldName(
-                        referenceField,
+                if (Array.isArray(values) && values.length) {
+                    const codeToId = new CodeId({
+                        connection,
+                    });
+                    values.forEach(code =>
+                        codeToId.addCode(code, referencedDatabaseEntity),
                     );
-                    const refDBEntity = await entityManager.getByName(
-                        refEntityName,
-                    );
-                    // todo: use connection here
-                    const repo = getRepository(refDBEntity);
-                    const qb = repo.createQueryBuilder(refEntityName);
+
+                    await codeToId.obtain();
+
+                    console.log(codeToId);
+
+                    // const refEntityName = schemaProvider.getReferenceFieldName(
+                    //     referenceField,
+                    // );
+                    // const refDBEntity = await entityManager.getByName(
+                    //     refEntityName,
+                    // );
+                    // // todo: use connection here
+                    // const repo = getRepository(refDBEntity);
+                    // const qb = repo.createQueryBuilder(refEntityName);
+
+                    // >>>
 
                     // todo: optimise: get code and id only!
-                    ids = (await qb
-                        .where({
-                            code: In(values),
-                        })
-                        .getMany()).map(item => item.id);
+                    // ids = (await qb
+                    //     .where({
+                    //         code: In(values),
+                    //     })
+                    //     .getMany()).map(item => item.id);
                 }
 
-                // delete all
-                await queryBuilder
-                    .delete()
-                    .from(refTableDBEntity)
-                    .where('self = :id', { id })
-                    .execute();
-
-                // and re-create
-                if (_.iane(ids)) {
-                    await queryBuilder
-                        .insert()
-                        .into(refTableDBEntity)
-                        .values(
-                            ids.map(relId => ({
-                                self: id,
-                                rel: relId,
-                            })),
-                        )
-                        .execute();
-                }
+                // // delete all
+                // await queryBuilder
+                //     .delete()
+                //     .from(refTableDBEntity)
+                //     .where('self = :id', { id })
+                //     .execute();
+                //
+                // // and re-create
+                // if (_.iane(ids)) {
+                //     await queryBuilder
+                //         .insert()
+                //         .into(refTableDBEntity)
+                //         .values(
+                //             ids.map(relId => ({
+                //                 self: id,
+                //                 rel: relId,
+                //             })),
+                //         )
+                //         .execute();
+                // }
             }
         }
     }
@@ -732,21 +742,33 @@ export default class ResolverGenerator {
         databaseEntityManager,
         entity,
     ) {
-        const fieldName = referenceField.getName();
+        // the name of the field we use to access this relation (e.g. "person" or "pets")
+        const referenceFieldName = referenceField.getName();
+        // the database entity name, which we make a reference to (e.g. "eq_person" or "eq_pet")
         const referencedEntityName = referenceField.getReferencedEntityName();
-        const databaseEntity = databaseEntityManager.getByName(
+        // the entity itself
+        const referencedDatabaseEntity = databaseEntityManager.getByName(
             referencedEntityName,
         );
 
-        let tableName = null;
+        // only for multiple
+        // a table we use to store multiple references (e.g. "eq_person_2_pet")
+        let referenceTableName = null;
+        // a database entity that is replresented by this table
+        let referenceDatabaseEntity = null;
         if (referenceField.isMultiple()) {
-            tableName = databaseEntityManager.constructor.getName(
+            referenceTableName = databaseEntityManager.constructor.getName(
                 entity,
                 referenceField,
             );
         }
 
-        return { fieldName, databaseEntity, tableName };
+        return {
+            referenceFieldName,
+            referencedDatabaseEntity,
+            referenceTableName,
+            referenceDatabaseEntity,
+        };
     }
 
     static getSingleReferences(entity) {
