@@ -178,9 +178,7 @@ export default class ResolverGenerator {
 
             data = safeData;
 
-            const singleReferences = entity
-                .getFields()
-                .filter(field => field.isReference() && !field.isMultiple());
+            const singleReferences = this.getSingleReferences(entity);
 
             await this.wrap(async () => {
                 const codeToId = new CodeId({
@@ -195,6 +193,7 @@ export default class ResolverGenerator {
                     } = this.getReferenceAttributes(
                         singleReferences[i],
                         databaseEntityManager,
+                        entity,
                     );
                     codeToId.addCode(data[fieldName], referenceDatabaseEntity);
                 }
@@ -228,13 +227,14 @@ export default class ResolverGenerator {
                 }
 
                 await repository.save(dbItem);
-                // await this.managerMultipleReferences(
-                //     entity,
-                //     dbItem.id,
-                //     data,
-                //     schemaProvider,
-                //     entityManager,
-                // );
+                await this.managerMultipleReferences({
+                    entity,
+                    schema,
+                    databaseEntityManager,
+                    connection,
+                    id: dbItem.id,
+                    data,
+                });
 
                 result.code = code;
                 result.data = this.convertToPlain(dbItem, entity);
@@ -372,41 +372,49 @@ export default class ResolverGenerator {
         };
     }
 
-    static async managerMultipleReferences(
+    static async managerMultipleReferences({
         entity,
+        schema,
+        databaseEntityManager,
+        connection,
         id,
         data,
-        schemaProvider,
-        entityManager,
-    ) {
-        // get all multiple references
-        const refs = entity.schema
-            .map(field =>
-                schemaProvider.isMultipleField(field) &&
-                _.isne(schemaProvider.getReferenceFieldName(field))
-                    ? field
-                    : null,
-            )
-            .filter(x => x);
+    }) {
+        const references = this.getMultipleReferences(entity);
 
         // check if something is in data
-        for (let i = 0; i < refs.length; i++) {
-            const field = refs[i];
-            if (field.name in data) {
-                const refTableEntityName = getRefName(entity, field);
-                const refTableDBEntity = await entityManager.getByName(
-                    refTableEntityName,
+        for (let i = 0; i < references.length; i += 1) {
+            const referenceField = references[i];
+            const {
+                fieldName: referenceFieldName,
+                databaseEntity: referenceDatabaseEntity,
+                tableName: referenceTableName,
+            } = this.getReferenceAttributes(
+                referenceField,
+                databaseEntityManager,
+                entity,
+            );
+
+            if (referenceFieldName in data) {
+                // const refTableEntityName = getRefName(entity, referenceField);
+
+                // const refTableDBEntity = await entityManager.getByName(
+                //     refTableEntityName,
+                // );
+
+                const repository = connection.getRepository(
+                    referenceDatabaseEntity,
+                );
+                const queryBuilder = repository.createQueryBuilder(
+                    referenceTableName,
                 );
 
-                const rrepo = getRepository(refTableDBEntity);
-                const rqb = rrepo.createQueryBuilder(refTableDBEntity);
-
-                const values = data[field.name];
+                const values = data[referenceField.name];
                 let ids = [];
 
                 if (_.iane(values)) {
                     const refEntityName = schemaProvider.getReferenceFieldName(
-                        field,
+                        referenceField,
                     );
                     const refDBEntity = await entityManager.getByName(
                         refEntityName,
@@ -424,7 +432,7 @@ export default class ResolverGenerator {
                 }
 
                 // delete all
-                await rqb
+                await queryBuilder
                     .delete()
                     .from(refTableDBEntity)
                     .where('self = :id', { id })
@@ -432,7 +440,7 @@ export default class ResolverGenerator {
 
                 // and re-create
                 if (_.iane(ids)) {
-                    await rqb
+                    await queryBuilder
                         .insert()
                         .into(refTableDBEntity)
                         .values(
@@ -719,13 +727,37 @@ export default class ResolverGenerator {
         return { limit, offset };
     }
 
-    static getReferenceAttributes(reference, databaseEntityManager) {
-        const fieldName = reference.getName();
-        const referencedEntityName = reference.getReferencedEntityName();
+    static getReferenceAttributes(
+        referenceField,
+        databaseEntityManager,
+        entity,
+    ) {
+        const fieldName = referenceField.getName();
+        const referencedEntityName = referenceField.getReferencedEntityName();
         const databaseEntity = databaseEntityManager.getByName(
             referencedEntityName,
         );
 
-        return { fieldName, databaseEntity };
+        let tableName = null;
+        if (referenceField.isMultiple()) {
+            tableName = databaseEntityManager.constructor.getName(
+                entity,
+                referenceField,
+            );
+        }
+
+        return { fieldName, databaseEntity, tableName };
+    }
+
+    static getSingleReferences(entity) {
+        return entity
+            .getFields()
+            .filter(field => field.isReference() && !field.isMultiple());
+    }
+
+    static getMultipleReferences(entity) {
+        return entity
+            .getFields()
+            .filter(field => field.isReference() && field.isMultiple());
     }
 }

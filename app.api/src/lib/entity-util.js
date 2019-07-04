@@ -12,6 +12,12 @@ export const getTableName = entity => {
     );
 };
 
+/**
+ * @deprecated
+ * @param entity
+ * @param field
+ * @returns {string}
+ */
 export const getRefName = (entity, field) => {
     return `${entity.name}_2_${field.name}`;
 };
