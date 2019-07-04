@@ -230,9 +230,8 @@ export default class ResolverGenerator {
                 }
 
                 await repository.save(dbItem);
-                await this.managerMultipleReferences({
+                await this.manageMultipleReferences({
                     entity,
-                    schema,
                     databaseEntityManager,
                     connection,
                     id: dbItem.id,
@@ -375,9 +374,8 @@ export default class ResolverGenerator {
         };
     }
 
-    static async managerMultipleReferences({
+    static async manageMultipleReferences({
         entity,
-        schema,
         databaseEntityManager,
         connection,
         id,
@@ -385,7 +383,6 @@ export default class ResolverGenerator {
     }) {
         const references = this.getMultipleReferences(entity);
 
-        // check if something is in data
         for (let i = 0; i < references.length; i += 1) {
             const referenceField = references[i];
             const {
@@ -400,7 +397,7 @@ export default class ResolverGenerator {
             );
 
             if (referenceFieldName in data) {
-                let ids = [];
+                const ids = [];
                 const values = data[referenceFieldName];
 
                 if (Array.isArray(values) && values.length) {
@@ -414,25 +411,6 @@ export default class ResolverGenerator {
                     await codeToId.obtain();
 
                     values.forEach(code => ids.push(codeToId.getId(code)));
-
-                    // const refEntityName = schemaProvider.getReferenceFieldName(
-                    //     referenceField,
-                    // );
-                    // const refDBEntity = await entityManager.getByName(
-                    //     refEntityName,
-                    // );
-                    // // todo: use connection here
-                    // const repo = getRepository(refDBEntity);
-                    // const qb = repo.createQueryBuilder(refEntityName);
-
-                    // >>>
-
-                    // todo: optimise: get code and id only!
-                    // ids = (await qb
-                    //     .where({
-                    //         code: In(values),
-                    //     })
-                    //     .getMany()).map(item => item.id);
                 }
 
                 const referenceRepository = connection.getRepository(
