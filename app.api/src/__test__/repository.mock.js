@@ -64,6 +64,7 @@ export const makeRepository = entityName => {
             ...data,
         })),
         createQueryBuilder: () => queryBuilder,
+        queryBuilder,
     };
 };
 
@@ -82,6 +83,27 @@ export const makeConnection = () => {
         getRepository,
         getRepositoryByEntityName: name => {
             return getRepository({ options: { name } });
+        },
+        cleanup: () => {
+            Object.keys(repositories).forEach(entityName => {
+                const repository = repositories[entityName];
+                Object.keys(repository).forEach(memberKey => {
+                    const member = repository[memberKey];
+                    if (typeof member === 'function' && 'mockReset' in member) {
+                        member.mockClear();
+                    } else {
+                        Object.keys(member).forEach(subKey => {
+                            const subMember = member[subKey];
+                            if (
+                                typeof subMember === 'function' &&
+                                'mockReset' in subMember
+                            ) {
+                                subMember.mockClear();
+                            }
+                        });
+                    }
+                });
+            });
         },
     };
 };

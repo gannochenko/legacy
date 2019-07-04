@@ -28,9 +28,7 @@ describe('GQL Resolver Generator', () => {
         databaseManager = new DatabaseEntityManager(schema);
 
         connection = makeConnection();
-        repository = connection.getRepository({
-            options: { name: 'important_person' },
-        });
+        repository = connection.getRepositoryByEntityName('important_person');
 
         resolvers = await ResolverGenerator.make(
             schema,
@@ -38,8 +36,9 @@ describe('GQL Resolver Generator', () => {
             connection,
         );
     });
-    // beforeEach(async () => {
-    // });
+    beforeEach(async () => {
+        connection.cleanup();
+    });
 
     it('get(): should produce the resolver', async () => {
         expect(resolvers[0].Query.ImportantPersonGet).toBeInstanceOf(Function);
@@ -269,12 +268,17 @@ describe('GQL Resolver Generator', () => {
             {},
         );
         expect(result.errors).toHaveLength(0);
-        expect(result.code).toHaveLength(36);
+        expect(result.code).toHaveLength(36); // assigns a new code
         expect(result.data).toMatchObject({
             full_name: 'hello!',
             has_pets: false,
             partner: 1,
         });
+
+        console.log(
+            connection.getRepositoryByEntityName('important_person').find.mock
+                .calls,
+        );
     });
 
     it('put(): should update an existing item', async () => {
@@ -297,7 +301,7 @@ describe('GQL Resolver Generator', () => {
         // todo
     });
 
-    it('put(): should assign a valid uuid code for a new item', async () => {
+    it('put(): should not touch any multiple relations if there were no changes', async () => {
         // todo
     });
 
