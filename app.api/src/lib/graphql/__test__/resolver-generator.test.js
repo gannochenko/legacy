@@ -252,15 +252,6 @@ describe('GQL Resolver Generator', () => {
     it('put(): should create a new item', async () => {
         const put = resolvers[0].Mutation.ImportantPersonPut;
 
-        connection
-            .getRepositoryByEntityName('important_person')
-            .find.mockImplementationOnce(async ({ where } = {}) => {
-                const codes = where.code._value;
-                return mockedData.important_person.filter(item =>
-                    codes.includes(item.code),
-                );
-            });
-
         let result = await put(
             {},
             {

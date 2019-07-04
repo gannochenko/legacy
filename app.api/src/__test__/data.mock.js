@@ -31,7 +31,7 @@ export default {
             partner: null,
         },
     ],
-    pets: [
+    pet: [
         {
             id: 1,
             code: '01f6f520-d180-4aee-9517-43214f396609',

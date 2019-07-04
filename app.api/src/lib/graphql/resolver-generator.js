@@ -189,7 +189,7 @@ export default class ResolverGenerator {
                 for (let i = 0; i < singleReferences.length; i += 1) {
                     const {
                         referenceFieldName,
-                        referenceDatabaseEntity,
+                        referencedDatabaseEntity,
                     } = this.getReferenceAttributes(
                         singleReferences[i],
                         databaseEntityManager,
@@ -197,7 +197,7 @@ export default class ResolverGenerator {
                     );
                     codeToId.addCode(
                         data[referenceFieldName],
-                        referenceDatabaseEntity,
+                        referencedDatabaseEntity,
                     );
                 }
 
@@ -391,6 +391,7 @@ export default class ResolverGenerator {
             const {
                 referenceFieldName,
                 referenceTableName,
+                referenceDatabaseEntity,
                 referencedDatabaseEntity,
             } = this.getReferenceAttributes(
                 referenceField,
@@ -399,15 +400,8 @@ export default class ResolverGenerator {
             );
 
             if (referenceFieldName in data) {
-                // const repository = connection.getRepository(
-                //     referenceDatabaseEntity,
-                // );
-                // const queryBuilder = repository.createQueryBuilder(
-                //     referenceTableName,
-                // );
-
-                const values = data[referenceFieldName];
                 let ids = [];
+                const values = data[referenceFieldName];
 
                 if (Array.isArray(values) && values.length) {
                     const codeToId = new CodeId({
@@ -419,7 +413,7 @@ export default class ResolverGenerator {
 
                     await codeToId.obtain();
 
-                    console.log(codeToId);
+                    values.forEach(code => ids.push(codeToId.getId(code)));
 
                     // const refEntityName = schemaProvider.getReferenceFieldName(
                     //     referenceField,
@@ -441,26 +435,33 @@ export default class ResolverGenerator {
                     //     .getMany()).map(item => item.id);
                 }
 
-                // // delete all
-                // await queryBuilder
-                //     .delete()
-                //     .from(refTableDBEntity)
-                //     .where('self = :id', { id })
-                //     .execute();
-                //
-                // // and re-create
-                // if (_.iane(ids)) {
-                //     await queryBuilder
-                //         .insert()
-                //         .into(refTableDBEntity)
-                //         .values(
-                //             ids.map(relId => ({
-                //                 self: id,
-                //                 rel: relId,
-                //             })),
-                //         )
-                //         .execute();
-                // }
+                const referenceRepository = connection.getRepository(
+                    referenceDatabaseEntity,
+                );
+                const referenceQueryBuilder = referenceRepository.createQueryBuilder(
+                    referenceTableName,
+                );
+
+                // delete all
+                await referenceQueryBuilder
+                    .delete()
+                    .from(referenceTableName)
+                    .where('self = :id', { id })
+                    .execute();
+
+                // and re-create
+                if (ids.length) {
+                    await referenceQueryBuilder
+                        .insert()
+                        .into(referenceTableName)
+                        .values(
+                            ids.map(referenceId => ({
+                                self: id,
+                                rel: referenceId,
+                            })),
+                        )
+                        .execute();
+                }
             }
         }
     }
@@ -757,9 +758,17 @@ export default class ResolverGenerator {
         // a database entity that is replresented by this table
         let referenceDatabaseEntity = null;
         if (referenceField.isMultiple()) {
-            referenceTableName = databaseEntityManager.constructor.getName(
+            referenceTableName = databaseEntityManager.constructor.getReferenceTableName(
                 entity,
                 referenceField,
+            );
+
+            // we need to get a database entity by its name
+            referenceDatabaseEntity = databaseEntityManager.getByName(
+                databaseEntityManager.constructor.getName(
+                    entity,
+                    referenceField,
+                ),
             );
         }
 

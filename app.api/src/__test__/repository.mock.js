@@ -14,6 +14,16 @@ const filterKeys = (result, select) => {
 export const makeRepository = entityName => {
     const data = _.cloneDeep(mockData[entityName]);
 
+    const queryBuilder = {
+        delete: jest.fn(() => queryBuilder),
+        from: () => queryBuilder,
+        where: jest.fn(() => queryBuilder),
+        insert: () => queryBuilder,
+        into: () => queryBuilder,
+        values: jest.fn(() => queryBuilder),
+        execute: () => {},
+    };
+
     return {
         findOne: jest.fn(async (parameters = {}) => {
             const { where, select } = parameters;
@@ -31,7 +41,16 @@ export const makeRepository = entityName => {
         }),
         find: jest.fn(async (parameters = {}) => {
             const { where, select, order, skip, take } = parameters;
-            const dataPart = _.cloneDeep(data).splice(skip, take);
+            let dataPart = _.cloneDeep(data);
+            if (skip !== undefined && take !== undefined) {
+                dataPart = dataPart.splice(skip, take);
+            }
+
+            if ('code' in where && '_value' in where.code) {
+                dataPart = dataPart.filter(item =>
+                    where.code._value.includes(item.code),
+                );
+            }
 
             return filterKeys(dataPart, select);
         }),
@@ -44,7 +63,7 @@ export const makeRepository = entityName => {
             id: 10,
             ...data,
         })),
-        createQueryBuilder: jest.fn(),
+        createQueryBuilder: () => queryBuilder,
     };
 };
 
