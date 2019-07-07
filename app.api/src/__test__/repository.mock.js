@@ -18,10 +18,10 @@ export const makeRepository = entityName => {
         delete: jest.fn(() => queryBuilder),
         from: () => queryBuilder,
         where: jest.fn(() => queryBuilder),
-        insert: () => queryBuilder,
+        insert: jest.fn(() => queryBuilder),
         into: () => queryBuilder,
         values: jest.fn(() => queryBuilder),
-        execute: () => {},
+        execute: jest.fn(() => {}),
     };
 
     return {
@@ -80,6 +80,7 @@ export const makeConnection = () => {
     });
 
     return {
+        getCurrentRepositories: () => repositories,
         getRepository,
         getRepositoryByEntityName: name => {
             return getRepository({ options: { name } });

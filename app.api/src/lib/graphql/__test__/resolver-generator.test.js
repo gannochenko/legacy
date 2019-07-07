@@ -275,10 +275,71 @@ describe('GQL Resolver Generator', () => {
             partner: 1,
         });
 
-        console.log(
-            connection.getRepositoryByEntityName('important_person').find.mock
-                .calls,
+        const importantPersonRepository = connection.getRepositoryByEntityName(
+            'important_person',
         );
+
+        // maps codes to ids on person repo (because of that "partner" field set)
+        let codeToIdCall = importantPersonRepository.find.mock.calls[0];
+        expect(codeToIdCall).toBeDefined();
+        expect(codeToIdCall[0].where.code._value).toEqual([
+            '4ef6f520-d180-4aee-9517-43214f396609',
+        ]);
+        expect(codeToIdCall[0].select).toEqual(['id', 'code']);
+
+        // calls create() to make a new item
+        const createCall = importantPersonRepository.create.mock.calls[0];
+        expect(createCall[0]).toMatchObject({
+            full_name: 'hello!',
+            has_pets: false,
+            pets: [
+                '01f6f520-d180-4aee-9517-43214f396609',
+                '02f6f520-d180-4aee-9517-43214f396609',
+            ],
+            partner: 1,
+        });
+
+        // calls save
+        const saveCall = importantPersonRepository.save.mock.calls[0];
+        expect(saveCall[0]).toMatchObject({
+            full_name: 'hello!',
+            has_pets: false,
+            pets: [
+                '01f6f520-d180-4aee-9517-43214f396609',
+                '02f6f520-d180-4aee-9517-43214f396609',
+            ],
+            partner: 1,
+        });
+
+        // now for "pet" entity
+        const petRepository = connection.getRepositoryByEntityName('pet');
+
+        // maps codes to ids on pet repo (because of that "pets" field set)
+        codeToIdCall = petRepository.find.mock.calls[0];
+        expect(codeToIdCall).toBeDefined();
+        expect(codeToIdCall[0].where.code._value).toEqual([
+            '01f6f520-d180-4aee-9517-43214f396609',
+            '02f6f520-d180-4aee-9517-43214f396609',
+        ]);
+        expect(codeToIdCall[0].select).toEqual(['id', 'code']);
+
+        //console.log(connection.getCurrentRepositories());
+        const petsRepository = connection.getRepositoryByEntityName(
+            'eq_ref_ba4ed80327568d335915e4452eb0703a',
+        );
+        const petsRepositoryQueryBuilder = petsRepository.queryBuilder;
+
+        expect(petsRepositoryQueryBuilder.delete.mock.calls).toHaveLength(1);
+        expect(petsRepositoryQueryBuilder.insert.mock.calls).toHaveLength(1);
+        expect(
+            petsRepositoryQueryBuilder.values.mock.calls[0][0],
+        ).toMatchObject([
+            { self: undefined, rel: 1 },
+            { self: undefined, rel: 2 },
+        ]);
+
+        // two times - first for delete(), second - for insert()
+        expect(petsRepositoryQueryBuilder.execute.mock.calls).toHaveLength(2);
     });
 
     it('put(): should update an existing item', async () => {
