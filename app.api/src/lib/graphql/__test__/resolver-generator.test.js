@@ -287,7 +287,7 @@ describe('GQL Resolver Generator', () => {
         ]);
         expect(codeToIdCall[0].select).toEqual(['id', 'code']);
 
-        // calls create() to make a new item
+        // calls create to make a new item
         const createCall = importantPersonRepository.create.mock.calls[0];
         expect(createCall[0]).toMatchObject({
             full_name: 'hello!',
@@ -298,6 +298,9 @@ describe('GQL Resolver Generator', () => {
             ],
             partner: 1,
         });
+
+        // does not call findOne
+        expect(importantPersonRepository.findOne.mock.calls).toHaveLength(0);
 
         // calls save
         const saveCall = importantPersonRepository.save.mock.calls[0];
@@ -388,7 +391,23 @@ describe('GQL Resolver Generator', () => {
     });
 
     it('put(): should not allow to set the code from the data argument', async () => {
-        // todo
+        const put = resolvers[0].Mutation.ImportantPersonPut;
+
+        let result = await put(
+            {},
+            {
+                data: {
+                    code: '4ef6f520-d180-4aee-9517-43214f396609',
+                    full_name: 'hello!',
+                },
+            },
+            null,
+            {},
+        );
+
+        expect(result.errors).toHaveLength(0);
+        expect(result.data).toMatchObject({ full_name: 'hello!' });
+        expect(result.code).not.toEqual('4ef6f520-d180-4aee-9517-43214f396609');
     });
 
     it('put(): should not accept invalid data for saving', async () => {
