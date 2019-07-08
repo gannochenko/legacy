@@ -156,7 +156,7 @@ export default class ResolverGenerator {
             delete data.code; // there is no way to set the code manually
 
             let isNewItem = false;
-            if (!_.isne(code)) {
+            if (typeof code !== 'string' || !code.length) {
                 code = uuid();
                 data.code = code;
                 isNewItem = true;
@@ -211,35 +211,38 @@ export default class ResolverGenerator {
                     );
                 }
 
-                let dbItem = null;
+                let databaseItem = null;
                 if (isNewItem) {
-                    dbItem = repository.create(data);
+                    databaseItem = repository.create(data);
                 } else {
                     // find id by code
-                    dbItem = await repository.findOne({
-                        code: code.trim(),
+                    databaseItem = await repository.findOne({
+                        where: {
+                            code: code.trim(),
+                        },
+                        select: ['id'],
                     });
-                    if (!dbItem) {
+                    if (!databaseItem) {
                         result.errors.push({
                             code: 'not_found',
                             message: 'Element not found',
                         });
                         return result;
                     }
-                    repository.merge(dbItem, data);
+                    repository.merge(databaseItem, data);
                 }
 
-                await repository.save(dbItem);
+                await repository.save(databaseItem);
                 await this.manageMultipleReferences({
                     entity,
                     databaseEntityManager,
                     connection,
-                    id: dbItem.id,
+                    id: databaseItem.id,
                     data,
                 });
 
                 result.code = code;
-                result.data = this.convertToPlain(dbItem, entity);
+                result.data = this.convertToPlain(databaseItem, entity);
             }, result.errors);
 
             return result;

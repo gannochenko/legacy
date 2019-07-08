@@ -26,7 +26,7 @@ export const makeRepository = entityName => {
 
     return {
         findOne: jest.fn(async (parameters = {}) => {
-            const { where, select } = parameters;
+            const { where = {}, select = [] } = parameters;
 
             let result = null;
             if (where.code) {
@@ -58,7 +58,9 @@ export const makeRepository = entityName => {
             return data.length;
         }),
         create: jest.fn(data => data),
-        merge: jest.fn(),
+        merge: jest.fn((item, data) => {
+            Object.assign(item, data);
+        }),
         save: jest.fn(data => ({
             id: 10,
             ...data,

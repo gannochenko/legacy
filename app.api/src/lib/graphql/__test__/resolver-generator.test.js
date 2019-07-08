@@ -323,7 +323,6 @@ describe('GQL Resolver Generator', () => {
         ]);
         expect(codeToIdCall[0].select).toEqual(['id', 'code']);
 
-        //console.log(connection.getCurrentRepositories());
         const petsRepository = connection.getRepositoryByEntityName(
             'eq_ref_ba4ed80327568d335915e4452eb0703a',
         );
@@ -343,7 +342,49 @@ describe('GQL Resolver Generator', () => {
     });
 
     it('put(): should update an existing item', async () => {
-        // todo
+        const put = resolvers[0].Mutation.ImportantPersonPut;
+
+        let result = await put(
+            {},
+            {
+                code: '4ef6f520-d180-4aee-9517-43214f396609',
+                data: {
+                    full_name: 'hello!',
+                },
+            },
+            null,
+            {},
+        );
+
+        expect(result.errors).toHaveLength(0);
+        expect(result.code).toEqual('4ef6f520-d180-4aee-9517-43214f396609');
+        expect(result.data).toMatchObject({ full_name: 'hello!', id: 1 });
+
+        const importantPersonRepository = connection.getRepositoryByEntityName(
+            'important_person',
+        );
+
+        // check that findOne was called
+        expect(importantPersonRepository.findOne.mock.calls).toHaveLength(1);
+        expect(
+            importantPersonRepository.findOne.mock.calls[0][0],
+        ).toMatchObject({
+            where: { code: '4ef6f520-d180-4aee-9517-43214f396609' },
+            select: ['id'],
+        });
+
+        // check that create was not called
+        expect(importantPersonRepository.create.mock.calls).toHaveLength(0);
+
+        // check that merge was called
+        expect(importantPersonRepository.merge.mock.calls).toHaveLength(1);
+
+        // check that save was called
+        const saveCall = importantPersonRepository.save.mock.calls[0];
+        expect(saveCall[0]).toMatchObject({
+            id: 1,
+            full_name: 'hello!',
+        });
     });
 
     it('put(): should not allow to set the code from the data argument', async () => {
