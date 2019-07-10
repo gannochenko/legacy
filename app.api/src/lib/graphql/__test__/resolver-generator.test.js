@@ -256,12 +256,7 @@ describe('GQL Resolver Generator', () => {
             {
                 data: {
                     full_name: 'hello!',
-                    partner: '4ef6f520-d180-4aee-9517-43214f396609',
                     has_pets: false,
-                    pets: [
-                        '01f6f520-d180-4aee-9517-43214f396609',
-                        '02f6f520-d180-4aee-9517-43214f396609',
-                    ],
                 },
             },
             null,
@@ -272,76 +267,31 @@ describe('GQL Resolver Generator', () => {
         expect(result.data).toMatchObject({
             full_name: 'hello!',
             has_pets: false,
-            partner: 1,
         });
 
         const importantPersonRepository = connection.getRepositoryByEntityName(
             'important_person',
         );
 
-        // maps codes to ids on person repo (because of that "partner" field set)
-        let codeToIdCall = importantPersonRepository.find.mock.calls[0];
-        expect(codeToIdCall).toBeDefined();
-        expect(codeToIdCall[0].where.code._value).toEqual([
-            '4ef6f520-d180-4aee-9517-43214f396609',
-        ]);
-        expect(codeToIdCall[0].select).toEqual(['id', 'code']);
-
         // calls create to make a new item
         const createCall = importantPersonRepository.create.mock.calls[0];
         expect(createCall[0]).toMatchObject({
             full_name: 'hello!',
             has_pets: false,
-            pets: [
-                '01f6f520-d180-4aee-9517-43214f396609',
-                '02f6f520-d180-4aee-9517-43214f396609',
-            ],
-            partner: 1,
         });
 
         // does not call findOne
         expect(importantPersonRepository.findOne.mock.calls).toHaveLength(0);
+
+        // does not call merge
+        expect(importantPersonRepository.merge.mock.calls).toHaveLength(0);
 
         // calls save
         const saveCall = importantPersonRepository.save.mock.calls[0];
         expect(saveCall[0]).toMatchObject({
             full_name: 'hello!',
             has_pets: false,
-            pets: [
-                '01f6f520-d180-4aee-9517-43214f396609',
-                '02f6f520-d180-4aee-9517-43214f396609',
-            ],
-            partner: 1,
         });
-
-        // now for "pet" entity
-        const petRepository = connection.getRepositoryByEntityName('pet');
-
-        // maps codes to ids on pet repo (because of that "pets" field set)
-        codeToIdCall = petRepository.find.mock.calls[0];
-        expect(codeToIdCall).toBeDefined();
-        expect(codeToIdCall[0].where.code._value).toEqual([
-            '01f6f520-d180-4aee-9517-43214f396609',
-            '02f6f520-d180-4aee-9517-43214f396609',
-        ]);
-        expect(codeToIdCall[0].select).toEqual(['id', 'code']);
-
-        const petsRepository = connection.getRepositoryByEntityName(
-            'eq_ref_ba4ed80327568d335915e4452eb0703a',
-        );
-        const petsRepositoryQueryBuilder = petsRepository.queryBuilder;
-
-        expect(petsRepositoryQueryBuilder.delete.mock.calls).toHaveLength(1);
-        expect(petsRepositoryQueryBuilder.insert.mock.calls).toHaveLength(1);
-        expect(
-            petsRepositoryQueryBuilder.values.mock.calls[0][0],
-        ).toMatchObject([
-            { self: undefined, rel: 1 },
-            { self: undefined, rel: 2 },
-        ]);
-
-        // two times - first for delete(), second - for insert()
-        expect(petsRepositoryQueryBuilder.execute.mock.calls).toHaveLength(2);
     });
 
     it('put(): should update an existing item', async () => {
@@ -411,22 +361,145 @@ describe('GQL Resolver Generator', () => {
     });
 
     it('put(): should not accept invalid data for saving', async () => {
-        // todo
+        const put = resolvers[0].Mutation.ImportantPersonPut;
+
+        let result = await put(
+            {},
+            {
+                data: {},
+            },
+            null,
+            {},
+        );
+
+        expect(result.code).toEqual(null);
+        expect(result.data).toEqual({});
+        expect(result.errors).toMatchObject([
+            {
+                message: 'Full name is required',
+                code: 'validation',
+                reference: 'full_name',
+            },
+        ]);
     });
 
-    it('put(): should return an item only when it is asked', async () => {
-        // todo
-    });
+    // it('put(): should return an item only when it is asked', async () => {
+    //     // todo
+    // });
 
-    it('put(): should manage multiple relations', async () => {
-        // todo
+    it('put(): should manage relations', async () => {
+        const put = resolvers[0].Mutation.ImportantPersonPut;
+
+        let result = await put(
+            {},
+            {
+                data: {
+                    full_name: 'hello!',
+                    partner: '4ef6f520-d180-4aee-9517-43214f396609',
+                    pets: [
+                        '01f6f520-d180-4aee-9517-43214f396609',
+                        '02f6f520-d180-4aee-9517-43214f396609',
+                    ],
+                },
+            },
+            null,
+            {},
+        );
+
+        expect(result.errors).toHaveLength(0);
+        expect(result.data).toMatchObject({
+            full_name: 'hello!',
+            partner: 1,
+        });
+
+        const importantPersonRepository = connection.getRepositoryByEntityName(
+            'important_person',
+        );
+
+        // maps codes to ids on person repo (because of that "partner" field set)
+        let codeToIdCall = importantPersonRepository.find.mock.calls[0];
+        expect(codeToIdCall).toBeDefined();
+        expect(codeToIdCall[0].where.code._value).toEqual([
+            '4ef6f520-d180-4aee-9517-43214f396609',
+        ]);
+        expect(codeToIdCall[0].select).toEqual(['id', 'code']);
+
+        // now for "pet" entity
+        const petRepository = connection.getRepositoryByEntityName('pet');
+
+        // maps codes to ids on pet repo (because of that "pets" field set)
+        codeToIdCall = petRepository.find.mock.calls[0];
+        expect(codeToIdCall).toBeDefined();
+        expect(codeToIdCall[0].where.code._value).toEqual([
+            '01f6f520-d180-4aee-9517-43214f396609',
+            '02f6f520-d180-4aee-9517-43214f396609',
+        ]);
+        expect(codeToIdCall[0].select).toEqual(['id', 'code']);
+
+        const petsRepository = connection.getRepositoryByEntityName(
+            'eq_ref_ba4ed80327568d335915e4452eb0703a',
+        );
+        const petsRepositoryQueryBuilder = petsRepository.queryBuilder;
+
+        expect(petsRepositoryQueryBuilder.delete.mock.calls).toHaveLength(1);
+        expect(petsRepositoryQueryBuilder.insert.mock.calls).toHaveLength(1);
+        expect(
+            petsRepositoryQueryBuilder.values.mock.calls[0][0],
+        ).toMatchObject([
+            { self: undefined, rel: 1 },
+            { self: undefined, rel: 2 },
+        ]);
+
+        // two times - first for delete(), second - for insert()
+        expect(petsRepositoryQueryBuilder.execute.mock.calls).toHaveLength(2);
     });
 
     it('put(): should not touch any multiple relations if there were no changes', async () => {
-        // todo
+        const put = resolvers[0].Mutation.ImportantPersonPut;
+
+        let result = await put(
+            {},
+            {
+                data: {
+                    full_name: 'hello!',
+                },
+            },
+            null,
+            {},
+        );
+
+        // no change for a single relation
+        expect(result.data.partner).not.toBeDefined();
+
+        // no change for multiple relations
+        const petsRepository = connection.getRepositoryByEntityName(
+            'eq_ref_ba4ed80327568d335915e4452eb0703a',
+        );
+        const petsRepositoryQueryBuilder = petsRepository.queryBuilder;
+
+        expect(petsRepositoryQueryBuilder.delete.mock.calls).toHaveLength(0);
+        expect(petsRepositoryQueryBuilder.insert.mock.calls).toHaveLength(0);
     });
 
-    it('put(): should report when trying to update non-existing item', async () => {
-        // todo
+    it('put(): should return error when trying to update non-existing item', async () => {
+        const put = resolvers[0].Mutation.ImportantPersonPut;
+
+        let result = await put(
+            {},
+            {
+                code: 'missing-item',
+                data: {
+                    full_name: 'hello!',
+                },
+            },
+            null,
+            {},
+        );
+
+        expect(result.code).toEqual(null);
+        expect(result.data).toEqual({});
+        expect(result.errors).toMatchObject([
+            { code: 'not_found', message: 'Element not found' },
+        ]);
     });
 });

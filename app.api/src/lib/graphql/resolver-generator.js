@@ -195,10 +195,12 @@ export default class ResolverGenerator {
                         databaseEntityManager,
                         entity,
                     );
-                    codeToId.addCode(
-                        data[referenceFieldName],
-                        referencedDatabaseEntity,
-                    );
+                    if (referenceFieldName in data) {
+                        codeToId.addCode(
+                            data[referenceFieldName],
+                            referencedDatabaseEntity,
+                        );
+                    }
                 }
 
                 await codeToId.obtain();
@@ -206,9 +208,12 @@ export default class ResolverGenerator {
                 for (let i = 0; i < singleReferences.length; i += 1) {
                     const reference = singleReferences[i];
                     const referenceFieldName = reference.getName();
-                    data[referenceFieldName] = codeToId.getId(
-                        data[referenceFieldName],
-                    );
+
+                    if (referenceFieldName in data) {
+                        data[referenceFieldName] = codeToId.getId(
+                            data[referenceFieldName],
+                        );
+                    }
                 }
 
                 let databaseItem = null;
