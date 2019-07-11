@@ -254,6 +254,84 @@ export default class ResolverGenerator {
         };
     }
 
+    static makeDeleteForEntity(
+        entity,
+        schema,
+        databaseEntityManager,
+        connection,
+    ) {
+        const databaseEntity = databaseEntityManager.getByDefinition(entity);
+
+        return async (source, args) => {
+            const result = {
+                errors: [],
+                code: null,
+                data: {},
+            };
+
+            const { code } = args;
+
+            if (typeof code !== 'string' || !code.length) {
+                result.errors.push({
+                    code: 'illegal_code',
+                    message: 'Code is illegal',
+                });
+
+                return result;
+            }
+
+            const repository = connection.getRepository(databaseEntity);
+
+            const item = await repository.findOne({
+                where: { code: code.trim() },
+            });
+            if (!item) {
+                result.errors.push({
+                    code: 'not_found',
+                    message: 'Element not found',
+                });
+            } else {
+                const id = repository.getId(item);
+                await this.wrap(async () => {
+                    await repository.delete(id);
+                }, result.errors);
+
+                // drop reference data
+                const references = this.getMultipleReferences(entity);
+
+                for (let i = 0; i < references.length; i += 1) {
+                    const referenceField = references[i];
+                    const {
+                        referenceFieldName,
+                        referenceTableName,
+                        referenceDatabaseEntity,
+                        referencedDatabaseEntity,
+                    } = this.getReferenceAttributes(
+                        referenceField,
+                        databaseEntityManager,
+                        entity,
+                    );
+
+                    const referenceRepository = connection.getRepository(
+                        referenceDatabaseEntity,
+                    );
+                    const referenceQueryBuilder = referenceRepository.createQueryBuilder(
+                        referenceTableName,
+                    );
+
+                    // delete all
+                    await referenceQueryBuilder
+                        .delete()
+                        .from(referenceTableName)
+                        .where('self = :id', { id })
+                        .execute();
+                }
+            }
+
+            return result;
+        };
+    }
+
     /**
      *
      * @param entity
@@ -265,7 +343,6 @@ export default class ResolverGenerator {
     static makeForEntity(entity, schema, databaseEntityManager, connection) {
         const name = entity.getCamelName();
         return {
-            // process query - Get and Find
             Query: {
                 [`${name}Get`]: this.makeGetForEntity(
                     entity,
@@ -280,7 +357,6 @@ export default class ResolverGenerator {
                     connection,
                 ),
             },
-            // process mutation - Put and Delete
             Mutation: {
                 [`${name}Put`]: this.makePutForEntity(
                     entity,
@@ -288,88 +364,12 @@ export default class ResolverGenerator {
                     databaseEntityManager,
                     connection,
                 ),
-                [`${name}Delete`]: async (
-                    source,
-                    args,
-                    { dataSources },
-                    state,
-                ) => {
-                    const result = {
-                        errors: [],
-                        code: null,
-                        data: {},
-                    };
-
-                    let { code } = args;
-                    if (!_.isne(code)) {
-                        result.errors.push({
-                            code: 'illegal_code',
-                            message: 'Code is illegal',
-                        });
-                    }
-
-                    if (!result.errors.length) {
-                        // todo: use connection here
-                        const repo = getRepository(dbEntity);
-
-                        const items = await repo.find({ code: code.trim() });
-                        if (!_.iane(items)) {
-                            result.errors.push({
-                                code: 'not_found',
-                                message: 'Element not found',
-                            });
-                        } else {
-                            const item = items[0];
-                            const id = repo.getId(item);
-                            await this.wrap(async () => {
-                                await repo.delete(id);
-                            }, result.errors);
-
-                            // drop refs
-                            // get all multiple references
-                            const refs = entity.schema
-                                .map(field =>
-                                    schemaProvider.isMultipleField(field) &&
-                                    _.isne(
-                                        schemaProvider.getReferenceFieldName(
-                                            field,
-                                        ),
-                                    )
-                                        ? field
-                                        : null,
-                                )
-                                .filter(x => x);
-
-                            // check if something is in data
-                            for (let i = 0; i < refs.length; i++) {
-                                const field = refs[i];
-
-                                const refTableEntityName = getRefName(
-                                    entity,
-                                    field,
-                                );
-                                const refTableDBEntity = await entityManager.getByName(
-                                    refTableEntityName,
-                                );
-
-                                // todo: use connection here
-                                const rrepo = getRepository(refTableDBEntity);
-                                const rqb = rrepo.createQueryBuilder(
-                                    refTableDBEntity,
-                                );
-
-                                // delete all
-                                await rqb
-                                    .delete()
-                                    .from(refTableDBEntity)
-                                    .where('self = :id', { id })
-                                    .execute();
-                            }
-                        }
-                    }
-
-                    return result;
-                },
+                [`${name}Delete`]: this.makeDeleteForEntity(
+                    entity,
+                    schema,
+                    databaseEntityManager,
+                    connection,
+                ),
             },
             //// process reference traversal
             // [name]: this.createReferenceResolvers({
@@ -741,7 +741,7 @@ export default class ResolverGenerator {
         // only for multiple
         // a table we use to store multiple references (e.g. "eq_person_2_pet")
         let referenceTableName = null;
-        // a database entity that is replresented by this table
+        // a database entity that is represented by this table
         let referenceDatabaseEntity = null;
         if (referenceField.isMultiple()) {
             referenceTableName = databaseEntityManager.constructor.getReferenceTableName(

@@ -502,4 +502,46 @@ describe('GQL Resolver Generator', () => {
             { code: 'not_found', message: 'Element not found' },
         ]);
     });
+
+    it('delete(): should delete an element and all its multiple references', async () => {
+        const mutationDelete = resolvers[0].Mutation.ImportantPersonDelete;
+
+        let result = await mutationDelete(
+            {},
+            {
+                code: '4ef6f520-d180-4aee-9517-43214f396609',
+            },
+            null,
+            {},
+        );
+
+        console.log(result);
+    });
+
+    it('delete(): should return error if the code is not set', async () => {
+        const mutationDelete = resolvers[0].Mutation.ImportantPersonDelete;
+
+        let result = await mutationDelete({}, {}, null, {});
+
+        expect(result.errors).toMatchObject([
+            { code: 'illegal_code', message: 'Code is illegal' },
+        ]);
+    });
+
+    it('delete(): should return error if the element is originally missing', async () => {
+        const mutationDelete = resolvers[0].Mutation.ImportantPersonDelete;
+
+        let result = await mutationDelete(
+            {},
+            {
+                code: 'missing-item',
+            },
+            null,
+            {},
+        );
+
+        expect(result.errors).toMatchObject([
+            { code: 'not_found', message: 'Element not found' },
+        ]);
+    });
 });

@@ -65,6 +65,8 @@ export const makeRepository = entityName => {
             id: 10,
             ...data,
         })),
+        getId: jest.fn(() => {}),
+        delete: jest.fn(() => {}),
         createQueryBuilder: () => queryBuilder,
         queryBuilder,
     };
