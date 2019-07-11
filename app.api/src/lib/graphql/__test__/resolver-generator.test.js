@@ -174,6 +174,10 @@ describe('GQL Resolver Generator', () => {
         });
     });
 
+    it('find(): should process filter [todo]', async () => {
+        // todo
+    });
+
     it('find(): should control the maximum amount of items to return', async () => {
         const find = resolvers[0].Query.ImportantPersonFind;
 
@@ -383,9 +387,9 @@ describe('GQL Resolver Generator', () => {
         ]);
     });
 
-    // it('put(): should return an item only when it is asked', async () => {
-    //     // todo
-    // });
+    it('put(): should return an item only when it is asked [todo]', async () => {
+        // todo
+    });
 
     it('put(): should manage relations', async () => {
         const put = resolvers[0].Mutation.ImportantPersonPut;
