@@ -129,7 +129,7 @@ describe('GQL Resolver Generator', () => {
             makeAST('data', ['full_name']),
         );
 
-        expect(repository.find.mock.calls).toHaveLength(1);
+        expect(repository.find).toHaveBeenCalledTimes(1);
         expect(result.limit).toEqual(1);
         expect(result.offset).toEqual(1);
         expect(result.data).toHaveLength(1);
@@ -148,7 +148,7 @@ describe('GQL Resolver Generator', () => {
             makeAST('data', ['full_name']),
         );
 
-        expect(repository.find.mock.calls).toHaveLength(1);
+        expect(repository.find).toHaveBeenCalledTimes(1);
         expect(result.limit).toEqual(1);
         expect(result.offset).toEqual(1);
         expect(result.data).toHaveLength(1);
@@ -287,10 +287,10 @@ describe('GQL Resolver Generator', () => {
         });
 
         // does not call findOne
-        expect(importantPersonRepository.findOne.mock.calls).toHaveLength(0);
+        expect(importantPersonRepository.findOne).toHaveBeenCalledTimes(0);
 
         // does not call merge
-        expect(importantPersonRepository.merge.mock.calls).toHaveLength(0);
+        expect(importantPersonRepository.merge).toHaveBeenCalledTimes(0);
 
         // calls save
         const saveCall = importantPersonRepository.save.mock.calls[0];
@@ -324,7 +324,7 @@ describe('GQL Resolver Generator', () => {
         );
 
         // check that findOne was called
-        expect(importantPersonRepository.findOne.mock.calls).toHaveLength(1);
+        expect(importantPersonRepository.findOne).toHaveBeenCalledTimes(1);
         expect(
             importantPersonRepository.findOne.mock.calls[0][0],
         ).toMatchObject({
@@ -333,10 +333,10 @@ describe('GQL Resolver Generator', () => {
         });
 
         // check that create was not called
-        expect(importantPersonRepository.create.mock.calls).toHaveLength(0);
+        expect(importantPersonRepository.create).toHaveBeenCalledTimes(0);
 
         // check that merge was called
-        expect(importantPersonRepository.merge.mock.calls).toHaveLength(1);
+        expect(importantPersonRepository.merge).toHaveBeenCalledTimes(1);
 
         // check that save was called
         const saveCall = importantPersonRepository.save.mock.calls[0];
@@ -447,8 +447,8 @@ describe('GQL Resolver Generator', () => {
         );
         const petsRepositoryQueryBuilder = petsRepository.queryBuilder;
 
-        expect(petsRepositoryQueryBuilder.delete.mock.calls).toHaveLength(1);
-        expect(petsRepositoryQueryBuilder.insert.mock.calls).toHaveLength(1);
+        expect(petsRepositoryQueryBuilder.delete).toHaveBeenCalledTimes(1);
+        expect(petsRepositoryQueryBuilder.insert).toHaveBeenCalledTimes(1);
         expect(
             petsRepositoryQueryBuilder.values.mock.calls[0][0],
         ).toMatchObject([
@@ -457,7 +457,7 @@ describe('GQL Resolver Generator', () => {
         ]);
 
         // two times - first for delete(), second - for insert()
-        expect(petsRepositoryQueryBuilder.execute.mock.calls).toHaveLength(2);
+        expect(petsRepositoryQueryBuilder.execute).toHaveBeenCalledTimes(2);
     });
 
     it('put(): should not touch any multiple relations if there were no changes', async () => {
@@ -483,8 +483,8 @@ describe('GQL Resolver Generator', () => {
         );
         const petsRepositoryQueryBuilder = petsRepository.queryBuilder;
 
-        expect(petsRepositoryQueryBuilder.delete.mock.calls).toHaveLength(0);
-        expect(petsRepositoryQueryBuilder.insert.mock.calls).toHaveLength(0);
+        expect(petsRepositoryQueryBuilder.delete).toHaveBeenCalledTimes(0);
+        expect(petsRepositoryQueryBuilder.insert).toHaveBeenCalledTimes(0);
     });
 
     it('put(): should return error when trying to update non-existing item', async () => {
@@ -528,7 +528,7 @@ describe('GQL Resolver Generator', () => {
         const importantPersonRepository = connection.getRepositoryByEntityName(
             'important_person',
         );
-        expect(importantPersonRepository.delete.mock.calls).toHaveLength(1);
+        expect(importantPersonRepository.delete).toHaveBeenCalledTimes(1);
         expect(importantPersonRepository.delete.mock.calls[0][0]).toEqual(1);
 
         // multiple relations dropped
@@ -537,8 +537,8 @@ describe('GQL Resolver Generator', () => {
         );
         const petsRepositoryQueryBuilder = petsRepository.queryBuilder;
 
-        expect(petsRepositoryQueryBuilder.delete.mock.calls).toHaveLength(1);
-        expect(petsRepositoryQueryBuilder.execute.mock.calls).toHaveLength(1);
+        expect(petsRepositoryQueryBuilder.delete).toHaveBeenCalledTimes(1);
+        expect(petsRepositoryQueryBuilder.execute).toHaveBeenCalledTimes(1);
     });
 
     it('delete(): should return error if the code is not set', async () => {
@@ -633,17 +633,150 @@ describe('GQL Resolver Generator', () => {
             'important_person',
         );
 
-        expect(importantPersonRepository.find.mock.calls).toHaveLength(1);
+        expect(importantPersonRepository.find).toHaveBeenCalledTimes(1);
         expect(
             importantPersonRepository.find.mock.calls[0][0].where.id._value,
         ).toEqual([1, 2, 10, 3]);
     });
 
     it('reference(single): should handle requests with different sets of selected fields', async () => {
-        // todo
+        const getPartner = resolvers[0].ImportantPerson.partner;
+        expect(getPartner).toBeInstanceOf(Function);
+
+        const dataLoaderPool = new DataLoaderPool();
+        const allResults = [];
+
+        await Promise.all([
+            getPartner(
+                { partner: 1 }, // this "comes" from the database, that is why there is id, not code
+                {},
+                {
+                    dataLoaderPool,
+                },
+                makeAST('data', ['full_name']),
+            ).then(result => {
+                allResults.push(result);
+            }),
+            getPartner(
+                { partner: 2 }, // this "comes" from the database, that is why there is id, not code
+                {},
+                {
+                    dataLoaderPool,
+                },
+                makeAST('data', ['full_name', 'has_pets', 'tags']),
+            ).then(result => {
+                allResults.push(result);
+            }),
+            getPartner(
+                { partner: 3 }, // this "comes" from the database, that is why there is id, not code
+                {},
+                {
+                    dataLoaderPool,
+                },
+                makeAST('data', ['full_name']),
+            ).then(result => {
+                allResults.push(result);
+            }),
+        ]);
+
+        expect(allResults).toMatchObject([
+            {
+                id: 1,
+                code: '4ef6f520-d180-4aee-9517-43214f396609',
+                full_name: 'Max Mustermann',
+            },
+            {
+                id: 3,
+                code: '2a98f71a-a3f6-43a1-8196-9a845ba8a54f',
+                full_name: 'Sonoya Mizuno',
+            },
+            {
+                id: 2,
+                code: '9e9c4ee3-d92e-48f2-8235-577806c12534',
+                full_name: 'Mister Twister',
+                tags: ['five', 'two'],
+                has_pets: false,
+            },
+        ]);
+
+        const importantPersonRepository = connection.getRepositoryByEntityName(
+            'important_person',
+        );
+
+        expect(importantPersonRepository.find).toHaveBeenCalledTimes(2);
+        expect(
+            importantPersonRepository.find.mock.calls[0][0].where.id._value,
+        ).toEqual([1, 3]);
+        expect(
+            importantPersonRepository.find.mock.calls[1][0].where.id._value,
+        ).toEqual([2]);
     });
 
     it('reference(single): should handle query errors', async () => {
-        // todo
+        const importantPersonRepository = connection.getRepositoryByEntityName(
+            'important_person',
+        );
+
+        importantPersonRepository.find.mockImplementationOnce(() => {
+            throw new Error('Woops');
+        });
+
+        const getPartner = resolvers[0].ImportantPerson.partner;
+        expect(getPartner).toBeInstanceOf(Function);
+
+        const dataLoaderPool = new DataLoaderPool();
+        const allResults = [];
+
+        jest.spyOn(global.logger, 'error');
+        global.logger.error.mockImplementation(() => {});
+
+        await Promise.all([
+            getPartner(
+                { partner: 1 }, // this "comes" from the database, that is why there is id, not code
+                {},
+                {
+                    dataLoaderPool,
+                },
+                makeAST('data', ['full_name']),
+            ).then(result => {
+                allResults.push(result);
+            }),
+            getPartner(
+                { partner: 2 }, // this "comes" from the database, that is why there is id, not code
+                {},
+                {
+                    dataLoaderPool,
+                },
+                makeAST('data', ['full_name', 'has_pets', 'tags']),
+            ).then(result => {
+                allResults.push(result);
+            }),
+            getPartner(
+                { partner: 3 }, // this "comes" from the database, that is why there is id, not code
+                {},
+                {
+                    dataLoaderPool,
+                },
+                makeAST('data', ['full_name']),
+            ).then(result => {
+                allResults.push(result);
+            }),
+        ]);
+
+        expect(allResults).toMatchObject([
+            null,
+            null,
+            {
+                id: 2,
+                code: '9e9c4ee3-d92e-48f2-8235-577806c12534',
+                full_name: 'Mister Twister',
+                tags: ['five', 'two'],
+                has_pets: false,
+            },
+        ]);
+
+        expect(global.logger.error).toHaveBeenCalledTimes(1);
+
+        global.logger.error.mockRestore();
     });
 });

@@ -537,7 +537,7 @@ export default class ResolverGenerator {
                         code: 'internal',
                         message: __DEV__ ? e.message : 'Internal error',
                     });
-                    logger.error('Internal error', e);
+                    logger.error('Unable to fetch some items', e);
                 }
 
                 // maintain the right order
