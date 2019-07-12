@@ -521,7 +521,6 @@ export default class ResolverGenerator {
                 const errors = [];
                 const map = {};
 
-                // todo: refactor this
                 try {
                     const items = await referencedRepository.find({
                         where: {

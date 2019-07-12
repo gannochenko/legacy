@@ -568,7 +568,7 @@ describe('GQL Resolver Generator', () => {
         ]);
     });
 
-    it('reference(): should get single reference', async () => {
+    it('reference(single): should get referenced data', async () => {
         const getPartner = resolvers[0].ImportantPerson.partner;
         expect(getPartner).toBeInstanceOf(Function);
 
@@ -588,7 +588,7 @@ describe('GQL Resolver Generator', () => {
         });
     });
 
-    it('reference(): should utilize bulk load for single reference', async () => {
+    it('reference(single): should utilize bulk load', async () => {
         const getPartner = resolvers[0].ImportantPerson.partner;
         expect(getPartner).toBeInstanceOf(Function);
 
@@ -610,18 +610,40 @@ describe('GQL Resolver Generator', () => {
             ),
         );
 
+        expect(allResults).toMatchObject([
+            {
+                id: 1,
+                code: '4ef6f520-d180-4aee-9517-43214f396609',
+                full_name: 'Max Mustermann',
+            },
+            {
+                id: 2,
+                code: '9e9c4ee3-d92e-48f2-8235-577806c12534',
+                full_name: 'Mister Twister',
+            },
+            null,
+            {
+                id: 3,
+                code: '2a98f71a-a3f6-43a1-8196-9a845ba8a54f',
+                full_name: 'Sonoya Mizuno',
+            },
+        ]);
+
         const importantPersonRepository = connection.getRepositoryByEntityName(
             'important_person',
         );
-        console.log(
-            require('util').inspect(importantPersonRepository.find.mock.calls, {
-                depth: 10,
-            }),
-        );
-        // expect(importantPersonRepository.delete.mock.calls).toHaveLength(1);
+
+        expect(importantPersonRepository.find.mock.calls).toHaveLength(1);
+        expect(
+            importantPersonRepository.find.mock.calls[0][0].where.id._value,
+        ).toEqual([1, 2, 10, 3]);
     });
 
-    it('should handle requests with different sets of selected fields', async () => {
+    it('reference(single): should handle requests with different sets of selected fields', async () => {
+        // todo
+    });
+
+    it('reference(single): should handle query errors', async () => {
         // todo
     });
 });
