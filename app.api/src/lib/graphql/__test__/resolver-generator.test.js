@@ -519,7 +519,24 @@ describe('GQL Resolver Generator', () => {
             {},
         );
 
-        console.log(result);
+        expect(result.errors).toHaveLength(0);
+        expect(result.code).toEqual('4ef6f520-d180-4aee-9517-43214f396609');
+
+        // the item itself was dropped
+        const importantPersonRepository = connection.getRepositoryByEntityName(
+            'important_person',
+        );
+        expect(importantPersonRepository.delete.mock.calls).toHaveLength(1);
+        expect(importantPersonRepository.delete.mock.calls[0][0]).toEqual(1);
+
+        // multiple relations dropped
+        const petsRepository = connection.getRepositoryByEntityName(
+            'eq_ref_ba4ed80327568d335915e4452eb0703a',
+        );
+        const petsRepositoryQueryBuilder = petsRepository.queryBuilder;
+
+        expect(petsRepositoryQueryBuilder.delete.mock.calls).toHaveLength(1);
+        expect(petsRepositoryQueryBuilder.execute.mock.calls).toHaveLength(1);
     });
 
     it('delete(): should return error if the code is not set', async () => {

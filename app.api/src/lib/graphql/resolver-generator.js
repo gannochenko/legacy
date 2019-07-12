@@ -280,10 +280,13 @@ export default class ResolverGenerator {
                 return result;
             }
 
+            result.code = code;
+
             const repository = connection.getRepository(databaseEntity);
 
             const item = await repository.findOne({
                 where: { code: code.trim() },
+                select: ['id'],
             });
             if (!item) {
                 result.errors.push({
@@ -302,10 +305,10 @@ export default class ResolverGenerator {
                 for (let i = 0; i < references.length; i += 1) {
                     const referenceField = references[i];
                     const {
-                        referenceFieldName,
+                        // referenceFieldName,
                         referenceTableName,
                         referenceDatabaseEntity,
-                        referencedDatabaseEntity,
+                        // referencedDatabaseEntity,
                     } = this.getReferenceAttributes(
                         referenceField,
                         databaseEntityManager,
@@ -320,6 +323,7 @@ export default class ResolverGenerator {
                     );
 
                     // delete all
+                    // eslint-disable-next-line no-await-in-loop
                     await referenceQueryBuilder
                         .delete()
                         .from(referenceTableName)
