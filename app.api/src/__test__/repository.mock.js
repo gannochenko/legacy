@@ -52,6 +52,12 @@ export const makeRepository = entityName => {
                 );
             }
 
+            if ('id' in where && '_value' in where.id) {
+                dataPart = dataPart.filter(item =>
+                    where.id._value.includes(item.id),
+                );
+            }
+
             return filterKeys(dataPart, select);
         }),
         count: jest.fn(async (parameters = {}) => {

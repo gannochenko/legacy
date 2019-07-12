@@ -6,7 +6,7 @@ export default class DataLoaderPool {
     }
 
     get(loaderId, fn) {
-        if (!_.isne(loaderId) || !_.isFunction(fn)) {
+        if (!_.isne(loaderId) || typeof fn !== 'function') {
             return null;
         }
 

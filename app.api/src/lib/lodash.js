@@ -1,4 +1,3 @@
-import isString from 'lodash.isstring';
 import isObject from 'lodash.isobject';
 // const random = require('lodash.random');
 // const isNumber = require('lodash.isnumber');
@@ -27,6 +26,6 @@ export default {
         return isObject(arg) && Object.keys(arg).length > 0;
     },
     isne: arg => {
-        return isString(arg) && arg.length > 0;
+        return typeof arg === 'string' && !!arg.length;
     },
 };

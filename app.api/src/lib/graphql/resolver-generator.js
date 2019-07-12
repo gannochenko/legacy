@@ -375,14 +375,12 @@ export default class ResolverGenerator {
                     connection,
                 ),
             },
-            //// process reference traversal
-            // [name]: this.createReferenceResolvers({
-            //     entity,
-            //     dbEntity,
-            //     entityManager,
-            //     schemaProvider,
-            //     connection,
-            // }),
+            [name]: this.makeReferenceResolversForEntity(
+                entity,
+                schema,
+                databaseEntityManager,
+                connection,
+            ),
         };
     }
 
@@ -420,6 +418,7 @@ export default class ResolverGenerator {
                         codeToId.addCode(code, referencedDatabaseEntity),
                     );
 
+                    // eslint-disable-next-line no-await-in-loop
                     await codeToId.obtain();
 
                     values.forEach(code => ids.push(codeToId.getId(code)));
@@ -433,6 +432,7 @@ export default class ResolverGenerator {
                 );
 
                 // delete all
+                // eslint-disable-next-line no-await-in-loop
                 await referenceQueryBuilder
                     .delete()
                     .from(referenceTableName)
@@ -441,6 +441,7 @@ export default class ResolverGenerator {
 
                 // and re-create
                 if (ids.length) {
+                    // eslint-disable-next-line no-await-in-loop
                     await referenceQueryBuilder
                         .insert()
                         .into(referenceTableName)
@@ -456,70 +457,81 @@ export default class ResolverGenerator {
         }
     }
 
-    /**
-     * @private
-     * @param args
-     */
-    static createReferenceResolvers({ ...args }) {
-        const { entity, schemaProvider } = args;
+    static makeReferenceResolversForEntity(
+        entity,
+        schema,
+        databaseEntityManager,
+        connection,
+    ) {
         const resolvers = {};
 
         // get all references
-        const refs = entity.schema
-            .map(field =>
-                schemaProvider.getReferenceFieldName(field) !== null
-                    ? field
-                    : null,
-            )
-            .filter(x => x);
-        if (!_.iane(refs)) {
+        const references = this.getReferences(entity);
+        if (!references.length) {
             return resolvers;
         }
 
-        refs.forEach(field => {
-            resolvers[field.name] = schemaProvider.isMultipleField(field)
-                ? this.createReferenceResolverMultiple({ field, ...args })
-                : this.createReferenceResolverSingle({ field, ...args });
+        const args = {
+            entity,
+            schema,
+            databaseEntityManager,
+            connection,
+        };
+
+        references.forEach(referenceField => {
+            resolvers[referenceField.getName()] = referenceField.isMultiple()
+                ? null // this.makeReferenceResolverMultiple({ referenceField, ...args })
+                : this.makeReferenceResolverSingle({ referenceField, ...args });
         });
 
         return resolvers;
     }
 
-    static createReferenceResolverSingle({
-        field,
-        entityManager,
-        schemaProvider,
+    static makeReferenceResolverSingle({
+        referenceField,
+        entity,
+        // schema,
+        databaseEntityManager,
+        connection,
     }) {
-        return async (source, args, { requestId, dataLoaderPool }, state) => {
-            const refValue = source[field.name];
-            // check if there is nothing to reference through
-            if (typeof refValue === 'undefined' || refValue === null) {
+        return async (source, args, { dataLoaderPool }, info) => {
+            // check if the parent item data does not have any value that we can reference with
+            const referenceValue = source[referenceField.getName()];
+            if (!parseInt(referenceValue, 10)) {
                 return null;
             }
 
-            const refEntityName = schemaProvider.getReferenceFieldName(field);
-            const refDBEntity = await entityManager.getByName(refEntityName);
-            const refEntity = await schemaProvider.getByName(refEntityName);
-            if (!refDBEntity || !refEntity) {
-                throw new Error(
-                    `Schema is corrupted. No entity under name ${refEntityName} found`,
-                );
-            }
+            const {
+                referencedDatabaseEntity,
+                referencedEntityName,
+            } = this.getReferenceAttributes(
+                referenceField,
+                databaseEntityManager,
+                entity,
+            );
 
-            // todo: use connection here
-            const repo = getRepository(refDBEntity);
-            const loader = dataLoaderPool.get(refEntityName, async ids => {
+            const selectedFields = getSelectionAt(info, 'data');
+            const select = this.getRealFields(selectedFields, entity);
+            const referencedRepository = connection.getRepository(
+                referencedDatabaseEntity,
+            );
+
+            const key = `${referencedEntityName}__${select.join('.')}`;
+            const loader = dataLoaderPool.get(key, async ids => {
                 const errors = [];
-                let ix = {};
+                const map = {};
 
                 // todo: refactor this
                 try {
-                    (await repo.find({
+                    const items = await referencedRepository.find({
                         where: {
                             id: In(ids),
                         },
-                    })).forEach(item => {
-                        ix[item.id] = item;
+                        select,
+                    });
+
+                    items.forEach(item => {
+                        map[item.id] = item;
                     });
                 } catch (e) {
                     errors.push({
@@ -530,17 +542,14 @@ export default class ResolverGenerator {
                 }
 
                 // maintain the right order
-                return ids.map(id => {
-                    return {
-                        item: id in ix ? ix[id] : null,
-                        errors,
-                    };
-                });
+                return ids.map(id => ({
+                    item: id in map ? map[id] : null,
+                    errors,
+                }));
             });
 
-            const item = await loader.load(refValue);
-            if (_.iane(item.errors)) {
-                // something is wrong
+            const item = await loader.load(referenceValue);
+            if (item.errors.length) {
                 return null;
             }
 
@@ -548,7 +557,7 @@ export default class ResolverGenerator {
         };
     }
 
-    static createReferenceResolverMultiple({
+    static makeReferenceResolverMultiple({
         field,
         entity,
         entityManager,
@@ -767,6 +776,7 @@ export default class ResolverGenerator {
             referencedDatabaseEntity,
             referenceTableName,
             referenceDatabaseEntity,
+            referencedEntityName,
         };
     }
 
@@ -780,5 +790,9 @@ export default class ResolverGenerator {
         return entity
             .getFields()
             .filter(field => field.isReference() && field.isMultiple());
+    }
+
+    static getReferences(entity) {
+        return entity.getFields().filter(field => field.isReference());
     }
 }

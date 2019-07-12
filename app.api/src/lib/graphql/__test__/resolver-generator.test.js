@@ -11,6 +11,7 @@ import {
     data as mockedData,
 } from '../../../__test__/repository.mock';
 import { makeAST } from '../../../__test__/apollo.mock';
+import DataLoaderPool from '../../database/data-loader-pool';
 
 let schema = null;
 let databaseManager = null;
@@ -121,7 +122,6 @@ describe('GQL Resolver Generator', () => {
     it('find(): should process limit and offset', async () => {
         const find = resolvers[0].Query.ImportantPersonFind;
 
-        repository.find.mockClear();
         let result = await find(
             {},
             { limit: 1, offset: 1 },
@@ -141,7 +141,6 @@ describe('GQL Resolver Generator', () => {
     it('find(): should process page and pageCount', async () => {
         const find = resolvers[0].Query.ImportantPersonFind;
 
-        repository.find.mockClear();
         let result = await find(
             {},
             { page: 2, pageSize: 1 },
@@ -161,8 +160,7 @@ describe('GQL Resolver Generator', () => {
     it('find(): should process sort order', async () => {
         const find = resolvers[0].Query.ImportantPersonFind;
 
-        repository.find.mockClear();
-        let result = await find(
+        await find(
             {},
             { sort: { full_name: 'ASC' } },
             null,
@@ -215,11 +213,15 @@ describe('GQL Resolver Generator', () => {
             },
             {
                 code: '2a98f71a-a3f6-43a1-8196-9a845ba8a54f',
-                full_name: 'Charley Bale',
+                full_name: 'Sonoya Mizuno',
                 has_pets: false,
                 id: 3,
             },
         ]);
+    });
+
+    it('find(): should return only codes if no select fields specified [todo]', async () => {
+        // todo
     });
 
     it('find(): should return count by filter', async () => {
@@ -564,5 +566,62 @@ describe('GQL Resolver Generator', () => {
         expect(result.errors).toMatchObject([
             { code: 'not_found', message: 'Element not found' },
         ]);
+    });
+
+    it('reference(): should get single reference', async () => {
+        const getPartner = resolvers[0].ImportantPerson.partner;
+        expect(getPartner).toBeInstanceOf(Function);
+
+        let result = await getPartner(
+            { full_name: 'Test Testov', partner: 1 }, // this "comes" from the database, that is why there is id, not code
+            {},
+            {
+                dataLoaderPool: new DataLoaderPool(),
+            },
+            makeAST('data', ['full_name']),
+        );
+
+        expect(result).toMatchObject({
+            id: 1,
+            code: '4ef6f520-d180-4aee-9517-43214f396609',
+            full_name: 'Max Mustermann',
+        });
+    });
+
+    it('reference(): should utilize bulk load for single reference', async () => {
+        const getPartner = resolvers[0].ImportantPerson.partner;
+        expect(getPartner).toBeInstanceOf(Function);
+
+        const dataLoaderPool = new DataLoaderPool();
+        const allResults = [];
+
+        await Promise.all(
+            [1, 2, 10, 3].map(id =>
+                getPartner(
+                    { partner: id }, // this "comes" from the database, that is why there is id, not code
+                    {},
+                    {
+                        dataLoaderPool,
+                    },
+                    makeAST('data', ['full_name']),
+                ).then(result => {
+                    allResults.push(result);
+                }),
+            ),
+        );
+
+        const importantPersonRepository = connection.getRepositoryByEntityName(
+            'important_person',
+        );
+        console.log(
+            require('util').inspect(importantPersonRepository.find.mock.calls, {
+                depth: 10,
+            }),
+        );
+        // expect(importantPersonRepository.delete.mock.calls).toHaveLength(1);
+    });
+
+    it('should handle requests with different sets of selected fields', async () => {
+        // todo
     });
 });
