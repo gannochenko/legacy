@@ -11,6 +11,10 @@ import {
  * This class manages database entities on the basis of a schema provided
  */
 export default class EntityManager {
+    /**
+     * @param entity Schema entity (not database entity)
+     * @param field
+     */
     static getName(entity, field = null) {
         if (field && field.isReference() && field.isMultiple()) {
             return `${entity.getName()}_2_${field.getName()}`;
@@ -19,6 +23,9 @@ export default class EntityManager {
         return entity.getName();
     }
 
+    /**
+     * @param entity Schema entity (not database entity)
+     */
     static getTableName(entity) {
         return `${DB_ENTITY_TABLE_PREFIX}${entity.getName()}`.substr(
             0,
@@ -26,6 +33,10 @@ export default class EntityManager {
         );
     }
 
+    /**
+     * @param entity Schema entity (not database entity)
+     * @param field
+     */
     static getReferenceTableName(entity, field) {
         return `${DB_REF_TABLE_PREFIX}${md5(
             `${entity.getName()}_${field.getName()}`,

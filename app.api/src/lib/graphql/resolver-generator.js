@@ -193,6 +193,7 @@ export default class ResolverGenerator {
                         singleReferences[i],
                         databaseEntityManager,
                         entity,
+                        schema,
                     );
                     if (referenceFieldName in data) {
                         codeToId.addCode(
@@ -312,6 +313,7 @@ export default class ResolverGenerator {
                         referenceField,
                         databaseEntityManager,
                         entity,
+                        schema,
                     );
 
                     const referenceRepository = connection.getRepository(
@@ -386,6 +388,7 @@ export default class ResolverGenerator {
     static async manageMultipleReferences({
         entity,
         databaseEntityManager,
+        schema,
         connection,
         id,
         data,
@@ -403,6 +406,7 @@ export default class ResolverGenerator {
                 referenceField,
                 databaseEntityManager,
                 entity,
+                schema,
             );
 
             if (referenceFieldName in data) {
@@ -493,6 +497,7 @@ export default class ResolverGenerator {
         referenceField,
         entity,
         databaseEntityManager,
+        schema,
         connection,
     }) {
         return async (source, args, { dataLoaderPool }, info) => {
@@ -511,6 +516,7 @@ export default class ResolverGenerator {
                 referenceField,
                 databaseEntityManager,
                 entity,
+                schema,
             );
 
             const selectedFields = getSelectionAt(info);
@@ -559,10 +565,14 @@ export default class ResolverGenerator {
         };
     }
 
+    /**
+     * https://github.com/typeorm/typeorm/blob/master/docs/select-query-builder.md
+     */
     static makeReferenceResolverMultiple({
         referenceField,
         entity,
         databaseEntityManager,
+        schema,
         connection,
     }) {
         return async (source, args, { dataLoaderPool }, info) => {
@@ -576,16 +586,18 @@ export default class ResolverGenerator {
                 referenceFieldName,
                 referenceTableName,
                 referencedDatabaseEntity,
-                referencedEntityName,
+                referencedTableName,
+                referencedEntity,
             } = this.getReferenceAttributes(
                 referenceField,
                 databaseEntityManager,
                 entity,
+                schema,
             );
 
             const { filter, sort, limit, offset } = args;
             const selectedFields = getSelectionAt(info);
-            const select = this.getRealFields(selectedFields, entity);
+            const select = this.getRealFields(selectedFields, referencedEntity);
 
             // todo: this kind of query can be batched in some cases
             // const canBatch =
@@ -594,27 +606,35 @@ export default class ResolverGenerator {
             const referencedRepository = connection.getRepository(
                 referencedDatabaseEntity,
             );
-            // const referencedQueryBuilder = referencedRepository.createQueryBuilder(
-            //     referenceTableName,
-            // );
+            const referencedQueryBuilder = referencedRepository.createQueryBuilder();
 
             let items = [];
             const errors = [];
 
             try {
-                // todo: apply parameters: sort, filter, limit, offset
+                // todo: apply parameters: sort, filter, limit, offset1
                 // todo: make the selected field set narrow
-
-                items = await referencedQueryBuilder
+                const query = referencedQueryBuilder
+                    // filter by the relation
                     .innerJoinAndSelect(
                         referenceTableName,
                         referenceFieldName,
                         `${referenceFieldName}.rel = ${this.sanitize(
-                            referencedEntityName,
-                        )}.id and ${referenceFieldName}.self = :refValue`,
+                            referencedTableName,
+                        )}.id and ${referenceFieldName}.self = :referenceValue`,
                         { referenceValue },
                     )
-                    .getMany();
+                    .select([
+                        ...select.map(field => `eq_e_pet.${field}`),
+                        `${referenceFieldName}.self`,
+                    ]);
+
+                console.log(query.getSql());
+
+                items = await query.getMany();
+                // items = await query.getRawMany();
+
+                console.log(items);
             } catch (e) {
                 errors.push({
                     code: 'internal',
@@ -623,7 +643,7 @@ export default class ResolverGenerator {
                 logger.error('Internal error', e);
             }
 
-            if (_.iane(errors)) {
+            if (errors.length) {
                 return [];
             }
 
@@ -742,22 +762,39 @@ export default class ResolverGenerator {
         referenceField,
         databaseEntityManager,
         entity,
+        schema,
     ) {
-        // the name of the field we use to access this relation (e.g. "person" or "pets")
+        // the name of the field we use to access this relation (e.g. "partner" or "pets")
         const referenceFieldName = referenceField.getName();
-        // the database entity name, which we make a reference to (e.g. "eq_person" or "eq_pet")
+
+        // ///////////////////////////////////////
+        // ReferencED entity
+        // the database entity name, which we make a reference to (e.g. "person" or "pet")
         const referencedEntityName = referenceField.getReferencedEntityName();
-        // the entity itself
+        // the referenced schema entity
+        const referencedEntity = schema.getEntity(referencedEntityName);
+        // the referenced database entity
         const referencedDatabaseEntity = databaseEntityManager.getByName(
             referencedEntityName,
         );
+        // the table name of the referenced database entity (e.g. "eq_e_person" or "eq_e_pet")
+        const referencedTableName = databaseEntityManager.constructor.getTableName(
+            referencedEntity,
+        );
 
-        // only for multiple
-        // a table we use to store multiple references (e.g. "eq_person_2_pet")
-        let referenceTableName = null;
+        // ///////////////////////////////////////
+        // Reference entity (only for multiple)
+        let referenceEntityName = null;
         // a database entity that is represented by this table
         let referenceDatabaseEntity = null;
+        // a table we use to store multiple references
+        let referenceTableName = null;
         if (referenceField.isMultiple()) {
+            referenceEntityName = databaseEntityManager.constructor.getName(
+                entity,
+                referenceField,
+            );
+
             referenceTableName = databaseEntityManager.constructor.getReferenceTableName(
                 entity,
                 referenceField,
@@ -774,10 +811,15 @@ export default class ResolverGenerator {
 
         return {
             referenceFieldName,
-            referencedDatabaseEntity,
-            referenceTableName,
-            referenceDatabaseEntity,
+
+            referencedEntity,
             referencedEntityName,
+            referencedDatabaseEntity,
+            referencedTableName,
+
+            referenceEntityName,
+            referenceDatabaseEntity,
+            referenceTableName,
         };
     }
 
