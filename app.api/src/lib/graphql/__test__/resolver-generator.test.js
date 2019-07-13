@@ -1,5 +1,6 @@
 /**
  * https://github.com/sapegin/jest-cheat-sheet
+ * https://jestjs.io/docs/en/mock-function-api.html
  */
 
 import ResolverGenerator from '../resolver-generator';
@@ -578,7 +579,7 @@ describe('GQL Resolver Generator', () => {
             {
                 dataLoaderPool: new DataLoaderPool(),
             },
-            makeAST('data', ['full_name']),
+            makeAST('', ['full_name']),
         );
 
         expect(result).toMatchObject({
@@ -603,7 +604,7 @@ describe('GQL Resolver Generator', () => {
                     {
                         dataLoaderPool,
                     },
-                    makeAST('data', ['full_name']),
+                    makeAST('', ['full_name']),
                 ).then(result => {
                     allResults.push(result);
                 }),
@@ -653,7 +654,7 @@ describe('GQL Resolver Generator', () => {
                 {
                     dataLoaderPool,
                 },
-                makeAST('data', ['full_name']),
+                makeAST('', ['full_name']),
             ).then(result => {
                 allResults.push(result);
             }),
@@ -663,7 +664,7 @@ describe('GQL Resolver Generator', () => {
                 {
                     dataLoaderPool,
                 },
-                makeAST('data', ['full_name', 'has_pets', 'tags']),
+                makeAST('', ['full_name', 'has_pets', 'tags']),
             ).then(result => {
                 allResults.push(result);
             }),
@@ -673,7 +674,7 @@ describe('GQL Resolver Generator', () => {
                 {
                     dataLoaderPool,
                 },
-                makeAST('data', ['full_name']),
+                makeAST('', ['full_name']),
             ).then(result => {
                 allResults.push(result);
             }),
@@ -737,7 +738,7 @@ describe('GQL Resolver Generator', () => {
                 {
                     dataLoaderPool,
                 },
-                makeAST('data', ['full_name']),
+                makeAST('', ['full_name']),
             ).then(result => {
                 allResults.push(result);
             }),
@@ -747,7 +748,7 @@ describe('GQL Resolver Generator', () => {
                 {
                     dataLoaderPool,
                 },
-                makeAST('data', ['full_name', 'has_pets', 'tags']),
+                makeAST('', ['full_name', 'has_pets', 'tags']),
             ).then(result => {
                 allResults.push(result);
             }),
@@ -757,7 +758,7 @@ describe('GQL Resolver Generator', () => {
                 {
                     dataLoaderPool,
                 },
-                makeAST('data', ['full_name']),
+                makeAST('', ['full_name']),
             ).then(result => {
                 allResults.push(result);
             }),

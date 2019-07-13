@@ -2,10 +2,9 @@
  * https://github.com/typeorm/typeorm/blob/master/docs/repository-api.md
  */
 
-import { getRepository, In, Like } from 'typeorm';
+import { In, Like } from 'typeorm';
 import uuid from 'uuid/v4';
 import { TYPE_DATETIME, QUERY_FIND_MAX_PAGE_SIZE } from 'project-minimum-core';
-import { getRefName } from '../entity-util';
 import { getASTAt, getSelectionAt } from './ast';
 import { CodeId } from '../database/code-id';
 
@@ -232,7 +231,7 @@ export default class ResolverGenerator {
                             code: 'not_found',
                             message: 'Element not found',
                         });
-                        return result;
+                        return;
                     }
                     repository.merge(databaseItem, data);
                 }
@@ -480,7 +479,10 @@ export default class ResolverGenerator {
 
         references.forEach(referenceField => {
             resolvers[referenceField.getName()] = referenceField.isMultiple()
-                ? null // this.makeReferenceResolverMultiple({ referenceField, ...args })
+                ? this.makeReferenceResolverMultiple({
+                      referenceField,
+                      ...args,
+                  })
                 : this.makeReferenceResolverSingle({ referenceField, ...args });
         });
 
@@ -490,13 +492,14 @@ export default class ResolverGenerator {
     static makeReferenceResolverSingle({
         referenceField,
         entity,
-        // schema,
         databaseEntityManager,
         connection,
     }) {
         return async (source, args, { dataLoaderPool }, info) => {
+            const referenceFieldName = referenceField.getName();
+
             // check if the parent item data does not have any value that we can reference with
-            const referenceValue = source[referenceField.getName()];
+            const referenceValue = source[referenceFieldName];
             if (!parseInt(referenceValue, 10)) {
                 return null;
             }
@@ -510,7 +513,7 @@ export default class ResolverGenerator {
                 entity,
             );
 
-            const selectedFields = getSelectionAt(info, 'data');
+            const selectedFields = getSelectionAt(info);
             const select = this.getRealFields(selectedFields, entity);
             const referencedRepository = connection.getRepository(
                 referencedDatabaseEntity,
@@ -557,60 +560,59 @@ export default class ResolverGenerator {
     }
 
     static makeReferenceResolverMultiple({
-        field,
+        referenceField,
         entity,
-        entityManager,
-        schemaProvider,
+        databaseEntityManager,
+        connection,
     }) {
-        return async (source, args, { requestId }, state) => {
-            const refValue = source.id;
-            // check if there is nothing to reference through
-            if (typeof refValue === 'undefined' || refValue === null) {
+        return async (source, args, { dataLoaderPool }, info) => {
+            // check if the parent item data does not have any value that we can reference with
+            const referenceValue = source.id;
+            if (!parseInt(referenceValue, 10)) {
                 return [];
             }
 
-            const refEntityName = schemaProvider.getReferenceFieldName(field);
-            const refDBEntity = await entityManager.getByName(refEntityName);
-            const refEntity = await schemaProvider.getByName(refEntityName);
-            const refTableEntityName = getRefName(entity, field);
-            const refTableDBEntity = await entityManager.getByName(
-                refTableEntityName,
+            const {
+                referenceFieldName,
+                referenceTableName,
+                referencedDatabaseEntity,
+                referencedEntityName,
+            } = this.getReferenceAttributes(
+                referenceField,
+                databaseEntityManager,
+                entity,
             );
 
-            if (
-                !refDBEntity ||
-                !refEntity ||
-                !refTableEntityName ||
-                !refTableDBEntity
-            ) {
-                throw new Error(
-                    `Schema is corrupted. No entity under name ${refEntityName} found`,
-                );
-            }
-
             const { filter, sort, limit, offset } = args;
-            // todo: batch
-            const canBatch =
-                typeof limit === 'undefined' && typeof offset === 'undefined';
+            const selectedFields = getSelectionAt(info);
+            const select = this.getRealFields(selectedFields, entity);
+
+            // todo: this kind of query can be batched in some cases
+            // const canBatch =
+            //     typeof limit === 'undefined' && typeof offset === 'undefined';
+
+            const referencedRepository = connection.getRepository(
+                referencedDatabaseEntity,
+            );
+            // const referencedQueryBuilder = referencedRepository.createQueryBuilder(
+            //     referenceTableName,
+            // );
 
             let items = [];
             const errors = [];
-            // todo: use connection here
-            const repo = getRepository(refDBEntity);
-            const qb = repo.createQueryBuilder(refEntityName);
-            const refName = field.name;
 
             try {
                 // todo: apply parameters: sort, filter, limit, offset
                 // todo: make the selected field set narrow
-                items = await qb
+
+                items = await referencedQueryBuilder
                     .innerJoinAndSelect(
-                        refTableDBEntity,
-                        refName,
-                        `${refName}.rel = ${this.sanitize(
-                            refEntityName,
-                        )}.id and ${refName}.self = :refValue`,
-                        { refValue },
+                        referenceTableName,
+                        referenceFieldName,
+                        `${referenceFieldName}.rel = ${this.sanitize(
+                            referencedEntityName,
+                        )}.id and ${referenceFieldName}.self = :refValue`,
+                        { referenceValue },
                     )
                     .getMany();
             } catch (e) {
