@@ -7,6 +7,7 @@ import uuid from 'uuid/v4';
 import { TYPE_DATETIME, QUERY_FIND_MAX_PAGE_SIZE } from 'project-minimum-core';
 import { getASTAt, getSelectionAt } from './ast';
 import { CodeId } from '../database/code-id';
+import { Query } from '../database/query';
 
 export default class ResolverGenerator {
     static make(schema, databaseEntityManager, connection) {
@@ -565,9 +566,6 @@ export default class ResolverGenerator {
         };
     }
 
-    /**
-     * https://github.com/typeorm/typeorm/blob/master/docs/select-query-builder.md
-     */
     static makeReferenceResolverMultiple({
         referenceField,
         entity,
@@ -595,46 +593,47 @@ export default class ResolverGenerator {
                 schema,
             );
 
-            const { filter, sort, limit, offset } = args;
-            const selectedFields = getSelectionAt(info);
-            const select = this.getRealFields(selectedFields, referencedEntity);
-
-            // todo: this kind of query can be batched in some cases
-            // const canBatch =
-            //     typeof limit === 'undefined' && typeof offset === 'undefined';
-
             const referencedRepository = connection.getRepository(
                 referencedDatabaseEntity,
             );
             const referencedQueryBuilder = referencedRepository.createQueryBuilder();
 
+            let { query } = Query.make({
+                args: { ...args, select: getSelectionAt(info) },
+                queryBuilder: referencedQueryBuilder,
+                entity: referencedEntity,
+                tableName: referencedTableName,
+                parameters: {
+                    restrictLimit: false,
+                },
+            });
+
+            // todo: this kind of query can be batched in some cases
+            // const canBatch =
+            //     typeof limit === 'undefined' && typeof offset === 'undefined';
+
             let items = [];
             const errors = [];
 
             try {
-                // todo: apply parameters: sort, filter, limit, offset1
-                // todo: make the selected field set narrow
-                const query = referencedQueryBuilder
+                const referencedTableNameSafe = Query.sanitize(
+                    referencedTableName,
+                );
+                const referenceFieldNameSafe = Query.sanitize(
+                    referenceFieldName,
+                );
+
+                query = query
                     // filter by the relation
                     .innerJoinAndSelect(
                         referenceTableName,
                         referenceFieldName,
-                        `${referenceFieldName}.rel = ${this.sanitize(
-                            referencedTableName,
-                        )}.id and ${referenceFieldName}.self = :referenceValue`,
+                        `${referenceFieldNameSafe}.rel = ${referencedTableNameSafe}.id and ${referenceFieldNameSafe}.self = :referenceValue`,
                         { referenceValue },
-                    )
-                    .select([
-                        ...select.map(field => `eq_e_pet.${field}`),
-                        `${referenceFieldName}.self`,
-                    ]);
-
-                console.log(query.getSql());
+                    );
 
                 items = await query.getMany();
                 // items = await query.getRawMany();
-
-                console.log(items);
             } catch (e) {
                 errors.push({
                     code: 'internal',
@@ -712,10 +711,12 @@ export default class ResolverGenerator {
         return plain;
     }
 
-    static sanitize(value) {
-        return value.replace(/[^a-zA-Z0-9_]/g, '');
-    }
-
+    /**
+     * @deprecated
+     * @param fields
+     * @param entity
+     * @returns {*}
+     */
     static getRealFields(fields, entity) {
         const realFields = entity
             .getFields()
