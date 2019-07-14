@@ -574,7 +574,7 @@ export default class ResolverGenerator {
         schema,
         connection,
     }) {
-        return async (source, args, { dataLoaderPool }, info) => {
+        return async (source, args, context, info) => {
             // check if the parent item data does not have any value that we can reference with
             const referenceValue = source.id;
             if (!parseInt(referenceValue, 10)) {

@@ -29,6 +29,8 @@ describe('GQL Resolver Generator', () => {
         });
         databaseManager = new DatabaseEntityManager(schema);
 
+        // console.log(require('util').inspect(databaseManager.get(), { depth: 10 }));
+
         connection = makeConnection();
         repository = connection.getRepositoryByEntityName('important_person');
 
@@ -782,6 +784,37 @@ describe('GQL Resolver Generator', () => {
     });
 
     it('reference(multiple): should get referenced data', async () => {
-        // todo
+        const petRepository = connection.getRepositoryByEntityName('pet');
+
+        petRepository.queryBuilder.getMany.mockImplementationOnce(() => [
+            {
+                id: '1',
+                code: 'code1',
+                nickname: 'Bobik',
+            },
+        ]);
+
+        const getPets = resolvers[0].ImportantPerson.pets;
+        expect(getPets).toBeInstanceOf(Function);
+
+        let result = await getPets(
+            { id: 1 }, // this "comes" from the database, that is why there is id, not code
+            {},
+            {},
+            makeAST('', ['nickname']),
+        );
+
+        expect(result).toMatchObject([
+            { id: '1', code: 'code1', nickname: 'Bobik' },
+        ]);
+
+        expect(
+            petRepository.queryBuilder.innerJoinAndSelect,
+        ).toHaveBeenCalledTimes(1);
+        const firstCall =
+            petRepository.queryBuilder.innerJoinAndSelect.mock.calls[0];
+        expect(firstCall[3]).toMatchObject({ referenceValue: 1 });
+
+        expect(petRepository.queryBuilder.getMany).toHaveBeenCalledTimes(1);
     });
 });

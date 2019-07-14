@@ -22,6 +22,12 @@ export const makeRepository = entityName => {
         into: () => queryBuilder,
         values: jest.fn(() => queryBuilder),
         execute: jest.fn(() => {}),
+        select: jest.fn(() => queryBuilder),
+        take: jest.fn(() => queryBuilder),
+        skip: jest.fn(() => queryBuilder),
+        orderBy: jest.fn(() => queryBuilder),
+        innerJoinAndSelect: jest.fn(() => queryBuilder),
+        getMany: jest.fn(() => []),
     };
 
     return {
