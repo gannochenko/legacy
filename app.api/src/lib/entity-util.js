@@ -5,6 +5,11 @@ import {
     DB_ENTITY_TABLE_PREFIX,
 } from '../constants';
 
+/**
+ * @deprecated
+ * @param entity
+ * @returns {string}
+ */
 export const getTableName = entity => {
     return `${DB_ENTITY_TABLE_PREFIX}${entity.name.toLowerCase()}`.substr(
         0,
@@ -22,6 +27,12 @@ export const getRefName = (entity, field) => {
     return `${entity.name}_2_${field.name}`;
 };
 
+/**
+ * @deprecated
+ * @param entity
+ * @param field
+ * @returns {string}
+ */
 export const getRefTableName = (entity, field) => {
     return `${DB_REF_TABLE_PREFIX}${md5(`${entity.name}_${field.name}`)}`;
 };

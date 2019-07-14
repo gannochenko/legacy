@@ -1,5 +1,5 @@
 import { wrapError } from 'ew-internals';
-import Migrator from '../lib/migrator';
+import Migrator from 'app.api/src/lib/database/migrator';
 
 export default (app, params = {}) => {
     app.get(

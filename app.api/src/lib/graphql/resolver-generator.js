@@ -734,6 +734,11 @@ export default class ResolverGenerator {
         return toSelect;
     }
 
+    /**
+     * @deprecated
+     * @param args
+     * @returns {{offset: *, limit: *}}
+     */
     static getLimitOffset(args) {
         let { limit, offset, page, pageSize } = args;
 

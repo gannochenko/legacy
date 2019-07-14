@@ -3,9 +3,9 @@
  */
 
 import { Table, TableColumn, TableIndex } from 'typeorm';
-import { DB_TABLE_PREFIX, DB_REF_TABLE_PREFIX } from '../constants';
-import EntityManager from './entity-manager';
-import { getRefTableName, getTableName } from './entity-util';
+import { DB_TABLE_PREFIX, DB_REF_TABLE_PREFIX } from '../../constants';
+import EntityManager from '../entity-manager';
+import { getRefTableName, getTableName } from '../entity-util';
 
 export default class Migrator {
     /**

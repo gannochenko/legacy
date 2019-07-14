@@ -799,15 +799,42 @@ describe('GQL Resolver Generator', () => {
 
         let result = await getPets(
             { id: 1 }, // this "comes" from the database, that is why there is id, not code
+            {
+                sort: { nickname: 'ASC', illegal_field: 'DESC' },
+                limit: 1,
+                offset: 1,
+            },
             {},
-            {},
-            makeAST('', ['nickname']),
+            makeAST('', ['nickname', 'illegal_field']),
         );
 
         expect(result).toMatchObject([
             { id: '1', code: 'code1', nickname: 'Bobik' },
         ]);
 
+        const queryBuilder = petRepository.queryBuilder;
+
+        // select
+        expect(queryBuilder.select).toHaveBeenCalledTimes(1);
+        expect(queryBuilder.select.mock.calls[0][0]).toMatchObject([
+            'eq_e_pet.nickname',
+            'eq_e_pet.id',
+            'eq_e_pet.code',
+        ]);
+
+        // order
+        expect(queryBuilder.orderBy).toHaveBeenCalledTimes(1);
+        expect(queryBuilder.orderBy.mock.calls[0][0]).toMatchObject({
+            'eq_e_pet.nickname': 'ASC',
+        });
+
+        // limit-offset
+        expect(queryBuilder.take).toHaveBeenCalledTimes(1);
+        expect(queryBuilder.take.mock.calls[0][0]).toEqual(1);
+        expect(queryBuilder.skip).toHaveBeenCalledTimes(1);
+        expect(queryBuilder.skip.mock.calls[0][0]).toEqual(1);
+
+        // join relation
         expect(
             petRepository.queryBuilder.innerJoinAndSelect,
         ).toHaveBeenCalledTimes(1);
@@ -815,6 +842,7 @@ describe('GQL Resolver Generator', () => {
             petRepository.queryBuilder.innerJoinAndSelect.mock.calls[0];
         expect(firstCall[3]).toMatchObject({ referenceValue: 1 });
 
+        // rock-and-roll
         expect(petRepository.queryBuilder.getMany).toHaveBeenCalledTimes(1);
     });
 });

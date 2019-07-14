@@ -1,3 +1,8 @@
+/**
+ * @deprecated
+ * @type {string}
+ */
+
 export const DB_TABLE_PREFIX = 'eq_';
 export const DB_REF_TABLE_PREFIX = `${DB_TABLE_PREFIX}ref_`;
 export const DB_ENTITY_TABLE_PREFIX = `${DB_TABLE_PREFIX}e_`;
