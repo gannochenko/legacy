@@ -4,8 +4,8 @@
 
 import { Table, TableColumn, TableIndex } from 'typeorm';
 import { DB_TABLE_PREFIX, DB_REF_TABLE_PREFIX } from '../../constants';
-import EntityManager from '../entity-manager';
-import { getRefTableName, getTableName } from '../entity-util';
+import EntityManager from './entity-manager';
+import { getRefTableName } from '../entity-util';
 
 export default class Migrator {
     /**
@@ -16,7 +16,6 @@ export default class Migrator {
     static async migrate(params = {}) {
         const { schemaProvider, connectionManager } = params;
 
-        const entityManager = new EntityManager(schemaProvider);
         const qr = (await connectionManager.getSystem()).createQueryRunner(
             'master',
         );
@@ -172,92 +171,5 @@ export default class Migrator {
         for (let i = 0; i < refsDrop.length; i++) {
             await qr.dropTable(refsDrop[i], true);
         }
-    }
-
-    static getDatabaseEntity(entity, schemaProvider) {
-        const table = {
-            name: getTableName(entity),
-            columns: [],
-            __refs: [],
-            __entity: entity,
-        };
-
-        // add "system" field: id
-        table.columns.push({
-            isNullable: false,
-            isGenerated: true,
-            isPrimary: true,
-            isUnique: true,
-            isArray: false,
-            length: '',
-            zerofill: false,
-            unsigned: true,
-            name: 'id',
-            type: 'integer',
-            generated: 'increment',
-        });
-
-        entity.schema.forEach(field => {
-            if (
-                schemaProvider.isMultipleField(field) &&
-                _.isne(schemaProvider.getReferenceFieldName(field))
-            ) {
-                // we do not create any fields for many-to-may relation. Instead, a table should be created
-                table.__refs.push(field);
-                return;
-            }
-
-            table.columns.push({
-                isNullable: field.required !== true,
-                isGenerated: false,
-                isPrimary: false,
-                isUnique: field.unique === true,
-                isArray: _.isArray(field.type),
-                length: this.getFieldLength(field, schemaProvider),
-                zerofill: false,
-                unsigned: false,
-                name: field.name,
-                type: this.getDatabaseFieldType(field),
-            });
-        });
-
-        return table;
-    }
-
-    static getDatabaseFieldType(field) {
-        let type = field.type;
-
-        if (_.isArray(type)) {
-            type = type[0] || String;
-        }
-
-        if (_.isne(type)) {
-            // reference
-            return 'integer';
-        }
-
-        if (type === Number) {
-            return 'integer'; // todo: add float support
-        }
-
-        if (type === Boolean) {
-            return 'boolean';
-        }
-
-        if (type === Date) {
-            return 'timestamp without time zone';
-        }
-
-        // the rest - just a string type
-        return 'character varying';
-    }
-
-    static getFieldLength(field, schemaProvider) {
-        const length = schemaProvider.getFieldLength(field);
-        if (length !== null) {
-            return length.toString();
-        }
-
-        return '';
     }
 }

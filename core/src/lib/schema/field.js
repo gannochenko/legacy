@@ -16,15 +16,7 @@ export class Field {
         if (!_.ione(declaration)) {
             declaration = {};
         }
-        this.declaration = {
-            name: declaration.name,
-            type: declaration.type,
-            label: declaration.label,
-            length: declaration.length,
-            required: declaration.required,
-            unique: declaration.unique,
-            preview: declaration.preview,
-        };
+        this.declaration = Object.assign({}, declaration);
     }
 
     async checkHealth() {
@@ -191,6 +183,10 @@ export class Field {
 
     isPreview() {
         return this.declaration.preview === true;
+    }
+
+    isUnique() {
+        return this.declaration.unique === true;
     }
 
     toJSON() {

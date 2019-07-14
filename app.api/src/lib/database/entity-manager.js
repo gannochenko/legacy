@@ -8,7 +8,7 @@ import {
 } from 'project-minimum-core';
 
 /**
- * This class manages database entities on the basis of a schema provided
+ * This class creates database entities based on the schema
  */
 export default class EntityManager {
     /**
@@ -50,6 +50,10 @@ export default class EntityManager {
      * @returns {string}
      */
     static getDBType(field) {
+        if (field.isReference()) {
+            return field.isMultiple() ? null : 'integer';
+        }
+
         const type = field.getActualType();
 
         switch (type) {
@@ -64,6 +68,53 @@ export default class EntityManager {
             default:
                 return 'string';
         }
+    }
+
+    /**
+     * Accepts a schema entity and returns a DDL structure of the table to create
+     */
+    static getDDLByEntity(entity) {
+        const table = {
+            name: this.getTableName(entity),
+            columns: [],
+        };
+
+        // add "system" field: id
+        table.columns.push({
+            isNullable: false,
+            isGenerated: true,
+            isPrimary: true,
+            isUnique: true,
+            isArray: false,
+            length: '',
+            zerofill: false,
+            unsigned: true,
+            name: 'id',
+            type: 'integer',
+            generated: 'increment',
+        });
+
+        entity.getFields().forEach(field => {
+            if (field.isReference() && field.isMultipleField()) {
+                // we do not create any fields for many-to-may relation. Instead, a table should be created
+                return;
+            }
+
+            table.columns.push({
+                isNullable: !field.isMandatory(),
+                isGenerated: false,
+                isPrimary: false,
+                isUnique: field.isUnique(),
+                isArray: field.isMultiple(),
+                length: field.getLength(),
+                zerofill: false,
+                unsigned: false,
+                name: field.getName(),
+                type: this.getDBType(field),
+            });
+        });
+
+        return table;
     }
 
     constructor(schema) {
@@ -110,6 +161,7 @@ export default class EntityManager {
                 generated: 'increment',
                 nullable: false,
             },
+            // todo: should we remove this?
             code: {
                 type: 'varchar',
                 length: DB_CODE_COLUMN_LENGTH,
