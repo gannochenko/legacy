@@ -245,6 +245,7 @@ export default class ResolverGenerator {
                     connection,
                     id: databaseItem.id,
                     data,
+                    schema,
                 });
 
                 result.code = code;

@@ -780,4 +780,8 @@ describe('GQL Resolver Generator', () => {
 
         global.logger.error.mockRestore();
     });
+
+    it('reference(multiple): should get referenced data', async () => {
+        // todo
+    });
 });
