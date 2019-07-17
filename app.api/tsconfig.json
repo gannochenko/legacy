@@ -16,5 +16,5 @@
         "noImplicitAny": false,
         "experimentalDecorators": true
     },
-    "include": ["common/**/*"]
+    "include": ["src/**/*"]
 }
