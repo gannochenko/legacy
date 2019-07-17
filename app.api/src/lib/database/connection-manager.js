@@ -2,7 +2,7 @@ import { createConnection } from 'typeorm';
 
 import SchemaEntity from '../../entity/schema';
 import migrations from '../../migrations/index';
-import { DB_MIGRATION_TABLE_NAME } from '../../constants';
+import { DB_MIGRATION_TABLE_NAME } from 'project-minimum-core';
 import { injectPassword } from '../util';
 
 export default class ConnectionManager {
