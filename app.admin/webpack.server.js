@@ -50,6 +50,7 @@ module.exports = (env, argv) => {
                                     '@babel/plugin-proposal-class-properties',
                                     'babel-plugin-styled-components',
                                 ],
+                                cacheDirectory: true,
                             },
                         },
                     ],

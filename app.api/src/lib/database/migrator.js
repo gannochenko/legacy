@@ -3,11 +3,179 @@
  */
 
 import { Table, TableColumn, TableIndex } from 'typeorm';
-import { DB_TABLE_PREFIX, DB_REF_TABLE_PREFIX } from '../../constants';
-import EntityManager from './entity-manager';
+import {
+    DB_TABLE_PREFIX,
+    DB_REF_TABLE_PREFIX,
+    ENTITY_CODE_FIELD_NAME,
+    ENTITY_ID_FIELD_NAME,
+    REFERENCE_ENTITY_PARENT_FIELD_NAME,
+    REFERENCE_ENTITY_CHILD_FIELD_NAME,
+} from 'project-minimum-core';
 import { getRefTableName } from '../entity-util';
 
+import EntityManager from './entity-manager';
+
 export default class Migrator {
+    static async getDelta({ schema, connectionManager } = {}) {
+        const queryRunner = (await connectionManager.getSystem()).createQueryRunner(
+            'master',
+        );
+
+        const tables = this.getTables(queryRunner);
+
+        const tablesToCreate = [];
+        const tablesToDrop = [];
+        const tablesToProbablyAlter = [];
+
+        const currentTables = {};
+        const futureTables = {};
+
+        tables.forEach(table => {
+            currentTables[table.name] = table;
+        });
+
+        const entities = schema.getSchema();
+
+        // tables
+        entities.forEach(entity => {
+            const table = EntityManager.getDDLByEntity(entity);
+            futureTables[table.name] = table;
+            if (!(table.name in currentTables)) {
+                tablesToCreate.push(table);
+            } else {
+                tablesToProbablyAlter.push(table);
+            }
+        });
+        Object.values(currentTables).forEach(table => {
+            if (
+                !(table.name in futureTables) &&
+                !table.name.startsWith(DB_REF_TABLE_PREFIX)
+            ) {
+                tablesToDrop.push(table);
+            }
+        });
+
+        // fields
+        const tablesToAlter = {};
+
+        for (let i = 0; i < tablesToProbablyAlter.length; i += 1) {
+            const futureTable = tablesToProbablyAlter[i];
+            const currentTable = currentTables[futureTable.name];
+
+            const tableFutureFieldNames = Object.keys(
+                futureTable.columns.reduce((result, item) => {
+                    result[item.name] = true;
+                    return result;
+                }, {}),
+            );
+
+            const tableCurrentFieldNames = Object.keys(
+                currentTable.columns.reduce((result, item) => {
+                    result[item.name] = true;
+                    return result;
+                }, {}),
+            );
+
+            const fieldsToAdd = _.difference(
+                tableCurrentFieldNames,
+                tableFutureFieldNames,
+            );
+            const fieldsToDelete = _.difference(
+                tableFutureFieldNames,
+                tableCurrentFieldNames,
+            );
+
+            for (let j = 0; j < futureTable.columns.length; j += 1) {
+                const field = futureTable.columns[j];
+                if (fieldsToAdd.includes(field.name)) {
+                    tablesToAlter[futureTable.name] = tablesToAlter[
+                        futureTable.name
+                    ] || {
+                        add: [],
+                        delete: [],
+                    };
+                    tablesToAlter[futureTable.name].add.push(field);
+                }
+            }
+
+            for (let j = 0; j < currentTable.columns.length; j += 1) {
+                const field = currentTable.columns[j];
+
+                if (
+                    field.name !== ENTITY_ID_FIELD_NAME &&
+                    field.name !== ENTITY_CODE_FIELD_NAME
+                ) {
+                    if (fieldsToDelete.includes(field.name)) {
+                        tablesToAlter[currentTable.name] = tablesToAlter[
+                            currentTable.name
+                        ] || {
+                            add: [],
+                            delete: [],
+                        };
+                        tablesToAlter[currentTable.name].delete.push(field);
+                    }
+                }
+            }
+
+            // todo: support altering of fields
+
+            // references
+            const currentReferences = Object.values(currentTables)
+                .map(table =>
+                    table.name.startsWith(DB_REF_TABLE_PREFIX)
+                        ? table.name
+                        : false,
+                )
+                .filter(x => x);
+
+            const refsAdd = [];
+            const refsWillBe = [];
+
+            // find all refs in future tables
+            Object.values(futureTables).forEach(table => {
+                table.__refs.forEach(field => {
+                    const refName = getRefTableName(table.__entity, field);
+                    refsWillBe.push(refName);
+
+                    if (currentReferences.indexOf(refName) < 0) {
+                        refsAdd.push({
+                            name: refName,
+                            columns: [
+                                {
+                                    name: REFERENCE_ENTITY_PARENT_FIELD_NAME,
+                                    isNullable: false,
+                                    isPrimary: true,
+                                    type: 'integer',
+                                },
+                                {
+                                    name: REFERENCE_ENTITY_CHILD_FIELD_NAME,
+                                    isNullable: false,
+                                    isPrimary: true,
+                                    type: 'integer',
+                                },
+                            ],
+                        });
+                    }
+                });
+            });
+
+            const refsDrop = _.difference(currentReferences, refsWillBe);
+
+            for (let i = 0; i < refsAdd.length; i++) {
+                await qr.createTable(new Table(refsAdd[i]), true);
+            }
+            for (let i = 0; i < refsDrop.length; i++) {
+                await qr.dropTable(refsDrop[i], true);
+            }
+        }
+
+        return {
+            create: tablesToCreate,
+            drop: tablesToDrop,
+            alter: tablesToAlter,
+        };
+    }
+
     /**
      * So this function calculates a set of commands that are to execute to set the database in sync with data structure
      * @param params
@@ -20,14 +188,6 @@ export default class Migrator {
             'master',
         );
         // get all entity tables
-        const eTableNames = (await qr.query(
-            `select * from information_schema.tables where table_schema='public' and table_name like '${DB_TABLE_PREFIX}%'`,
-        )).map(t => t.table_name);
-
-        let tables = [];
-        if (_.iane(eTableNames)) {
-            tables = await qr.getTables(eTableNames);
-        }
 
         const toCreate = [];
         const toDrop = [];
@@ -171,5 +331,18 @@ export default class Migrator {
         for (let i = 0; i < refsDrop.length; i++) {
             await qr.dropTable(refsDrop[i], true);
         }
+    }
+
+    static async getTables(queryRunner) {
+        const entityTableNames = (await queryRunner.query(
+            `select * from information_schema.tables where table_schema='public' and table_name like '${DB_TABLE_PREFIX}%'`,
+        )).map(t => t.table_name);
+
+        let tables = [];
+        if (entityTableNames.length) {
+            tables = await queryRunner.getTables(entityTableNames);
+        }
+
+        return tables;
     }
 }

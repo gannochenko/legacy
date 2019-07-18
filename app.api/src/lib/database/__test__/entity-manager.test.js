@@ -56,7 +56,7 @@ describe('DatabaseEntityManager', () => {
         const referenceField = person
             .getFields()
             .find(field => field.getName() === 'partner');
-        expect(EntityManager.getDBType(referenceField)).toEqual('string');
+        expect(EntityManager.getDBType(referenceField)).toEqual('integer');
 
         const booleanField = person
             .getFields()

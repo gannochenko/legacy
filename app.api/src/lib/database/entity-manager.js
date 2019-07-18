@@ -177,9 +177,7 @@ export default class EntityManager {
             }
 
             const column = {
-                type: field.isReference()
-                    ? 'integer'
-                    : this.constructor.getDBType(field),
+                type: this.constructor.getDBType(field),
                 nullable: !field.isMandatory(),
                 array: field.isMultiple(),
             };

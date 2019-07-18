@@ -1,5 +1,5 @@
 import { EntitySchema } from 'typeorm';
-import { DB_SCHEMA_TABLE_NAME } from '../constants';
+import { DB_SCHEMA_TABLE_NAME } from 'project-minimum-core';
 
 export const schema = {
     name: DB_SCHEMA_TABLE_NAME,
