@@ -178,7 +178,7 @@ export default class ResolverGenerator {
 
             data = safeData;
 
-            const singleReferences = this.getSingleReferences(entity);
+            const singleReferences = entity.getSingleReferences();
 
             await this.wrap(async () => {
                 const codeToId = new CodeId({
@@ -302,7 +302,7 @@ export default class ResolverGenerator {
                 }, result.errors);
 
                 // drop reference data
-                const references = this.getMultipleReferences(entity);
+                const references = entity.getMultipleReferences();
 
                 for (let i = 0; i < references.length; i += 1) {
                     const referenceField = references[i];
@@ -395,7 +395,7 @@ export default class ResolverGenerator {
         id,
         data,
     }) {
-        const references = this.getMultipleReferences(entity);
+        const references = entity.getMultipleReferences();
 
         for (let i = 0; i < references.length; i += 1) {
             const referenceField = references[i];
@@ -471,7 +471,7 @@ export default class ResolverGenerator {
         const resolvers = {};
 
         // get all references
-        const references = this.getReferences(entity);
+        const references = entity.getReferences();
         if (!references.length) {
             return resolvers;
         }
@@ -830,19 +830,19 @@ export default class ResolverGenerator {
         };
     }
 
-    static getSingleReferences(entity) {
-        return entity
-            .getFields()
-            .filter(field => field.isReference() && !field.isMultiple());
-    }
+    // static getSingleReferences(entity) {
+    //     return entity
+    //         .getFields()
+    //         .filter(field => field.isReference() && !field.isMultiple());
+    // }
 
-    static getMultipleReferences(entity) {
-        return entity
-            .getFields()
-            .filter(field => field.isReference() && field.isMultiple());
-    }
+    // static getMultipleReferences(entity) {
+    //     return entity
+    //         .getFields()
+    //         .filter(field => field.isReference() && field.isMultiple());
+    // }
 
-    static getReferences(entity) {
-        return entity.getFields().filter(field => field.isReference());
-    }
+    // static getReferences(entity) {
+    //     return entity.getFields().filter(field => field.isReference());
+    // }
 }

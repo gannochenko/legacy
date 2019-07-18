@@ -139,12 +139,24 @@ export class Entity {
         return uCFirst(this.getName()).replace(/_/g, ' ');
     }
 
-    getReferences() {
-        return this.declaration.schema.filter(field => field.isReference());
-    }
-
     getFields() {
         return this.declaration.schema;
+    }
+
+    getReferences() {
+        return this.getFields().filter(field => field.isReference());
+    }
+
+    getSingleReferences() {
+        return this.getFields().filter(
+            field => field.isReference() && !field.isMultiple(),
+        );
+    }
+
+    getMultipleReferences() {
+        return this.getFields().filter(
+            field => field.isReference() && field.isMultiple(),
+        );
     }
 
     getField(name) {
