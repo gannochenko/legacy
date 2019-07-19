@@ -1,5 +1,5 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
-import { DB_SCHEMA_TABLE_NAME } from '../constants';
+import { DB_SCHEMA_TABLE_NAME } from 'project-minimum-core';
 
 /**
  * https://github.com/typeorm/typeorm/blob/master/docs/migrations.md

@@ -59,7 +59,7 @@ const getServer = async ({ cache, connectionManager }) => {
     return server;
 };
 
-export default (app, params = {}) => {
+const useGraphQL = (app, params = {}) => {
     // server.applyMiddleware({ app, cors: false });
 
     app.use('/graphql', async (req, res, next) => {
@@ -87,3 +87,5 @@ export default (app, params = {}) => {
         })(req, res, next);
     });
 };
+
+export default useGraphQL;

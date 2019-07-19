@@ -1,7 +1,7 @@
 import { wrapError } from 'ew-internals';
 import Migrator from '../lib/database/migrator';
 
-export default (app, params = {}) => {
+const useSyncAPI = (app, params = {}) => {
     app.get(
         '/sync',
         wrapError(async (req, res) => {
@@ -10,3 +10,5 @@ export default (app, params = {}) => {
         }),
     );
 };
+
+export default useSyncAPI;

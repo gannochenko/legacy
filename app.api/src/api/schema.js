@@ -19,7 +19,7 @@ const sendJSONResult = (res, result, code = null) => {
         .send(JSON.stringify(result));
 };
 
-export default (app, params = {}) => {
+const useSchemaAPI = (app, params = {}) => {
     const { connectionManager } = params;
 
     /**
@@ -128,3 +128,5 @@ export default (app, params = {}) => {
         }),
     );
 };
+
+export default useSchemaAPI;
