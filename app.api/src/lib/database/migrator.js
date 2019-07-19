@@ -11,7 +11,6 @@ import {
     REFERENCE_ENTITY_PARENT_FIELD_NAME,
     REFERENCE_ENTITY_CHILD_FIELD_NAME,
 } from 'project-minimum-core';
-import { getRefTableName } from '../entity-util';
 
 import EntityManager from './entity-manager';
 
@@ -176,7 +175,7 @@ export default class Migrator {
     }
 
     static async migrate(params) {
-        const delta = this.getDelta(params);
+        const delta = await this.getDelta(params);
     }
 
     static async getTables(queryRunner) {
