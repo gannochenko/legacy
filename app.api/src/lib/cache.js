@@ -24,7 +24,7 @@ export default class Cache {
 
     constructor(props = {}) {
         const { url, password } = props;
-        this._cache = null;
+        this.cache = null;
         if (_.isne(url)) {
             const sUrl = decomposeURL(injectPassword(url, password));
             if (sUrl === null) {
@@ -32,7 +32,7 @@ export default class Cache {
                 return;
             }
 
-            this._cache = new TagCache({
+            this.cache = new TagCache({
                 redis: {
                     ...sUrl,
                     connectTimeout: 1000,
@@ -42,24 +42,24 @@ export default class Cache {
     }
 
     async get(...args) {
-        if (this._cache) {
-            return await this._cache.get(...args);
+        if (this.cache) {
+            return this.cache.get(...args);
         }
 
         return null;
     }
 
     async set(...args) {
-        if (this._cache) {
-            return await this._cache.set(...args);
+        if (this.cache) {
+            return this.cache.set(...args);
         }
 
         return null;
     }
 
     async invalidate(...args) {
-        if (this._cache) {
-            return this._cache.invalidate(...args);
+        if (this.cache) {
+            return this.cache.invalidate(...args);
         }
 
         return null;

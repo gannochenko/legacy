@@ -56,20 +56,19 @@ module.exports = (env, argv) => {
                         },
                     ],
                 },
+                {
+                    test: /\.tsx?$/,
+                    loaders: [
+                        {
+                            loader: 'ts-loader',
+                            options: {
+                                transpileOnly: true,
+                            },
+                        },
+                    ],
 
-                // {
-                //     test: /\.tsx?$/,
-                //     loaders: [
-                //         {
-                //             loader: 'ts-loader',
-                //             options: {
-                //                 transpileOnly: true,
-                //             },
-                //         },
-                //     ],
-                //
-                //     exclude: /node_modules/,
-                // },
+                    exclude: /node_modules/,
+                },
             ],
         },
         plugins: [
@@ -85,9 +84,9 @@ module.exports = (env, argv) => {
                 nodeArgs: development ? ['--inspect=0.0.0.0:4001'] : [],
                 watch: path.join(__dirname, 'build'),
             }),
-            // new ForkTsCheckerWebpackPlugin({
-            //     watch: path.join(__dirname, 'src'),
-            // }),
+            new ForkTsCheckerWebpackPlugin({
+                watch: path.join(__dirname, 'src'),
+            }),
         ],
     };
 };
