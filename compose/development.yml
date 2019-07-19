@@ -62,10 +62,10 @@ services:
       - DEBUG=gql.*
       - DEBUG_COLORS=1
       - DEBUG_HIDE_DATE=1
-      - network.port=4000
-      - "network.cors=http://localhost:3000"
-      - "cache.url=redis://cache:6379"
-      - "db.url=postgres://root:123@db:5432/legacy"
+      - NETWORK__PORT=4000
+      - NETWORK__CORS=*
+      - CACHE__URL=redis://cache:6379"
+      - DB__URL=postgres://root:123@db:5432/legacy"
     labels:
       com.list.name: Backend
       com.list.sort: "1"
@@ -101,8 +101,8 @@ services:
       - NODE_ENV=development
       - DEBUG_COLORS=1
       - DEBUG_HIDE_DATE=1
-      - network.cors=*
-      - api.url=http://localhost:4000
+      - NETWORK__CORS=*
+      - API__URL=http://localhost:4000
     labels:
       com.list.name: Admin
       com.list.link.analyzer: Bundle analyzer|http://localhost:8888
