@@ -1,10 +1,11 @@
+import { Request, Response, Express } from 'express';
 import { wrapError } from 'ew-internals';
 import Migrator from '../lib/database/migrator';
 
-const useSyncAPI = (app, params = {}) => {
+const useSyncAPI = (app: Express, params: object = {}) => {
     app.get(
         '/sync',
-        wrapError(async (req, res) => {
+        wrapError(async (req: Request, res: Response) => {
             await Migrator.migrate(params);
             res.status(200).send(`<pre>1</pre>`);
         }),

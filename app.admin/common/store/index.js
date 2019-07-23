@@ -9,8 +9,8 @@ import createSagaMiddleware from 'redux-saga';
 import { fork, all } from 'redux-saga/effects';
 import logger from 'redux-logger';
 
-import reducers from './reducers';
-import sagas from './sagas';
+import reducers from 'app.admin/common/store/reducers';
+import sagas from 'app.admin/common/store/sagas';
 
 export const createStore = ({ history, onChange }) => {
     const saga = createSagaMiddleware();

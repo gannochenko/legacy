@@ -1,7 +1,10 @@
 import { camel } from 'naming-style';
 
-export const injectPassword = (url, password = null) => {
-    if (_.isne(password)) {
+export const injectPassword = (
+    url: string,
+    password: Nullable<string> = null,
+) => {
+    if (typeof password === 'string' && password.length) {
         const oUrl = new URL(url);
         oUrl.password = password;
 
@@ -11,7 +14,7 @@ export const injectPassword = (url, password = null) => {
     return url;
 };
 
-export const decomposeURL = url => {
+export const decomposeURL = (url: string) => {
     const oUrl = new URL(url);
 
     const parts = {
@@ -25,7 +28,7 @@ export const decomposeURL = url => {
         return null;
     }
 
-    if (Number.isNaN(parts.port)) {
+    if (Number.isNaN(Number(parts.port))) {
         delete parts.port;
     }
 
@@ -37,7 +40,7 @@ export const decomposeURL = url => {
  * @param str
  * @returns {string}
  */
-export const convertToCamel = str => {
+export const convertToCamel = (str: string) => {
     str = camel(str.toLowerCase());
     return `${str.substr(0, 1).toUpperCase()}${str.substr(1, str.length - 1)}`;
 };
