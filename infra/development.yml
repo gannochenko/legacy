@@ -24,7 +24,7 @@ services:
       com.list.link.endpoint: Browse database|/?pgsql=db&username=root&db=legacy&ns=public
   cache:
     build:
-      context: ../infra/cache/
+      context: ./cache/
       dockerfile: Dockerfile
     expose:
       - 6379
@@ -46,7 +46,7 @@ services:
     image: "api:dev"
     build:
       context: ../app.api/
-      dockerfile: docker/development.dockerfile
+      dockerfile: infra/development.dockerfile
     expose:
       - "4001"
       - "4000"
@@ -85,7 +85,7 @@ services:
     image: "admin:dev"
     build:
       context: ../app.admin/
-      dockerfile: docker/development.dockerfile
+      dockerfile: infra/development.dockerfile
     expose:
       - "8888"
       - "3000"

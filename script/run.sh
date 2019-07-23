@@ -10,4 +10,4 @@ if [[ $1 = "-r" ]]; then
 fi
 
 docker stop $(docker ps -aq) > /dev/null;
-docker-compose -f ${DIR}/../compose/development.yml up ${REBUILD};
+docker-compose -f ${DIR}/../infra/development.yml up ${REBUILD};
