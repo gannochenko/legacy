@@ -1,5 +1,6 @@
 /**
  * https://github.com/typeorm/typeorm/blob/master/docs/entities.md
+ * https://github.com/typeorm/typeorm/blob/master/src/driver/types/ColumnTypes.ts
  */
 
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
@@ -16,31 +17,6 @@ export default class SchemaEntity {
     @Column({ type: 'json', nullable: false })
     public schema: string | undefined;
 
-    @Column({ type: 'number', default: 0 })
+    @Column({ type: 'smallint', default: 0 })
     public version: number | undefined;
 }
-
-// const schema = {
-//     name: DB_SCHEMA_TABLE_NAME,
-//     columns: {
-//         id: {
-//             primary: true,
-//             type: 'integer',
-//             generated: 'increment',
-//             nullable: false,
-//         },
-//         draft: {
-//             type: 'boolean',
-//             nullable: false,
-//         },
-//         schema: {
-//             type: 'json',
-//             nullable: false,
-//         },
-//         version: {
-//             type: 'integer',
-//             defaultValue: 0,
-//         },
-//     },
-// };
-// export default new EntitySchema(schema);

@@ -1,3 +1,7 @@
+/**
+ * https://github.com/typeorm/typeorm/blob/master/src/driver/types/ColumnTypes.ts
+ */
+
 import md5 from 'md5';
 import { EntitySchema } from 'typeorm';
 import {

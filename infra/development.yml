@@ -64,8 +64,8 @@ services:
       - DEBUG_HIDE_DATE=1
       - NETWORK__PORT=4000
       - NETWORK__CORS=*
-      - CACHE__URL=redis://cache:6379"
-      - DB__URL=postgres://root:123@db:5432/legacy"
+      - CACHE__URL=redis://cache:6379
+      - DB__URL=postgres://root:123@db:5432/legacy
     labels:
       com.list.name: Backend
       com.list.sort: "1"
