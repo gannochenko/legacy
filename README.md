@@ -32,3 +32,6 @@ Additinal:
 ~~~
 ./script/run.sh
 ~~~
+
+TF_LOG=1 terraform apply -auto-approve
+terraform destroy
