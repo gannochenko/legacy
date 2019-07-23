@@ -1,7 +1,7 @@
 import { Schema } from 'project-minimum-core';
-import SchemaEntity from '../entity/schema';
+import SchemaEntity from 'app.api/src/entity/schema';
 
-class SchemaStore {
+class SchemaService {
     static async load(type, connectionManager) {
         const connection = await connectionManager.getSystem();
 
@@ -61,4 +61,4 @@ class SchemaStore {
     }
 }
 
-export default SchemaStore;
+export default SchemaService;

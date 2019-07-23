@@ -1,6 +1,6 @@
 import { wrapError } from 'ew-internals';
 import { Schema } from 'project-minimum-core';
-import SchemaStore from '../lib/schema-store';
+import SchemaService from '../service/schema';
 
 // todo: move sendJSONResult() to ew-internals
 const sendJSONResult = (res, result, code = null) => {
@@ -44,7 +44,7 @@ const useSchemaAPI = (app, params = {}) => {
                 return sendJSONResult(res, result);
             }
 
-            const schema = await SchemaStore.load(type, connectionManager);
+            const schema = await SchemaService.load(type, connectionManager);
             if (schema) {
                 result.data = schema.getEntity(entity);
             }
@@ -74,7 +74,7 @@ const useSchemaAPI = (app, params = {}) => {
                 return sendJSONResult(res, result);
             }
 
-            result.data = await SchemaStore.load(type, connectionManager);
+            result.data = await SchemaService.load(type, connectionManager);
             return sendJSONResult(res, result, !result.data ? 404 : null);
         }),
     );
@@ -90,12 +90,12 @@ const useSchemaAPI = (app, params = {}) => {
             };
 
             // replace an actual schema with a draft
-            const draftSchema = await SchemaStore.load(
+            const draftSchema = await SchemaService.load(
                 'draft',
                 connectionManager,
             );
             if (draftSchema) {
-                result.errors = await SchemaStore.put(
+                result.errors = await SchemaService.put(
                     'actual',
                     draftSchema,
                     connectionManager,
@@ -118,7 +118,7 @@ const useSchemaAPI = (app, params = {}) => {
             };
 
             const schema = _.get(req, 'body.schema');
-            result.errors = await SchemaStore.put(
+            result.errors = await SchemaService.put(
                 'draft',
                 new Schema({ schema }).getSchema(), // todo: this makes a vulnerability
                 connectionManager,

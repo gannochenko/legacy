@@ -16,9 +16,13 @@ export const get = () => {
         );
 
         const criticalCSS = makeCSS({ theme });
-        const html = fs.readFileSync(path.join(templateFolder, 'index.html'));
-        const js = fs.readFileSync(path.join(templateFolder, 'index.js'));
-        const css = fs.readFileSync(path.join(templateFolder, 'index.css'));
+        const html = fs.readFileSync(
+            path.join(templateFolder, 'index.ts.ts.html'),
+        );
+        const js = fs.readFileSync(path.join(templateFolder, 'index.ts.ts.js'));
+        const css = fs.readFileSync(
+            path.join(templateFolder, 'index.ts.ts.css'),
+        );
 
         cache = {
             html,
