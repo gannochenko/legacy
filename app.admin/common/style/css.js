@@ -1,7 +1,7 @@
 const makeCss = ({ theme, prepend = '', append = '' }) => `
     ${prepend}
     @import url('https://fonts.googleapis.com/css?family=Montserrat');
-    
+
     html {
         font-size: 20px;
         cursor: default;
@@ -11,7 +11,7 @@ const makeCss = ({ theme, prepend = '', append = '' }) => `
         -ms-text-size-adjust: 100%;
         -webkit-text-size-adjust: 100%;
     }
-    
+
     body {
         padding: 0 !important;
         margin: 0 !important;

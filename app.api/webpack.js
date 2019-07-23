@@ -85,29 +85,30 @@ module.exports = (env, argv) => {
             ],
         },
         plugins: [
-            new ForkTsCheckerWebpackPlugin({
-                typescript: resolve.sync('typescript', {
-                    basedir: path.join(__dirname, 'node_modules'),
+            development &&
+                new ForkTsCheckerWebpackPlugin({
+                    typescript: resolve.sync('typescript', {
+                        basedir: path.join(__dirname, 'node_modules'),
+                    }),
+                    async: false,
+                    checkSyntacticErrors: true,
+                    tsconfig: path.join(__dirname, 'tsconfig.json'),
+                    compilerOptions: {
+                        module: 'esnext',
+                        moduleResolution: 'node',
+                        resolveJsonModule: true,
+                        isolatedModules: true,
+                        noEmit: true,
+                    },
+                    reportFiles: [
+                        '**',
+                        '!**/*.json',
+                        '!**/__test__/**',
+                        '!**/?(*.)(spec|test).*',
+                    ],
+                    watch: sourceFolder,
+                    silent: true,
                 }),
-                async: false,
-                checkSyntacticErrors: true,
-                tsconfig: path.join(__dirname, 'tsconfig.json'),
-                compilerOptions: {
-                    module: 'esnext',
-                    moduleResolution: 'node',
-                    resolveJsonModule: true,
-                    isolatedModules: true,
-                    noEmit: true,
-                },
-                reportFiles: [
-                    '**',
-                    '!**/*.json',
-                    '!**/__test__/**',
-                    '!**/?(*.)(spec|test).*',
-                ],
-                watch: sourceFolder,
-                silent: true,
-            }),
             new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
             new webpack.ProvidePlugin({
                 _: [path.join(__dirname, `src/lib/lodash.js`), 'default'],
@@ -117,10 +118,11 @@ module.exports = (env, argv) => {
                 __DEV__: development,
                 __TEST__: false,
             }),
-            new NodemonPlugin({
-                nodeArgs: development ? ['--inspect=0.0.0.0:4001'] : [],
-                watch: destinationFolder,
-            }),
-        ],
+            development &&
+                new NodemonPlugin({
+                    nodeArgs: development ? ['--inspect=0.0.0.0:4001'] : [],
+                    watch: destinationFolder,
+                }),
+        ].filter(x => !!x),
     };
 };
