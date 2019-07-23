@@ -117,7 +117,7 @@ const useSchemaAPI = (app, params = {}) => {
                 errors: [],
             };
 
-            const schema = _.get(req, 'body.schema');
+            const schema = _.get(req, 'body.schema.ts');
             result.errors = await SchemaService.put(
                 'draft',
                 new Schema({ schema }).getSchema(), // todo: this makes a vulnerability

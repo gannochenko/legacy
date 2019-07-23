@@ -25,7 +25,7 @@ module.exports = (env, argv) => {
         output: {
             libraryTarget: 'commonjs',
             path: destinationFolder,
-            filename: 'index.ts.ts.js',
+            filename: 'index.ts.ts.ts.js',
         },
         resolve: {
             extensions: ['.js', '.ts'],
@@ -122,6 +122,7 @@ module.exports = (env, argv) => {
                 new NodemonPlugin({
                     nodeArgs: development ? ['--inspect=0.0.0.0:4001'] : [],
                     watch: destinationFolder,
+                    ext: 'js,ts,graphql',
                 }),
         ].filter(x => !!x),
     };

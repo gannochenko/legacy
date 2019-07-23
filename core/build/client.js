@@ -89,7 +89,7 @@
             var r = ''.concat('eq_', 'ref_'),
                 i = ''.concat('eq_', 'e_'),
                 a = ''.concat('eq_', 'migrations'),
-                o = ''.concat('eq_', 'schema'),
+                o = ''.concat('eq_', 'schema.ts'),
                 u = 'code',
                 c = 'string',
                 l = 'integer',

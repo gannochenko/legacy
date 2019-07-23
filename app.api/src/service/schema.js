@@ -1,5 +1,5 @@
 import { Schema } from 'project-minimum-core';
-import SchemaEntity from 'app.api/src/entity/schema';
+import SchemaEntity from '../entity/schema';
 
 class SchemaService {
     static async load(type, connectionManager) {

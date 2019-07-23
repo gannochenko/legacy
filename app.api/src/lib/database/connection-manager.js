@@ -1,8 +1,8 @@
 import { createConnection } from 'typeorm';
 
-import SchemaEntity from '../../entity/schema';
-import migrations from '../../migrations/index';
 import { DB_MIGRATION_TABLE_NAME } from 'project-minimum-core';
+import SchemaEntity from '../../entity/schema';
+import migrations from '../../migrations';
 import { injectPassword } from '../util';
 
 export default class ConnectionManager {
@@ -48,10 +48,7 @@ export default class ConnectionManager {
             this.connections.simple = this.make({
                 name: 'system',
                 settings: this.settings,
-                entities: [
-                    SchemaEntity,
-                    // todo: user entity, group entity
-                ],
+                entities: [SchemaEntity],
                 migrationsTableName: DB_MIGRATION_TABLE_NAME,
                 migrations,
             });

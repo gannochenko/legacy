@@ -8,11 +8,11 @@ import { graphqlExpress } from './graphql-express';
 import SchemaService from '../../service/schema';
 import GQLTypeGenerator from './type-generator';
 import ResolverGenerator from './resolver-generator';
-import DatabaseEntityManager from '../../lib/database/entity-manager';
-import DataLoaderPool from '../../lib/database/data-loader-pool';
+import DatabaseEntityManager from '../database/entity-manager';
+import DataLoaderPool from '../database/data-loader-pool';
 
-import typeDefs from 'app.api/src/graphql/types';
-import resolvers from 'app.api/src/graphql/resolvers';
+import typeDefs from '../../graphql/types';
+import resolvers from '../../graphql/resolvers';
 
 let server = null;
 
