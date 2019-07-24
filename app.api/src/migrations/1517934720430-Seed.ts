@@ -5,7 +5,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
  */
 export class Seed1517934720430 implements MigrationInterface {
     public async up(queryRunner: QueryRunner) {
-        await queryRunner.connection.synchronize(true);
+        await queryRunner.connection.synchronize(false);
 
         logger.info('🌱 Seed migration applied');
     }
