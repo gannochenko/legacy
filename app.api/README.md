@@ -16,3 +16,8 @@ The following command will make a production-ready build, create a docker image 
 ~~~~
 ./script/push.sh 1.0.0
 ~~~~
+
+To run migrations locally outside of the application:
+~~~~
+TYPEORM_URL=postgres://root:123@localhost:5432/legacy yarn run migrate
+~~~~

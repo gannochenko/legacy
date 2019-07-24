@@ -45,7 +45,9 @@ import useSyncAPI from './api/sync';
     const cache = await Cache.make({ settings });
     const connectionManager = new ConnectionManager({ settings });
     const systemConnection = await connectionManager.getSystem();
-    await systemConnection.runMigrations();
+    if (__DEV__) {
+        await systemConnection.runMigrations();
+    }
 
     // const intercom = new InterCom({
     //     url: await settings.get('intercom.url', ''),

@@ -12,6 +12,7 @@
         "e2e:dev": "jest -c ./jest/config.e2e.js --runInBand --forceExit --watch",
         "build": "webpack --config webpack.js --mode production",
         "start": "node ./build/index.js",
+        "migrate": "ts-node ./node_modules/typeorm/cli.js migration:run",
         "lint": "eslint ./src/",
         "lint:fix": "eslint ./src/ --fix",
         "techdebt": "leasot --exit-nicely --reporter table --skip-unsupported --ignore node_modules,build,migrations ./"
@@ -92,6 +93,7 @@
         "project-minimum-core": "^1.0.1",
         "redis-tag-cache": "^1.2.1",
         "reflect-metadata": "^0.1.13",
+        "ts-node": "^8.3.0",
         "typeorm": "^0.2.14",
         "uuid": "^3.3.2",
         "yup": "^0.27.0"

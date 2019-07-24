@@ -3,11 +3,18 @@
  * https://github.com/typeorm/typeorm/blob/master/src/driver/types/ColumnTypes.ts
  */
 
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { DB_SCHEMA_TABLE_NAME } from 'project-minimum-core';
 
+// const typeorm = require('typeorm');
+// const tableName = require('project-minimum-core').DB_SCHEMA_TABLE_NAME;
+//
+// const Entity = typeorm.Entity;
+// const PrimaryGeneratedColumn = typeorm.PrimaryGeneratedColumn;
+// const Column = typeorm.Column;
+
 @Entity({ name: DB_SCHEMA_TABLE_NAME })
-export default class SchemaEntity {
+class SchemaEntity {
     @PrimaryGeneratedColumn()
     public id: number | undefined;
 
@@ -20,3 +27,5 @@ export default class SchemaEntity {
     @Column({ type: 'smallint', default: 0 })
     public version: number | undefined;
 }
+
+export default SchemaEntity;
