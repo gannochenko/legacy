@@ -6,13 +6,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { DB_SCHEMA_TABLE_NAME } from 'project-minimum-core';
 
-// const typeorm = require('typeorm');
-// const tableName = require('project-minimum-core').DB_SCHEMA_TABLE_NAME;
-//
-// const Entity = typeorm.Entity;
-// const PrimaryGeneratedColumn = typeorm.PrimaryGeneratedColumn;
-// const Column = typeorm.Column;
-
 @Entity({ name: DB_SCHEMA_TABLE_NAME })
 class SchemaEntity {
     @PrimaryGeneratedColumn()
