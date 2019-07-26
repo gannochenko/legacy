@@ -2,8 +2,6 @@ import * as yup from 'yup';
 import { getVaultFor } from './vault';
 import { StringMap } from './type';
 
-const cache = new Map();
-
 export const getValidator = (dto: Function, depth = 1): object => {
     if (depth > 30) {
         return null;
@@ -12,7 +10,6 @@ export const getValidator = (dto: Function, depth = 1): object => {
     const vault = getVaultFor(dto);
 
     if (!vault || !vault.isDTO) {
-        console.log('no vault!');
         return null;
     }
 
@@ -67,4 +64,27 @@ export const getValidator = (dto: Function, depth = 1): object => {
     });
 
     return result;
+};
+
+export const truncateStructure = (
+    structure: StringMap,
+    dto: Function,
+    depth = 1,
+): StringMap => {
+    if (depth > 30) {
+        return {};
+    }
+
+    const vault = getVaultFor(dto);
+
+    if (!vault || !vault.isDTO) {
+        return {};
+    }
+
+    const { attributes } = vault;
+    if (!_.ione(attributes)) {
+        return {};
+    }
+
+    // todo
 };

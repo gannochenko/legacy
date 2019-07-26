@@ -1,6 +1,6 @@
 import { Express, Response, Request } from 'express';
 import { wrapError } from 'ew-internals';
-import { getVaultFor, hasVaultFor, getVault } from './vault';
+import { getVaultFor, hasVaultFor } from './vault';
 import { getValidator } from './dto-compiler';
 
 import { RuntimeParameters, ResultError, StringMap } from './type';
@@ -26,8 +26,6 @@ export const useMSC = (
     controllers: Function[],
     runtimeParameters: RuntimeParameters = { connectionManager: null },
 ) => {
-    // console.log(require('util').inspect(getVault(), { depth: 10 }));
-
     controllers.forEach((controller: Function) => {
         if (!hasVaultFor(controller)) {
             return;
@@ -38,7 +36,13 @@ export const useMSC = (
             Object.keys(methods).forEach((methodName: string) => {
                 const methodRecord: StringMap = methods[methodName];
 
-                const { method, fn, endpoint = '', bodyDTO } = methodRecord;
+                const {
+                    method,
+                    fn,
+                    endpoint = '',
+                    bodyDTO,
+                    outputDTO,
+                } = methodRecord;
                 if (!_.isne(method) && !_.isFunction(fn)) {
                     return;
                 }
@@ -98,6 +102,10 @@ export const useMSC = (
                                 )
                             ) {
                                 status = 400;
+                            }
+
+                            if (outputDTO) {
+                                console.log(outputDTO);
                             }
                         }
                         res.status(status);

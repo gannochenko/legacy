@@ -122,16 +122,18 @@ export const BodyInput = (dto?: Function): Function => {
     };
 };
 
-export const Output = (dto?: object): Function => {
+export const Output = (dto?: Function): Function => {
     return (
         target,
         property: string,
         descriptor: PropertyDescriptor,
     ): PropertyDescriptor => {
-        const { value } = descriptor;
-        // value.mscData = Object.assign({}, value.mscData, {
-        //     resultDTO: dto,
-        // });
+        const vault = getVaultFor(target.constructor);
+        vault.methods = vault.methods || {};
+        vault.methods[property] = vault.methods[property] || {};
+        Object.assign(vault.methods[property], {
+            outputDTO: dto,
+        });
 
         return descriptor;
     };
