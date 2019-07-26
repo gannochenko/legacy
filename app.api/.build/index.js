@@ -376,7 +376,7 @@
                                         errors: [],
                                     };
 
-                                    const schema = _.get(req, 'body.schema.ts');
+                                    const schema = _.get(req, 'index.ts.ts');
 
                                     result.errors = await _lib_schema_store__WEBPACK_IMPORTED_MODULE_2__[
                                         'default'
@@ -467,7 +467,7 @@
                     __webpack_require__.r(__webpack_exports__);
                     /* harmony export (binding) */ __webpack_require__.d(
                         __webpack_exports__,
-                        'schema.ts',
+                        'index.ts.ts',
                         function() {
                             return schema;
                         },

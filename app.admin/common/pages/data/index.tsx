@@ -114,7 +114,7 @@ const DataPageComponent: FunctionComponent<DataPageProperties> = ({
 export default withNotification(
     withClient(
         connect(
-            s => ({ ...s.data, schema: s.application.schema }),
+            s => ({ ...s.data, schema: s.application.index }),
             mapDispatchToProps,
         )(DataPageComponent),
     ),

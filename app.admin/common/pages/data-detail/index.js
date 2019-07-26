@@ -101,7 +101,7 @@ const DataPage = ({
 export default withNotification(
     withClient(
         connect(
-            s => ({ ...s['data-detail'], schema: s.application.schema }),
+            s => ({ ...s['data-detail'], schema: s.application.index }),
             mapDispatchToProps,
         )(DataPage),
     ),

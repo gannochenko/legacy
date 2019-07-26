@@ -4,11 +4,15 @@ import {
     Get,
     Put,
     Patch,
+    BodyInput,
+    Output,
     Result,
     InputContext,
     ERROR_REQUEST,
-} from '../lib/msc';
-import SchemaService from '../service/schema';
+} from '../../lib/msc';
+import SchemaService from '../../service/schema';
+
+import { SchemaInputDTO } from './input.dto';
 
 @Endpoint('/schema')
 export class SchemaController {
@@ -85,6 +89,8 @@ export class SchemaController {
     }
 
     @Patch()
+    @BodyInput(SchemaInputDTO)
+    @Output()
     public async patch(
         params,
         { body },
@@ -92,7 +98,7 @@ export class SchemaController {
     ): Promise<Result> {
         const result = new Result();
 
-        const schema = body.schema.ts;
+        const schema = body.index.ts;
         result.errors = await SchemaService.put(
             'draft',
             new Schema({ schema }).getSchema(), // todo: this makes a vulnerability, check if healthy before saving!!!

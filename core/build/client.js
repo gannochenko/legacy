@@ -89,7 +89,7 @@
             var r = ''.concat('eq_', 'ref_'),
                 i = ''.concat('eq_', 'e_'),
                 a = ''.concat('eq_', 'migrations'),
-                o = ''.concat('eq_', 'schema.ts'),
+                o = ''.concat('eq_', 'index.ts.ts'),
                 u = 'code',
                 c = 'string',
                 l = 'integer',
@@ -771,7 +771,7 @@
                                                                             n.name,
                                                                     }),
                                                                 N.iane(
-                                                                    n.schema,
+                                                                    n.index,
                                                                 ) ||
                                                                     t.push({
                                                                         message:
@@ -782,7 +782,7 @@
                                                                             n.name,
                                                                     }),
                                                                 (r = {}),
-                                                                n.schema.forEach(
+                                                                n.index.forEach(
                                                                     function(
                                                                         e,
                                                                     ) {
@@ -837,7 +837,7 @@
                                                                 ),
                                                                 (e.next = 11),
                                                                 Promise.all(
-                                                                    n.schema.map(
+                                                                    n.index.map(
                                                                         function(
                                                                             e,
                                                                         ) {
@@ -914,7 +914,7 @@
                         {
                             key: 'getReferences',
                             value: function() {
-                                return this.declaration.schema.filter(function(
+                                return this.declaration.index.filter(function(
                                     e,
                                 ) {
                                     return e.isReference();
@@ -924,13 +924,13 @@
                         {
                             key: 'getFields',
                             value: function() {
-                                return this.declaration.schema;
+                                return this.declaration.index;
                             },
                         },
                         {
                             key: 'getField',
                             value: function(e) {
-                                return this.declaration.schema[e];
+                                return this.declaration.index[e];
                             },
                         },
                         {
@@ -943,7 +943,7 @@
                             key: 'getPresentationField',
                             value: function() {
                                 return (
-                                    this.declaration.schema.find(function(e) {
+                                    this.declaration.index.find(function(e) {
                                         return (
                                             e.getType() === c &&
                                             e.getName() !== u
@@ -957,9 +957,7 @@
                             value: function() {
                                 var e = {};
                                 return (
-                                    this.declaration.schema.forEach(function(
-                                        t,
-                                    ) {
+                                    this.declaration.index.forEach(function(t) {
                                         var n = null;
                                         if (t.isReference())
                                             n = h
@@ -1228,7 +1226,7 @@
                                                                     (n = this
                                                                         .declaration),
                                                                     (r =
-                                                                        n.schema),
+                                                                        n.index),
                                                                     N.iane(r))
                                                                 ) {
                                                                     e.next = 5;
@@ -1393,7 +1391,7 @@
                         {
                             key: 'getSchema',
                             value: function() {
-                                return this.declaration.schema;
+                                return this.declaration.index;
                             },
                         },
                         {
@@ -1405,9 +1403,7 @@
                         {
                             key: 'getEntity',
                             value: function(e) {
-                                return this.declaration.schema.find(function(
-                                    t,
-                                ) {
+                                return this.declaration.index.find(function(t) {
                                     return t.getName() === e;
                                 });
                             },
@@ -1417,9 +1413,7 @@
                             value: function() {
                                 var e = [];
                                 return (
-                                    this.declaration.schema.forEach(function(
-                                        t,
-                                    ) {
+                                    this.declaration.index.forEach(function(t) {
                                         e = N.union(e, t.getReferences());
                                     }),
                                     e
@@ -1429,7 +1423,7 @@
                         {
                             key: 'isEmpty',
                             value: function() {
-                                return !this.declaration.schema.length;
+                                return !this.declaration.index.length;
                             },
                         },
                     ]) && B(t.prototype, n),

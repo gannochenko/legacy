@@ -2,13 +2,9 @@ import { Request, Response } from 'express';
 import { IncomingHttpHeaders } from 'http';
 import ConnectionManager from '../database/connection-manager';
 
-export interface MSCData {
-    [key: string]: any;
-}
-export type PatchedConstructor = Function & { mscData?: MSCData };
-export type PatchedPropertyDescriptor = TypedPropertyDescriptor<
+export type PropertyDescriptor = TypedPropertyDescriptor<
     (params: any) => Promise<any>
-> & { value?: Function & { mscData?: MSCData } };
+> & { initializer?: Function } & { value?: Function };
 
 export interface RuntimeParameters {
     connectionManager?: ConnectionManager;
@@ -30,4 +26,8 @@ export interface Result {
     data?: any;
     errors: Error[];
     status?: number;
+}
+
+export interface StringMap {
+    [key: string]: any;
 }
