@@ -1,7 +1,6 @@
 import isObject from 'lodash.isobject';
 // const random = require('lodash.random');
 // const isNumber = require('lodash.isnumber');
-import isFunction from 'lodash.isfunction';
 import union from 'lodash.union';
 import intersection from 'lodash.intersection';
 import difference from 'lodash.difference';
@@ -13,7 +12,7 @@ import cloneDeep from 'lodash.clonedeep';
 export default {
     isArray: Array.isArray,
     isObject,
-    isFunction,
+    isFunction: arg => typeof arg === 'function',
     union,
     intersection,
     difference,

@@ -11,10 +11,15 @@ import useCORS from './lib/cors';
 import Cache from './lib/cache';
 import ConnectionManager from './lib/database/connection-manager';
 
+// simple API as middleware
 import useHomeAPI from './api/home';
 import useGraphQL from './lib/graphql/apollo';
-import useSchemaAPI from './api/schema';
+// import useSchemaAPI from './api/schema';
 import useSyncAPI from './api/sync';
+
+// MSC-API
+import { useMSC } from './lib/msc';
+import controllers from './controller';
 
 (async () => {
     const app = express();
@@ -54,17 +59,21 @@ import useSyncAPI from './api/sync';
     // });
     // await intercom.start();
 
-    useHomeAPI(app, { cache });
+    useHomeAPI(app);
     useGraphQL(app, {
         settings,
         cache,
         connectionManager,
     });
-    useSchemaAPI(app, { cache, connectionManager });
+    useMSC(app, controllers, {
+        connectionManager,
+    });
+    // useSchemaAPI(app, { cache, connectionManager });
+    // todo: temporary endpoint
     useSyncAPI(app, {
         cache,
         connectionManager,
-    }); // todo: temporary endpoint
+    });
 
     app.listen({ port }, () => {
         logger.info(

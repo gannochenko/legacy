@@ -1,7 +1,7 @@
 import { createConnection } from 'typeorm';
 
 import { DB_MIGRATION_TABLE_NAME } from 'project-minimum-core';
-import SchemaEntity from '../../entity/schema';
+import SchemaEntity from '../../model/schema';
 import migrations from '../../migrations';
 import { injectPassword } from '../util';
 
