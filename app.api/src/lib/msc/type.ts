@@ -17,14 +17,14 @@ export interface InputContext {
     runtime: RuntimeParameters;
 }
 
-export interface Error {
+export interface ResultError {
     message?: string;
     code: string;
     type?: string;
 }
 export interface Result {
     data?: any;
-    errors: Error[];
+    errors: ResultError[];
     status?: number;
 }
 

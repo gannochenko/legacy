@@ -156,11 +156,12 @@ export const Attribute = (params: StringMap): Function => {
 
         const vault = getVaultFor(target.constructor);
         vault.attributes = vault.attributes || {};
+
         vault.attributes[property] = Object.assign(
             {},
             {
                 params,
-                initializer,
+                value: initializer ? initializer() : null,
             },
         );
 
