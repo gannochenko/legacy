@@ -28,17 +28,22 @@ export const getValidator = (dto: Function, depth = 1): object => {
         const shape = {};
 
         let subType = null;
+        let fieldType = type;
+        let isArray = false;
+        if (_.isArray(type)) {
+            fieldType = type[0];
+            isArray = true;
+        }
+
         if (_.isFunction(value)) {
             subType = getValidator(value, depth + 1);
         } else {
             // only basic stuff so far
-
-            // todo: support arrays
-            if (type === 'string') {
+            if (fieldType === 'string') {
                 subType = yup.string();
-            } else if (type === 'number') {
+            } else if (fieldType === 'number') {
                 subType = yup.number();
-            } else if (type === 'boolean') {
+            } else if (fieldType === 'boolean') {
                 subType = yup.boolean();
             } else {
                 subType = yup.string();
@@ -47,6 +52,10 @@ export const getValidator = (dto: Function, depth = 1): object => {
 
         if (subType === null) {
             throw new Error(`No DTO found for "${attributeName}" attribute`);
+        }
+
+        if (isArray) {
+            subType = yup.array().of(subType);
         }
 
         if (required) {
@@ -66,7 +75,7 @@ export const getValidator = (dto: Function, depth = 1): object => {
     return result;
 };
 
-export const truncateStructure = (
+export const filterStructure = (
     structure: StringMap,
     dto: Function,
     depth = 1,
@@ -86,5 +95,8 @@ export const truncateStructure = (
         return {};
     }
 
+    console.log(attributes);
+
+    return structure;
     // todo
 };

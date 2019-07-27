@@ -17,6 +17,9 @@ export class DemoInputDTO {
     @Attribute({ required: true, type: 'object' })
     public index: object = IndexDTO;
 
+    @Attribute({ required: true, type: ['object'] })
+    public indexAr: object = IndexDTO;
+
     @Attribute({ required: false, type: 'number' })
     public age: number;
 }

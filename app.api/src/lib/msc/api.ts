@@ -1,7 +1,7 @@
 import { Express, Response, Request } from 'express';
 import { wrapError } from 'ew-internals';
 import { getVaultFor, hasVaultFor } from './vault';
-import { getValidator } from './dto-compiler';
+import { getValidator, filterStructure } from './dto-compiler';
 
 import { RuntimeParameters, ResultError, StringMap } from './type';
 
@@ -59,6 +59,10 @@ export const useMSC = (
                                     await validator.validate(req.body, {
                                         abortEarly: false,
                                     });
+                                    req.body = filterStructure(
+                                        req.body,
+                                        bodyDTO,
+                                    );
                                 } catch (e) {
                                     e.inner.forEach((error: Error) => {
                                         errors.push({
