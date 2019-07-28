@@ -109,7 +109,10 @@ export const useMSC = (
                             }
 
                             if (outputDTO) {
-                                console.log(outputDTO);
+                                result.data = filterStructure(
+                                    result.data,
+                                    outputDTO,
+                                );
                             }
                         }
                         res.status(status);

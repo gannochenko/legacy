@@ -8,17 +8,17 @@ class TSDTO {
 
 @DTO()
 class IndexDTO {
-    @Attribute({ required: true, type: 'object' })
-    public ts: object = TSDTO;
+    @Attribute({ required: true, type: TSDTO })
+    public ts: object;
 }
 
 @DTO()
 export class DemoInputDTO {
-    @Attribute({ required: true, type: 'object' })
-    public index: object = IndexDTO;
+    @Attribute({ required: true, type: IndexDTO })
+    public index: object;
 
-    @Attribute({ required: true, type: ['object'] })
-    public indexAr: object = IndexDTO;
+    @Attribute({ required: true, type: [IndexDTO] })
+    public indexAr: object;
 
     @Attribute({ required: false, type: 'number' })
     public age: number;

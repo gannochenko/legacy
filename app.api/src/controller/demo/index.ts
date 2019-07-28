@@ -17,7 +17,7 @@ export class DemoController {
     @Output(DemoOutputDTO)
     public async getEntity(
         { type, entity },
-        { runtime: { connectionManager } }: InputContext,
+        { body, runtime: { connectionManager } }: InputContext,
     ): Promise<Result> {
         const result = new Result();
 

@@ -23,7 +23,8 @@
     "no-use-before-define": ["error", { "functions": false }],
     "no-underscore-dangle": ["error", { "allow": ["__DEV__", "__TEST__", "_"] }],
     "@typescript-eslint/explicit-function-return-type": "off",
-    "lines-between-class-members": "off"
+    "lines-between-class-members": "off",
+    "no-lonely-if": "off"
   },
   "parserOptions": {
     "ecmaVersion": 6,
