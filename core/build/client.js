@@ -163,7 +163,7 @@
                     (t = e),
                     (n = [
                         {
-                            key: 'checkHealth',
+                            key: 'getHealth',
                             value: (function() {
                                 var e,
                                     t = ((e = regeneratorRuntime.mark(
@@ -551,7 +551,7 @@
                     (n = t),
                     (r = [
                         {
-                            key: 'checkHealth',
+                            key: 'getHealth',
                             value: (function() {
                                 var e,
                                     n = ((e = regeneratorRuntime.mark(
@@ -570,7 +570,7 @@
                                                                         x(
                                                                             t.prototype,
                                                                         ),
-                                                                        'checkHealth',
+                                                                        'getHealth',
                                                                         this,
                                                                     ).call(this)
                                                                 );
@@ -730,7 +730,7 @@
                     (t = e),
                     (n = [
                         {
-                            key: 'checkHealth',
+                            key: 'getHealth',
                             value: (function() {
                                 var e = q(
                                     regeneratorRuntime.mark(function e() {
@@ -842,7 +842,7 @@
                                                                             e,
                                                                         ) {
                                                                             return e
-                                                                                .checkHealth()
+                                                                                .getHealth()
                                                                                 .then(
                                                                                     function(
                                                                                         e,
@@ -1204,7 +1204,7 @@
                     (t = e),
                     (n = [
                         {
-                            key: 'checkHealth',
+                            key: 'getHealth',
                             value: (function() {
                                 var e,
                                     t = ((e = regeneratorRuntime.mark(
@@ -1290,7 +1290,7 @@
                                                                                 e,
                                                                             ) {
                                                                                 return e
-                                                                                    .checkHealth()
+                                                                                    .getHealth()
                                                                                     .then(
                                                                                         function(
                                                                                             e,

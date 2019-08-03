@@ -8,7 +8,7 @@ describe('Entity', () => {
             schema: [],
         });
 
-        const errors = await entity.checkHealth();
+        const errors = await entity.getHealth();
         expect(errors).toMatchObjectInArray({ code: 'entity_name_empty' });
         expect(errors).toMatchObjectInArray({ code: 'entity_schema_empty' });
         expect(errors).toMatchObjectInArray({
@@ -32,7 +32,7 @@ describe('Entity', () => {
             ],
         });
 
-        const errors = await entity.checkHealth();
+        const errors = await entity.getHealth();
         expect(errors).toMatchObjectInArray({
             code: 'field_illegal',
             fieldName: 'name',
@@ -58,7 +58,7 @@ describe('Entity', () => {
             ],
         });
 
-        const errors = await entity.checkHealth();
+        const errors = await entity.getHealth();
         expect(errors).toMatchObjectInArray({
             code: 'field_code_not_mandatory',
             fieldName: 'code',

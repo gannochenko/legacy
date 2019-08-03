@@ -25,7 +25,7 @@ describe('Schema', () => {
             ],
         });
 
-        const errors = await schema.checkHealth();
+        const errors = await schema.getHealth();
         expect(errors).toMatchObjectInArray({
             code: 'entity_schema_empty',
             entityName: 'entity_one',

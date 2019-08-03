@@ -127,7 +127,7 @@
                             preview: e.preview,
                         });
                 }
-                async checkHealth() {
+                async getHealth() {
                     const e = [],
                         { declaration: t } = this,
                         { type: n } = t,
@@ -245,8 +245,8 @@
                 }
             }
             class F extends T {
-                async checkHealth() {
-                    const e = await super.checkHealth(),
+                async getHealth() {
+                    const e = await super.getHealth(),
                         { declaration: t } = this;
                     t.required ||
                         e.push({
@@ -299,7 +299,7 @@
                             ),
                         });
                 }
-                async checkHealth() {
+                async getHealth() {
                     const e = [],
                         { declaration: t } = this;
                     b.isne(t.name) ||
@@ -346,7 +346,7 @@
                         }),
                         await Promise.all(
                             t.schema.map(n =>
-                                n.checkHealth().then(n => {
+                                n.getHealth().then(n => {
                                     n.forEach(n => {
                                         e.push(
                                             Object.assign({}, n, {
@@ -508,7 +508,7 @@
                             version: t,
                         });
                 }
-                async checkHealth() {
+                async getHealth() {
                     const e = [],
                         { declaration: t } = this,
                         { schema: n } = t;
@@ -531,7 +531,7 @@
                         }),
                         await Promise.all(
                             n.map(t =>
-                                t.checkHealth().then(t => {
+                                t.getHealth().then(t => {
                                     t.forEach(t => {
                                         e.push(Object.assign({}, t));
                                     });

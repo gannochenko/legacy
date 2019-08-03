@@ -3,6 +3,7 @@
 import { uCFirst } from 'ew-internals';
 import * as yup from 'yup';
 import { DB_VARCHAR_DEF_LENGTH } from '../constants.server';
+import { ENTITY_ID_FIELD_NAME, ENTITY_PK_FIELD_NAME } from '../constants.both';
 import {
     TYPE_STRING,
     TYPE_BOOLEAN,
@@ -16,10 +17,10 @@ export class Field {
         this.declaration = this.sanitizeDeclarationKeys(declaration);
     }
 
-    async checkHealth() {
+    async getHealth() {
         const errors = [];
         const { declaration } = this;
-        const { type } = declaration;
+        const { type, name } = declaration;
 
         const validator = this.getValidator();
 
@@ -54,7 +55,19 @@ export class Field {
             });
         }
 
+        if (name === ENTITY_ID_FIELD_NAME || name === ENTITY_PK_FIELD_NAME) {
+            errors.push({
+                message: `The following name is system-reserved: ${name}`,
+                code: `field_name_illegal`,
+                fieldName: name || '',
+            });
+        }
+
         return errors;
+    }
+
+    async isSafe() {
+        return this.getHealth();
     }
 
     getValidator() {

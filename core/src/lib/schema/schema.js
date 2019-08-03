@@ -21,7 +21,7 @@ export class Schema {
         };
     }
 
-    async checkHealth() {
+    async getHealth() {
         const errors = [];
         const { declaration } = this;
         const { schema } = declaration;
@@ -50,7 +50,7 @@ export class Schema {
 
         await Promise.all(
             schema.map(entity =>
-                entity.checkHealth().then(entityErrors => {
+                entity.getHealth().then(entityErrors => {
                     entityErrors.forEach(entityError => {
                         errors.push(Object.assign({}, entityError));
                     });
@@ -71,6 +71,14 @@ export class Schema {
         });
 
         // todo: check that there are still User and Group entities left intact
+
+        return errors;
+    }
+
+    isSafe() {
+        const errors = [];
+        const { declaration } = this;
+        const { schema } = declaration;
 
         return errors;
     }

@@ -36,7 +36,7 @@ describe('Field', () => {
             unique: 'lala',
         });
 
-        const errors = await field.checkHealth();
+        const errors = await field.getHealth();
 
         expect(errors).toHaveLength(7);
     });
@@ -52,7 +52,7 @@ describe('Field', () => {
             unique: false,
         });
 
-        let errors = await field.checkHealth();
+        let errors = await field.getHealth();
         expect(errors).toHaveLength(0);
 
         field = new Field({
@@ -65,7 +65,7 @@ describe('Field', () => {
             unique: false,
         });
 
-        errors = await field.checkHealth();
+        errors = await field.getHealth();
         expect(errors).toHaveLength(0);
     });
 });

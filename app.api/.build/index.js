@@ -4416,7 +4416,7 @@ type Mutation {
                             }
 
                             static async put(type, schema, connectionManager) {
-                                const errors = await schema.checkHealth();
+                                const errors = await schema.getHealth();
 
                                 if (!_.iane(errors)) {
                                     const connection = await connectionManager.getSystem();

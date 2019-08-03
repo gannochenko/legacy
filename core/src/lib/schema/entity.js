@@ -9,12 +9,8 @@ import {
     TYPE_DATETIME,
     TYPE_BOOLEAN,
 } from '../field-types';
-import { CodeField } from './code-field';
-import {
-    ENTITY_USER_NAME,
-    ENTITY_GROUP_NAME,
-    ENTITY_ID_FIELD_NAME,
-} from '../entity-types';
+import { ENTITY_USER_NAME, ENTITY_GROUP_NAME } from '../entity-types';
+import { ENTITY_ID_FIELD_NAME } from '../constants.both';
 import _ from '../lodash';
 
 export class Entity {
@@ -29,15 +25,11 @@ export class Entity {
 
         this.declaration = {
             name: safeDeclaration.name || '',
-            schema: safeDeclaration.schema.map(field =>
-                field.name === ENTITY_ID_FIELD_NAME
-                    ? new CodeField(field)
-                    : new Field(field),
-            ),
+            schema: safeDeclaration.schema.map(field => new Field(field)),
         };
     }
 
-    async checkHealth() {
+    async getHealth() {
         const errors = [];
         const { declaration } = this;
 
@@ -71,6 +63,8 @@ export class Entity {
                 code: 'entity_schema_empty',
                 entityName: declaration.name,
             });
+
+            return errors; // no point on further checking
         }
 
         const times = {};
@@ -78,14 +72,6 @@ export class Entity {
             times[field.getName()] =
                 field.getName() in times ? times[field.getName()] + 1 : 1;
         });
-
-        if (!(ENTITY_ID_FIELD_NAME in times)) {
-            errors.push({
-                message: `System field "code" is missing`,
-                code: 'entity_code_field_missing',
-                entityName: declaration.name,
-            });
-        }
 
         Object.keys(times).forEach(key => {
             if (times[key] > 1) {
@@ -100,7 +86,47 @@ export class Entity {
 
         await Promise.all(
             declaration.schema.map(field =>
-                field.checkHealth().then(fieldErrors => {
+                field.getHealth().then(fieldErrors => {
+                    fieldErrors.forEach(fieldError => {
+                        errors.push(
+                            Object.assign({}, fieldError, {
+                                entityName: declaration.name,
+                            }),
+                        );
+                    });
+                }),
+            ),
+        );
+
+        return errors;
+    }
+
+    async isSafe() {
+        const errors = [];
+        const { declaration } = this;
+
+        if (typeof declaration.name !== 'string') {
+            errors.push({
+                message: 'Entity name is not a string',
+                code: 'entity_illegal_name',
+                entityName: declaration.name || '',
+            });
+        }
+
+        if (!Array.isArray(declaration.schema)) {
+            errors.push({
+                message: 'Entity schema is not an array',
+                code: 'entity_illegal_schema',
+                entityName: declaration.name || '',
+            });
+
+            return errors; // no point on further checking
+        }
+
+        // check sub-fields
+        await Promise.all(
+            declaration.schema.map(field =>
+                field.isSafe().then(fieldErrors => {
                     fieldErrors.forEach(fieldError => {
                         errors.push(
                             Object.assign({}, fieldError, {
