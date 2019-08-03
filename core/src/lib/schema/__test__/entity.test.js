@@ -293,6 +293,5 @@ describe('Entity', () => {
         ).toEqual(0);
         result = await main.validateData(data);
         expect(result.errors).toEqual(null);
-        console.log(result);
     });
 });

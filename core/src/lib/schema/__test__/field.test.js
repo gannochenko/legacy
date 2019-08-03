@@ -5,6 +5,11 @@ describe('Field', () => {
         const field = new Field({
             type: 'boolean',
             name: 'foo',
+            length: 100,
+            label: 'la',
+            preview: 'lo',
+            required: true,
+            unique: true,
             some: 'other',
             field: 'bar',
         });

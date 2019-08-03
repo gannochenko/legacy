@@ -2,7 +2,7 @@
 
 import { uCFirst } from 'ew-internals';
 import * as yup from 'yup';
-import { DB_VARCHAR_DEF_LENGTH } from 'core/src/lib/constants.both';
+import { DB_VARCHAR_DEF_LENGTH } from '../constants.server';
 import {
     TYPE_STRING,
     TYPE_BOOLEAN,
@@ -12,11 +12,8 @@ import {
 import _ from '../lodash';
 
 export class Field {
-    constructor(declaration) {
-        if (!_.ione(declaration)) {
-            declaration = {};
-        }
-        this.declaration = Object.assign({}, declaration);
+    constructor(declaration = {}) {
+        this.declaration = this.sanitizeDeclarationKeys(declaration);
     }
 
     async checkHealth() {
@@ -191,5 +188,29 @@ export class Field {
 
     toJSON() {
         return this.declaration;
+    }
+
+    sanitizeDeclarationKeys(declaration) {
+        const legal = this.getLegalKeys();
+        const result = {};
+        Object.keys(declaration).forEach(key => {
+            if (legal.includes(key)) {
+                result[key] = declaration[key];
+            }
+        });
+
+        return result;
+    }
+
+    getLegalKeys() {
+        return [
+            'type',
+            'name',
+            'label',
+            'length',
+            'required',
+            'unique',
+            'preview',
+        ];
     }
 }
