@@ -2,7 +2,7 @@
  * https://github.com/typeorm/typeorm/blob/master/docs/select-query-builder.md
  */
 
-import { QUERY_FIND_MAX_PAGE_SIZE } from 'project-minimum-core';
+import { DB_QUERY_FIND_MAX_PAGE_SIZE } from 'project-minimum-core';
 
 export class Query {
     static make({
@@ -69,7 +69,7 @@ export class Query {
         limit = parseInt(limit, 10);
         if (Number.isNaN(limit)) {
             if (parameters.restrictLimit) {
-                limit = QUERY_FIND_MAX_PAGE_SIZE;
+                limit = DB_QUERY_FIND_MAX_PAGE_SIZE;
             } else {
                 limit = null;
             }

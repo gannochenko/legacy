@@ -68,7 +68,6 @@ import controllers from './controller';
     useMSC(app, controllers, {
         connectionManager,
     });
-    // useSchemaAPI(app, { cache, connectionManager });
     // todo: temporary endpoint
     useSyncAPI(app, {
         cache,

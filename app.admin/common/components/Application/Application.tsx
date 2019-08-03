@@ -4,6 +4,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Modal, ModalContext, withNotification } from 'ew-internals-ui';
+import { ENTITY_ID_FIELD_NAME } from 'project-minimum-core';
 import { MainProgressBar } from './style';
 import { ApplicationProperties } from './type';
 import {
@@ -59,7 +60,7 @@ const ApplicationComponent: FunctionComponent<ApplicationProperties> = ({
                                 render={route => <HomePage route={route} />}
                             />
                             <Route
-                                path="/data/:entity_name/:code"
+                                path={`/data/:entity_name/:${ENTITY_ID_FIELD_NAME}`}
                                 render={route => (
                                     <DataDetailPage route={route} />
                                 )}

@@ -2153,11 +2153,11 @@
                                         if (
                                             field.name !==
                                                 project_minimum_core__WEBPACK_IMPORTED_MODULE_1__[
-                                                    'ENTITY_ID_FIELD_NAME'
+                                                    'ENTITY_PK_FIELD_NAME'
                                                 ] &&
                                             field.name !==
                                                 project_minimum_core__WEBPACK_IMPORTED_MODULE_1__[
-                                                    'ENTITY_CODE_FIELD_NAME'
+                                                    'ENTITY_ID_FIELD_NAME'
                                                 ]
                                         ) {
                                             if (
@@ -2452,7 +2452,7 @@
                                     if (parameters.restrictLimit) {
                                         limit =
                                             project_minimum_core__WEBPACK_IMPORTED_MODULE_0__[
-                                                'QUERY_FIND_MAX_PAGE_SIZE'
+                                                'DB_QUERY_FIND_MAX_PAGE_SIZE'
                                             ];
                                     } else {
                                         limit = null;
@@ -3135,7 +3135,7 @@
                                         data: [],
                                         limit:
                                             project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
-                                                'QUERY_FIND_MAX_PAGE_SIZE'
+                                                'DB_QUERY_FIND_MAX_PAGE_SIZE'
                                             ],
                                         offset: 0,
                                     };
@@ -3148,7 +3148,7 @@
                                     if (
                                         limit >
                                         project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
-                                            'QUERY_FIND_MAX_PAGE_SIZE'
+                                            'DB_QUERY_FIND_MAX_PAGE_SIZE'
                                         ]
                                     ) {
                                         result.errors.push({
@@ -3959,7 +3959,7 @@
                                 if (Number.isNaN(limit)) {
                                     limit =
                                         project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
-                                            'QUERY_FIND_MAX_PAGE_SIZE'
+                                            'DB_QUERY_FIND_MAX_PAGE_SIZE'
                                         ];
                                 }
 
@@ -4133,7 +4133,7 @@
                                 if (
                                     fieldName !==
                                     project_minimum_core__WEBPACK_IMPORTED_MODULE_0__[
-                                        'ENTITY_CODE_FIELD_NAME'
+                                        'ENTITY_ID_FIELD_NAME'
                                     ]
                                 ) {
                                     // code is a read-only field

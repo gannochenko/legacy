@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { ENTITY_CODE_FIELD_NAME } from 'project-minimum-core';
+import { ENTITY_ID_FIELD_NAME } from 'project-minimum-core';
 import { sanitize } from '../../lib/util';
 
 export const buildQueryFind = ({
@@ -13,7 +13,7 @@ export const buildQueryFind = ({
     const selectedFields = entity.getFields().map(field => {
         const name = field.getName();
         if (field.isReference()) {
-            return `${sanitize(name)} { ${ENTITY_CODE_FIELD_NAME} }`;
+            return `${sanitize(name)} { ${ENTITY_ID_FIELD_NAME} }`;
         }
 
         return sanitize(name);

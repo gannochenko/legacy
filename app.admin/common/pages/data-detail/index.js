@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withNotification } from 'ew-internals-ui';
+import { ENTITY_ID_FIELD_NAME } from 'project-minimum-core';
 import { useErrorNotification, useDispatchUnload } from '../../lib/hooks';
 import { withClient } from '../../lib/client';
 import { Form, Layout } from '../../components';
@@ -40,10 +41,10 @@ const DataPage = ({
 
     let entity = null;
     let entityName = '';
-    let code = '';
+    let id = '';
 
     if (schema) {
-        code = _.get(route, 'match.params.code');
+        id = _.get(route, `match.params.${ENTITY_ID_FIELD_NAME}`);
         entity = schema.getEntity(_.get(route, 'match.params.entity_name'));
 
         if (entity) {
@@ -53,30 +54,32 @@ const DataPage = ({
 
     // load data on mount
     useEffect(() => {
-        if (!entity || !code) {
+        if (!entity || !id) {
             return;
         }
 
-        if (code !== 'new') {
-            dispatchLoad(client, entity, schema, code);
+        if (id !== 'new') {
+            dispatchLoad(client, entity, schema, id);
         } else {
             dispatchSuccess();
         }
-    }, [entityName, code]);
+    }, [entityName, id]);
 
-    if (!entity || !code) {
+    if (!entity || !id) {
         return null;
     }
 
     data = data || {};
 
-    let displayCode = '';
+    let displayId = '';
     if (ready) {
-        displayCode = data.code ? data.code : 'new';
+        displayId = data[ENTITY_ID_FIELD_NAME]
+            ? data[ENTITY_ID_FIELD_NAME]
+            : 'new';
     }
 
     return (
-        <Layout title={`${entity.getDisplayName()}: ${displayCode}`}>
+        <Layout title={`${entity.getDisplayName()}: ${displayId}`}>
             {ready && (
                 <Form
                     data={data || {}}
@@ -85,11 +88,11 @@ const DataPage = ({
                     dispatch={dispatch}
                     formData={formData}
                     onSubmit={(values, formActions) => {
-                        dispatchSave(client, entity, values, formActions, code);
+                        dispatchSave(client, entity, values, formActions, id);
                     }}
                     onActionClick={action => {
-                        if (action === 'delete' && data.code) {
-                            dispatchDelete(client, entity, data.code);
+                        if (action === 'delete' && displayId) {
+                            dispatchDelete(client, entity, displayId);
                         }
                     }}
                 />

@@ -3,7 +3,7 @@ import { wrapError } from 'ew-internals';
 import { getVaultFor, hasVaultFor } from './vault';
 import { getValidator, filterStructure } from './dto-compiler';
 
-import { RuntimeParameters, ResultError, StringMap } from './type';
+import { ResultError, StringMap } from './type';
 
 export class Result {
     public data?: any = null;
@@ -24,7 +24,7 @@ export const ERROR_REQUEST = 'request';
 export const useMSC = (
     app: Express,
     controllers: Function[],
-    runtimeParameters: RuntimeParameters = { connectionManager: null },
+    runtimeParameters: StringMap = { connectionManager: null },
 ) => {
     controllers.forEach((controller: Function) => {
         if (!hasVaultFor(controller)) {

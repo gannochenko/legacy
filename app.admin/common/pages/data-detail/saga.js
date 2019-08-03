@@ -83,7 +83,7 @@ function* itemSearch(params) {
 
 function* save(params) {
     const { payload } = params || {};
-    let { client, formActions, code, entity } = payload || {};
+    let { client, formActions, id, entity } = payload || {};
     formActions = formActions || {};
 
     try {
@@ -106,17 +106,17 @@ function* save(params) {
                 payload: result.errors,
             });
         } else {
-            const newCode = _.get(result, 'data.code');
+            const newId = _.get(result, 'data.id');
 
             yield put({
                 type: reducer.SAVE_SUCCESS,
             });
-            if (code !== newCode) {
+            if (id !== newId) {
                 yield put(
                     push(
                         `/data/${encodeURIComponent(
                             entity.getName(),
-                        )}/${encodeURIComponent(newCode)}/`,
+                        )}/${encodeURIComponent(newId)}/`,
                     ),
                 );
             }

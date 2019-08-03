@@ -2,7 +2,7 @@
 
 import { uCFirst } from 'ew-internals';
 import * as yup from 'yup';
-import { DB_VARCHAR_DEF_LENGTH } from '../constants';
+import { DB_VARCHAR_DEF_LENGTH } from 'core/src/lib/constants.both';
 import {
     TYPE_STRING,
     TYPE_BOOLEAN,

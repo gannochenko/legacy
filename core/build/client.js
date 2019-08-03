@@ -1455,7 +1455,7 @@
                 n.d(t, 'DB_CODE_COLUMN_LENGTH', function() {
                     return 36;
                 }),
-                n.d(t, 'QUERY_FIND_MAX_PAGE_SIZE', function() {
+                n.d(t, 'DB_QUERY_FIND_MAX_PAGE_SIZE', function() {
                     return 50;
                 }),
                 n.d(t, 'ENTITY_USER_NAME', function() {
@@ -1464,7 +1464,7 @@
                 n.d(t, 'ENTITY_GROUP_NAME', function() {
                     return 'group';
                 }),
-                n.d(t, 'ENTITY_CODE_FIELD_NAME', function() {
+                n.d(t, 'ENTITY_ID_FIELD_NAME', function() {
                     return u;
                 }),
                 n.d(t, 'TYPE_STRING', function() {

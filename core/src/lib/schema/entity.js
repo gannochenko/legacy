@@ -13,7 +13,7 @@ import { CodeField } from './code-field';
 import {
     ENTITY_USER_NAME,
     ENTITY_GROUP_NAME,
-    ENTITY_CODE_FIELD_NAME,
+    ENTITY_ID_FIELD_NAME,
 } from '../entity-types';
 import _ from '../lodash';
 
@@ -30,7 +30,7 @@ export class Entity {
         this.declaration = {
             name: safeDeclaration.name || '',
             schema: safeDeclaration.schema.map(field =>
-                field.name === ENTITY_CODE_FIELD_NAME
+                field.name === ENTITY_ID_FIELD_NAME
                     ? new CodeField(field)
                     : new Field(field),
             ),
@@ -79,7 +79,7 @@ export class Entity {
                 field.getName() in times ? times[field.getName()] + 1 : 1;
         });
 
-        if (!(ENTITY_CODE_FIELD_NAME in times)) {
+        if (!(ENTITY_ID_FIELD_NAME in times)) {
             errors.push({
                 message: `System field "code" is missing`,
                 code: 'entity_code_field_missing',
@@ -173,7 +173,7 @@ export class Entity {
             this.declaration.schema.find(
                 field =>
                     field.getType() === TYPE_STRING &&
-                    field.getName() !== ENTITY_CODE_FIELD_NAME,
+                    field.getName() !== ENTITY_ID_FIELD_NAME,
             ) || null
         );
     }
@@ -253,7 +253,7 @@ export class Entity {
 
         this.getFields().forEach(field => {
             const name = field.getName();
-            if (name === ENTITY_CODE_FIELD_NAME) {
+            if (name === ENTITY_ID_FIELD_NAME) {
                 return;
             }
 

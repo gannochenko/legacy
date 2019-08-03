@@ -5,10 +5,12 @@ class TSDTO {}
 
 @DTO()
 class IndexDTO {
-    public ts: object = TSDTO;
+    @Attribute({ type: TSDTO, required: true })
+    public ts: object;
 }
 
 @DTO()
 export class SchemaInputDTO {
-    public index: object = IndexDTO;
+    @Attribute({ type: IndexDTO, required: true })
+    public index: object;
 }

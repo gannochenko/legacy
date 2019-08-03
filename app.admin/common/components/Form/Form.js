@@ -6,7 +6,7 @@ import {
     TYPE_INTEGER,
     TYPE_BOOLEAN,
     TYPE_DATETIME,
-    ENTITY_CODE_FIELD_NAME,
+    ENTITY_ID_FIELD_NAME,
 } from 'project-minimum-core';
 
 import {
@@ -83,7 +83,7 @@ export const FormComponent = ({
                             <Fields>
                                 {entity.getFields().map(field => {
                                     const fName = field.getName();
-                                    if (fName === ENTITY_CODE_FIELD_NAME) {
+                                    if (fName === ENTITY_ID_FIELD_NAME) {
                                         return null;
                                     }
 

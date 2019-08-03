@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import { sanitize, escapeQuote } from '../../lib/util';
 import {
-    ENTITY_CODE_FIELD_NAME,
+    ENTITY_ID_FIELD_NAME,
     TYPE_STRING,
     TYPE_DATETIME,
 } from 'project-minimum-core';
@@ -16,7 +16,7 @@ export const buildQueryLoad = ({ entity, schema, code }) => {
                 presentField = refEntity.getPresentationField();
             }
 
-            return `${sanitize(name)} { ${ENTITY_CODE_FIELD_NAME} ${
+            return `${sanitize(name)} { ${ENTITY_ID_FIELD_NAME} ${
                 presentField ? presentField.getName() : ''
             } }`;
         }

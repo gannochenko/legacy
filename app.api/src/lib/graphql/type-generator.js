@@ -3,7 +3,7 @@ import {
     TYPE_BOOLEAN,
     TYPE_DATETIME,
     TYPE_INTEGER,
-    ENTITY_CODE_FIELD_NAME,
+    ENTITY_ID_FIELD_NAME,
 } from 'project-minimum-core';
 
 export default class TypeGenerator {
@@ -36,7 +36,7 @@ export default class TypeGenerator {
                 )}: ${this.getGQLFieldType(field, schema)}`,
             );
             const fieldName = field.getName();
-            if (fieldName !== ENTITY_CODE_FIELD_NAME) {
+            if (fieldName !== ENTITY_ID_FIELD_NAME) {
                 // code is a read-only field
                 iFields.push(
                     `${field.getName()}: ${this.getGQLFieldType(

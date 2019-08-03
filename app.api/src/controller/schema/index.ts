@@ -90,11 +90,9 @@ export class SchemaController {
 
     @Patch()
     @BodyInput(SchemaInputDTO)
-    @Output()
     public async patch(
         params,
-        { body },
-        { runtime: { connectionManager } }: InputContext,
+        { body, runtime: { connectionManager } }: InputContext,
     ): Promise<Result> {
         const result = new Result();
 

@@ -4,7 +4,10 @@
 
 import { In, Like } from 'typeorm';
 import uuid from 'uuid/v4';
-import { TYPE_DATETIME, QUERY_FIND_MAX_PAGE_SIZE } from 'project-minimum-core';
+import {
+    TYPE_DATETIME,
+    DB_DB_QUERY_FIND_MAX_PAGE_SIZE,
+} from 'project-minimum-core';
 import { getASTAt, getSelectionAt } from './ast';
 import { CodeId } from '../database/code-id';
 import { Query } from '../database/query';
@@ -84,14 +87,14 @@ export default class ResolverGenerator {
             const result = {
                 errors: [],
                 data: [],
-                limit: QUERY_FIND_MAX_PAGE_SIZE,
+                limit: DB_QUERY_FIND_MAX_PAGE_SIZE,
                 offset: 0,
             };
 
             const { filter, search, sort } = args;
 
             const { limit, offset } = this.getLimitOffset(args);
-            if (limit > QUERY_FIND_MAX_PAGE_SIZE) {
+            if (limit > DB_QUERY_FIND_MAX_PAGE_SIZE) {
                 result.errors.push({
                     code: 'limit_too_high',
                     message: 'Limit too high',
@@ -744,7 +747,7 @@ export default class ResolverGenerator {
 
         limit = parseInt(limit, 10);
         if (Number.isNaN(limit)) {
-            limit = QUERY_FIND_MAX_PAGE_SIZE;
+            limit = DB_QUERY_FIND_MAX_PAGE_SIZE;
         }
 
         offset = parseInt(offset, 10);

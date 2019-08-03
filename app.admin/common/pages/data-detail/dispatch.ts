@@ -2,14 +2,14 @@ import { LOAD, UNLOAD, DELETE, LOAD_SUCCESS, SAVE } from './reducer';
 
 export default dispatch => ({
     dispatch,
-    dispatchLoad: (client, entity, schema, code) =>
+    dispatchLoad: (client, entity, schema, id) =>
         dispatch({
             type: LOAD,
             payload: {
                 client,
                 entity,
                 schema,
-                code,
+                id,
             },
         }),
     dispatchUnload: () =>
@@ -23,16 +23,16 @@ export default dispatch => ({
                 data: {},
             },
         }),
-    dispatchDelete: (client, entity, code) =>
+    dispatchDelete: (client, entity, id) =>
         dispatch({
             type: DELETE,
             payload: {
                 entity,
-                code,
+                id,
                 client,
             },
         }),
-    dispatchSave: (client, entity, data, formActions, code) =>
+    dispatchSave: (client, entity, data, formActions, id) =>
         dispatch({
             type: SAVE,
             payload: {
@@ -40,7 +40,7 @@ export default dispatch => ({
                 entity,
                 client,
                 formActions,
-                code,
+                id,
             },
         }),
 });

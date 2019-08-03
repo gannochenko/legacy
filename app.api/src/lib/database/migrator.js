@@ -6,8 +6,8 @@ import { Table, TableColumn, TableIndex } from 'typeorm';
 import {
     DB_TABLE_PREFIX,
     DB_REF_TABLE_PREFIX,
-    ENTITY_CODE_FIELD_NAME,
     ENTITY_ID_FIELD_NAME,
+    ENTITY_PK_FIELD_NAME,
     REFERENCE_ENTITY_PARENT_FIELD_NAME,
     REFERENCE_ENTITY_CHILD_FIELD_NAME,
 } from 'project-minimum-core';
@@ -103,8 +103,8 @@ export default class Migrator {
                 const field = currentTable.columns[j];
 
                 if (
-                    field.name !== ENTITY_ID_FIELD_NAME &&
-                    field.name !== ENTITY_CODE_FIELD_NAME
+                    field.name !== ENTITY_PK_FIELD_NAME &&
+                    field.name !== ENTITY_ID_FIELD_NAME
                 ) {
                     if (fieldsToDelete.includes(field.name)) {
                         tablesToAlter[currentTable.name] = tablesToAlter[
