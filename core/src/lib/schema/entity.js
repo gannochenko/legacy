@@ -9,24 +9,12 @@ import {
     TYPE_DATETIME,
     TYPE_BOOLEAN,
 } from '../field-types';
-import { ENTITY_USER_NAME, ENTITY_GROUP_NAME } from '../entity-types';
 import { ENTITY_ID_FIELD_NAME } from '../constants.both';
 import _ from '../lodash';
 
 export class Entity {
     constructor(declaration) {
-        let safeDeclaration = declaration;
-        if (!_.ione(safeDeclaration)) {
-            safeDeclaration = {};
-        }
-        if (!_.iane(safeDeclaration.schema)) {
-            safeDeclaration.schema = [];
-        }
-
-        this.declaration = {
-            name: safeDeclaration.name || '',
-            schema: safeDeclaration.schema.map(field => new Field(field)),
-        };
+        this.declaration = declaration;
     }
 
     async getHealth() {
@@ -34,7 +22,7 @@ export class Entity {
         const { declaration } = this;
 
         // check that entity has a name
-        if (!_.isne(declaration.name)) {
+        if (!declaration.name.length) {
             errors.push({
                 message: 'Entity does not have a name',
                 code: 'entity_name_empty',
@@ -42,22 +30,8 @@ export class Entity {
             });
         }
 
-        // check that entity does not have a reserved name
-        if (
-            _.isne(declaration.name) &&
-            (declaration.name === ENTITY_USER_NAME ||
-                declaration.name === ENTITY_GROUP_NAME)
-        ) {
-            errors.push({
-                message: 'Entity name is a reserved name',
-                code: 'entity_name_reserved',
-                entityName: declaration.name,
-            });
-        }
-
         // check schema
-
-        if (!_.iane(declaration.schema)) {
+        if (!declaration.schema.length) {
             errors.push({
                 message: 'Entity does not have a single field',
                 code: 'entity_schema_empty',
@@ -101,44 +75,27 @@ export class Entity {
         return errors;
     }
 
-    async isSafe() {
-        const errors = [];
-        const { declaration } = this;
+    set declaration(declaration) {
+        this.declarationInternal = this.getSanitizedDeclaration(declaration);
+    }
 
-        if (typeof declaration.name !== 'string') {
-            errors.push({
-                message: 'Entity name is not a string',
-                code: 'entity_illegal_name',
-                entityName: declaration.name || '',
-            });
+    get declaration() {
+        return this.declarationInternal;
+    }
+
+    getSanitizedDeclaration(declaration) {
+        let safeDeclaration = declaration;
+        if (!_.ione(safeDeclaration)) {
+            safeDeclaration = {};
+        }
+        if (!_.iane(safeDeclaration.schema)) {
+            safeDeclaration.schema = [];
         }
 
-        if (!Array.isArray(declaration.schema)) {
-            errors.push({
-                message: 'Entity schema is not an array',
-                code: 'entity_illegal_schema',
-                entityName: declaration.name || '',
-            });
-
-            return errors; // no point on further checking
-        }
-
-        // check sub-fields
-        await Promise.all(
-            declaration.schema.map(field =>
-                field.isSafe().then(fieldErrors => {
-                    fieldErrors.forEach(fieldError => {
-                        errors.push(
-                            Object.assign({}, fieldError, {
-                                entityName: declaration.name,
-                            }),
-                        );
-                    });
-                }),
-            ),
-        );
-
-        return errors;
+        return {
+            name: safeDeclaration.name || '',
+            schema: safeDeclaration.schema.map(field => new Field(field)),
+        };
     }
 
     /**

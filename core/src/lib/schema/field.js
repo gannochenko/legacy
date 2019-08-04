@@ -1,5 +1,4 @@
 /* eslint import/no-unresolved: 0 */
-
 import { uCFirst } from 'ew-internals';
 import * as yup from 'yup';
 import { DB_VARCHAR_DEF_LENGTH } from '../constants.server';
@@ -14,46 +13,13 @@ import _ from '../lodash';
 
 export class Field {
     constructor(declaration = {}) {
-        this.declaration = this.sanitizeDeclarationKeys(declaration);
+        this.declaration = declaration;
     }
 
     async getHealth() {
         const errors = [];
         const { declaration } = this;
-        const { type, name } = declaration;
-
-        const validator = this.getValidator();
-
-        try {
-            await validator.validate(declaration, {
-                abortEarly: false,
-            });
-        } catch (validationErrors) {
-            if (validationErrors instanceof yup.ValidationError) {
-                validationErrors.inner.forEach(errorItem => {
-                    errors.push({
-                        message: errorItem.message,
-                        code: `field_illegal`,
-                        fieldName: errorItem.path,
-                    });
-                });
-            } else {
-                throw validationErrors;
-            }
-        }
-
-        // check if type is string or [string]
-        if (
-            !_.isne(type) &&
-            !(_.isArray(type) && type.length === 1 && _.isne(type[0]))
-        ) {
-            errors.push({
-                message:
-                    'Field type should be of type string or an array of one string',
-                code: `field_type_illegal`,
-                fieldName: declaration.name || '',
-            });
-        }
+        const { name } = declaration;
 
         if (name === ENTITY_ID_FIELD_NAME || name === ENTITY_PK_FIELD_NAME) {
             errors.push({
@@ -66,8 +32,59 @@ export class Field {
         return errors;
     }
 
-    async isSafe() {
-        return this.getHealth();
+    set declaration(declaration) {
+        this.declarationInternal = this.getSanitizedDeclaration(declaration);
+    }
+
+    get declaration() {
+        return this.declarationInternal;
+    }
+
+    getSanitizedDeclaration(declaration) {
+        const legal = [
+            'type',
+            'name',
+            'label',
+            'length',
+            'required',
+            'unique',
+            'preview',
+        ];
+
+        const safeDeclaration = {};
+        Object.keys(declaration).forEach(key => {
+            if (legal.includes(key)) {
+                safeDeclaration[key] = declaration[key];
+            }
+        });
+
+        const validator = this.getValidator();
+
+        try {
+            validator.validateSync(declaration, {
+                abortEarly: false,
+            });
+        } catch (validationErrors) {
+            if (validationErrors instanceof yup.ValidationError) {
+                validationErrors.inner.forEach(errorItem => {
+                    delete safeDeclaration[errorItem.path];
+                });
+            } else {
+                throw validationErrors;
+            }
+        }
+
+        const { type } = safeDeclaration;
+
+        // check if type is string or [string] (not possible to do with yup?)
+        if (
+            !_.isne(type) &&
+            !(_.isArray(type) && type.length === 1 && _.isne(type[0]))
+        ) {
+            delete safeDeclaration.type;
+        }
+
+        return safeDeclaration;
     }
 
     getValidator() {
@@ -201,29 +218,5 @@ export class Field {
 
     toJSON() {
         return this.declaration;
-    }
-
-    sanitizeDeclarationKeys(declaration) {
-        const legal = this.getLegalKeys();
-        const result = {};
-        Object.keys(declaration).forEach(key => {
-            if (legal.includes(key)) {
-                result[key] = declaration[key];
-            }
-        });
-
-        return result;
-    }
-
-    getLegalKeys() {
-        return [
-            'type',
-            'name',
-            'label',
-            'length',
-            'required',
-            'unique',
-            'preview',
-        ];
     }
 }

@@ -3,30 +3,14 @@ import _ from '../lodash';
 
 export class Schema {
     constructor(declaration) {
-        if (!_.ione(declaration)) {
-            declaration = {};
-        }
-        if (!_.iane(declaration.schema)) {
-            declaration.schema = [];
-        }
-
-        let version = parseInt(declaration.version, 10);
-        if (Number.isNaN(version)) {
-            version = 0;
-        }
-
-        this.declaration = {
-            schema: declaration.schema.map(entity => new Entity(entity)),
-            version,
-        };
+        this.declaration = declaration;
     }
 
     async getHealth() {
         const errors = [];
-        const { declaration } = this;
-        const { schema } = declaration;
+        const schema = this.getSchema();
 
-        if (!_.iane(schema)) {
+        if (!schema.length) {
             // nothing to check
             return errors;
         }
@@ -70,25 +54,46 @@ export class Schema {
             }
         });
 
-        // todo: check that there are still User and Group entities left intact
-
         return errors;
     }
 
-    isSafe() {
-        const errors = [];
-        const { declaration } = this;
-        const { schema } = declaration;
+    getSanitizedDeclaration(declaration) {
+        if (!_.ione(declaration)) {
+            declaration = {};
+        }
+        if (!_.iane(declaration.schema)) {
+            declaration.schema = [];
+        }
 
-        return errors;
+        let version = parseInt(declaration.version, 10);
+        if (Number.isNaN(version)) {
+            version = 0;
+        }
+
+        return {
+            schema: declaration.schema.map(entity => new Entity(entity)),
+            version,
+        };
     }
 
     toJSON() {
-        return this.declaration;
+        return this.declarationInternal;
     }
 
+    set declaration(declaration) {
+        this.declarationInternal = this.getSanitizedDeclaration(declaration);
+    }
+
+    get declaration() {
+        return this.declarationInternal;
+    }
+
+    /**
+     * @deprecated
+     * @returns {{schema: Entity[], version: number}|*}
+     */
     getDeclaration() {
-        return this.declaration;
+        return this.declarationInternal;
     }
 
     /**
@@ -96,7 +101,7 @@ export class Schema {
      * @returns {{schema: Entity[], version: number}|*}
      */
     get() {
-        return this.declaration;
+        return this.declarationInternal;
     }
 
     getSchema() {
