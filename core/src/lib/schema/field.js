@@ -19,7 +19,25 @@ export class Field {
     async getHealth() {
         const errors = [];
         const { declaration } = this;
-        const { name } = declaration;
+        const { name, type } = declaration;
+
+        // check that entity has a name
+        if (!_.isne(name)) {
+            errors.push({
+                message: 'Field does not have a name',
+                code: 'field_name_empty',
+                fieldName: '',
+            });
+        }
+
+        // check that entity has a type
+        if (!_.isne(type)) {
+            errors.push({
+                message: 'Field does not have a type',
+                code: 'field_type_empty',
+                fieldName: name || '',
+            });
+        }
 
         if (name === ENTITY_ID_FIELD_NAME || name === ENTITY_PK_FIELD_NAME) {
             errors.push({
