@@ -2,7 +2,7 @@
 
 import { uCFirst, convertToCamel } from 'ew-internals';
 import * as yup from 'yup';
-import { Field } from './field';
+import { BaseField } from './field/base';
 import {
     TYPE_STRING,
     TYPE_INTEGER,
@@ -94,7 +94,9 @@ export class Entity {
 
         return {
             name: safeDeclaration.name || '',
-            schema: safeDeclaration.schema.map(field => new Field(field)),
+            schema: safeDeclaration.schema.map(field =>
+                BaseField.makeInstance(field),
+            ),
         };
     }
 
@@ -247,14 +249,6 @@ export class Entity {
             let value = data[name];
 
             if (field.isMultiple()) {
-                // if (!_.isArray(value)) {
-                //     value = [this.castFieldValue(field, value)];
-                // } else {
-                //     value = value.map(subValue =>
-                //         this.castFieldValue(field, subValue),
-                //     );
-                // }
-
                 if (_.isArray(value)) {
                     value = value.map(subValue =>
                         this.castFieldValue(field, subValue),
@@ -275,15 +269,6 @@ export class Entity {
         });
 
         return processed;
-    }
-
-    /**
-     * @deprecated
-     * @param data
-     * @returns {{}}
-     */
-    prepareData(data) {
-        return this.castData(data);
     }
 
     async validateData(sourceData) {

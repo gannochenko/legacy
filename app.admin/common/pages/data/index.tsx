@@ -89,7 +89,7 @@ const DataPageComponent: FunctionComponent<DataPageProperties> = ({
                 }
                 onSortChange={sort =>
                     dispatchUpdateSearch(route, {
-                        sort: `${sort.field}:${sort.way}`,
+                        sort: `${sort.scalar}:${sort.way}`,
                     })
                 }
                 onActionClick={(action: string, item: EntityItemData) => {

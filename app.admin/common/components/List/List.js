@@ -125,7 +125,7 @@ const ListComponent = ({
                                 <HeaderLink
                                     sortable={field.isSortable()}
                                     sign={
-                                        field.getName() === sort.field
+                                        field.getName() === sort.scalar
                                             ? sort.way === 'desc'
                                                 ? 'arrow_drop_up'
                                                 : 'arrow_drop_down'

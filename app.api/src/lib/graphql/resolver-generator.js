@@ -173,7 +173,7 @@ export default class ResolverGenerator {
                 result.errors = errors.map(error => ({
                     message: error.message,
                     code: 'validation',
-                    reference: error.field,
+                    reference: error.scalar,
                 }));
 
                 return result;

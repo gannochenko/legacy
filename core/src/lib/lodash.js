@@ -1,13 +1,12 @@
 /* eslint import/no-unresolved: 0 */
 
-import isString from 'lodash.isstring';
 import isObject from 'lodash.isobject';
 import union from 'lodash.union';
 import unique from 'lodash.uniq';
 
 export default {
     isArray: Array.isArray,
-    isString,
+    isString: arg => typeof arg === 'string',
     isObject,
     union,
     iane: arg => {
@@ -17,7 +16,7 @@ export default {
         return isObject(arg) && Object.keys(arg).length > 0;
     },
     isne: arg => {
-        return isString(arg) && arg.length > 0;
+        return typeof arg === 'string' && arg.length > 0;
     },
     unique,
 };

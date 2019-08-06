@@ -60,7 +60,6 @@
     "peerDependencies": {
         "ew-internals": "x.x",
         "lodash.isobject": "x.x",
-        "lodash.isstring": "x.x",
         "lodash.union": "x.x",
         "lodash.uniq": "x.x",
         "react": "16.x",
