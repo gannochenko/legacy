@@ -1,3 +1,4 @@
+import * as yup from 'yup';
 import { BaseField } from './base';
 import { DB_VARCHAR_DEF_LENGTH } from '../../constants.server';
 
@@ -17,5 +18,11 @@ export class StringField extends BaseField {
         }
 
         return value.toString();
+    }
+
+    createValueValidator() {
+        return yup
+            .string()
+            .typeError(`Field '${this.getDisplayName()}' is not a string`);
     }
 }

@@ -2,7 +2,6 @@
 
 import { uCFirst, convertToCamel } from 'ew-internals';
 import * as yup from 'yup';
-import { BaseField } from './field/base';
 import {
     TYPE_STRING,
     TYPE_INTEGER,
@@ -11,6 +10,7 @@ import {
 } from '../field-types';
 import { ENTITY_ID_FIELD_NAME } from '../constants.both';
 import _ from '../lodash';
+import { makeField } from './field/make-field';
 
 export class Entity {
     constructor(declaration) {
@@ -94,9 +94,7 @@ export class Entity {
 
         return {
             name: safeDeclaration.name || '',
-            schema: safeDeclaration.schema.map(field =>
-                BaseField.makeInstance(field),
-            ),
+            schema: safeDeclaration.schema.map(field => makeField(field)),
         };
     }
 
@@ -166,7 +164,7 @@ export class Entity {
     getValidator() {
         const shape = {};
         this.declaration.schema.forEach(field => {
-            let rule = null;
+            let rule = field.createValueValidator();
 
             // type
             if (field.isReference()) {
@@ -289,45 +287,6 @@ export class Entity {
     }
 
     castFieldValue(field, value) {
-        const type = field.getActualType();
-        let safeValue = value;
-
-        if (type === TYPE_STRING) {
-            if (safeValue === undefined || safeValue === null) {
-                safeValue = null;
-            } else {
-                safeValue = safeValue.toString();
-            }
-        } else if (type === TYPE_BOOLEAN) {
-            safeValue = !!safeValue;
-        } else if (type === TYPE_INTEGER) {
-            safeValue = parseInt(safeValue, 10);
-        } else if (type === TYPE_DATETIME) {
-            if (safeValue === undefined || safeValue === null) {
-                return null;
-            }
-
-            if (safeValue instanceof Date) {
-                // just a date
-                safeValue = safeValue.toISOString();
-            } else {
-                const timestamp = Date.parse(safeValue);
-                if (!Number.isNaN(timestamp)) {
-                    // a string representation of a date
-                    safeValue = new Date(timestamp).toISOString();
-                } else if (!Number.isNaN(parseInt(safeValue, 10))) {
-                    // last chance - a timestamp
-                    safeValue = new Date(parseInt(safeValue, 10)).toISOString();
-                }
-            }
-        } else if (field.isReference()) {
-            if (safeValue !== undefined && safeValue !== null) {
-                safeValue = safeValue.toString();
-            } else {
-                safeValue = null;
-            }
-        }
-
-        return safeValue;
+        return field.castValue(value);
     }
 }

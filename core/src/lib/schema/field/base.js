@@ -5,48 +5,9 @@ import {
     ENTITY_ID_FIELD_NAME,
     ENTITY_PK_FIELD_NAME,
 } from '../../constants.both';
-import {
-    TYPE_STRING,
-    TYPE_BOOLEAN,
-    TYPE_DATETIME,
-    TYPE_INTEGER,
-} from '../../field-types';
 import _ from '../../lodash';
-import {
-    StringField,
-    BooleanField,
-    NumericField,
-    DateField,
-    ReferenceField,
-} from './index';
 
 export class BaseField {
-    static makeInstance(declaration = {}) {
-        let { type } = declaration;
-        if (!type) {
-            return new this(declaration);
-        }
-
-        if (_.isArray(type)) {
-            [type] = type;
-        }
-        if (!type) {
-            return new this(declaration);
-        }
-
-        if (type === TYPE_STRING) {
-            return new StringField(declaration);
-        } else if (type === TYPE_BOOLEAN) {
-            return new BooleanField(declaration);
-        } else if (type === TYPE_INTEGER) {
-            return new NumericField(declaration);
-        } else if (type === TYPE_DATETIME) {
-            return new DateField(declaration);
-        }
-
-        return new ReferenceField(declaration);
-    }
-
     constructor(declaration = {}) {
         this.declaration = declaration;
     }
@@ -241,6 +202,8 @@ export class BaseField {
     castValue(value) {
         return value;
     }
+
+    createValueValidator() {}
 
     getReferencedEntityName() {
         return null;

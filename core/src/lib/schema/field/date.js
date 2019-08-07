@@ -1,3 +1,4 @@
+import * as yup from 'yup';
 import { BaseField } from './base';
 
 export class DateField extends BaseField {
@@ -23,5 +24,11 @@ export class DateField extends BaseField {
         }
 
         return null;
+    }
+
+    createValueValidator() {
+        return yup
+            .date()
+            .typeError(`Field '${this.getDisplayName()}' is not a date`);
     }
 }
