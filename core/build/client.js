@@ -992,7 +992,7 @@
                                                           )
                                                     : r === f
                                                     ? h
-                                                          .date()
+                                                          .datetime()
                                                           .typeError(
                                                               "Field '".concat(
                                                                   t.getDisplayName(),
@@ -1467,16 +1467,16 @@
                 n.d(t, 'ENTITY_ID_FIELD_NAME', function() {
                     return u;
                 }),
-                n.d(t, 'TYPE_STRING', function() {
+                n.d(t, 'FIELD_TYPE_STRING', function() {
                     return c;
                 }),
-                n.d(t, 'TYPE_INTEGER', function() {
+                n.d(t, 'FIELD_TYPE_INTEGER', function() {
                     return l;
                 }),
-                n.d(t, 'TYPE_BOOLEAN', function() {
+                n.d(t, 'FIELD_TYPE_BOOLEAN', function() {
                     return s;
                 }),
-                n.d(t, 'TYPE_DATETIME', function() {
+                n.d(t, 'FIELD_TYPE_DATETIME', function() {
                     return f;
                 }),
                 n.d(t, 'Schema', function() {

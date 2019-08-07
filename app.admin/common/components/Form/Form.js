@@ -2,10 +2,10 @@ import React, { useMemo, useRef } from 'react';
 import { Formik } from 'formik';
 import { withModal } from 'ew-internals-ui';
 import {
-    TYPE_STRING,
-    TYPE_INTEGER,
-    TYPE_BOOLEAN,
-    TYPE_DATETIME,
+    FIELD_TYPE_STRING,
+    FIELD_TYPE_INTEGER,
+    FIELD_TYPE_BOOLEAN,
+    FIELD_TYPE_DATETIME,
     ENTITY_ID_FIELD_NAME,
 } from 'project-minimum-core';
 
@@ -32,13 +32,13 @@ const getField = field => {
         return FormFieldReference;
     }
 
-    if (type === TYPE_STRING || type === TYPE_INTEGER) {
+    if (type === FIELD_TYPE_STRING || type === FIELD_TYPE_INTEGER) {
         return FormFieldScalar;
     }
-    if (type === TYPE_BOOLEAN) {
+    if (type === FIELD_TYPE_BOOLEAN) {
         return FormFieldBoolean;
     }
-    if (type === TYPE_DATETIME) {
+    if (type === FIELD_TYPE_DATETIME) {
         return FormFieldDate;
     }
 

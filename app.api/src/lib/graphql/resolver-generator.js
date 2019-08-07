@@ -5,7 +5,7 @@
 import { In, Like } from 'typeorm';
 import uuid from 'uuid/v4';
 import {
-    TYPE_DATETIME,
+    FIELD_TYPE_DATETIME,
     DB_DB_QUERY_FIND_MAX_PAGE_SIZE,
 } from 'project-minimum-core';
 import { getASTAt, getSelectionAt } from './ast';
@@ -686,7 +686,7 @@ export default class ResolverGenerator {
             const fieldValue = dbItem[fieldName];
             if (typeof fieldValue !== 'undefined' && fieldValue !== null) {
                 // todo: probably, apollo server is capable of casting Date to String by it's own?
-                if (fieldType === TYPE_DATETIME) {
+                if (fieldType === FIELD_TYPE_DATETIME) {
                     if (multiple) {
                         plain[fieldName] = fieldValue.map(subItem =>
                             subItem instanceof Date

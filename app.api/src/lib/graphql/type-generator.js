@@ -1,8 +1,8 @@
 import {
-    TYPE_STRING,
-    TYPE_BOOLEAN,
-    TYPE_DATETIME,
-    TYPE_INTEGER,
+    FIELD_TYPE_STRING,
+    FIELD_TYPE_BOOLEAN,
+    FIELD_TYPE_DATETIME,
+    FIELD_TYPE_INTEGER,
     ENTITY_ID_FIELD_NAME,
 } from 'project-minimum-core';
 
@@ -117,16 +117,16 @@ type Mutation {
         } else {
             const type = field.getActualType();
             switch (type) {
-                case TYPE_STRING:
+                case FIELD_TYPE_STRING:
                     gqlType = 'String';
                     break;
-                case TYPE_INTEGER:
+                case FIELD_TYPE_INTEGER:
                     gqlType = 'Int';
                     break;
-                case TYPE_DATETIME:
+                case FIELD_TYPE_DATETIME:
                     gqlType = 'String';
                     break;
-                case TYPE_BOOLEAN:
+                case FIELD_TYPE_BOOLEAN:
                     gqlType = 'Boolean';
                     break;
                 default:

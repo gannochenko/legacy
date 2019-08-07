@@ -1,5 +1,9 @@
 import React, { useMemo } from 'react';
-import { TYPE_STRING, TYPE_DATETIME, TYPE_BOOLEAN } from 'project-minimum-core';
+import {
+    FIELD_TYPE_STRING,
+    FIELD_TYPE_DATETIME,
+    FIELD_TYPE_BOOLEAN,
+} from 'project-minimum-core';
 import { withModal } from 'ew-internals-ui';
 
 import Button from '../../material-kit/CustomButtons';
@@ -39,13 +43,13 @@ const getCellComponent = field => {
     if (field.isReference()) {
         return ListCellReference;
     }
-    if (field.getActualType() === TYPE_STRING) {
+    if (field.getActualType() === FIELD_TYPE_STRING) {
         return ListCellString;
     }
-    if (field.getActualType() === TYPE_DATETIME) {
+    if (field.getActualType() === FIELD_TYPE_DATETIME) {
         return ListCellDate;
     }
-    if (field.getActualType() === TYPE_BOOLEAN) {
+    if (field.getActualType() === FIELD_TYPE_BOOLEAN) {
         return ListCellBoolean;
     }
 

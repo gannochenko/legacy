@@ -1,9 +1,9 @@
 import {
-    TYPE_BOOLEAN,
-    TYPE_DATETIME,
-    TYPE_INTEGER,
-    TYPE_STRING,
-} from '../field-types';
+    FIELD_TYPE_BOOLEAN,
+    FIELD_TYPE_DATETIME,
+    FIELD_TYPE_INTEGER,
+    FIELD_TYPE_STRING,
+} from '../schema/field/type';
 import { Entity } from '../schema/entity';
 
 const makeStubEntity = () => {
@@ -12,35 +12,35 @@ const makeStubEntity = () => {
         schema: [
             {
                 name: 'string_field',
-                type: TYPE_STRING,
+                type: FIELD_TYPE_STRING,
             },
             {
                 name: 'string_field_m',
-                type: [TYPE_STRING],
+                type: [FIELD_TYPE_STRING],
             },
             {
                 name: 'integer_field',
-                type: TYPE_INTEGER,
+                type: FIELD_TYPE_INTEGER,
             },
             {
                 name: 'integer_field_m',
-                type: [TYPE_INTEGER],
+                type: [FIELD_TYPE_INTEGER],
             },
             {
                 name: 'boolean_field',
-                type: TYPE_BOOLEAN,
+                type: FIELD_TYPE_BOOLEAN,
             },
             {
                 name: 'boolean_field_m',
-                type: [TYPE_BOOLEAN],
+                type: [FIELD_TYPE_BOOLEAN],
             },
             {
                 name: 'date_field',
-                type: TYPE_DATETIME,
+                type: FIELD_TYPE_DATETIME,
             },
             {
                 name: 'date_field_m',
-                type: [TYPE_DATETIME],
+                type: [FIELD_TYPE_DATETIME],
             },
             {
                 name: 'reference_field',

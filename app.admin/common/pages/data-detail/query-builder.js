@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 import { sanitize, escapeQuote } from '../../lib/util';
 import {
     ENTITY_ID_FIELD_NAME,
-    TYPE_STRING,
-    TYPE_DATETIME,
+    FIELD_TYPE_STRING,
+    FIELD_TYPE_DATETIME,
 } from 'project-minimum-core';
 
 export const buildQueryLoad = ({ entity, schema, code }) => {
@@ -80,8 +80,8 @@ export const buildMutationPut = ({ entity, schema, data, code }) => {
         let value = data[name];
         const type = field.getActualType();
         if (
-            type === TYPE_DATETIME ||
-            type === TYPE_STRING ||
+            type === FIELD_TYPE_DATETIME ||
+            type === FIELD_TYPE_STRING ||
             field.isReference()
         ) {
             if (field.isMultiple()) {

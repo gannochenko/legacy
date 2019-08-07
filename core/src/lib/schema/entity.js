@@ -3,11 +3,11 @@
 import { uCFirst, convertToCamel } from 'ew-internals';
 import * as yup from 'yup';
 import {
-    TYPE_STRING,
-    TYPE_INTEGER,
-    TYPE_DATETIME,
-    TYPE_BOOLEAN,
-} from '../field-types';
+    FIELD_TYPE_STRING,
+    FIELD_TYPE_INTEGER,
+    FIELD_TYPE_DATETIME,
+    FIELD_TYPE_BOOLEAN,
+} from './field/type';
 import { ENTITY_ID_FIELD_NAME } from '../constants.both';
 import _ from '../lodash';
 import { makeField } from './field/make-field';
@@ -155,7 +155,7 @@ export class Entity {
         return (
             this.declaration.schema.find(
                 field =>
-                    field.getType() === TYPE_STRING &&
+                    field.getType() === FIELD_TYPE_STRING &&
                     field.getName() !== ENTITY_ID_FIELD_NAME,
             ) || null
         );

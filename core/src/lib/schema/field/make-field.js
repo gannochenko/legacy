@@ -1,14 +1,14 @@
 import _ from '../../lodash';
 import {
-    TYPE_BOOLEAN,
-    TYPE_DATETIME,
-    TYPE_INTEGER,
-    TYPE_STRING,
-} from '../../field-types';
+    FIELD_TYPE_BOOLEAN,
+    FIELD_TYPE_DATETIME,
+    FIELD_TYPE_INTEGER,
+    FIELD_TYPE_STRING,
+} from './type';
 import { StringField } from './string';
 import { BooleanField } from './boolean';
 import { IntegerField } from './integer';
-import { DateField } from './date';
+import { DateTimeField } from './datetime';
 import { ReferenceField } from './reference';
 
 export const makeField = declaration => {
@@ -24,14 +24,14 @@ export const makeField = declaration => {
         return new this(declaration);
     }
 
-    if (type === TYPE_STRING) {
+    if (type === FIELD_TYPE_STRING) {
         return new StringField(declaration);
-    } else if (type === TYPE_BOOLEAN) {
+    } else if (type === FIELD_TYPE_BOOLEAN) {
         return new BooleanField(declaration);
-    } else if (type === TYPE_INTEGER) {
+    } else if (type === FIELD_TYPE_INTEGER) {
         return new IntegerField(declaration);
-    } else if (type === TYPE_DATETIME) {
-        return new DateField(declaration);
+    } else if (type === FIELD_TYPE_DATETIME) {
+        return new DateTimeField(declaration);
     }
 
     return new ReferenceField(declaration);

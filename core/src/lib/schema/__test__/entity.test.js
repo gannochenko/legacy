@@ -1,6 +1,6 @@
 import { Entity } from '../entity';
 import makeStubEntity from '../../__test__/stub-entity';
-// import { TYPE_STRING, TYPE_BOOLEAN, TYPE_DATETIME, TYPE_INTEGER } from '../../field-types';
+// import { FIELD_TYPE_STRING, FIELD_TYPE_BOOLEAN, FIELD_TYPE_DATETIME, FIELD_TYPE_INTEGER } from '../../field-types';
 
 describe('Entity', () => {
     it('should report on nameless entity', async () => {

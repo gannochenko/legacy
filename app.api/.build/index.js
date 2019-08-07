@@ -3881,7 +3881,7 @@
                                         if (
                                             fieldType ===
                                             project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
-                                                'TYPE_DATETIME'
+                                                'FIELD_TYPE_DATETIME'
                                             ]
                                         ) {
                                             if (multiple) {
@@ -4221,25 +4221,25 @@ type Mutation {
 
                                 switch (type) {
                                     case project_minimum_core__WEBPACK_IMPORTED_MODULE_0__[
-                                        'TYPE_STRING'
+                                        'FIELD_TYPE_STRING'
                                     ]:
                                         gqlType = 'String';
                                         break;
 
                                     case project_minimum_core__WEBPACK_IMPORTED_MODULE_0__[
-                                        'TYPE_INTEGER'
+                                        'FIELD_TYPE_INTEGER'
                                     ]:
                                         gqlType = 'Int';
                                         break;
 
                                     case project_minimum_core__WEBPACK_IMPORTED_MODULE_0__[
-                                        'TYPE_DATETIME'
+                                        'FIELD_TYPE_DATETIME'
                                     ]:
                                         gqlType = 'String';
                                         break;
 
                                     case project_minimum_core__WEBPACK_IMPORTED_MODULE_0__[
-                                        'TYPE_BOOLEAN'
+                                        'FIELD_TYPE_BOOLEAN'
                                     ]:
                                         gqlType = 'Boolean';
                                         break;

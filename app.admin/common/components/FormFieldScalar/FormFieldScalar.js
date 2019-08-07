@@ -1,5 +1,5 @@
 import React from 'react';
-import { TYPE_INTEGER } from 'project-minimum-core';
+import { FIELD_TYPE_INTEGER } from 'project-minimum-core';
 
 import { FormField, FormFieldMultiplier, Add } from '..';
 import { Input } from './style';
@@ -15,7 +15,7 @@ export const FormFieldScalar = ({ field, value, error, onChange }) => (
                     onChange={onChange}
                     value={value}
                     initialValue={
-                        field.getActualType() === TYPE_INTEGER ? '0' : ''
+                        field.getActualType() === FIELD_TYPE_INTEGER ? '0' : ''
                     }
                 />
             ) : null
