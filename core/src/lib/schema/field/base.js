@@ -63,6 +63,7 @@ export class BaseField {
             'required',
             'unique',
             'preview',
+            'system',
         ];
 
         const safeDeclaration = {};
@@ -130,6 +131,9 @@ export class BaseField {
                 preview: yup
                     .boolean()
                     .typeError('Field preview flag should be boolean'),
+                system: yup
+                    .boolean()
+                    .typeError('System flag should be boolean'),
             });
         }
 
@@ -193,6 +197,10 @@ export class BaseField {
 
     isUnique() {
         return this.declaration.unique === true;
+    }
+
+    isSystem() {
+        return this.declaration.system === true;
     }
 
     toJSON() {

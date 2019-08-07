@@ -30,7 +30,7 @@ export class Entity {
             errors.push({
                 message: 'Entity does not have a single field',
                 code: 'entity_schema_empty',
-                entityName: declaration.name,
+                entityName: declaration.name || '',
             });
 
             return errors; // no point on further checking
@@ -48,10 +48,19 @@ export class Entity {
                     message: `Field "${times[key]}" met several times`,
                     code: 'entity_field_duplicate',
                     fieldName: times[key],
-                    entityName: declaration.name,
+                    entityName: declaration.name || '',
                 });
             }
         });
+
+        // check that entity has legal entity id field
+        if (!times[ENTITY_ID_FIELD_NAME]) {
+            errors.push({
+                message: `Entity does not have mandatory id field`,
+                code: 'entity_no_id_field',
+                entityName: declaration.name || '',
+            });
+        }
 
         await Promise.all(
             declaration.schema.map(field =>
@@ -194,9 +203,6 @@ export class Entity {
 
         this.getFields().forEach(field => {
             const name = field.getName();
-            if (name === ENTITY_ID_FIELD_NAME) {
-                return;
-            }
 
             if (!(name in data)) {
                 return;
