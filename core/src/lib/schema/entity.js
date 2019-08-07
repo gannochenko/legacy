@@ -164,44 +164,7 @@ export class Entity {
     getValidator() {
         const shape = {};
         this.declaration.schema.forEach(field => {
-            let rule = field.createValueValidator();
-
-            // type
-            if (field.isReference()) {
-                rule = yup
-                    .string()
-                    .typeError(
-                        `Reference field '${field.getDisplayName()}' is not a string`,
-                    );
-            } else {
-                const type = field.getActualType();
-                if (type === TYPE_INTEGER) {
-                    rule = yup
-                        .number()
-                        .integer()
-                        .typeError(
-                            `Field '${field.getDisplayName()}' is not a number`,
-                        );
-                } else if (type === TYPE_BOOLEAN) {
-                    rule = yup
-                        .boolean()
-                        .typeError(
-                            `Field '${field.getDisplayName()}' is not a boolean`,
-                        );
-                } else if (type === TYPE_DATETIME) {
-                    rule = yup
-                        .date()
-                        .typeError(
-                            `Field '${field.getDisplayName()}' is not a date`,
-                        );
-                } else {
-                    rule = yup
-                        .string()
-                        .typeError(
-                            `Field '${field.getDisplayName()}' is not a string`,
-                        );
-                }
-            }
+            let rule = field.createValueItemValidator();
 
             // multiple
             if (field.isMultiple()) {
@@ -244,26 +207,7 @@ export class Entity {
                 return;
             }
 
-            let value = data[name];
-
-            if (field.isMultiple()) {
-                if (_.isArray(value)) {
-                    value = value.map(subValue =>
-                        this.castFieldValue(field, subValue),
-                    );
-
-                    // remove all nulls, does not make sense to keep them
-                    value = value.filter(x => x !== null);
-                }
-
-                if (field.isReference()) {
-                    value = _.unique(value).filter(x => !!x);
-                }
-            } else {
-                value = this.castFieldValue(field, value);
-            }
-
-            processed[name] = value;
+            processed[name] = field.castValue(data[name]);
         });
 
         return processed;
@@ -284,9 +228,5 @@ export class Entity {
         }
 
         return { data, errors };
-    }
-
-    castFieldValue(field, value) {
-        return field.castValue(value);
     }
 }

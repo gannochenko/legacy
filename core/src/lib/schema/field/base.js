@@ -200,10 +200,25 @@ export class BaseField {
     }
 
     castValue(value) {
+        if (this.isMultiple()) {
+            if (_.isArray(value)) {
+                // cast & remove all nulls, does not make sense to keep them
+                return value
+                    .map(subValue => this.castValueItem(subValue))
+                    .filter(x => x !== null);
+            }
+
+            return [];
+        }
+
+        return this.castValueItem(value);
+    }
+
+    castValueItem(value) {
         return value;
     }
 
-    createValueValidator() {}
+    createValueItemValidator() {}
 
     getReferencedEntityName() {
         return null;

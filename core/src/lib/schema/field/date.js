@@ -2,7 +2,7 @@ import * as yup from 'yup';
 import { BaseField } from './base';
 
 export class DateField extends BaseField {
-    castValue(value) {
+    castValueItem(value) {
         if (value === undefined || value === null) {
             return null;
         }
@@ -26,7 +26,7 @@ export class DateField extends BaseField {
         return null;
     }
 
-    createValueValidator() {
+    createValueItemValidator() {
         return yup
             .date()
             .typeError(`Field '${this.getDisplayName()}' is not a date`);

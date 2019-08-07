@@ -2,11 +2,11 @@ import * as yup from 'yup';
 import { BaseField } from './base';
 
 export class IntegerField extends BaseField {
-    castValue(value) {
+    castValueItem(value) {
         return parseInt(value, 10);
     }
 
-    createValueValidator() {
+    createValueItemValidator() {
         return yup
             .number()
             .integer()

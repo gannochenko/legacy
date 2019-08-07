@@ -2,11 +2,11 @@ import * as yup from 'yup';
 import { BaseField } from './base';
 
 export class BooleanField extends BaseField {
-    castValue(value) {
+    castValueItem(value) {
         return !!value;
     }
 
-    createValueValidator() {
+    createValueItemValidator() {
         return yup
             .boolean()
             .typeError(`Field '${this.getDisplayName()}' is not a boolean`);

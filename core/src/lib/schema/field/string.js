@@ -12,7 +12,7 @@ export class StringField extends BaseField {
         return length;
     }
 
-    castValue(value) {
+    castValueItem(value) {
         if (value === undefined || value === null) {
             return null;
         }
@@ -20,7 +20,7 @@ export class StringField extends BaseField {
         return value.toString();
     }
 
-    createValueValidator() {
+    createValueItemValidator() {
         return yup
             .string()
             .typeError(`Field '${this.getDisplayName()}' is not a string`);
