@@ -154,8 +154,17 @@ export class Entity {
         return this.declaration;
     }
 
-    // aux
-    getPresentationField() {
+    getPreviewField() {
+        const preview = this.declaration.schema.find(
+            field =>
+                field.getType() === FIELD_TYPE_STRING &&
+                field.getName() !== ENTITY_ID_FIELD_NAME &&
+                field.isPreview(),
+        );
+        if (preview) {
+            return preview;
+        }
+
         return (
             this.declaration.schema.find(
                 field =>

@@ -940,7 +940,7 @@
                             },
                         },
                         {
-                            key: 'getPresentationField',
+                            key: 'getPreviewField',
                             value: function() {
                                 return (
                                     this.declaration.index.find(function(e) {

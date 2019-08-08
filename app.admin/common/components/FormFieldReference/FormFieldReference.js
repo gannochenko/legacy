@@ -56,7 +56,7 @@ const FormFieldReferenceComponent = ({
     }
     const [pFieldName, refEntity] = useMemo(() => {
         const refEntity = schema.getEntity(field.getReferenceFieldName());
-        const pField = refEntity.getPresentationField();
+        const pField = refEntity.getPreviewField();
 
         if (pField) {
             return [pField.getName(), refEntity];

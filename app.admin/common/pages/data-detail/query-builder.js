@@ -13,7 +13,7 @@ export const buildQueryLoad = ({ entity, schema, code }) => {
             let presentField = null;
             const refEntity = schema.getEntity(field.getReferencedEntityName());
             if (refEntity) {
-                presentField = refEntity.getPresentationField();
+                presentField = refEntity.getPreviewField();
             }
 
             return `${sanitize(name)} { ${ENTITY_ID_FIELD_NAME} ${
@@ -44,7 +44,7 @@ export const buildQueryLoad = ({ entity, schema, code }) => {
 
 export const buildQuerySearch = ({ entity, text }) => {
     const queryName = `${entity.getCamelName()}Find`;
-    const presentationalField = entity.getPresentationField();
+    const presentationalField = entity.getPreviewField();
 
     const query = gql`
         query {

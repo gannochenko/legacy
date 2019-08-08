@@ -383,7 +383,7 @@
                 toJSON() {
                     return this.declaration;
                 }
-                getPresentationField() {
+                getPreviewField() {
                     return (
                         this.declaration.schema.find(
                             e => e.getType() === l && e.getName() !== s,

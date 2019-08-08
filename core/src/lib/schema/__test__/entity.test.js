@@ -4,7 +4,7 @@ import {
     ENTITY_ID_FIELD_NAME,
     ENTITY_ID_FIELD_LENGTH,
 } from '../../constants.both';
-// import { FIELD_TYPE_STRING, FIELD_TYPE_BOOLEAN, FIELD_TYPE_DATETIME, FIELD_TYPE_INTEGER } from '../../field-types';
+import { ReferenceField, StringField } from '../field';
 
 describe('Entity', () => {
     describe('getSanitizedDeclaration()', () => {
@@ -136,15 +136,13 @@ describe('Entity', () => {
         });
     });
 
-    describe('castData()', () => {
+    describe('castData() + validateData()', () => {
         it('should cast and validate input data: multiple <-> single', async () => {
             const main = makeStubEntity();
             const data = main.castData({
                 string_field: ['A', 'B'],
                 string_field_m: 'A',
             });
-
-            console.log(data);
 
             expect(data).toMatchObject({
                 string_field: 'A,B',
@@ -360,35 +358,180 @@ describe('Entity', () => {
         });
     });
 
-    describe('validateData()', () => {
-        throw new Error('Todo');
-    });
-
     describe('getName()', () => {
-        throw new Error('Todo');
+        it('should return correct snake case name', async () => {
+            const entity = new Entity({
+                name: 'my_name_is_alice',
+                schema: [],
+            });
+
+            expect(entity.getName()).toEqual('my_name_is_alice');
+        });
     });
 
     describe('getCamelName()', () => {
-        throw new Error('Todo');
+        it('should return correct camel case name', async () => {
+            const entity = new Entity({
+                name: 'my_name_is_alice',
+                schema: [],
+            });
+
+            expect(entity.getCamelName()).toEqual('MyNameIsAlice');
+        });
     });
 
     describe('getDisplayName()', () => {
-        throw new Error('Todo');
+        it('should return correct space-separated name', async () => {
+            const entity = new Entity({
+                name: 'my_name_is_alice',
+                schema: [],
+            });
+
+            expect(entity.getDisplayName()).toEqual('My name is alice');
+        });
     });
 
     describe('getReferences()', () => {
-        throw new Error('Todo');
+        it('should return references', async () => {
+            const entity = new Entity({
+                name: 'sample',
+                schema: [
+                    {
+                        name: 'i_have_a_name',
+                        type: 'boolean',
+                    },
+                    {
+                        name: 'single_ref',
+                        type: 'referenced_entity_1',
+                    },
+                    {
+                        name: 'multiple_ref',
+                        type: ['referenced_entity_2'],
+                    },
+                ],
+            });
+
+            const result = entity.getReferences();
+            expect(result).toHaveLength(2);
+
+            expect(result[0]).toBeInstanceOf(ReferenceField);
+            expect(result[0].getName()).toEqual('single_ref');
+
+            expect(result[1]).toBeInstanceOf(ReferenceField);
+            expect(result[1].getName()).toEqual('multiple_ref');
+        });
     });
 
     describe('getSingleReferences()', () => {
-        throw new Error('Todo');
+        it('should return references', async () => {
+            const entity = new Entity({
+                name: 'sample',
+                schema: [
+                    {
+                        name: 'i_have_a_name',
+                        type: 'boolean',
+                    },
+                    {
+                        name: 'single_ref',
+                        type: 'referenced_entity_1',
+                    },
+                    {
+                        name: 'multiple_ref',
+                        type: ['referenced_entity_2'],
+                    },
+                ],
+            });
+
+            const result = entity.getSingleReferences();
+            expect(result).toHaveLength(1);
+
+            expect(result[0]).toBeInstanceOf(ReferenceField);
+            expect(result[0].getName()).toEqual('single_ref');
+        });
     });
 
     describe('getMultipleReferences()', () => {
-        throw new Error('Todo');
+        it('should return references', async () => {
+            const entity = new Entity({
+                name: 'sample',
+                schema: [
+                    {
+                        name: 'i_have_a_name',
+                        type: 'boolean',
+                    },
+                    {
+                        name: 'single_ref',
+                        type: 'referenced_entity_1',
+                    },
+                    {
+                        name: 'multiple_ref',
+                        type: ['referenced_entity_2'],
+                    },
+                ],
+            });
+
+            const result = entity.getMultipleReferences();
+            expect(result).toHaveLength(1);
+
+            expect(result[0]).toBeInstanceOf(ReferenceField);
+            expect(result[0].getName()).toEqual('multiple_ref');
+        });
     });
 
-    describe('getPresentationField()', () => {
-        throw new Error('Todo');
+    describe('getPreviewField()', () => {
+        it('should take first single string field as presentational', async () => {
+            const entity = new Entity({
+                name: 'sample',
+                schema: [
+                    {
+                        name: 'i_have_a_name',
+                        type: 'boolean',
+                    },
+                    {
+                        name: 'single_ref',
+                        type: 'referenced_entity_1',
+                    },
+                    {
+                        name: 'i_am_presentational',
+                        type: 'string',
+                    },
+                ],
+            });
+
+            const result = entity.getPreviewField();
+
+            expect(result).toBeInstanceOf(StringField);
+            expect(result.getName()).toEqual('i_am_presentational');
+        });
+
+        it('should take specified field as presentational', async () => {
+            const entity = new Entity({
+                name: 'sample',
+                schema: [
+                    {
+                        name: 'i_have_a_name',
+                        type: 'boolean',
+                    },
+                    {
+                        name: 'single_ref',
+                        type: 'referenced_entity_1',
+                    },
+                    {
+                        name: 'i_am_not_presentational',
+                        type: 'string',
+                    },
+                    {
+                        name: 'i_am_presentational',
+                        type: 'string',
+                        preview: true,
+                    },
+                ],
+            });
+
+            const result = entity.getPreviewField();
+
+            expect(result).toBeInstanceOf(StringField);
+            expect(result.getName()).toEqual('i_am_presentational');
+        });
     });
 });

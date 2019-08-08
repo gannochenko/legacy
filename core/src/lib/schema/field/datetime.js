@@ -23,7 +23,7 @@ export class DateTimeField extends BaseField {
             return new Date(parseInt(value, 10)).toISOString();
         }
 
-        return null;
+        return value; // unable to cast
     }
 
     createValueItemValidator() {

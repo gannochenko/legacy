@@ -12,6 +12,7 @@ describe('Field', () => {
             unique: true,
             some: 'other',
             field: 'bar',
+            system: true,
         });
 
         expect(Object.keys(field.getDeclaration())).toEqualArray([
@@ -22,6 +23,7 @@ describe('Field', () => {
             'preview',
             'unique',
             'required',
+            'system',
         ]);
     });
 
