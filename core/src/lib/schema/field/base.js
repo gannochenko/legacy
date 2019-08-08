@@ -219,7 +219,7 @@ export class BaseField {
                     .filter(x => x !== null);
             }
 
-            return [];
+            return value;
         }
 
         return this.castValueItem(value);

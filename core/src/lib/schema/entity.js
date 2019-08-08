@@ -68,9 +68,9 @@ export class Entity {
         Object.keys(times).forEach(key => {
             if (times[key] > 1) {
                 errors.push({
-                    message: `Field "${times[key]}" met several times`,
+                    message: `Field "${key}" met several times`,
                     code: 'entity_field_duplicate',
-                    fieldName: times[key],
+                    fieldName: key,
                     entityName: declaration.name || '',
                 });
             }
@@ -222,10 +222,19 @@ export class Entity {
                 abortEarly: false,
             });
         } catch (validationErrors) {
-            errors = validationErrors.inner.map(error => ({
-                message: error.message,
-                field: error.path,
-            }));
+            if (_.isArray(validationErrors.inner)) {
+                errors = validationErrors.inner.map(error => ({
+                    message: error.message,
+                    field: error.path,
+                }));
+            } else {
+                errors = [
+                    {
+                        message: 'Internal error',
+                        field: '',
+                    },
+                ];
+            }
         }
 
         return { data, errors };
