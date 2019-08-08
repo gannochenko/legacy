@@ -1,6 +1,9 @@
 import * as yup from 'yup';
 import { StringField } from './string';
-import { ENTITY_ID_FIELD_NAME } from '../../constants.both';
+import {
+    ENTITY_ID_FIELD_NAME,
+    ENTITY_ID_FIELD_LENGTH,
+} from '../../constants.both';
 import { FIELD_TYPE_STRING } from './type';
 
 export class IdStringField extends StringField {
@@ -9,20 +12,11 @@ export class IdStringField extends StringField {
 
         const { declaration } = this;
 
-        // // check that it is mandatory
-        // if (!declaration.required) {
-        //     errors.push({
-        //         message: `System field "code" should be mandatory`,
-        //         code: 'field_code_not_mandatory',
-        //         fieldName: declaration.name,
-        //     });
-        // }
-
         // check that it is unique
         if (!declaration.unique) {
             errors.push({
                 message: `System field "${ENTITY_ID_FIELD_NAME}" should be unique`,
-                code: 'field_code_not_unique',
+                code: 'field_id_not_unique',
                 fieldName: declaration.name,
             });
         }
@@ -31,7 +25,7 @@ export class IdStringField extends StringField {
         if (this.getActualType() !== FIELD_TYPE_STRING) {
             errors.push({
                 message: `System field "${ENTITY_ID_FIELD_NAME}" should be string`,
-                code: 'field_code_not_string',
+                code: 'field_id_not_string',
                 fieldName: declaration.name,
             });
         }
@@ -40,17 +34,26 @@ export class IdStringField extends StringField {
         if (this.isMultiple()) {
             errors.push({
                 message: `System field "${ENTITY_ID_FIELD_NAME}" should not be multiple`,
-                code: 'field_code_multiple',
+                code: 'field_id_multiple',
                 fieldName: declaration.name,
             });
         }
 
-        // check that it is not multiple
+        // check that it has length
         const len = parseInt(declaration.length, 10);
-        if (Number.isNaN(len) || len <= 0) {
+        if (Number.isNaN(len) || len !== ENTITY_ID_FIELD_LENGTH) {
             errors.push({
-                message: `System field "${ENTITY_ID_FIELD_NAME}" should have finite length`,
-                code: 'field_code_illegal_length',
+                message: `System field "${ENTITY_ID_FIELD_NAME}" should have length of ${ENTITY_ID_FIELD_LENGTH}`,
+                code: 'field_id_illegal_length',
+                fieldName: declaration.name,
+            });
+        }
+
+        // check that it is system
+        if (!this.isSystem()) {
+            errors.push({
+                message: `System field "${ENTITY_ID_FIELD_NAME}" should not declared as system`,
+                code: 'field_id_system',
                 fieldName: declaration.name,
             });
         }
@@ -63,8 +66,8 @@ export class IdStringField extends StringField {
         return yup
             .string()
             .length(
-                32,
-                `Field '${this.getDisplayName()}' should be 32 characters long`,
+                ENTITY_ID_FIELD_LENGTH,
+                `Field '${this.getDisplayName()}' should be ${ENTITY_ID_FIELD_LENGTH} characters long`,
             )
             .typeError(`Field '${this.getDisplayName()}' is not a string`);
     }
