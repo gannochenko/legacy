@@ -12,6 +12,29 @@ export class Entity {
         this.declaration = declaration;
     }
 
+    set declaration(declaration) {
+        this.declarationInternal = this.getSanitizedDeclaration(declaration);
+    }
+
+    get declaration() {
+        return this.declarationInternal;
+    }
+
+    getSanitizedDeclaration(declaration) {
+        let safeDeclaration = declaration;
+        if (!_.ione(safeDeclaration)) {
+            safeDeclaration = {};
+        }
+        if (!_.iane(safeDeclaration.schema)) {
+            safeDeclaration.schema = [];
+        }
+
+        return {
+            name: safeDeclaration.name || '',
+            schema: safeDeclaration.schema.map(field => makeField(field)),
+        };
+    }
+
     async getHealth() {
         const errors = [];
         const { declaration } = this;
@@ -77,29 +100,6 @@ export class Entity {
         );
 
         return errors;
-    }
-
-    set declaration(declaration) {
-        this.declarationInternal = this.getSanitizedDeclaration(declaration);
-    }
-
-    get declaration() {
-        return this.declarationInternal;
-    }
-
-    getSanitizedDeclaration(declaration) {
-        let safeDeclaration = declaration;
-        if (!_.ione(safeDeclaration)) {
-            safeDeclaration = {};
-        }
-        if (!_.iane(safeDeclaration.schema)) {
-            safeDeclaration.schema = [];
-        }
-
-        return {
-            name: safeDeclaration.name || '',
-            schema: safeDeclaration.schema.map(field => makeField(field)),
-        };
     }
 
     /**
