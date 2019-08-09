@@ -79,7 +79,7 @@ export class Entity {
         // check that entity has legal entity id field
         if (!times[ENTITY_ID_FIELD_NAME]) {
             errors.push({
-                message: `Entity does not have mandatory id field`,
+                message: `Entity does not have id field`,
                 code: 'entity_no_id_field',
                 entityName: declaration.name || '',
             });

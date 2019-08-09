@@ -16,18 +16,6 @@ describe('Entity', () => {
     });
 
     describe('getHealth()', () => {
-        it('should report on empty entity', async () => {
-            const entity = new Entity({
-                schema: [],
-            });
-
-            const errors = await entity.getHealth();
-
-            expect(errors).toMatchObjectInArray({
-                code: 'entity_schema_empty',
-            });
-        });
-
         it('should report on nameless entity', async () => {
             const entity = new Entity({
                 schema: [
@@ -41,68 +29,17 @@ describe('Entity', () => {
             const errors = await entity.getHealth();
 
             expect(errors).toMatchObjectInArray({ code: 'entity_name_empty' });
-            expect(errors).toMatchObjectInArray({
-                code: 'entity_no_id_field',
-            });
         });
 
-        it('should report invalid fieldset health check', async () => {
-            const name = 'test';
+        it('should report on empty entity', async () => {
             const entity = new Entity({
-                name,
-                schema: [
-                    {
-                        name: 'i_have_a_name',
-                        type: 'boolean',
-                    },
-                    {
-                        name: '',
-                        type: 'string',
-                    },
-                ],
+                schema: [],
             });
 
             const errors = await entity.getHealth();
 
             expect(errors).toMatchObjectInArray({
-                code: 'field_name_empty',
-                fieldName: '',
-            });
-            expect(errors).toMatchObjectInArray({
-                code: 'entity_no_id_field',
-            });
-        });
-
-        it(`should report invalid ${ENTITY_ID_FIELD_NAME} field health check`, async () => {
-            const name = 'test';
-            const entity = new Entity({
-                name,
-                schema: [
-                    {
-                        name: ENTITY_ID_FIELD_NAME,
-                        type: 'boolean',
-                        system: true,
-                    },
-                    {
-                        name: 'i_have_a_name',
-                        type: 'boolean',
-                    },
-                ],
-            });
-
-            const errors = await entity.getHealth();
-
-            expect(errors).toMatchObjectInArray({
-                code: 'field_id_not_unique',
-                fieldName: ENTITY_ID_FIELD_NAME,
-            });
-            expect(errors).toMatchObjectInArray({
-                code: 'field_id_not_string',
-                fieldName: ENTITY_ID_FIELD_NAME,
-            });
-            expect(errors).toMatchObjectInArray({
-                code: 'field_id_illegal_length',
-                fieldName: ENTITY_ID_FIELD_NAME,
+                code: 'entity_schema_empty',
             });
         });
 
@@ -132,6 +69,57 @@ describe('Entity', () => {
             expect(errors).toMatchObjectInArray({
                 code: 'entity_field_duplicate',
                 fieldName: 'i_have_a_name',
+            });
+        });
+
+        it(`should report absence of ${ENTITY_ID_FIELD_NAME} field`, async () => {
+            const name = 'test';
+            const entity = new Entity({
+                name,
+                schema: [
+                    {
+                        name: 'i_have_a_name',
+                        type: 'boolean',
+                    },
+                ],
+            });
+
+            const errors = await entity.getHealth();
+
+            expect(errors).toMatchObjectInArray({
+                code: 'entity_no_id_field',
+            });
+        });
+
+        it('should report invalid fieldset health check', async () => {
+            const name = 'test';
+            const entity = new Entity({
+                name,
+                schema: [
+                    {
+                        name: 'i_have_a_name',
+                        type: 'boolean',
+                    },
+                    {
+                        name: ENTITY_ID_FIELD_NAME,
+                        type: 'boolean',
+                    },
+                    {
+                        name: '',
+                        type: 'string',
+                    },
+                ],
+            });
+
+            const errors = await entity.getHealth();
+
+            expect(errors).toMatchObjectInArray({
+                code: 'field_name_empty',
+                fieldName: '',
+            });
+            expect(errors).toMatchObjectInArray({
+                code: 'field_name_illegal',
+                fieldName: ENTITY_ID_FIELD_NAME,
             });
         });
     });

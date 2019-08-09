@@ -7,17 +7,32 @@ import {
 import { FIELD_TYPE_STRING } from './type';
 
 export class IdStringField extends StringField {
+    /**
+     * In this function we assume that the name of the field is equal to ENTITY_ID_FIELD_NAME constant value
+     * @returns {Promise<Array>}
+     */
     async getHealth() {
         const errors = await super.getHealth();
 
-        const { declaration } = this;
+        const name = this.getName();
+        const system = this.isSystem();
+        const unique = this.isUnique();
+        const length = this.getLength();
+
+        if (!system) {
+            errors.push({
+                message: `The field should be declared as system-reserved: ${name}`,
+                code: `field_not_system`,
+                fieldName: name,
+            });
+        }
 
         // check that it is unique
-        if (!declaration.unique) {
+        if (!unique) {
             errors.push({
                 message: `System field "${ENTITY_ID_FIELD_NAME}" should be unique`,
                 code: 'field_id_not_unique',
-                fieldName: declaration.name,
+                fieldName: name,
             });
         }
 
@@ -26,7 +41,7 @@ export class IdStringField extends StringField {
             errors.push({
                 message: `System field "${ENTITY_ID_FIELD_NAME}" should be string`,
                 code: 'field_id_not_string',
-                fieldName: declaration.name,
+                fieldName: name,
             });
         }
 
@@ -35,26 +50,17 @@ export class IdStringField extends StringField {
             errors.push({
                 message: `System field "${ENTITY_ID_FIELD_NAME}" should not be multiple`,
                 code: 'field_id_multiple',
-                fieldName: declaration.name,
+                fieldName: name,
             });
         }
 
         // check that it has length
-        const len = parseInt(declaration.length, 10);
+        const len = parseInt(length, 10);
         if (Number.isNaN(len) || len !== ENTITY_ID_FIELD_LENGTH) {
             errors.push({
                 message: `System field "${ENTITY_ID_FIELD_NAME}" should have length of ${ENTITY_ID_FIELD_LENGTH}`,
                 code: 'field_id_illegal_length',
-                fieldName: declaration.name,
-            });
-        }
-
-        // check that it is system
-        if (!this.isSystem()) {
-            errors.push({
-                message: `System field "${ENTITY_ID_FIELD_NAME}" should not declared as system`,
-                code: 'field_id_system',
-                fieldName: declaration.name,
+                fieldName: name,
             });
         }
 

@@ -14,8 +14,9 @@ export class BaseField {
 
     async getHealth() {
         const errors = [];
-        const { declaration } = this;
-        const { name, type, system } = declaration;
+
+        const name = this.getName();
+        const type = this.getType();
 
         // check that entity has a name
         if (!_.isne(name)) {
@@ -35,14 +36,11 @@ export class BaseField {
             });
         }
 
-        if (
-            (name === ENTITY_ID_FIELD_NAME && !system) ||
-            name === ENTITY_PK_FIELD_NAME
-        ) {
+        if (name === ENTITY_PK_FIELD_NAME) {
             errors.push({
                 message: `The following name is system-reserved: ${name}`,
                 code: `field_name_illegal`,
-                fieldName: name || '',
+                fieldName: name,
             });
         }
 
