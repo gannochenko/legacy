@@ -1,10 +1,9 @@
 import { Entity } from '../entity';
-import makeStubEntity from '../../__test__/stub-entity';
 import {
     ENTITY_ID_FIELD_NAME,
     ENTITY_ID_FIELD_LENGTH,
 } from '../../constants.both';
-import { ReferenceField, StringField } from '../field';
+import { BooleanField, ReferenceField, StringField } from '../field';
 
 describe('Entity', () => {
     describe('getSanitizedDeclaration()', () => {
@@ -12,6 +11,27 @@ describe('Entity', () => {
             const entity = new Entity();
 
             expect(entity.declaration).toMatchObject({ name: '', schema: [] });
+        });
+
+        it('should make instances of fields', async () => {
+            const entity = new Entity({
+                name: 'sample',
+                schema: [
+                    {
+                        name: 'i_have_a_name',
+                        type: 'boolean',
+                    },
+                    {
+                        name: 'i_have_a_name',
+                        type: 'string',
+                    },
+                ],
+            });
+
+            const declaration = entity.declaration;
+
+            expect(declaration.schema[0]).toBeInstanceOf(BooleanField);
+            expect(declaration.schema[1]).toBeInstanceOf(StringField);
         });
     });
 

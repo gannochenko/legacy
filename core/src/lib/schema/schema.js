@@ -2,7 +2,7 @@ import { Entity } from './entity';
 import _ from '../lodash';
 
 export class Schema {
-    constructor(declaration) {
+    constructor(declaration = {}) {
         this.declaration = declaration;
     }
 
