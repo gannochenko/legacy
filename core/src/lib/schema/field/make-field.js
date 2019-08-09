@@ -17,7 +17,7 @@ export const makeField = declaration => {
     let { type } = declaration;
     const { name } = declaration;
     if (!type) {
-        return new this(declaration);
+        return new StringField(declaration);
     }
 
     if (_.isArray(type)) {

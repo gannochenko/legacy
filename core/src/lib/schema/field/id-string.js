@@ -75,6 +75,6 @@ export class IdStringField extends StringField {
                 ENTITY_ID_FIELD_LENGTH,
                 `Field '${this.getDisplayName()}' should be ${ENTITY_ID_FIELD_LENGTH} characters long`,
             )
-            .typeError(`Field '${this.getDisplayName()}' is not a string`);
+            .typeError(this.getTypeErrorMessage('a string'));
     }
 }

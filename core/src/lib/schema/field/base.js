@@ -1,10 +1,7 @@
 /* eslint import/no-unresolved: 0 */
 import { uCFirst } from 'ew-internals';
 import * as yup from 'yup';
-import {
-    ENTITY_ID_FIELD_NAME,
-    ENTITY_PK_FIELD_NAME,
-} from '../../constants.both';
+import { ENTITY_PK_FIELD_NAME } from '../../constants.both';
 import _ from '../../lodash';
 
 export class BaseField {
