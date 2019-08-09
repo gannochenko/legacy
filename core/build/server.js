@@ -234,7 +234,7 @@
                 isSortable() {
                     return !this.isMultiple() && !this.isReference();
                 }
-                isMandatory() {
+                isRequired() {
                     return !0 === this.declaration.required;
                 }
                 isPreview() {
@@ -430,7 +430,7 @@
                                               );
                             }
                             t.isMultiple() && (n = h.array().of(n)),
-                                (n = t.isMandatory()
+                                (n = t.isRequired()
                                     ? n.required(
                                           `${t.getDisplayName()} is required`,
                                       )

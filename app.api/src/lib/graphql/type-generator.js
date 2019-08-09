@@ -43,7 +43,7 @@ export default class TypeGenerator {
                         field,
                         schema,
                         true,
-                    )}${false && field.isMandatory() ? '!' : ''}`,
+                    )}${false && field.isRequired() ? '!' : ''}`,
                 );
             }
             fFields.push(`${fieldName}: IFilterFieldValue`);

@@ -182,10 +182,10 @@ export class BaseField {
     }
 
     isSortable() {
-        return !this.isMultiple();
+        return !(this.isMultiple() || this.isReference());
     }
 
-    isMandatory() {
+    isRequired() {
         return this.declaration.required === true;
     }
 

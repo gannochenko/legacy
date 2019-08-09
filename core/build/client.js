@@ -417,7 +417,7 @@
                             },
                         },
                         {
-                            key: 'isMandatory',
+                            key: 'isRequired',
                             value: function() {
                                 return !0 === this.declaration.required;
                             },
@@ -1009,7 +1009,7 @@
                                                           );
                                         }
                                         t.isMultiple() && (n = h.array().of(n)),
-                                            (n = t.isMandatory()
+                                            (n = t.isRequired()
                                                 ? n.required(
                                                       ''.concat(
                                                           t.getDisplayName(),

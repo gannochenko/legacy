@@ -105,7 +105,7 @@ export default class EntityManager {
             }
 
             table.columns.push({
-                isNullable: !field.isMandatory(),
+                isNullable: !field.isRequired(),
                 isGenerated: false,
                 isPrimary: false,
                 isUnique: field.isUnique(),
@@ -182,7 +182,7 @@ export default class EntityManager {
 
             const column = {
                 type: this.constructor.getDBType(field),
-                nullable: !field.isMandatory(),
+                nullable: !field.isRequired(),
                 array: field.isMultiple(),
             };
 

@@ -13,7 +13,7 @@ export const FormField = ({ field, actions, error, children }) => {
         <FormFieldContainer>
             <Label>
                 {field.getDisplayName()}{' '}
-                {field.isMandatory() && <RedStar>*</RedStar>}
+                {field.isRequired() && <RedStar>*</RedStar>}
             </Label>
             {children}
             <Footer>

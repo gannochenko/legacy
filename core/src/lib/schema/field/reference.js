@@ -15,6 +15,10 @@ export class ReferenceField extends BaseField {
         return false;
     }
 
+    isPreview() {
+        return false;
+    }
+
     createValueItemValidator() {
         // todo: it should be uuid actually, so the corresponding check is needed
         return yup.string().typeError(this.getTypeErrorMessage('a string'));

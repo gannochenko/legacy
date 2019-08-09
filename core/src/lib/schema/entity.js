@@ -185,7 +185,7 @@ export class Entity {
             }
 
             // required
-            if (field.isMandatory()) {
+            if (field.isRequired()) {
                 rule = rule.required(`${field.getDisplayName()} is required`);
             } else {
                 rule = rule.nullable();
