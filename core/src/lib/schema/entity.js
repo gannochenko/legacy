@@ -224,28 +224,27 @@ export class Entity {
     }
 
     async validateData(sourceData) {
-        let data = null;
         let errors = null;
         try {
-            data = await this.getValidator().validate(sourceData, {
+            await this.getValidator().validate(sourceData, {
                 abortEarly: false,
             });
         } catch (validationErrors) {
             if (_.isArray(validationErrors.inner)) {
                 errors = validationErrors.inner.map(error => ({
                     message: error.message,
-                    field: error.path,
+                    fieldName: error.path,
                 }));
             } else {
                 errors = [
                     {
                         message: 'Internal error',
-                        field: '',
+                        fieldName: '',
                     },
                 ];
             }
         }
 
-        return { data, errors };
+        return errors;
     }
 }

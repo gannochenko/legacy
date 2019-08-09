@@ -17,11 +17,7 @@ export class ReferenceField extends BaseField {
 
     createValueItemValidator() {
         // todo: it should be uuid actually, so the corresponding check is needed
-        return yup
-            .string()
-            .typeError(
-                `Reference field '${this.getDisplayName()}' is not a string`,
-            );
+        return yup.string().typeError(this.getTypeErrorMessage('a string'));
     }
 
     castValueItem(value) {

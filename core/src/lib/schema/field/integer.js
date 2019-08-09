@@ -15,6 +15,6 @@ export class IntegerField extends BaseField {
         return yup
             .number()
             .integer()
-            .typeError(`Field '${this.getDisplayName()}' is not an integer`);
+            .typeError(this.getTypeErrorMessage('an integer'));
     }
 }

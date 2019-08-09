@@ -27,8 +27,6 @@ export class DateTimeField extends BaseField {
     }
 
     createValueItemValidator() {
-        return yup
-            .date()
-            .typeError(`Field '${this.getDisplayName()}' is not a date`);
+        return yup.date().typeError(this.getTypeErrorMessage('a date'));
     }
 }

@@ -236,4 +236,8 @@ export class BaseField {
     isReference() {
         return false;
     }
+
+    getTypeErrorMessage(what) {
+        return `The value of '${this.getDisplayName()}' is not ${what}`;
+    }
 }

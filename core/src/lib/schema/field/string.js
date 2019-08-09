@@ -21,8 +21,6 @@ export class StringField extends BaseField {
     }
 
     createValueItemValidator() {
-        return yup
-            .string()
-            .typeError(`Field '${this.getDisplayName()}' is not a string`);
+        return yup.string().typeError(this.getTypeErrorMessage('a string'));
     }
 }

@@ -7,8 +7,6 @@ export class BooleanField extends BaseField {
     }
 
     createValueItemValidator() {
-        return yup
-            .boolean()
-            .typeError(`Field '${this.getDisplayName()}' is not a boolean`);
+        return yup.boolean().typeError(this.getTypeErrorMessage('a boolean'));
     }
 }

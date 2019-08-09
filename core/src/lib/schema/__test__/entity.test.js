@@ -118,231 +118,64 @@ describe('Entity', () => {
                 fieldName: '',
             });
             expect(errors).toMatchObjectInArray({
-                code: 'field_name_illegal',
+                code: 'field_not_system',
                 fieldName: ENTITY_ID_FIELD_NAME,
             });
         });
     });
 
-    describe('castData() + validateData()', () => {
-        it('should cast and validate input data: multiple <-> single', async () => {
-            const main = makeStubEntity();
-            const data = main.castData({
-                string_field: ['A', 'B'],
-                string_field_m: 'A',
-            });
-
-            expect(data).toMatchObject({
-                string_field: 'A,B',
-                string_field_m: 'A', // stays the same
-            });
-
-            const errors = await main.validateData(data);
-            expect(errors).toEqual({
-                data: { string_field_m: null, string_field: 'A,B' },
-                errors: null,
-            });
-        });
-
-        it('should cast and validate input data: string', async () => {
-            const main = makeStubEntity();
-
-            let data = main.castData({
-                string_field: null,
-                string_field_m: [null],
-            });
-            expect(data).toMatchObject({
-                string_field: null,
-                string_field_m: [],
-            });
-            let result = await main.validateData(data);
-            expect(result).toEqual({
-                data: { string_field: null, string_field_m: [] },
-                errors: null,
-            });
-
-            data = main.castData({
-                string_field: undefined,
-                string_field_m: [undefined],
-            });
-            expect(data).toMatchObject({
-                string_field: null,
-                string_field_m: [],
-            });
-            result = await main.validateData(data);
-            expect(result).toEqual({
-                data: { string_field: null, string_field_m: [] },
-                errors: null,
-            });
-
-            data = main.castData({
-                string_field: 1000,
-                string_field_m: [1000],
-            });
-            expect(data).toMatchObject({
-                string_field: '1000',
-                string_field_m: ['1000'],
-            });
-            result = await main.validateData(data);
-            expect(result).toEqual({
-                data: { string_field: '1000', string_field_m: ['1000'] },
-                errors: null,
-            });
-
-            data = main.castData({
-                string_field: new Date('2019-06-12T18:20:48.394Z'),
-                string_field_m: [new Date('2019-06-12T18:20:48.394Z')],
-            });
-            expect(
-                data.string_field.indexOf('Wed Jun 12 2019 20:20:48 GMT+0200'),
-            ).toEqual(0);
-            expect(
-                data.string_field_m[0].indexOf(
-                    'Wed Jun 12 2019 20:20:48 GMT+0200',
-                ),
-            ).toEqual(0);
-            result = await main.validateData(data);
-            expect(result.errors).toEqual(null);
-        });
-
-        it('should cast and validate input data: boolean', async () => {
-            const main = makeStubEntity();
-
-            let data = main.castData({
-                boolean_field: true,
-                boolean_field_m: [false],
-            });
-            expect(data).toMatchObject({
-                boolean_field: true,
-                boolean_field_m: [false],
-            });
-            let result = await main.validateData(data);
-            expect(result.errors).toEqual(null);
-
-            data = main.castData({
-                boolean_field: 0,
-                boolean_field_m: [1],
-            });
-            expect(data).toMatchObject({
-                boolean_field: false,
-                boolean_field_m: [true],
-            });
-            result = await main.validateData(data);
-            expect(result.errors).toEqual(null);
-
-            data = main.castData({
-                boolean_field: '0',
-                boolean_field_m: ['1'],
-            });
-            expect(data).toMatchObject({
-                boolean_field: true,
-                boolean_field_m: [true],
-            });
-            result = await main.validateData(data);
-            expect(result.errors).toEqual(null);
-        });
-
-        it('should cast and validate input data: date', async () => {
-            const main = makeStubEntity();
-
-            let data = main.castData({
-                date_field: new Date('2019-06-12T18:20:48.394Z'),
-                date_field_m: [new Date('2019-06-12T18:20:48.394Z')],
-            });
-            expect(data).toMatchObject({
-                date_field: '2019-06-12T18:20:48.394Z',
-                date_field_m: ['2019-06-12T18:20:48.394Z'],
-            });
-            let result = await main.validateData(data);
-            expect(result.errors).toEqual(null);
-
-            data = main.castData({
-                date_field: '2019-06-12T18:20:48.394Z',
-                date_field_m: ['2019-06-12T18:20:48.394Z'],
-            });
-            expect(data).toMatchObject({
-                date_field: '2019-06-12T18:20:48.394Z',
-                date_field_m: ['2019-06-12T18:20:48.394Z'],
-            });
-            result = await main.validateData(data);
-            expect(result.errors).toEqual(null);
-
-            data = main.castData({
-                date_field: '1560364245420',
-                date_field_m: ['1560364245420'],
-            });
-            expect(data).toMatchObject({
-                date_field: '2019-06-12T18:30:45.420Z',
-                date_field_m: ['2019-06-12T18:30:45.420Z'],
-            });
-            result = await main.validateData(data);
-            expect(result.errors).toEqual(null);
-
-            data = main.castData({
-                date_field: 'not_a_date',
-                date_field_m: ['not_a_date'],
-            });
-            expect(data).toMatchObject({
-                date_field: 'not_a_date',
-                date_field_m: ['not_a_date'],
-            });
-            result = await main.validateData(data);
-            expect(result.errors).toEqual([
-                {
-                    field: 'date_field_m[0]',
-                    message: "Field 'Date field m' is not a date",
-                },
-                {
-                    field: 'date_field',
-                    message: "Field 'Date field' is not a date",
-                },
-            ]);
-        });
-
-        it('should cast and validate input data: references', async () => {
-            const main = makeStubEntity();
-
-            let data = main.castData({
-                reference_field: '4ef6f520-d180-4aee-9517-43214f396609',
-                reference_field_m: ['4ef6f520-d180-4aee-9517-43214f396609'],
-            });
-            expect(data).toMatchObject({
-                reference_field: '4ef6f520-d180-4aee-9517-43214f396609',
-                reference_field_m: ['4ef6f520-d180-4aee-9517-43214f396609'],
-            });
-            let result = await main.validateData(data);
-            expect(result.errors).toEqual(null);
-
-            data = main.castData({
-                reference_field: undefined,
-                reference_field_m: [null],
-            });
-            expect(data).toMatchObject({
-                reference_field: null,
-                reference_field_m: [],
-            });
-            result = await main.validateData(data);
-            expect(result.errors).toEqual(null);
-
-            data = main.castData({
-                reference_field_m: [
-                    null,
-                    undefined,
-                    '4ef6f520-d180-4aee-9517-43214f396609',
-                    new Date('2019-06-12T18:30:45.420Z'),
+    describe('castData()', () => {
+        it('should cast several fields', async () => {
+            const entity = new Entity({
+                name: 'test',
+                schema: [
+                    {
+                        name: 'bool_field',
+                        type: 'boolean',
+                    },
+                    {
+                        name: 'integer_field',
+                        type: 'integer',
+                    },
                 ],
             });
 
-            expect(data.reference_field_m[0]).toEqual(
-                '4ef6f520-d180-4aee-9517-43214f396609',
-            );
-            expect(
-                data.reference_field_m[1].indexOf(
-                    'Wed Jun 12 2019 20:30:45 GMT+0200',
-                ),
-            ).toEqual(0);
-            result = await main.validateData(data);
-            expect(result.errors).toEqual(null);
+            let data = entity.castData({
+                bool_field: '1111',
+                integer_field: '1000',
+            });
+
+            expect(data).toEqual({ bool_field: true, integer_field: 1000 });
+        });
+    });
+
+    describe('validateData()', () => {
+        it('should validate several fields', async () => {
+            const entity = new Entity({
+                name: 'test',
+                schema: [
+                    {
+                        name: 'bool_field',
+                        type: 'boolean',
+                    },
+                    {
+                        name: 'integer_field',
+                        type: 'integer',
+                    },
+                ],
+            });
+
+            const errors = await entity.validateData({
+                bool_field: '1111',
+                integer_field: 'aaaa',
+            });
+
+            expect(errors).toMatchObjectInArray({
+                fieldName: 'bool_field',
+            });
+            expect(errors).toMatchObjectInArray({
+                fieldName: 'integer_field',
+            });
         });
     });
 
