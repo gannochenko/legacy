@@ -3,20 +3,49 @@ import { BaseField } from './base';
 import _ from '../../lodash';
 
 export class ReferenceField extends BaseField {
+    async getHealth() {
+        const errors = await super.getHealth();
+
+        const name = this.getName();
+        const unique = this.isUnique();
+        const preview = this.isPreview();
+        const sortable = this.isSortable();
+
+        if (unique) {
+            errors.push({
+                message: 'The reference field should not be declared as unique',
+                code: 'field_reference_unique_conflict',
+                fieldName: name,
+            });
+        }
+
+        if (preview) {
+            errors.push({
+                message:
+                    'The reference field should not be declared as preview',
+                code: 'field_reference_preview_conflict',
+                fieldName: name,
+            });
+        }
+
+        if (sortable) {
+            errors.push({
+                message:
+                    'The reference field should not be declared as sortable',
+                code: 'field_reference_sortable_conflict',
+                fieldName: name,
+            });
+        }
+
+        return errors;
+    }
+
     isReference() {
         return true;
     }
 
     getReferencedEntityName() {
         return this.getActualType();
-    }
-
-    isSortable() {
-        return false;
-    }
-
-    isPreview() {
-        return false;
     }
 
     createValueItemValidator() {

@@ -14,6 +14,8 @@ export class BaseField {
 
         const name = this.getName();
         const type = this.getType();
+        const isMultiple = this.isMultiple();
+        const isUnique = this.isUnique();
 
         // check that entity has a name
         if (!_.isne(name)) {
@@ -33,10 +35,18 @@ export class BaseField {
             });
         }
 
+        if (isMultiple && isUnique) {
+            errors.push({
+                message: 'The field can not be both multiple and unique',
+                code: 'field_multiple_unique_conflict',
+                fieldName: name || '',
+            });
+        }
+
         if (name === ENTITY_PK_FIELD_NAME) {
             errors.push({
                 message: `The following name is system-reserved: ${name}`,
-                code: `field_name_illegal`,
+                code: 'field_name_illegal',
                 fieldName: name,
             });
         }

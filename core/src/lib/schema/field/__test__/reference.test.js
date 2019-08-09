@@ -1,33 +1,34 @@
 import { ReferenceField } from '../reference';
-import { BaseField } from '../base';
 
 /**
  * https://github.com/sapegin/jest-cheat-sheet
  */
 
 describe('ReferenceField', () => {
-    // beforeAll(async () => {
-    // });
-    // beforeEach(async () => {
-    // });
-    // afterEach(async () => {
-    // });
-
-    describe('isSortable()', () => {
-        it('should return false for any reference field', async () => {
-            const field1 = new ReferenceField({
+    describe('getHealth()', () => {
+        it('should report invalid reference field health check', async () => {
+            const field = new ReferenceField({
+                name: 'reference',
                 type: 'reference',
-                name: 'foo_bar_bazz',
+                unique: true,
+                sortable: true,
+                preview: true,
             });
 
-            expect(field1.isSortable()).toBeFalsy();
+            const errors = await field.getHealth();
 
-            const field2 = new ReferenceField({
-                type: ['reference'],
-                name: 'foo_bar_bazz',
+            expect(errors).toMatchObjectInArray({
+                code: 'field_reference_unique_conflict',
+                fieldName: 'reference',
             });
-
-            expect(field2.isSortable()).toBeFalsy();
+            expect(errors).toMatchObjectInArray({
+                code: 'field_reference_preview_conflict',
+                fieldName: 'reference',
+            });
+            expect(errors).toMatchObjectInArray({
+                code: 'field_reference_sortable_conflict',
+                fieldName: 'reference',
+            });
         });
     });
 
@@ -40,18 +41,6 @@ describe('ReferenceField', () => {
             });
 
             expect(field.isReference()).toBeTruthy();
-        });
-    });
-
-    describe('isPreview()', () => {
-        it('should return false for a reference field', async () => {
-            const field = new ReferenceField({
-                type: ['reference'],
-                name: 'foo',
-                preview: true,
-            });
-
-            expect(field.isPreview()).toBeFalsy();
         });
     });
 });

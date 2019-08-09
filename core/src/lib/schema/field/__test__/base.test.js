@@ -86,6 +86,19 @@ describe('BaseField', () => {
                 fieldName: ENTITY_PK_FIELD_NAME,
             });
         });
+
+        it('should report multipe-unique conflict', async () => {
+            const field = new BaseField({
+                name: 'blah',
+                type: ['string'],
+                unique: true,
+            });
+            const errors = await field.getHealth();
+
+            expect(errors).toMatchObjectInArray({
+                code: 'field_multiple_unique_conflict',
+            });
+        });
     });
 
     describe('getType()', () => {
@@ -225,7 +238,15 @@ describe('BaseField', () => {
     });
 
     describe('isUnique()', () => {
-        throw new Error('Todo');
+        it('should return true for non-reference single field', async () => {
+            const field = new BaseField({
+                type: 'string',
+                name: 'foo',
+                unique: true,
+            });
+
+            expect(field.isUnique()).toBeTruthy();
+        });
     });
 
     describe('isSystem()', () => {
