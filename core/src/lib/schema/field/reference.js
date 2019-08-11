@@ -9,7 +9,6 @@ export class ReferenceField extends BaseField {
         const name = this.getName();
         const unique = this.isUnique();
         const preview = this.isPreview();
-        const sortable = this.isSortable();
 
         if (unique) {
             errors.push({
@@ -24,15 +23,6 @@ export class ReferenceField extends BaseField {
                 message:
                     'The reference field should not be declared as preview',
                 code: 'field_reference_preview_conflict',
-                fieldName: name,
-            });
-        }
-
-        if (sortable) {
-            errors.push({
-                message:
-                    'The reference field should not be declared as sortable',
-                code: 'field_reference_sortable_conflict',
                 fieldName: name,
             });
         }

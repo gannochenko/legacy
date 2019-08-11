@@ -11,7 +11,6 @@ describe('ReferenceField', () => {
                 name: 'reference',
                 type: 'reference',
                 unique: true,
-                sortable: true,
                 preview: true,
             });
 
@@ -23,10 +22,6 @@ describe('ReferenceField', () => {
             });
             expect(errors).toMatchObjectInArray({
                 code: 'field_reference_preview_conflict',
-                fieldName: 'reference',
-            });
-            expect(errors).toMatchObjectInArray({
-                code: 'field_reference_sortable_conflict',
                 fieldName: 'reference',
             });
         });
@@ -41,6 +36,17 @@ describe('ReferenceField', () => {
             });
 
             expect(field.isReference()).toBeTruthy();
+        });
+    });
+
+    describe('isSortable()', () => {
+        it('should not return true for reference filds', async () => {
+            const field = new ReferenceField({
+                name: 'reference',
+                type: 'reference',
+            });
+
+            expect(field.isSortable()).toBeFalsy();
         });
     });
 });

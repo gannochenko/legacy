@@ -250,15 +250,56 @@ describe('BaseField', () => {
     });
 
     describe('isSystem()', () => {
-        throw new Error('Todo');
+        it('should return true if the field is maked as system', async () => {
+            const field = new BaseField({
+                type: 'string',
+                name: 'foo',
+                system: true,
+            });
+
+            expect(field.isSystem()).toBeTruthy();
+        });
     });
 
     describe('toJSON()', () => {
-        throw new Error('Todo');
+        it('should return return JSON declaration', async () => {
+            const field = new BaseField({
+                type: 'string',
+                name: 'foo',
+                system: true,
+            });
+
+            expect(JSON.stringify(field)).toEqual(
+                JSON.stringify({
+                    type: 'string',
+                    name: 'foo',
+                    system: true,
+                }),
+            );
+        });
     });
 
     describe('castValue()', () => {
-        throw new Error('Todo');
+        it('should cast single value', async () => {
+            const field = new BaseField({
+                type: 'string',
+                name: 'foo',
+            });
+
+            expect(field.castValue('lalala')).toEqual('lalala');
+        });
+
+        it('should cast multiple values throwing out nulls and undefineds', async () => {
+            const field = new BaseField({
+                type: ['string'],
+                name: 'foo',
+            });
+
+            expect(field.castValue(['la', null, undefined, 'lo'])).toEqual([
+                'la',
+                'lo',
+            ]);
+        });
     });
 
     describe('isReference()', () => {

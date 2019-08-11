@@ -221,7 +221,7 @@ export class BaseField {
                 // cast & remove all nulls, does not make sense to keep them
                 return value
                     .map(subValue => this.castValueItem(subValue))
-                    .filter(x => x !== null);
+                    .filter(x => x !== null && x !== undefined);
             }
 
             return value;
