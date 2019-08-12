@@ -1,14 +1,19 @@
+import {
+    ENTITY_ID_FIELD_NAME,
+    ENTITY_ID_FIELD_LENGTH,
+} from 'project-minimum-core';
+
 export default [
     {
         name: 'important_person',
         schema: [
             {
-                name: 'code',
+                name: ENTITY_ID_FIELD_NAME,
                 type: 'string',
-                label: 'Code',
-                length: 36,
-                required: false,
+                label: 'Id',
+                length: ENTITY_ID_FIELD_LENGTH,
                 unique: true,
+                system: true,
             },
             {
                 name: 'full_name',
@@ -33,12 +38,12 @@ export default [
         name: 'pet',
         schema: [
             {
-                name: 'code',
+                name: ENTITY_ID_FIELD_NAME,
                 type: 'string',
-                label: 'Code',
-                length: 36,
-                required: false,
+                label: 'Id',
+                length: ENTITY_ID_FIELD_LENGTH,
                 unique: true,
+                system: true,
             },
             {
                 name: 'nickname',
@@ -52,12 +57,12 @@ export default [
         name: 'tool',
         schema: [
             {
-                name: 'code',
+                name: ENTITY_ID_FIELD_NAME,
                 type: 'string',
-                label: 'Code',
-                length: 36,
-                required: false,
+                label: 'Id',
+                length: ENTITY_ID_FIELD_LENGTH,
                 unique: true,
+                system: true,
             },
             { name: 'name', type: 'string', label: 'Name', required: true },
         ],

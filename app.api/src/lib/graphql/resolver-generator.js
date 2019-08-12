@@ -6,7 +6,7 @@ import { In, Like } from 'typeorm';
 import uuid from 'uuid/v4';
 import {
     FIELD_TYPE_DATETIME,
-    DB_DB_QUERY_FIND_MAX_PAGE_SIZE,
+    DB_QUERY_FIND_MAX_PAGE_SIZE,
 } from 'project-minimum-core';
 import { getASTAt, getSelectionAt } from './ast';
 import { CodeId } from '../database/code-id';
@@ -166,20 +166,18 @@ export default class ResolverGenerator {
             }
 
             // cast everything that is possible to cast
-            data = entity.prepareData(data);
+            data = entity.castData(data);
             // then validate
-            const { errors, data: safeData } = await entity.validateData(data);
+            const errors = await entity.validateData(data);
             if (errors) {
                 result.errors = errors.map(error => ({
                     message: error.message,
                     code: 'validation',
-                    reference: error.scalar,
+                    reference: error.fieldName,
                 }));
 
                 return result;
             }
-
-            data = safeData;
 
             const singleReferences = entity.getSingleReferences();
 

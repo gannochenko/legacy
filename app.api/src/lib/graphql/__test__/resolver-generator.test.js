@@ -404,9 +404,9 @@ describe('GQL Resolver Generator', () => {
             ]);
         });
 
-        it('should return an item only when it is asked [todo]', async () => {
-            // todo
-        });
+        // it('should return an item only when it is asked [todo]', async () => {
+        //     // todo
+        // });
 
         it('should manage relations', async () => {
             const put = resolvers[0].Mutation.ImportantPersonPut;

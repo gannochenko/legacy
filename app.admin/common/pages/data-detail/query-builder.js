@@ -67,10 +67,10 @@ export const buildQuerySearch = ({ entity, text }) => {
 export const buildMutationPut = ({ entity, schema, data, code }) => {
     const mutationName = `${entity.getCamelName()}Put`;
 
-    data = entity.prepareData(data);
+    data = entity.castData(data);
 
     // translate to GraphQL presentation
-    let dataStr = [];
+    const dataStr = [];
     entity.getFields().forEach(field => {
         const name = field.getName();
         if (!(name in data)) {
