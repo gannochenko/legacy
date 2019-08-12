@@ -40,7 +40,7 @@ describe('ReferenceField', () => {
     });
 
     describe('isSortable()', () => {
-        it('should not return true for reference filds', async () => {
+        it('should not return true for reference fields', async () => {
             const field = new ReferenceField({
                 name: 'reference',
                 type: 'reference',
