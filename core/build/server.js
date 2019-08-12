@@ -1,22 +1,22 @@
 !(function(e, t) {
-    for (var n in t) e[n] = t[n];
+    for (var r in t) e[r] = t[r];
 })(
     exports,
     (function(e) {
         var t = {};
-        function n(r) {
-            if (t[r]) return t[r].exports;
-            var i = (t[r] = { i: r, l: !1, exports: {} });
-            return e[r].call(i.exports, i, i.exports, n), (i.l = !0), i.exports;
+        function r(n) {
+            if (t[n]) return t[n].exports;
+            var i = (t[n] = { i: n, l: !1, exports: {} });
+            return e[n].call(i.exports, i, i.exports, r), (i.l = !0), i.exports;
         }
         return (
-            (n.m = e),
-            (n.c = t),
-            (n.d = function(e, t, r) {
-                n.o(e, t) ||
-                    Object.defineProperty(e, t, { enumerable: !0, get: r });
+            (r.m = e),
+            (r.c = t),
+            (r.d = function(e, t, n) {
+                r.o(e, t) ||
+                    Object.defineProperty(e, t, { enumerable: !0, get: n });
             }),
-            (n.r = function(e) {
+            (r.r = function(e) {
                 'undefined' != typeof Symbol &&
                     Symbol.toStringTag &&
                     Object.defineProperty(e, Symbol.toStringTag, {
@@ -24,30 +24,30 @@
                     }),
                     Object.defineProperty(e, '__esModule', { value: !0 });
             }),
-            (n.t = function(e, t) {
-                if ((1 & t && (e = n(e)), 8 & t)) return e;
+            (r.t = function(e, t) {
+                if ((1 & t && (e = r(e)), 8 & t)) return e;
                 if (4 & t && 'object' == typeof e && e && e.__esModule)
                     return e;
-                var r = Object.create(null);
+                var n = Object.create(null);
                 if (
-                    (n.r(r),
-                    Object.defineProperty(r, 'default', {
+                    (r.r(n),
+                    Object.defineProperty(n, 'default', {
                         enumerable: !0,
                         value: e,
                     }),
                     2 & t && 'string' != typeof e)
                 )
                     for (var i in e)
-                        n.d(
-                            r,
+                        r.d(
+                            n,
                             i,
                             function(t) {
                                 return e[t];
                             }.bind(null, i),
                         );
-                return r;
+                return n;
             }),
-            (n.n = function(e) {
+            (r.n = function(e) {
                 var t =
                     e && e.__esModule
                         ? function() {
@@ -56,13 +56,13 @@
                         : function() {
                               return e;
                           };
-                return n.d(t, 'a', t), t;
+                return r.d(t, 'a', t), t;
             }),
-            (n.o = function(e, t) {
+            (r.o = function(e, t) {
                 return Object.prototype.hasOwnProperty.call(e, t);
             }),
-            (n.p = ''),
-            n((n.s = 6))
+            (r.p = ''),
+            r((r.s = 5))
         );
     })([
         function(e, t) {
@@ -70,9 +70,6 @@
         },
         function(e, t) {
             e.exports = require('ew-internals');
-        },
-        function(e, t) {
-            e.exports = require('lodash.isstring');
         },
         function(e, t) {
             e.exports = require('lodash.isobject');
@@ -83,112 +80,146 @@
         function(e, t) {
             e.exports = require('lodash.uniq');
         },
-        function(e, t, n) {
+        function(e, t, r) {
             'use strict';
-            n.r(t);
-            const r = 255,
-                i = 'user',
-                a = 'group',
-                s = 'code',
-                l = 'string',
-                o = 'integer',
-                u = 'boolean',
-                c = 'datetime';
-            var d = n(1),
-                h = n(0),
-                m = n(2),
-                f = n.n(m),
-                g = n(3),
-                p = n.n(g),
-                y = n(4),
-                _ = n.n(y),
-                N = n(5),
-                E = n.n(N),
-                b = {
+            r.r(t);
+            const n = 'id',
+                i = 'idInternal',
+                a = 32,
+                s = 255,
+                l = 'string';
+            var o = r(1),
+                u = r(0),
+                c = r(2),
+                d = r.n(c),
+                h = r(3),
+                m = r.n(h),
+                g = r(4),
+                f = r.n(g),
+                p = {
                     isArray: Array.isArray,
-                    isString: f.a,
-                    isObject: p.a,
-                    union: _.a,
+                    isString: e => 'string' == typeof e,
+                    isObject: d.a,
+                    union: m.a,
                     iane: e => Array.isArray(e) && e.length > 0,
-                    ione: e => p()(e) && Object.keys(e).length > 0,
-                    isne: e => f()(e) && e.length > 0,
-                    unique: E.a,
+                    ione: e => d()(e) && Object.keys(e).length > 0,
+                    isne: e => 'string' == typeof e && e.length > 0,
+                    unique: f.a,
                 };
-            class T {
-                constructor(e) {
-                    b.ione(e) || (e = {}),
-                        (this.declaration = {
-                            name: e.name,
-                            type: e.type,
-                            label: e.label,
-                            length: e.length,
-                            required: e.required,
-                            unique: e.unique,
-                            preview: e.preview,
-                        });
+            class y {
+                constructor(e = {}) {
+                    this.declaration = e;
                 }
                 async getHealth() {
                     const e = [],
-                        { declaration: t } = this,
-                        { type: n } = t,
-                        r = this.getValidator();
-                    try {
-                        await r.validate(t, { abortEarly: !1 });
-                    } catch (t) {
-                        if (!(t instanceof h.ValidationError)) throw t;
-                        t.inner.forEach(t => {
-                            e.push({
-                                message: t.message,
-                                code: 'field_illegal',
-                                fieldName: t.path,
-                            });
-                        });
-                    }
+                        t = this.getName(),
+                        r = this.getType(),
+                        n = this.isMultiple(),
+                        a = this.isUnique();
                     return (
-                        b.isne(n) ||
-                            (b.isArray(n) && 1 === n.length && b.isne(n[0])) ||
+                        p.isne(t) ||
+                            e.push({
+                                message: 'Field does not have a name',
+                                code: 'field_name_empty',
+                                fieldName: '',
+                            }),
+                        p.isne(r) ||
+                            e.push({
+                                message: 'Field does not have a type',
+                                code: 'field_type_empty',
+                                fieldName: t || '',
+                            }),
+                        n &&
+                            a &&
                             e.push({
                                 message:
-                                    'Field type should be of type string or an array of one string',
-                                code: 'field_type_illegal',
-                                fieldName: t.name || '',
+                                    'The field can not be both multiple and unique',
+                                code: 'field_multiple_unique_conflict',
+                                fieldName: t || '',
+                            }),
+                        t === i &&
+                            e.push({
+                                message: `The following name is system-reserved: ${t}`,
+                                code: 'field_name_illegal',
+                                fieldName: t,
                             }),
                         e
                     );
                 }
-                getValidator() {
+                set declaration(e) {
+                    this.declarationInternal = this.getSanitizedDeclaration(e);
+                }
+                get declaration() {
+                    return this.declarationInternal;
+                }
+                getSanitizedDeclaration(e) {
+                    const t = [
+                            'type',
+                            'name',
+                            'label',
+                            'length',
+                            'required',
+                            'unique',
+                            'preview',
+                            'system',
+                        ],
+                        r = {};
+                    Object.keys(e).forEach(n => {
+                        t.includes(n) && (r[n] = e[n]);
+                    });
+                    const n = this.getDeclarationValidator();
+                    try {
+                        n.validateSync(e, { abortEarly: !1 });
+                    } catch (e) {
+                        if (!(e instanceof u.ValidationError)) throw e;
+                        e.inner.forEach(e => {
+                            delete r[e.path];
+                        });
+                    }
+                    const { type: i } = r;
+                    return (
+                        p.isne(i) ||
+                            (p.isArray(i) && 1 === i.length && p.isne(i[0])) ||
+                            delete r.type,
+                        r
+                    );
+                }
+                getDeclarationValidator() {
                     return (
                         this.fieldValidator ||
-                            (this.fieldValidator = h.object().shape({
-                                name: h
+                            (this.fieldValidator = u.object().shape({
+                                name: u
                                     .string()
                                     .typeError('Field name should be a string')
                                     .strict(!0)
                                     .required('Field should have a name'),
-                                label: h
+                                label: u
                                     .string()
                                     .typeError('Field label should be a string')
                                     .strict(!0),
-                                length: h
+                                length: u
                                     .number()
                                     .typeError(
                                         'Field length should be a number',
                                     ),
-                                required: h
+                                required: u
                                     .boolean()
                                     .typeError(
                                         'Field required flag should be boolean',
                                     ),
-                                unique: h
+                                unique: u
                                     .boolean()
                                     .typeError(
                                         'Field unique flag should be boolean',
                                     ),
-                                preview: h
+                                preview: u
                                     .boolean()
                                     .typeError(
                                         'Field preview flag should be boolean',
                                     ),
+                                system: u
+                                    .boolean()
+                                    .typeError('System flag should be boolean'),
                             })),
                         this.fieldValidator
                     );
@@ -201,38 +232,24 @@
                     return e ? (this.isMultiple() ? e[0] : e) : null;
                 }
                 getLength() {
-                    if (this.getType() === l) {
-                        const e = parseInt(this.declaration.length, 10);
-                        return Number.isNaN(e) ? r : e;
-                    }
                     return null;
                 }
                 getName() {
                     return this.declaration.name;
                 }
                 getDisplayName() {
-                    return b.isne(this.declaration.label)
+                    return p.isne(this.declaration.label)
                         ? this.declaration.label
-                        : Object(d.uCFirst)(this.getName()).replace(/_/g, ' ');
-                }
-                getReferencedEntityName() {
-                    const e = this.getActualType();
-                    return [l, u, c, o].indexOf(e) >= 0 ? null : e;
-                }
-                getReferenceFieldName() {
-                    return this.getReferencedEntityName();
+                        : Object(o.uCFirst)(this.getName()).replace(/_/g, ' ');
                 }
                 getDeclaration() {
                     return this.declaration;
                 }
                 isMultiple() {
-                    return b.isArray(this.declaration.type);
-                }
-                isReference() {
-                    return b.isne(this.getReferencedEntityName());
+                    return p.isArray(this.declaration.type);
                 }
                 isSortable() {
-                    return !this.isMultiple() && !this.isReference();
+                    return !(this.isMultiple() || this.isReference());
                 }
                 isRequired() {
                     return !0 === this.declaration.required;
@@ -240,116 +257,288 @@
                 isPreview() {
                     return !0 === this.declaration.preview;
                 }
+                isUnique() {
+                    return !0 === this.declaration.unique;
+                }
+                isSystem() {
+                    return !0 === this.declaration.system;
+                }
                 toJSON() {
                     return this.declaration;
                 }
+                castValue(e) {
+                    return this.isMultiple()
+                        ? p.isArray(e)
+                            ? e
+                                  .map(e => this.castValueItem(e))
+                                  .filter(e => null != e)
+                            : e
+                        : this.castValueItem(e);
+                }
+                castValueItem(e) {
+                    return e;
+                }
+                getValidator() {
+                    let e = this.createValueItemValidator();
+                    return (
+                        this.isMultiple() && (e = u.array().of(e)),
+                        (e = this.isRequired()
+                            ? e.required(`${this.getDisplayName()} is required`)
+                            : e.nullable())
+                    );
+                }
+                createValueItemValidator() {
+                    throw new Error('Not implemented');
+                }
+                getReferencedEntityName() {
+                    return null;
+                }
+                isReference() {
+                    return !1;
+                }
+                getTypeErrorMessage(e) {
+                    return `The value of '${this.getDisplayName()}' is not ${e}`;
+                }
             }
-            class F extends T {
+            class E extends y {
+                getLength() {
+                    const e = parseInt(this.declaration.length, 10);
+                    return Number.isNaN(e) ? s : e;
+                }
+                castValueItem(e) {
+                    return null == e ? null : e.toString();
+                }
+                createValueItemValidator() {
+                    return u
+                        .string()
+                        .typeError(this.getTypeErrorMessage('a string'));
+                }
+            }
+            class _ extends y {
+                castValueItem(e) {
+                    return null == e ? null : !!e;
+                }
+                createValueItemValidator() {
+                    return u
+                        .boolean()
+                        .typeError(this.getTypeErrorMessage('a boolean'));
+                }
+            }
+            class N extends y {
+                castValueItem(e) {
+                    if (null == e) return null;
+                    const t = parseInt(e, 10);
+                    return Number.isNaN(t) ? e : t;
+                }
+                createValueItemValidator() {
+                    return u
+                        .number()
+                        .integer()
+                        .typeError(this.getTypeErrorMessage('an integer'));
+                }
+            }
+            class b extends y {
+                castValueItem(e) {
+                    if (null == e) return null;
+                    if (e instanceof Date) return e.toISOString();
+                    const t = Date.parse(e);
+                    return Number.isNaN(t)
+                        ? Number.isNaN(parseInt(e, 10))
+                            ? e
+                            : new Date(parseInt(e, 10)).toISOString()
+                        : new Date(t).toISOString();
+                }
+                createValueItemValidator() {
+                    return u
+                        .date()
+                        .typeError(this.getTypeErrorMessage('a date'));
+                }
+            }
+            class I extends y {
                 async getHealth() {
                     const e = await super.getHealth(),
-                        { declaration: t } = this;
-                    t.required ||
-                        e.push({
-                            message: 'System field "code" should be mandatory',
-                            code: 'field_code_not_mandatory',
-                            fieldName: t.name,
-                        }),
-                        t.unique ||
-                            e.push({
-                                message: 'System field "code" should be unique',
-                                code: 'field_code_not_unique',
-                                fieldName: t.name,
-                            }),
-                        this.getActualType() !== l &&
-                            e.push({
-                                message:
-                                    'System field "code" should be of type string',
-                                code: 'field_code_not_string',
-                                fieldName: t.name,
-                            }),
-                        this.isMultiple() &&
-                            e.push({
-                                message:
-                                    'System field "code" should not be multiple',
-                                code: 'field_code_multiple',
-                                fieldName: t.name,
-                            });
-                    const n = parseInt(t.length, 10);
+                        t = this.getName(),
+                        r = this.isUnique(),
+                        n = this.isPreview();
                     return (
-                        (Number.isNaN(n) || n <= 0) &&
+                        r &&
                             e.push({
                                 message:
-                                    'System field "code" should have a finite length',
-                                code: 'field_code_illegal_length',
-                                fieldName: t.name,
+                                    'The reference field should not be declared as unique',
+                                code: 'field_reference_unique_conflict',
+                                fieldName: t,
+                            }),
+                        n &&
+                            e.push({
+                                message:
+                                    'The reference field should not be declared as preview',
+                                code: 'field_reference_preview_conflict',
+                                fieldName: t,
                             }),
                         e
                     );
                 }
+                isReference() {
+                    return !0;
+                }
+                getReferencedEntityName() {
+                    return this.getActualType();
+                }
+                createValueItemValidator() {
+                    return u
+                        .string()
+                        .typeError(this.getTypeErrorMessage('a string'));
+                }
+                castValueItem(e) {
+                    return null != e ? e.toString() : null;
+                }
+                castValue(e) {
+                    return this.isMultiple()
+                        ? p.isArray(e)
+                            ? p
+                                  .unique(e.map(e => this.castValueItem(e)))
+                                  .filter(e => !!e)
+                            : []
+                        : this.castValueItem(e);
+                }
             }
-            class v {
+            class T extends E {
+                async getHealth() {
+                    const e = await super.getHealth(),
+                        t = this.getName(),
+                        r = this.isSystem(),
+                        i = this.isUnique(),
+                        s = this.getLength();
+                    r ||
+                        e.push({
+                            message: `The field should be declared as system-reserved: ${t}`,
+                            code: 'field_not_system',
+                            fieldName: t,
+                        }),
+                        i ||
+                            e.push({
+                                message: `System field "${n}" should be unique`,
+                                code: 'field_id_not_unique',
+                                fieldName: t,
+                            }),
+                        this.getActualType() !== l &&
+                            e.push({
+                                message: `System field "${n}" should be string`,
+                                code: 'field_id_not_string',
+                                fieldName: t,
+                            }),
+                        this.isMultiple() &&
+                            e.push({
+                                message: `System field "${n}" should not be multiple`,
+                                code: 'field_id_multiple',
+                                fieldName: t,
+                            });
+                    const o = parseInt(s, 10);
+                    return (
+                        (Number.isNaN(o) || o !== a) &&
+                            e.push({
+                                message: `System field "${n}" should have length of ${a}`,
+                                code: 'field_id_illegal_length',
+                                fieldName: t,
+                            }),
+                        e
+                    );
+                }
+                createValueItemValidator() {
+                    return u
+                        .string()
+                        .length(
+                            a,
+                            `Field '${this.getDisplayName()}' should be ${a} characters long`,
+                        )
+                        .typeError(this.getTypeErrorMessage('a string'));
+                }
+            }
+            const D = e => {
+                let { type: t } = e;
+                const { name: r } = e;
+                return t
+                    ? (p.isArray(t) && ([t] = t),
+                      t
+                          ? r === n
+                              ? new T(e)
+                              : t === l
+                              ? new E(e)
+                              : 'boolean' === t
+                              ? new _(e)
+                              : 'integer' === t
+                              ? new N(e)
+                              : 'datetime' === t
+                              ? new b(e)
+                              : new I(e)
+                          : new (void 0)(e))
+                    : new E(e);
+            };
+            class F {
                 constructor(e) {
+                    this.declaration = e;
+                }
+                set declaration(e) {
+                    this.declarationInternal = this.getSanitizedDeclaration(e);
+                }
+                get declaration() {
+                    return this.declarationInternal;
+                }
+                getSanitizedDeclaration(e) {
                     let t = e;
-                    b.ione(t) || (t = {}),
-                        b.iane(t.schema) || (t.schema = []),
-                        (this.declaration = {
-                            name: t.name || '',
-                            schema: t.schema.map(e =>
-                                e.name === s ? new F(e) : new T(e),
-                            ),
-                        });
+                    return (
+                        p.ione(t) || (t = {}),
+                        p.iane(t.schema) || (t.schema = []),
+                        { name: t.name || '', schema: t.schema.map(e => D(e)) }
+                    );
                 }
                 async getHealth() {
                     const e = [],
                         { declaration: t } = this;
-                    b.isne(t.name) ||
-                        e.push({
-                            message: 'Entity does not have a name',
-                            code: 'entity_name_empty',
-                            entityName: '',
-                        }),
-                        !b.isne(t.name) ||
-                            (t.name !== i && t.name !== a) ||
+                    if (
+                        (t.name.length ||
                             e.push({
-                                message: 'Entity name is a reserved name',
-                                code: 'entity_name_reserved',
-                                entityName: t.name,
+                                message: 'Entity does not have a name',
+                                code: 'entity_name_empty',
+                                entityName: '',
                             }),
-                        b.iane(t.schema) ||
+                        !t.schema.length)
+                    )
+                        return (
                             e.push({
                                 message: 'Entity does not have a single field',
                                 code: 'entity_schema_empty',
-                                entityName: t.name,
-                            });
-                    const n = {};
+                                entityName: t.name || '',
+                            }),
+                            e
+                        );
+                    const r = {};
                     return (
                         t.schema.forEach(e => {
-                            n[e.getName()] =
-                                e.getName() in n ? n[e.getName()] + 1 : 1;
+                            r[e.getName()] =
+                                e.getName() in r ? r[e.getName()] + 1 : 1;
                         }),
-                        s in n ||
-                            e.push({
-                                message: 'System field "code" is missing',
-                                code: 'entity_code_field_missing',
-                                entityName: t.name,
-                            }),
-                        Object.keys(n).forEach(r => {
-                            n[r] > 1 &&
+                        Object.keys(r).forEach(n => {
+                            r[n] > 1 &&
                                 e.push({
-                                    message: `Field "${
-                                        n[r]
-                                    }" met several times`,
+                                    message: `Field "${n}" met several times`,
                                     code: 'entity_field_duplicate',
-                                    fieldName: n[r],
-                                    entityName: t.name,
+                                    fieldName: n,
+                                    entityName: t.name || '',
                                 });
                         }),
+                        r[n] ||
+                            e.push({
+                                message: 'Entity does not have id field',
+                                code: 'entity_no_id_field',
+                                entityName: t.name || '',
+                            }),
                         await Promise.all(
-                            t.schema.map(n =>
-                                n.getHealth().then(n => {
-                                    n.forEach(n => {
+                            t.schema.map(r =>
+                                r.getHealth().then(r => {
+                                    r.forEach(r => {
                                         e.push(
-                                            Object.assign({}, n, {
+                                            Object.assign({}, r, {
                                                 entityName: t.name,
                                             }),
                                         );
@@ -364,18 +553,28 @@
                     return this.declaration.name;
                 }
                 getCamelName() {
-                    return Object(d.convertToCamel)(
+                    return Object(o.convertToCamel)(
                         this.getName().toLowerCase(),
                     );
                 }
                 getDisplayName() {
-                    return Object(d.uCFirst)(this.getName()).replace(/_/g, ' ');
-                }
-                getReferences() {
-                    return this.declaration.schema.filter(e => e.isReference());
+                    return Object(o.uCFirst)(this.getName()).replace(/_/g, ' ');
                 }
                 getFields() {
                     return this.declaration.schema;
+                }
+                getReferences() {
+                    return this.getFields().filter(e => e.isReference());
+                }
+                getSingleReferences() {
+                    return this.getFields().filter(
+                        e => e.isReference() && !e.isMultiple(),
+                    );
+                }
+                getMultipleReferences() {
+                    return this.getFields().filter(
+                        e => e.isReference() && e.isMultiple(),
+                    );
                 }
                 getField(e) {
                     return this.declaration.schema[e];
@@ -384,138 +583,67 @@
                     return this.declaration;
                 }
                 getPreviewField() {
+                    const e = this.declaration.schema.find(
+                        e =>
+                            e.getType() === l &&
+                            e.getName() !== n &&
+                            e.isPreview(),
+                    );
                     return (
-                        this.declaration.schema.find(
-                            e => e.getType() === l && e.getName() !== s,
-                        ) || null
+                        e ||
+                        (this.declaration.schema.find(
+                            e => e.getType() === l && e.getName() !== n,
+                        ) ||
+                            null)
                     );
                 }
                 getValidator() {
                     const e = {};
                     return (
                         this.declaration.schema.forEach(t => {
-                            let n = null;
-                            if (t.isReference())
-                                n = h
-                                    .string()
-                                    .typeError(
-                                        `Reference field '${t.getDisplayName()}' is not a string`,
-                                    );
-                            else {
-                                const e = t.getActualType();
-                                n =
-                                    e === o
-                                        ? h
-                                              .number()
-                                              .integer()
-                                              .typeError(
-                                                  `Field '${t.getDisplayName()}' is not a number`,
-                                              )
-                                        : e === u
-                                        ? h
-                                              .boolean()
-                                              .typeError(
-                                                  `Field '${t.getDisplayName()}' is not a boolean`,
-                                              )
-                                        : e === c
-                                        ? h
-                                              .datetime()
-                                              .typeError(
-                                                  `Field '${t.getDisplayName()}' is not a date`,
-                                              )
-                                        : h
-                                              .string()
-                                              .typeError(
-                                                  `Field '${t.getDisplayName()}' is not a string`,
-                                              );
-                            }
-                            t.isMultiple() && (n = h.array().of(n)),
-                                (n = t.isRequired()
-                                    ? n.required(
-                                          `${t.getDisplayName()} is required`,
-                                      )
-                                    : n.nullable()),
-                                (e[t.getName()] = n);
+                            e[t.getName()] = t.getValidator();
                         }),
-                        h.object().shape(e)
+                        u.object().shape(e)
                     );
                 }
-                prepareData(e) {
+                castData(e) {
                     const t = {};
-                    return b.ione(e)
-                        ? (this.getFields().forEach(n => {
-                              const r = n.getName();
-                              if (r === s) return;
-                              if (!(r in e)) return;
-                              let i = e[r];
-                              n.isMultiple()
-                                  ? (b.isArray(i) &&
-                                        (i = (i = i.map(e =>
-                                            this.castFieldValue(n, e),
-                                        )).filter(e => null !== e)),
-                                    n.isReference() &&
-                                        (i = b.unique(i).filter(e => !!e)))
-                                  : (i = this.castFieldValue(n, i)),
-                                  (t[r] = i);
+                    return p.ione(e)
+                        ? (this.getFields().forEach(r => {
+                              const n = r.getName();
+                              n in e && (t[n] = r.castValue(e[n]));
                           }),
                           t)
                         : t;
                 }
                 async validateData(e) {
-                    let t = null,
-                        n = null;
+                    let t = null;
                     try {
-                        t = await this.getValidator().validate(e, {
+                        await this.getValidator().validate(e, {
                             abortEarly: !1,
                         });
                     } catch (e) {
-                        n = e.inner.map(e => ({
-                            message: e.message,
-                            field: e.path,
-                        }));
+                        t = p.isArray(e.inner)
+                            ? e.inner.map(e => ({
+                                  message: e.message,
+                                  fieldName: e.path,
+                              }))
+                            : [{ message: 'Internal error', fieldName: '' }];
                     }
-                    return { data: t, errors: n };
-                }
-                castFieldValue(e, t) {
-                    const n = e.getActualType();
-                    let r = t;
-                    if (n === l) r = null == r ? null : r.toString();
-                    else if (n === u) r = !!r;
-                    else if (n === o) r = parseInt(r, 10);
-                    else if (n === c) {
-                        if (null == r) return null;
-                        if (r instanceof Date) r = r.toISOString();
-                        else {
-                            const e = Date.parse(r);
-                            Number.isNaN(e)
-                                ? Number.isNaN(parseInt(r, 10)) ||
-                                  (r = new Date(parseInt(r, 10)).toISOString())
-                                : (r = new Date(e).toISOString());
-                        }
-                    } else
-                        e.isReference() &&
-                            (r = null != r ? r.toString() : null);
-                    return r;
+                    return t;
                 }
             }
-            class A {
-                constructor(e) {
-                    b.ione(e) || (e = {}), b.iane(e.schema) || (e.schema = []);
-                    let t = parseInt(e.version, 10);
-                    Number.isNaN(t) && (t = 0),
-                        (this.declaration = {
-                            schema: e.schema.map(e => new v(e)),
-                            version: t,
-                        });
+            class S {
+                constructor(e = {}) {
+                    this.declaration = e;
                 }
                 async getHealth() {
                     const e = [],
-                        { declaration: t } = this,
-                        { schema: n } = t;
-                    if (!b.iane(n)) return e;
+                        t = this.getSchema();
+                    if (!t.length) return e;
                     const r = {};
                     return (
-                        n.forEach(e => {
+                        t.forEach(e => {
                             r[e.getName()] =
                                 e.getName() in r ? r[e.getName()] + 1 : 1;
                         }),
@@ -530,7 +658,7 @@
                                 });
                         }),
                         await Promise.all(
-                            n.map(t =>
+                            t.map(t =>
                                 t.getHealth().then(t => {
                                     t.forEach(t => {
                                         e.push(Object.assign({}, t));
@@ -539,25 +667,39 @@
                             ),
                         ),
                         this.getReferences().forEach(t => {
-                            const n = t.getReferenceFieldName();
-                            this.getEntity(n) ||
+                            const r = t.getReferenceFieldName();
+                            this.getEntity(r) ||
                                 e.push({
-                                    message: `Entity "${n}" is referenced, but not created`,
+                                    message: `Entity "${r}" is referenced, but not created`,
                                     code: 'field_broken_reference',
-                                    fieldName: n,
+                                    fieldName: r,
                                 });
                         }),
                         e
                     );
                 }
+                getSanitizedDeclaration(e) {
+                    p.ione(e) || (e = {}), p.iane(e.schema) || (e.schema = []);
+                    let t = parseInt(e.version, 10);
+                    return (
+                        Number.isNaN(t) && (t = 0),
+                        { schema: e.schema.map(e => new F(e)), version: t }
+                    );
+                }
                 toJSON() {
-                    return this.declaration;
+                    return this.declarationInternal;
+                }
+                set declaration(e) {
+                    this.declarationInternal = this.getSanitizedDeclaration(e);
+                }
+                get declaration() {
+                    return this.declarationInternal;
                 }
                 getDeclaration() {
-                    return this.declaration;
+                    return this.declarationInternal;
                 }
                 get() {
-                    return this.declaration;
+                    return this.declarationInternal;
                 }
                 getSchema() {
                     return this.declaration.schema;
@@ -572,7 +714,7 @@
                     let e = [];
                     return (
                         this.declaration.schema.forEach(t => {
-                            e = b.union(e, t.getReferences());
+                            e = p.union(e, t.getReferences());
                         }),
                         e
                     );
@@ -581,65 +723,83 @@
                     return !this.declaration.schema.length;
                 }
             }
-            n.d(t, 'DB_TABLE_PREFIX', function() {
-                return 'eq_';
+            r.d(t, 'ENTITY_ID_FIELD_NAME', function() {
+                return n;
             }),
-                n.d(t, 'DB_REF_TABLE_PREFIX', function() {
-                    return 'eq_ref_';
-                }),
-                n.d(t, 'DB_ENTITY_TABLE_PREFIX', function() {
-                    return 'eq_e_';
-                }),
-                n.d(t, 'DB_MIGRATION_TABLE_NAME', function() {
-                    return 'eq_migrations';
-                }),
-                n.d(t, 'DB_SCHEMA_TABLE_NAME', function() {
-                    return 'eq_schema';
-                }),
-                n.d(t, 'DB_IDENTIFIER_LENGTH', function() {
-                    return 63;
-                }),
-                n.d(t, 'DB_VARCHAR_DEF_LENGTH', function() {
-                    return r;
-                }),
-                n.d(t, 'DB_CODE_COLUMN_LENGTH', function() {
-                    return 36;
-                }),
-                n.d(t, 'DB_QUERY_FIND_MAX_PAGE_SIZE', function() {
-                    return 50;
-                }),
-                n.d(t, 'ENTITY_USER_NAME', function() {
+                r.d(t, 'ENTITY_PK_FIELD_NAME', function() {
                     return i;
                 }),
-                n.d(t, 'ENTITY_GROUP_NAME', function() {
+                r.d(t, 'REFERENCE_ENTITY_PARENT_FIELD_NAME', function() {
+                    return 'self';
+                }),
+                r.d(t, 'REFERENCE_ENTITY_CHILD_FIELD_NAME', function() {
+                    return 'rel';
+                }),
+                r.d(t, 'ENTITY_ID_FIELD_LENGTH', function() {
                     return a;
                 }),
-                n.d(t, 'ENTITY_ID_FIELD_NAME', function() {
+                r.d(t, 'DB_TABLE_PREFIX', function() {
+                    return 'eq_';
+                }),
+                r.d(t, 'DB_REF_TABLE_PREFIX', function() {
+                    return 'eq_ref_';
+                }),
+                r.d(t, 'DB_ENTITY_TABLE_PREFIX', function() {
+                    return 'eq_e_';
+                }),
+                r.d(t, 'DB_MIGRATION_TABLE_NAME', function() {
+                    return 'eq_migrations';
+                }),
+                r.d(t, 'DB_SCHEMA_TABLE_NAME', function() {
+                    return 'eq_schema';
+                }),
+                r.d(t, 'DB_IDENTIFIER_LENGTH', function() {
+                    return 63;
+                }),
+                r.d(t, 'DB_VARCHAR_DEF_LENGTH', function() {
                     return s;
                 }),
-                n.d(t, 'FIELD_TYPE_STRING', function() {
+                r.d(t, 'DB_CODE_COLUMN_LENGTH', function() {
+                    return 36;
+                }),
+                r.d(t, 'DB_QUERY_FIND_MAX_PAGE_SIZE', function() {
+                    return 50;
+                }),
+                r.d(t, 'FIELD_TYPE_STRING', function() {
                     return l;
                 }),
-                n.d(t, 'FIELD_TYPE_INTEGER', function() {
-                    return o;
+                r.d(t, 'FIELD_TYPE_INTEGER', function() {
+                    return 'integer';
                 }),
-                n.d(t, 'FIELD_TYPE_BOOLEAN', function() {
-                    return u;
+                r.d(t, 'FIELD_TYPE_BOOLEAN', function() {
+                    return 'boolean';
                 }),
-                n.d(t, 'FIELD_TYPE_DATETIME', function() {
-                    return c;
+                r.d(t, 'FIELD_TYPE_DATETIME', function() {
+                    return 'datetime';
                 }),
-                n.d(t, 'Schema', function() {
-                    return A;
+                r.d(t, 'Schema', function() {
+                    return S;
                 }),
-                n.d(t, 'CodeField', function() {
+                r.d(t, 'Entity', function() {
                     return F;
                 }),
-                n.d(t, 'Field', function() {
+                r.d(t, 'StringField', function() {
+                    return E;
+                }),
+                r.d(t, 'IdStringField', function() {
                     return T;
                 }),
-                n.d(t, 'Entity', function() {
-                    return v;
+                r.d(t, 'IntegerField', function() {
+                    return N;
+                }),
+                r.d(t, 'BooleanField', function() {
+                    return _;
+                }),
+                r.d(t, 'DateTimeField', function() {
+                    return b;
+                }),
+                r.d(t, 'ReferenceField', function() {
+                    return I;
                 });
         },
     ]),

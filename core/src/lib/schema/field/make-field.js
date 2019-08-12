@@ -33,11 +33,17 @@ export const makeField = declaration => {
 
     if (type === FIELD_TYPE_STRING) {
         return new StringField(declaration);
-    } else if (type === FIELD_TYPE_BOOLEAN) {
+    }
+
+    if (type === FIELD_TYPE_BOOLEAN) {
         return new BooleanField(declaration);
-    } else if (type === FIELD_TYPE_INTEGER) {
+    }
+
+    if (type === FIELD_TYPE_INTEGER) {
         return new IntegerField(declaration);
-    } else if (type === FIELD_TYPE_DATETIME) {
+    }
+
+    if (type === FIELD_TYPE_DATETIME) {
         return new DateTimeField(declaration);
     }
 
