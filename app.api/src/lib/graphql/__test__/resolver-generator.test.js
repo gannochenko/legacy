@@ -5,7 +5,11 @@
 
 import ResolverGenerator from '../resolver-generator';
 import DatabaseEntityManager from '../../database/entity-manager';
-import { Schema } from 'project-minimum-core';
+import {
+    ENTITY_ID_FIELD_NAME,
+    ENTITY_PK_FIELD_NAME,
+    Schema,
+} from 'project-minimum-core';
 import schemaJSON from '../../../__test__/schema';
 import { makeConnection } from '../../../__test__/repository.mock';
 import { makeAST } from '../../../__test__/apollo.mock';
@@ -48,24 +52,29 @@ describe('GQL Resolver Generator', () => {
             );
         });
 
-        it('should report code missing', async () => {
+        it(`should report ${ENTITY_ID_FIELD_NAME} missing`, async () => {
             const get = resolvers[0].Query.ImportantPersonGet;
 
             // call with no parameters
             let result = await get({}, {});
             expect(result.errors).toHaveLength(1);
-            expect(result.errors[0].code).toEqual('code_missing');
+            expect(result.errors[0].code).toEqual(
+                `${ENTITY_ID_FIELD_NAME}_missing`,
+            );
         });
 
         it('should report not found', async () => {
             const get = resolvers[0].Query.ImportantPersonGet;
 
-            let result = await get({}, { code: '   does_not_exist' });
+            let result = await get(
+                {},
+                { [ENTITY_ID_FIELD_NAME]: 'does_not_exist' },
+            );
             expect(result.errors).toHaveLength(1);
             expect(result.errors[0].code).toEqual('not_found');
             expect(repository.findOne.mock.calls[0][0]).toMatchObject({
-                where: { code: 'does_not_exist' },
-                select: ['id', 'code'],
+                where: { [ENTITY_ID_FIELD_NAME]: 'does_not_exist' },
+                select: [ENTITY_PK_FIELD_NAME, ENTITY_ID_FIELD_NAME],
             });
         });
 
@@ -74,14 +83,17 @@ describe('GQL Resolver Generator', () => {
 
             let result = await get(
                 {},
-                { code: '4ef6f520-d180-4aee-9517-43214f396609' },
+                {
+                    [ENTITY_ID_FIELD_NAME]:
+                        '4ef6f520-d180-4aee-9517-43214f396609',
+                },
                 null,
                 {},
             );
             expect(result.errors).toHaveLength(0);
             expect(result.data).toMatchObject({
-                code: '4ef6f520-d180-4aee-9517-43214f396609',
-                id: 1,
+                [ENTITY_ID_FIELD_NAME]: '4ef6f520-d180-4aee-9517-43214f396609',
+                [ENTITY_PK_FIELD_NAME]: 1,
             });
         });
 
@@ -90,15 +102,18 @@ describe('GQL Resolver Generator', () => {
 
             let result = await get(
                 {},
-                { code: '4ef6f520-d180-4aee-9517-43214f396609' },
+                {
+                    [ENTITY_ID_FIELD_NAME]:
+                        '4ef6f520-d180-4aee-9517-43214f396609',
+                },
                 null,
                 makeAST('data', ['full_name', 'has_pets']),
             );
             expect(result.data).toMatchObject({
-                code: '4ef6f520-d180-4aee-9517-43214f396609',
+                [ENTITY_ID_FIELD_NAME]: '4ef6f520-d180-4aee-9517-43214f396609',
                 full_name: 'Max Mustermann',
                 has_pets: true,
-                id: 1,
+                [ENTITY_PK_FIELD_NAME]: 1,
             });
         });
     });
@@ -116,9 +131,21 @@ describe('GQL Resolver Generator', () => {
             let result = await find({}, {}, null, {});
             expect(result).toMatchObject({
                 data: [
-                    { code: '4ef6f520-d180-4aee-9517-43214f396609', id: 1 },
-                    { code: '9e9c4ee3-d92e-48f2-8235-577806c12534', id: 2 },
-                    { code: '2a98f71a-a3f6-43a1-8196-9a845ba8a54f', id: 3 },
+                    {
+                        [ENTITY_ID_FIELD_NAME]:
+                            '4ef6f520-d180-4aee-9517-43214f396609',
+                        [ENTITY_PK_FIELD_NAME]: 1,
+                    },
+                    {
+                        [ENTITY_ID_FIELD_NAME]:
+                            '9e9c4ee3-d92e-48f2-8235-577806c12534',
+                        [ENTITY_PK_FIELD_NAME]: 2,
+                    },
+                    {
+                        [ENTITY_ID_FIELD_NAME]:
+                            '2a98f71a-a3f6-43a1-8196-9a845ba8a54f',
+                        [ENTITY_PK_FIELD_NAME]: 3,
+                    },
                 ],
                 errors: [],
                 limit: 50,
@@ -140,7 +167,7 @@ describe('GQL Resolver Generator', () => {
             expect(result.limit).toEqual(1);
             expect(result.offset).toEqual(1);
             expect(result.data).toHaveLength(1);
-            expect(result.data[0].code).toEqual(
+            expect(result.data[0][ENTITY_ID_FIELD_NAME]).toEqual(
                 '9e9c4ee3-d92e-48f2-8235-577806c12534',
             );
         });
@@ -159,7 +186,7 @@ describe('GQL Resolver Generator', () => {
             expect(result.limit).toEqual(1);
             expect(result.offset).toEqual(1);
             expect(result.data).toHaveLength(1);
-            expect(result.data[0].code).toEqual(
+            expect(result.data[0][ENTITY_ID_FIELD_NAME]).toEqual(
                 '9e9c4ee3-d92e-48f2-8235-577806c12534',
             );
         });
@@ -179,9 +206,9 @@ describe('GQL Resolver Generator', () => {
             });
         });
 
-        it('should process filter [todo]', async () => {
-            // todo
-        });
+        // it('should process filter [todo]', async () => {
+        //     // todo
+        // });
 
         it('should control the maximum amount of items to return', async () => {
             const find = resolvers[0].Query.ImportantPersonFind;
@@ -207,22 +234,25 @@ describe('GQL Resolver Generator', () => {
             );
             expect(result.data).toMatchObject([
                 {
-                    code: '4ef6f520-d180-4aee-9517-43214f396609',
+                    [ENTITY_ID_FIELD_NAME]:
+                        '4ef6f520-d180-4aee-9517-43214f396609',
                     full_name: 'Max Mustermann',
                     has_pets: true,
-                    id: 1,
+                    [ENTITY_PK_FIELD_NAME]: 1,
                 },
                 {
-                    code: '9e9c4ee3-d92e-48f2-8235-577806c12534',
+                    [ENTITY_ID_FIELD_NAME]:
+                        '9e9c4ee3-d92e-48f2-8235-577806c12534',
                     full_name: 'Mister Twister',
                     has_pets: false,
-                    id: 2,
+                    [ENTITY_PK_FIELD_NAME]: 2,
                 },
                 {
-                    code: '2a98f71a-a3f6-43a1-8196-9a845ba8a54f',
+                    [ENTITY_ID_FIELD_NAME]:
+                        '2a98f71a-a3f6-43a1-8196-9a845ba8a54f',
                     full_name: 'Sonoya Mizuno',
                     has_pets: false,
-                    id: 3,
+                    [ENTITY_PK_FIELD_NAME]: 3,
                 },
             ]);
         });
@@ -316,7 +346,8 @@ describe('GQL Resolver Generator', () => {
             let result = await put(
                 {},
                 {
-                    code: '4ef6f520-d180-4aee-9517-43214f396609',
+                    [ENTITY_ID_FIELD_NAME]:
+                        '4ef6f520-d180-4aee-9517-43214f396609',
                     data: {
                         full_name: 'hello!',
                     },
@@ -326,8 +357,13 @@ describe('GQL Resolver Generator', () => {
             );
 
             expect(result.errors).toHaveLength(0);
-            expect(result.code).toEqual('4ef6f520-d180-4aee-9517-43214f396609');
-            expect(result.data).toMatchObject({ full_name: 'hello!', id: 1 });
+            expect(result[ENTITY_ID_FIELD_NAME]).toEqual(
+                '4ef6f520-d180-4aee-9517-43214f396609',
+            );
+            expect(result.data).toMatchObject({
+                full_name: 'hello!',
+                [ENTITY_PK_FIELD_NAME]: 1,
+            });
 
             const importantPersonRepository = connection.getRepositoryByEntityName(
                 'important_person',
@@ -338,8 +374,11 @@ describe('GQL Resolver Generator', () => {
             expect(
                 importantPersonRepository.findOne.mock.calls[0][0],
             ).toMatchObject({
-                where: { code: '4ef6f520-d180-4aee-9517-43214f396609' },
-                select: ['id'],
+                where: {
+                    [ENTITY_ID_FIELD_NAME]:
+                        '4ef6f520-d180-4aee-9517-43214f396609',
+                },
+                select: [ENTITY_PK_FIELD_NAME],
             });
 
             // check that create was not called
@@ -351,7 +390,7 @@ describe('GQL Resolver Generator', () => {
             // check that save was called
             const saveCall = importantPersonRepository.save.mock.calls[0];
             expect(saveCall[0]).toMatchObject({
-                id: 1,
+                [ENTITY_PK_FIELD_NAME]: 1,
                 full_name: 'hello!',
             });
         });

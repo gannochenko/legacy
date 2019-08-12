@@ -39,8 +39,12 @@ export const makeRepository = entityName => {
             const { where = {}, select = [] } = parameters;
 
             let result = null;
-            if (where.code) {
-                result = data.find(item => item.code === where.code);
+            if (where[ENTITY_ID_FIELD_NAME]) {
+                result = data.find(
+                    item =>
+                        item[ENTITY_ID_FIELD_NAME] ===
+                        where[ENTITY_ID_FIELD_NAME],
+                );
             }
 
             if (result) {
@@ -88,10 +92,10 @@ export const makeRepository = entityName => {
             Object.assign(item, data);
         }),
         save: jest.fn(data => ({
-            id: 10,
+            [ENTITY_PK_FIELD_NAME]: 10,
             ...data,
         })),
-        getId: jest.fn(item => item.id),
+        getId: jest.fn(item => item[ENTITY_PK_FIELD_NAME]),
         delete: jest.fn(() => {}),
         createQueryBuilder: () => queryBuilder,
         queryBuilder,
