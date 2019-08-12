@@ -31,18 +31,17 @@ describe('DateTimeField', () => {
     });
 
     describe('getValidator()', () => {
-        it('should validate', async () => {
+        it('should report illegal data', async () => {
             const field = new DateTimeField({
                 type: 'datetime',
                 name: 'foo',
             });
 
-            const data = 'not_a_date';
-
             let errors = null;
             try {
-                await field.getValidator().validate(data, {
+                await field.getValidator().validate('not_a_date', {
                     abortEarly: false,
+                    // strict: true,
                 });
             } catch (validationErrors) {
                 errors = validationErrors.inner.map(error => ({
@@ -56,6 +55,29 @@ describe('DateTimeField', () => {
                 message: "The value of 'Foo' is not a date",
                 fieldName: undefined,
             });
+        });
+        it('should not report legal data', async () => {
+            const field = new DateTimeField({
+                type: 'datetime',
+                name: 'foo',
+            });
+
+            let errors = null;
+            try {
+                await field
+                    .getValidator()
+                    .validate('2019-06-12T18:20:48.394Z', {
+                        abortEarly: false,
+                        // strict: true,
+                    });
+            } catch (validationErrors) {
+                errors = validationErrors.inner.map(error => ({
+                    message: error.message,
+                    fieldName: error.path,
+                }));
+            }
+
+            expect(errors).toEqual(null);
         });
     });
 });

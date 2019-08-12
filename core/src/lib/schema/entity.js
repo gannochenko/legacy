@@ -214,6 +214,7 @@ export class Entity {
         try {
             await this.getValidator().validate(sourceData, {
                 abortEarly: false,
+                // strict: true,
             });
         } catch (validationErrors) {
             if (_.isArray(validationErrors.inner)) {

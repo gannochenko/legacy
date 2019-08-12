@@ -25,4 +25,53 @@ describe('BooleanField', () => {
             expect(field.castValueItem(undefined)).toEqual(null);
         });
     });
+
+    describe('getValidator()', () => {
+        it('should report illegal data', async () => {
+            const field = new BooleanField({
+                type: 'boolean',
+                name: 'foo',
+            });
+
+            let errors = null;
+            try {
+                await field.getValidator().validate('la', {
+                    abortEarly: false,
+                    // strict: true,
+                });
+            } catch (validationErrors) {
+                errors = validationErrors.inner.map(error => ({
+                    message: error.message,
+                    fieldName: error.path,
+                }));
+            }
+
+            expect(errors).toHaveLength(1);
+            expect(errors[0]).toEqual({
+                message: "The value of 'Foo' is not a boolean",
+                fieldName: undefined,
+            });
+        });
+        it('should not report legal data', async () => {
+            const field = new BooleanField({
+                type: 'boolean',
+                name: 'foo',
+            });
+
+            let errors = null;
+            try {
+                await field.getValidator().validate(true, {
+                    abortEarly: false,
+                    // strict: true,
+                });
+            } catch (validationErrors) {
+                errors = validationErrors.inner.map(error => ({
+                    message: error.message,
+                    fieldName: error.path,
+                }));
+            }
+
+            expect(errors).toEqual(null);
+        });
+    });
 });

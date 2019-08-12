@@ -19,4 +19,49 @@ describe('StringField', () => {
             expect(field.castValueItem(undefined)).toEqual(null);
         });
     });
+
+    describe('getValidator()', () => {
+        it('should not report data that can be casted', async () => {
+            const field = new StringField({
+                type: 'string',
+                name: 'foo',
+            });
+
+            let errors = null;
+            try {
+                await field.getValidator().validate(10, {
+                    abortEarly: false,
+                    // strict: true,
+                });
+            } catch (validationErrors) {
+                errors = validationErrors.inner.map(error => ({
+                    message: error.message,
+                    fieldName: error.path,
+                }));
+            }
+
+            expect(errors).toEqual(null);
+        });
+        it('should not report legal data', async () => {
+            const field = new StringField({
+                type: 'string',
+                name: 'foo',
+            });
+
+            let errors = null;
+            try {
+                await field.getValidator().validate('10', {
+                    abortEarly: false,
+                    // strict: true,
+                });
+            } catch (validationErrors) {
+                errors = validationErrors.inner.map(error => ({
+                    message: error.message,
+                    fieldName: error.path,
+                }));
+            }
+
+            expect(errors).toEqual(null);
+        });
+    });
 });

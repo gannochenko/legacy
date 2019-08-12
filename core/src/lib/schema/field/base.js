@@ -253,7 +253,7 @@ export class BaseField {
     }
 
     createValueItemValidator() {
-        return yup.string();
+        throw new Error('Not implemented');
     }
 
     getReferencedEntityName() {
