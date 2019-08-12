@@ -81,7 +81,7 @@ export class BaseField {
             }
         });
 
-        const validator = this.getValidator();
+        const validator = this.getDeclarationValidator();
 
         try {
             validator.validateSync(declaration, {
@@ -110,7 +110,7 @@ export class BaseField {
         return safeDeclaration;
     }
 
-    getValidator() {
+    getDeclarationValidator() {
         if (!this.fieldValidator) {
             this.fieldValidator = yup.object().shape({
                 name: yup
@@ -234,7 +234,27 @@ export class BaseField {
         return value;
     }
 
-    createValueItemValidator() {}
+    getValidator() {
+        let rule = this.createValueItemValidator();
+
+        // multiple
+        if (this.isMultiple()) {
+            rule = yup.array().of(rule);
+        }
+
+        // required
+        if (this.isRequired()) {
+            rule = rule.required(`${this.getDisplayName()} is required`);
+        } else {
+            rule = rule.nullable();
+        }
+
+        return rule;
+    }
+
+    createValueItemValidator() {
+        return yup.string();
+    }
 
     getReferencedEntityName() {
         return null;

@@ -300,6 +300,25 @@ describe('BaseField', () => {
                 'lo',
             ]);
         });
+
+        it('should not cast multiple to single and back', async () => {
+            const fieldSingle = new BaseField({
+                type: 'string',
+                name: 'foo',
+            });
+
+            expect(fieldSingle.castValue(['one', 'two'])).toEqual([
+                'one',
+                'two',
+            ]);
+
+            const fieldMultiple = new BaseField({
+                type: ['string'],
+                name: 'foo',
+            });
+
+            expect(fieldMultiple.castValue('one')).toEqual('one');
+        });
     });
 
     describe('isReference()', () => {

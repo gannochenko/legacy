@@ -177,21 +177,7 @@ export class Entity {
     getValidator() {
         const shape = {};
         this.declaration.schema.forEach(field => {
-            let rule = field.createValueItemValidator();
-
-            // multiple
-            if (field.isMultiple()) {
-                rule = yup.array().of(rule);
-            }
-
-            // required
-            if (field.isRequired()) {
-                rule = rule.required(`${field.getDisplayName()} is required`);
-            } else {
-                rule = rule.nullable();
-            }
-
-            shape[field.getName()] = rule;
+            shape[field.getName()] = field.getValidator();
         });
 
         return yup.object().shape(shape);
