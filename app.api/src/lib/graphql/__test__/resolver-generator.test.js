@@ -7,10 +7,7 @@ import ResolverGenerator from '../resolver-generator';
 import DatabaseEntityManager from '../../database/entity-manager';
 import { Schema } from 'project-minimum-core';
 import schemaJSON from '../../../__test__/schema';
-import {
-    makeConnection,
-    data as mockedData,
-} from '../../../__test__/repository.mock';
+import { makeConnection } from '../../../__test__/repository.mock';
 import { makeAST } from '../../../__test__/apollo.mock';
 import DataLoaderPool from '../../database/data-loader-pool';
 
