@@ -20,6 +20,9 @@ describe('BooleanField', () => {
 
             expect(field.castValueItem('0')).toEqual(true);
             expect(field.castValueItem('1')).toEqual(true);
+
+            expect(field.castValueItem(null)).toEqual(null);
+            expect(field.castValueItem(undefined)).toEqual(null);
         });
     });
 });

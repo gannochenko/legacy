@@ -22,6 +22,9 @@ describe('DateTimeField', () => {
                 '2019-06-12T18:30:45.420Z',
             );
             expect(field.castValueItem('not_a_date')).toEqual('not_a_date');
+
+            expect(field.castValueItem(null)).toEqual(null);
+            expect(field.castValueItem(undefined)).toEqual(null);
         });
     });
 });
