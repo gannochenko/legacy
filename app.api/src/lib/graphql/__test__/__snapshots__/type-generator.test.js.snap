@@ -17,7 +17,7 @@ type ImportantPersonSearchResult {
 }
 
 type ImportantPerson {
-    code: String
+    id: String
     full_name: String
     tags: [String]
     lucky_numbers: [Int]
@@ -58,7 +58,7 @@ input IImportantPerson {
 input IImportantPersonFilter {
     SYSLogic: FilterLogic
     SYSSubFilter: [IImportantPersonFilter]
-    code: IFilterFieldValue
+    id: IFilterFieldValue
     full_name: IFilterFieldValue
     tags: IFilterFieldValue
     lucky_numbers: IFilterFieldValue
@@ -70,7 +70,7 @@ input IImportantPersonFilter {
 }
 
 input IImportantPersonSort {
-    code: SortOrder
+    id: SortOrder
     full_name: SortOrder
     tags: SortOrder
     lucky_numbers: SortOrder
@@ -115,7 +115,7 @@ type PetSearchResult {
 }
 
 type Pet {
-    code: String
+    id: String
     nickname: String
 }
 
@@ -126,12 +126,12 @@ input IPet {
 input IPetFilter {
     SYSLogic: FilterLogic
     SYSSubFilter: [IPetFilter]
-    code: IFilterFieldValue
+    id: IFilterFieldValue
     nickname: IFilterFieldValue
 }
 
 input IPetSort {
-    code: SortOrder
+    id: SortOrder
     nickname: SortOrder
 }
 
@@ -169,7 +169,7 @@ type ToolSearchResult {
 }
 
 type Tool {
-    code: String
+    id: String
     name: String
 }
 
@@ -180,12 +180,12 @@ input ITool {
 input IToolFilter {
     SYSLogic: FilterLogic
     SYSSubFilter: [IToolFilter]
-    code: IFilterFieldValue
+    id: IFilterFieldValue
     name: IFilterFieldValue
 }
 
 input IToolSort {
-    code: SortOrder
+    id: SortOrder
     name: SortOrder
 }
 
