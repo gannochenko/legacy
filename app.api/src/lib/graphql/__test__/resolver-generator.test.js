@@ -311,7 +311,7 @@ describe('GQL Resolver Generator', () => {
                 {},
             );
             expect(result.errors).toHaveLength(0);
-            expect(resul[ENTITY_ID_FIELD_NAME]).toHaveLength(
+            expect(result[ENTITY_ID_FIELD_NAME]).toHaveLength(
                 ENTITY_ID_FIELD_LENGTH,
             ); // assigns a new code
             expect(result.data).toMatchObject({
@@ -480,10 +480,13 @@ describe('GQL Resolver Generator', () => {
             // maps codes to ids on person repo (because of that "partner" field set)
             let codeToIdCall = importantPersonRepository.find.mock.calls[0];
             expect(codeToIdCall).toBeDefined();
-            expect(codeToIdCall[0].where.code._value).toEqual([
+            expect(codeToIdCall[0].where[ENTITY_ID_FIELD_NAME]._value).toEqual([
                 '4ef6f520-d180-4aee-9517-43214f396609',
             ]);
-            expect(codeToIdCall[0].select).toEqual(['id', 'code']);
+            expect(codeToIdCall[0].select).toEqual([
+                ENTITY_PK_FIELD_NAME,
+                ENTITY_ID_FIELD_NAME,
+            ]);
 
             // now for "pet" entity
             const petRepository = connection.getRepositoryByEntityName('pet');
@@ -491,11 +494,14 @@ describe('GQL Resolver Generator', () => {
             // maps codes to ids on pet repo (because of that "pets" field set)
             codeToIdCall = petRepository.find.mock.calls[0];
             expect(codeToIdCall).toBeDefined();
-            expect(codeToIdCall[0].where.code._value).toEqual([
+            expect(codeToIdCall[0].where[ENTITY_ID_FIELD_NAME]._value).toEqual([
                 '01f6f520-d180-4aee-9517-43214f396609',
                 '02f6f520-d180-4aee-9517-43214f396609',
             ]);
-            expect(codeToIdCall[0].select).toEqual(['id', 'code']);
+            expect(codeToIdCall[0].select).toEqual([
+                ENTITY_PK_FIELD_NAME,
+                ENTITY_ID_FIELD_NAME,
+            ]);
 
             const petsRepository = connection.getRepositoryByEntityName(
                 'eq_ref_ba4ed80327568d335915e4452eb0703a',
@@ -548,7 +554,7 @@ describe('GQL Resolver Generator', () => {
             let result = await put(
                 {},
                 {
-                    code: 'missing-item',
+                    [ENTITY_ID_FIELD_NAME]: uuid(),
                     data: {
                         full_name: 'hello!',
                     },
@@ -572,14 +578,15 @@ describe('GQL Resolver Generator', () => {
             let result = await mutationDelete(
                 {},
                 {
-                    code: '4ef6f520-d180-4aee-9517-43214f396609',
+                    [ENTITY_ID_FIELD_NAME]:
+                        '4ef6f520-d180-4aee-9517-43214f396609',
                 },
                 null,
                 {},
             );
 
             expect(result.errors).toHaveLength(0);
-            expect(result.code).toEqual('4ef6f520-d180-4aee-9517-43214f396609');
+            expect(result.id).toEqual('4ef6f520-d180-4aee-9517-43214f396609');
 
             // the item itself was dropped
             const importantPersonRepository = connection.getRepositoryByEntityName(
@@ -606,7 +613,7 @@ describe('GQL Resolver Generator', () => {
             let result = await mutationDelete({}, {}, null, {});
 
             expect(result.errors).toMatchObject([
-                { code: 'illegal_code', message: 'Code is illegal' },
+                { code: 'illegal_id', message: 'Id is illegal' },
             ]);
         });
 
@@ -616,7 +623,7 @@ describe('GQL Resolver Generator', () => {
             let result = await mutationDelete(
                 {},
                 {
-                    code: 'missing-item',
+                    [ENTITY_ID_FIELD_NAME]: 'missing-item',
                 },
                 null,
                 {},

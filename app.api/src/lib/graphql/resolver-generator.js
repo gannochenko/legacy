@@ -171,9 +171,6 @@ export default class ResolverGenerator {
             data = entity.castData(data);
             // then validate
 
-            console.log('data');
-            console.log(data);
-
             const errors = await entity.validateData(data);
             if (errors) {
                 result.errors = errors.map(error => ({
@@ -278,24 +275,24 @@ export default class ResolverGenerator {
                 data: {},
             };
 
-            const { code } = args;
+            const { id } = args;
 
-            if (typeof code !== 'string' || !code.length) {
+            if (typeof id !== 'string' || !id.length) {
                 result.errors.push({
-                    code: 'illegal_code',
-                    message: 'Code is illegal',
+                    code: 'illegal_id',
+                    message: 'Id is illegal',
                 });
 
                 return result;
             }
 
-            result.code = code;
+            result[ENTITY_ID_FIELD_NAME] = id;
 
             const repository = connection.getRepository(databaseEntity);
 
             const item = await repository.findOne({
-                where: { code: code.trim() },
-                select: ['id'],
+                where: { [ENTITY_ID_FIELD_NAME]: id.trim() },
+                select: [ENTITY_PK_FIELD_NAME],
             });
             if (!item) {
                 result.errors.push({
@@ -303,9 +300,9 @@ export default class ResolverGenerator {
                     message: 'Element not found',
                 });
             } else {
-                const id = repository.getId(item);
+                const idInternal = repository.getId(item);
                 await this.wrap(async () => {
-                    await repository.delete(id);
+                    await repository.delete(idInternal);
                 }, result.errors);
 
                 // drop reference data
@@ -423,17 +420,19 @@ export default class ResolverGenerator {
                 const values = data[referenceFieldName];
 
                 if (Array.isArray(values) && values.length) {
-                    const codeToId = new IdMapper({
+                    const idMapper = new IdMapper({
                         connection,
                     });
-                    values.forEach(code =>
-                        codeToId.addCode(code, referencedDatabaseEntity),
+                    values.forEach(idItem =>
+                        idMapper.addId(idItem, referencedDatabaseEntity),
                     );
 
                     // eslint-disable-next-line no-await-in-loop
-                    await codeToId.obtain();
+                    await idMapper.obtain();
 
-                    values.forEach(code => ids.push(codeToId.getId(code)));
+                    values.forEach(idItem =>
+                        ids.push(idMapper.getInternalId(idItem)),
+                    );
                 }
 
                 const referenceRepository = connection.getRepository(
