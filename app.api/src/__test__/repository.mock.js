@@ -1,4 +1,8 @@
 import mockData from './data.mock';
+import {
+    ENTITY_ID_FIELD_NAME,
+    ENTITY_PK_FIELD_NAME,
+} from 'project-minimum-core';
 
 const filterKeys = (result, select) => {
     return result.map(item => {
@@ -35,8 +39,12 @@ export const makeRepository = entityName => {
             const { where = {}, select = [] } = parameters;
 
             let result = null;
-            if (where.code) {
-                result = data.find(item => item.code === where.code);
+            if (where[ENTITY_ID_FIELD_NAME]) {
+                result = data.find(
+                    item =>
+                        item[ENTITY_ID_FIELD_NAME] ===
+                        where[ENTITY_ID_FIELD_NAME],
+                );
             }
 
             if (result) {
@@ -52,15 +60,25 @@ export const makeRepository = entityName => {
                 dataPart = dataPart.splice(skip, take);
             }
 
-            if ('code' in where && '_value' in where.code) {
+            if (
+                ENTITY_ID_FIELD_NAME in where &&
+                '_value' in where[ENTITY_ID_FIELD_NAME]
+            ) {
                 dataPart = dataPart.filter(item =>
-                    where.code._value.includes(item.code),
+                    where[ENTITY_ID_FIELD_NAME]._value.includes(
+                        item[ENTITY_ID_FIELD_NAME],
+                    ),
                 );
             }
 
-            if ('id' in where && '_value' in where.id) {
+            if (
+                ENTITY_PK_FIELD_NAME in where &&
+                '_value' in where[ENTITY_PK_FIELD_NAME]
+            ) {
                 dataPart = dataPart.filter(item =>
-                    where.id._value.includes(item.id),
+                    where[ENTITY_PK_FIELD_NAME]._value.includes(
+                        item[ENTITY_PK_FIELD_NAME],
+                    ),
                 );
             }
 
@@ -74,10 +92,10 @@ export const makeRepository = entityName => {
             Object.assign(item, data);
         }),
         save: jest.fn(data => ({
-            id: 10,
+            [ENTITY_PK_FIELD_NAME]: 10,
             ...data,
         })),
-        getId: jest.fn(item => item.id),
+        getId: jest.fn(item => item[ENTITY_PK_FIELD_NAME]),
         delete: jest.fn(() => {}),
         createQueryBuilder: () => queryBuilder,
         queryBuilder,

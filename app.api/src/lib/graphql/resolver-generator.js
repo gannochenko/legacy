@@ -7,9 +7,11 @@ import uuid from 'uuid/v4';
 import {
     FIELD_TYPE_DATETIME,
     DB_QUERY_FIND_MAX_PAGE_SIZE,
+    ENTITY_ID_FIELD_NAME,
+    ENTITY_PK_FIELD_NAME,
 } from 'project-minimum-core';
 import { getASTAt, getSelectionAt } from './ast';
-import { CodeId } from '../database/code-id';
+import { IdMapper } from '../database/id-mapper';
 import { Query } from '../database/query';
 
 export default class ResolverGenerator {
@@ -35,12 +37,12 @@ export default class ResolverGenerator {
                 data: null,
             };
 
-            const { code } = args;
+            const { id } = args;
 
-            if (!_.isne(code)) {
+            if (!_.isne(id)) {
                 result.errors.push({
-                    code: 'code_missing',
-                    message: 'Code is missing in the request',
+                    code: `${ENTITY_ID_FIELD_NAME}_missing`,
+                    message: `Argument "${ENTITY_ID_FIELD_NAME}" is missing in the request`,
                 });
                 return result;
             }
@@ -52,7 +54,7 @@ export default class ResolverGenerator {
             await this.wrap(async () => {
                 dbItem = await repository.findOne({
                     where: {
-                        code: code.trim(),
+                        [ENTITY_ID_FIELD_NAME]: id.trim(),
                     },
                     select: this.getRealFields(selectedFields, entity),
                 });
@@ -153,21 +155,25 @@ export default class ResolverGenerator {
                 data: {},
             };
 
-            let { code, data } = args;
+            let { id, data } = args;
 
             const repository = connection.getRepository(databaseEntity);
-            delete data.code; // there is no way to set the code manually
+            delete data[ENTITY_ID_FIELD_NAME]; // there is no way to set the code manually
 
             let isNewItem = false;
-            if (typeof code !== 'string' || !code.length) {
-                code = uuid();
-                data.code = code;
+            if (typeof id !== 'string' || !id.length) {
+                id = uuid();
+                data[ENTITY_ID_FIELD_NAME] = id;
                 isNewItem = true;
             }
 
             // cast everything that is possible to cast
             data = entity.castData(data);
             // then validate
+
+            console.log('data');
+            console.log(data);
+
             const errors = await entity.validateData(data);
             if (errors) {
                 result.errors = errors.map(error => ({
@@ -182,7 +188,7 @@ export default class ResolverGenerator {
             const singleReferences = entity.getSingleReferences();
 
             await this.wrap(async () => {
-                const codeToId = new CodeId({
+                const idToInternal = new IdMapper({
                     connection,
                 });
 
@@ -198,21 +204,21 @@ export default class ResolverGenerator {
                         schema,
                     );
                     if (referenceFieldName in data) {
-                        codeToId.addCode(
+                        idToInternal.addId(
                             data[referenceFieldName],
                             referencedDatabaseEntity,
                         );
                     }
                 }
 
-                await codeToId.obtain();
+                await idToInternal.obtain();
 
                 for (let i = 0; i < singleReferences.length; i += 1) {
                     const reference = singleReferences[i];
                     const referenceFieldName = reference.getName();
 
                     if (referenceFieldName in data) {
-                        data[referenceFieldName] = codeToId.getId(
+                        data[referenceFieldName] = idToInternal.getInternalId(
                             data[referenceFieldName],
                         );
                     }
@@ -225,9 +231,9 @@ export default class ResolverGenerator {
                     // find id by code
                     databaseItem = await repository.findOne({
                         where: {
-                            code: code.trim(),
+                            [ENTITY_ID_FIELD_NAME]: id.trim(),
                         },
-                        select: ['id'],
+                        select: [ENTITY_PK_FIELD_NAME],
                     });
                     if (!databaseItem) {
                         result.errors.push({
@@ -244,12 +250,12 @@ export default class ResolverGenerator {
                     entity,
                     databaseEntityManager,
                     connection,
-                    id: databaseItem.id,
+                    [ENTITY_PK_FIELD_NAME]: databaseItem[ENTITY_PK_FIELD_NAME],
                     data,
                     schema,
                 });
 
-                result.code = code;
+                result[ENTITY_ID_FIELD_NAME] = id;
                 result.data = this.convertToPlain(databaseItem, entity);
             }, result.errors);
 
@@ -417,7 +423,7 @@ export default class ResolverGenerator {
                 const values = data[referenceFieldName];
 
                 if (Array.isArray(values) && values.length) {
-                    const codeToId = new CodeId({
+                    const codeToId = new IdMapper({
                         connection,
                     });
                     values.forEach(code =>
@@ -706,8 +712,8 @@ export default class ResolverGenerator {
         });
 
         // plus id, always there
-        if ('id' in dbItem) {
-            plain.id = dbItem.id;
+        if (ENTITY_PK_FIELD_NAME in dbItem) {
+            plain[ENTITY_PK_FIELD_NAME] = dbItem[ENTITY_PK_FIELD_NAME];
         }
 
         return plain;
@@ -725,11 +731,11 @@ export default class ResolverGenerator {
             .filter(field => !(field.isReference() && field.isMultiple()))
             .map(field => field.getName());
         const toSelect = _.intersection(fields, realFields);
-        if (!toSelect.includes('id')) {
-            toSelect.push('id');
+        if (!toSelect.includes(ENTITY_PK_FIELD_NAME)) {
+            toSelect.push(ENTITY_PK_FIELD_NAME);
         }
-        if (!toSelect.includes('code')) {
-            toSelect.push('code');
+        if (!toSelect.includes(ENTITY_ID_FIELD_NAME)) {
+            toSelect.push(ENTITY_ID_FIELD_NAME);
         }
 
         return toSelect;

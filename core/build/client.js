@@ -1374,7 +1374,7 @@
                                                                         (Number.isNaN(
                                                                             u,
                                                                         ) ||
-                                                                            32 !==
+                                                                            36 !==
                                                                                 u) &&
                                                                             n.push(
                                                                                 {
@@ -1384,7 +1384,7 @@
                                                                                             '" should have length of ',
                                                                                         )
                                                                                         .concat(
-                                                                                            32,
+                                                                                            36,
                                                                                         ),
                                                                                     code:
                                                                                         'field_id_illegal_length',
@@ -1439,13 +1439,13 @@
                                     return i
                                         .string()
                                         .length(
-                                            32,
+                                            36,
                                             "Field '"
                                                 .concat(
                                                     this.getDisplayName(),
                                                     "' should be ",
                                                 )
-                                                .concat(32, ' characters long'),
+                                                .concat(36, ' characters long'),
                                         )
                                         .typeError(
                                             this.getTypeErrorMessage(
@@ -2240,7 +2240,7 @@
                     return 'rel';
                 }),
                 n.d(t, 'ENTITY_ID_FIELD_LENGTH', function() {
-                    return 32;
+                    return 36;
                 }),
                 n.d(t, 'FIELD_TYPE_STRING', function() {
                     return 'string';
