@@ -2,7 +2,11 @@
  * https://github.com/typeorm/typeorm/blob/master/docs/select-query-builder.md
  */
 
-import { DB_QUERY_FIND_MAX_PAGE_SIZE } from 'project-minimum-core';
+import {
+    DB_QUERY_FIND_MAX_PAGE_SIZE,
+    ENTITY_ID_FIELD_NAME,
+    ENTITY_PK_FIELD_NAME,
+} from 'project-minimum-core';
 
 export class Query {
     static make({
@@ -100,11 +104,11 @@ export class Query {
             this.getLegalFields(entity),
         ).map(fieldName => `${prefix}${fieldName}`);
 
-        if (!toSelect.includes(`${prefix}id`)) {
-            toSelect.push(`${prefix}id`);
+        if (!toSelect.includes(`${prefix}${ENTITY_PK_FIELD_NAME}`)) {
+            toSelect.push(`${prefix}${ENTITY_PK_FIELD_NAME}`);
         }
-        if (!toSelect.includes(`${prefix}code`)) {
-            toSelect.push(`${prefix}code`);
+        if (!toSelect.includes(`${prefix}${ENTITY_ID_FIELD_NAME}`)) {
+            toSelect.push(`${prefix}${ENTITY_ID_FIELD_NAME}`);
         }
 
         return toSelect;

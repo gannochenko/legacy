@@ -416,7 +416,7 @@ describe('GQL Resolver Generator', () => {
 
             expect(result.errors).toHaveLength(0);
             expect(result.data).toMatchObject({ full_name: 'hello!' });
-            expect(result.code).not.toEqual(
+            expect(result[ENTITY_ID_FIELD_NAME]).not.toEqual(
                 '4ef6f520-d180-4aee-9517-43214f396609',
             );
         });
@@ -433,7 +433,7 @@ describe('GQL Resolver Generator', () => {
                 {},
             );
 
-            expect(result.code).toEqual(null);
+            expect(result[ENTITY_ID_FIELD_NAME]).toEqual(null);
             expect(result.data).toEqual({});
             expect(result.errors).toMatchObject([
                 {
@@ -563,7 +563,7 @@ describe('GQL Resolver Generator', () => {
                 {},
             );
 
-            expect(result.code).toEqual(null);
+            expect(result[ENTITY_ID_FIELD_NAME]).toEqual(null);
             expect(result.data).toEqual({});
             expect(result.errors).toMatchObject([
                 { code: 'not_found', message: 'Element not found' },
@@ -651,8 +651,9 @@ describe('GQL Resolver Generator', () => {
                 );
 
                 expect(result).toMatchObject({
-                    id: 1,
-                    code: '4ef6f520-d180-4aee-9517-43214f396609',
+                    [ENTITY_PK_FIELD_NAME]: 1,
+                    [ENTITY_ID_FIELD_NAME]:
+                        '4ef6f520-d180-4aee-9517-43214f396609',
                     full_name: 'Max Mustermann',
                 });
             });
@@ -681,19 +682,22 @@ describe('GQL Resolver Generator', () => {
 
                 expect(allResults).toMatchObject([
                     {
-                        id: 1,
-                        code: '4ef6f520-d180-4aee-9517-43214f396609',
+                        [ENTITY_PK_FIELD_NAME]: 1,
+                        [ENTITY_ID_FIELD_NAME]:
+                            '4ef6f520-d180-4aee-9517-43214f396609',
                         full_name: 'Max Mustermann',
                     },
                     {
-                        id: 2,
-                        code: '9e9c4ee3-d92e-48f2-8235-577806c12534',
+                        [ENTITY_PK_FIELD_NAME]: 2,
+                        [ENTITY_ID_FIELD_NAME]:
+                            '9e9c4ee3-d92e-48f2-8235-577806c12534',
                         full_name: 'Mister Twister',
                     },
                     null,
                     {
-                        id: 3,
-                        code: '2a98f71a-a3f6-43a1-8196-9a845ba8a54f',
+                        [ENTITY_PK_FIELD_NAME]: 3,
+                        [ENTITY_ID_FIELD_NAME]:
+                            '2a98f71a-a3f6-43a1-8196-9a845ba8a54f',
                         full_name: 'Sonoya Mizuno',
                     },
                 ]);
@@ -704,8 +708,9 @@ describe('GQL Resolver Generator', () => {
 
                 expect(importantPersonRepository.find).toHaveBeenCalledTimes(1);
                 expect(
-                    importantPersonRepository.find.mock.calls[0][0].where.id
-                        ._value,
+                    importantPersonRepository.find.mock.calls[0][0].where[
+                        ENTITY_PK_FIELD_NAME
+                    ]._value,
                 ).toEqual([1, 2, 10, 3]);
             });
 
@@ -751,18 +756,21 @@ describe('GQL Resolver Generator', () => {
 
                 expect(allResults).toMatchObject([
                     {
-                        id: 1,
-                        code: '4ef6f520-d180-4aee-9517-43214f396609',
+                        [ENTITY_PK_FIELD_NAME]: 1,
+                        [ENTITY_ID_FIELD_NAME]:
+                            '4ef6f520-d180-4aee-9517-43214f396609',
                         full_name: 'Max Mustermann',
                     },
                     {
-                        id: 3,
-                        code: '2a98f71a-a3f6-43a1-8196-9a845ba8a54f',
+                        [ENTITY_PK_FIELD_NAME]: 3,
+                        [ENTITY_ID_FIELD_NAME]:
+                            '2a98f71a-a3f6-43a1-8196-9a845ba8a54f',
                         full_name: 'Sonoya Mizuno',
                     },
                     {
-                        id: 2,
-                        code: '9e9c4ee3-d92e-48f2-8235-577806c12534',
+                        [ENTITY_PK_FIELD_NAME]: 2,
+                        [ENTITY_ID_FIELD_NAME]:
+                            '9e9c4ee3-d92e-48f2-8235-577806c12534',
                         full_name: 'Mister Twister',
                         tags: ['five', 'two'],
                         has_pets: false,
@@ -775,12 +783,14 @@ describe('GQL Resolver Generator', () => {
 
                 expect(importantPersonRepository.find).toHaveBeenCalledTimes(2);
                 expect(
-                    importantPersonRepository.find.mock.calls[0][0].where.id
-                        ._value,
+                    importantPersonRepository.find.mock.calls[0][0].where[
+                        ENTITY_PK_FIELD_NAME
+                    ]._value,
                 ).toEqual([1, 3]);
                 expect(
-                    importantPersonRepository.find.mock.calls[1][0].where.id
-                        ._value,
+                    importantPersonRepository.find.mock.calls[1][0].where[
+                        ENTITY_PK_FIELD_NAME
+                    ]._value,
                 ).toEqual([2]);
             });
 
@@ -839,8 +849,9 @@ describe('GQL Resolver Generator', () => {
                     null,
                     null,
                     {
-                        id: 2,
-                        code: '9e9c4ee3-d92e-48f2-8235-577806c12534',
+                        [ENTITY_PK_FIELD_NAME]: 2,
+                        [ENTITY_ID_FIELD_NAME]:
+                            '9e9c4ee3-d92e-48f2-8235-577806c12534',
                         full_name: 'Mister Twister',
                         tags: ['five', 'two'],
                         has_pets: false,
@@ -862,8 +873,8 @@ describe('GQL Resolver Generator', () => {
                 petRepository.queryBuilder.getMany.mockImplementationOnce(
                     () => [
                         {
-                            id: '1',
-                            code: 'code1',
+                            [ENTITY_PK_FIELD_NAME]: '1',
+                            [ENTITY_ID_FIELD_NAME]: 'code1',
                             nickname: 'Bobik',
                         },
                     ],
@@ -873,7 +884,7 @@ describe('GQL Resolver Generator', () => {
                 expect(getPets).toBeInstanceOf(Function);
 
                 let result = await getPets(
-                    { id: 1 }, // this "comes" from the database, that is why there is id, not code
+                    { [ENTITY_PK_FIELD_NAME]: 1 }, // this "comes" from the database, that is why there is id, not code
                     {
                         sort: { nickname: 'ASC', illegal_field: 'DESC' },
                         limit: 1,
@@ -884,7 +895,11 @@ describe('GQL Resolver Generator', () => {
                 );
 
                 expect(result).toMatchObject([
-                    { id: '1', code: 'code1', nickname: 'Bobik' },
+                    {
+                        [ENTITY_PK_FIELD_NAME]: '1',
+                        [ENTITY_ID_FIELD_NAME]: 'code1',
+                        nickname: 'Bobik',
+                    },
                 ]);
 
                 const queryBuilder = petRepository.queryBuilder;
@@ -893,8 +908,8 @@ describe('GQL Resolver Generator', () => {
                 expect(queryBuilder.select).toHaveBeenCalledTimes(1);
                 expect(queryBuilder.select.mock.calls[0][0]).toMatchObject([
                     'eq_e_pet.nickname',
-                    'eq_e_pet.id',
-                    'eq_e_pet.code',
+                    `eq_e_pet.${ENTITY_PK_FIELD_NAME}`,
+                    `eq_e_pet.${ENTITY_ID_FIELD_NAME}`,
                 ]);
 
                 // order

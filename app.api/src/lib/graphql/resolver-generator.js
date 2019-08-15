@@ -56,7 +56,7 @@ export default class ResolverGenerator {
                     where: {
                         [ENTITY_ID_FIELD_NAME]: id.trim(),
                     },
-                    select: this.getRealFields(selectedFields, entity),
+                    select: Query.prepareSelect(selectedFields, entity),
                 });
             }, result.errors);
 
@@ -95,7 +95,7 @@ export default class ResolverGenerator {
 
             const { filter, search, sort } = args;
 
-            const { limit, offset } = this.getLimitOffset(args);
+            const { limit, offset } = Query.prepareLimitOffset(args);
             if (limit > DB_QUERY_FIND_MAX_PAGE_SIZE) {
                 result.errors.push({
                     code: 'limit_too_high',
@@ -104,6 +104,8 @@ export default class ResolverGenerator {
 
                 return result;
             }
+            result.limit = limit;
+            result.offset = offset;
 
             if (filter !== undefined && search !== undefined) {
                 result.errors.push({
@@ -111,24 +113,21 @@ export default class ResolverGenerator {
                     message:
                         'You can not set both search and filter at the same time',
                 });
-
                 return result;
             }
 
-            result.limit = limit;
-            result.offset = offset;
-
             const selectedFields = getSelectionAt(info, 'data');
             const repository = connection.getRepository(databaseEntity);
+
             const where = this.makeWhereFind(filter, search);
 
             await this.wrap(async () => {
                 result.data = (await repository.find({
-                    select: this.getRealFields(selectedFields, entity),
+                    select: Query.prepareSelect(selectedFields, entity),
                     where,
-                    order: _.ione(sort) ? sort : {},
-                    skip: result.offset,
-                    take: result.limit,
+                    order: Query.prepareOrderBy(sort, entity),
+                    skip: offset,
+                    take: limit,
                 })).map(item => this.convertToPlain(item, entity));
             }, result.errors);
 
@@ -151,14 +150,14 @@ export default class ResolverGenerator {
         return async (source, args) => {
             const result = {
                 errors: [],
-                code: null,
+                [ENTITY_ID_FIELD_NAME]: null,
                 data: {},
             };
 
             let { id, data } = args;
 
             const repository = connection.getRepository(databaseEntity);
-            delete data[ENTITY_ID_FIELD_NAME]; // there is no way to set the code manually
+            delete data[ENTITY_ID_FIELD_NAME]; // there is no way to set the id manually
 
             let isNewItem = false;
             if (typeof id !== 'string' || !id.length) {
@@ -271,7 +270,7 @@ export default class ResolverGenerator {
         return async (source, args) => {
             const result = {
                 errors: [],
-                code: null,
+                [ENTITY_ID_FIELD_NAME]: null,
                 data: {},
             };
 
@@ -396,7 +395,7 @@ export default class ResolverGenerator {
         databaseEntityManager,
         schema,
         connection,
-        id,
+        idInternal,
         data,
     }) {
         const references = entity.getMultipleReferences();
@@ -447,7 +446,7 @@ export default class ResolverGenerator {
                 await referenceQueryBuilder
                     .delete()
                     .from(referenceTableName)
-                    .where('self = :id', { id })
+                    .where('self = :id', { idInternal })
                     .execute();
 
                 // and re-create
@@ -458,7 +457,7 @@ export default class ResolverGenerator {
                         .into(referenceTableName)
                         .values(
                             ids.map(referenceId => ({
-                                self: id,
+                                self: idInternal,
                                 rel: referenceId,
                             })),
                         )
@@ -528,7 +527,7 @@ export default class ResolverGenerator {
             );
 
             const selectedFields = getSelectionAt(info);
-            const select = this.getRealFields(selectedFields, entity);
+            const select = Query.prepareSelect(selectedFields, entity);
             const referencedRepository = connection.getRepository(
                 referencedDatabaseEntity,
             );
@@ -541,13 +540,13 @@ export default class ResolverGenerator {
                 try {
                     const items = await referencedRepository.find({
                         where: {
-                            id: In(ids),
+                            idInternal: In(ids),
                         },
                         select,
                     });
 
                     items.forEach(item => {
-                        map[item.id] = item;
+                        map[item.idInternal] = item;
                     });
                 } catch (e) {
                     errors.push({
@@ -582,7 +581,7 @@ export default class ResolverGenerator {
     }) {
         return async (source, args, context, info) => {
             // check if the parent item data does not have any value that we can reference with
-            const referenceValue = source.id;
+            const referenceValue = source[ENTITY_PK_FIELD_NAME];
             if (!parseInt(referenceValue, 10)) {
                 return [];
             }
@@ -635,7 +634,7 @@ export default class ResolverGenerator {
                     .innerJoinAndSelect(
                         referenceTableName,
                         referenceFieldName,
-                        `${referenceFieldNameSafe}.rel = ${referencedTableNameSafe}.id and ${referenceFieldNameSafe}.self = :referenceValue`,
+                        `${referenceFieldNameSafe}.rel = ${referencedTableNameSafe}.${ENTITY_PK_FIELD_NAME} and ${referenceFieldNameSafe}.self = :referenceValue`,
                         { referenceValue },
                     );
 
@@ -674,7 +673,9 @@ export default class ResolverGenerator {
 
         if (_.isne(search)) {
             // a very basic type of search - by the part of code
-            where.code = Like(`%${search.replace(/[^a-zA-Z0-9_-]/, '')}%`);
+            where[ENTITY_ID_FIELD_NAME] = Like(
+                `%${search.replace(/[^a-zA-Z0-9_-]/, '')}%`,
+            );
         }
 
         return where;
@@ -716,59 +717,6 @@ export default class ResolverGenerator {
         }
 
         return plain;
-    }
-
-    /**
-     * @deprecated
-     * @param fields
-     * @param entity
-     * @returns {*}
-     */
-    static getRealFields(fields, entity) {
-        const realFields = entity
-            .getFields()
-            .filter(field => !(field.isReference() && field.isMultiple()))
-            .map(field => field.getName());
-        const toSelect = _.intersection(fields, realFields);
-        if (!toSelect.includes(ENTITY_PK_FIELD_NAME)) {
-            toSelect.push(ENTITY_PK_FIELD_NAME);
-        }
-        if (!toSelect.includes(ENTITY_ID_FIELD_NAME)) {
-            toSelect.push(ENTITY_ID_FIELD_NAME);
-        }
-
-        return toSelect;
-    }
-
-    /**
-     * @deprecated
-     * @param args
-     * @returns {{offset: *, limit: *}}
-     */
-    static getLimitOffset(args) {
-        let { limit, offset, page, pageSize } = args;
-
-        limit = parseInt(limit, 10);
-        if (Number.isNaN(limit)) {
-            limit = DB_QUERY_FIND_MAX_PAGE_SIZE;
-        }
-
-        offset = parseInt(offset, 10);
-        if (Number.isNaN(offset)) {
-            offset = 0;
-        }
-
-        pageSize = parseInt(pageSize, 10);
-        if (!Number.isNaN(pageSize)) {
-            limit = pageSize;
-        }
-
-        page = parseInt(page, 10);
-        if (!Number.isNaN(page)) {
-            offset = (page - 1) * limit;
-        }
-
-        return { limit, offset };
     }
 
     static getReferenceAttributes(
@@ -835,20 +783,4 @@ export default class ResolverGenerator {
             referenceTableName,
         };
     }
-
-    // static getSingleReferences(entity) {
-    //     return entity
-    //         .getFields()
-    //         .filter(field => field.isReference() && !field.isMultiple());
-    // }
-
-    // static getMultipleReferences(entity) {
-    //     return entity
-    //         .getFields()
-    //         .filter(field => field.isReference() && field.isMultiple());
-    // }
-
-    // static getReferences(entity) {
-    //     return entity.getFields().filter(field => field.isReference());
-    // }
 }
