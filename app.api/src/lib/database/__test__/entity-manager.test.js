@@ -4,7 +4,11 @@
 
 import { EntitySchema } from 'typeorm';
 import EntityManager from '../entity-manager';
-import { Schema } from 'project-minimum-core';
+import {
+    Schema,
+    ENTITY_ID_FIELD_NAME,
+    ENTITY_PK_FIELD_NAME,
+} from 'project-minimum-core';
 import schemaJSON from '../../../__test__/schema';
 
 let schema = null;
@@ -135,14 +139,14 @@ describe('DatabaseEntityManager', () => {
             ).toMatchObject({
                 name: 'eq_e_important_person',
                 columns: {
-                    id: {
+                    [ENTITY_PK_FIELD_NAME]: {
                         primary: true,
                         type: 'integer',
                         generated: 'increment',
                         nullable: false,
                     },
-                    code: {
-                        type: 'varchar',
+                    [ENTITY_ID_FIELD_NAME]: {
+                        type: 'uuid',
                         nullable: true,
                         array: false,
                         length: 36,
@@ -182,6 +186,10 @@ describe('DatabaseEntityManager', () => {
     });
 
     describe('getDDLByEntity()', () => {
-        throw new Error('Todo');
+        it('should return DDL structure', async () => {
+            const entity = schema.getEntity('important_person');
+
+            expect(EntityManager.getDDLByEntity(entity)).toMatchSnapshot();
+        });
     });
 });

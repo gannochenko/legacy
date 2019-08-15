@@ -17,7 +17,7 @@ import {
 /**
  * This class creates database entities based on the schema
  */
-export default class EntityManager {
+export default class DatabaseEntityManager {
     /**
      * @param entity Schema entity (not database entity)
      * @param field
@@ -81,13 +81,18 @@ export default class EntityManager {
         }
     }
 
-    static getDBGeneratedFlag(field) {
-        return field.getName() === ENTITY_ID_FIELD_NAME;
-    }
+    static getDBFieldGenerationStrategy(field) {
+        const name = field.getName();
 
-    static getDBGeneratedType(field) {
-        throw new Error('Confirm this');
-        return field.getName() === ENTITY_ID_FIELD_NAME ? 'uuid' : false;
+        if (name === ENTITY_ID_FIELD_NAME) {
+            return 'uuid';
+        }
+
+        if (name === ENTITY_PK_FIELD_NAME) {
+            return 'increment';
+        }
+
+        return null;
     }
 
     /**
@@ -120,9 +125,9 @@ export default class EntityManager {
                 return;
             }
 
-            table.columns.push({
+            let columnMeta = {
                 isNullable: !field.isRequired(),
-                isGenerated: this.getDBGeneratedFlag(field),
+                isGenerated: false,
                 isPrimary: false,
                 isUnique: field.isUnique(),
                 isArray: field.isMultiple(),
@@ -131,8 +136,18 @@ export default class EntityManager {
                 unsigned: false,
                 name: field.getName(),
                 type: this.getDBType(field),
-                generated: this.getDBGeneratedType(field),
-            });
+            };
+
+            const generationStrategy = this.getDBFieldGenerationStrategy(field);
+            if (generationStrategy) {
+                columnMeta = {
+                    ...columnMeta,
+                    isGenerated: true,
+                    generationStrategy,
+                };
+            }
+
+            table.columns.push(columnMeta);
         });
 
         return table;
