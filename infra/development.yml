@@ -71,6 +71,7 @@ services:
       com.list.sort: "1"
       com.list.description: Main server that provides API
       com.list.link.endpoint: GraphQL endpoint|/graphql
+      com.list.link.sync: Synchronize|/sync
   container-list:
     image: awesome1888/container-list
     expose:

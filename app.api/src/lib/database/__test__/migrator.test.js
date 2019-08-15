@@ -9,12 +9,12 @@ describe('Migrator', () => {
     // });
     // afterEach(async () => {
     // });
-    it('should migrate', async () => {
-        // just a few insights here
-        // expect(something).toEqual(somethingElse);
-        // expect(something).toMatchObject({foo: 'bar'});
-        // const mockedFn = jest.fn(() => 'Hello');
-        // mockedFn.mockImplementationOnce(() => 'Bye');
-        // console.log(mockedFn.mock.calls)
+    describe('getDelta()', () => {
+        it('should return initial delta', async () => {
+            throw new Error('Todo');
+        });
+        it('should return delta of changes', async () => {
+            throw new Error('Todo');
+        });
     });
 });
