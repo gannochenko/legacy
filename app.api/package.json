@@ -13,6 +13,7 @@
         "build": "webpack --config webpack.js --mode production",
         "start": "node ./build/index.js",
         "migrate": "ts-node ./node_modules/typeorm/cli.js migration:run",
+        "migrate:local": "./script/migrate.sh local",
         "lint": "eslint ./src/",
         "lint:fix": "eslint ./src/ --fix",
         "techdebt": "leasot --exit-nicely --reporter table --skip-unsupported --ignore node_modules,build,migrations ./"

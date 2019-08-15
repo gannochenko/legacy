@@ -8,11 +8,12 @@ import {
 
 export default class TypeGenerator {
     static make(schema) {
-        const gqlTypes = Object.values(schema.getSchema()).map(entity =>
-            this.makeForEntity(entity, schema),
-        );
+        const entities = Object.values(schema.getSchema());
+        if (!entities.length) {
+            return [];
+        }
 
-        return gqlTypes;
+        return entities.map(entity => this.makeForEntity(entity, schema));
     }
 
     /**

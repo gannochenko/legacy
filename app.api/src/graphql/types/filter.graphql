@@ -18,6 +18,6 @@ enum FilterOperator {
 
 input IFilterFieldValue {
     Operation: FilterOperator
-    ValueA: String
-    ValueB: [String]
+    Value: String
+    Values: [String]
 }

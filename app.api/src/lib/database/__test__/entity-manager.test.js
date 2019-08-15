@@ -128,6 +128,13 @@ describe('DatabaseEntityManager', () => {
             expect(entities.pet).toBeInstanceOf(EntitySchema);
             expect(entities.tool).toBeInstanceOf(EntitySchema);
         });
+
+        it('should handle empty schema correctly', async () => {
+            const manager = new EntityManager(new Schema({}));
+            const entities = await manager.get();
+
+            expect(entities).toEqual({});
+        });
     });
     describe('getByName()', () => {
         it('should return database entities against the schema', async () => {

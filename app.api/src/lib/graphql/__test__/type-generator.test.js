@@ -7,13 +7,21 @@ describe('GQL Type generator', () => {
     // });
     // beforeEach(async () => {
     // });
-    it('Should generate gql type declaration', async () => {
-        const schema = new Schema({
-            schema: schemaJSON,
-            draft: true,
-            version: 2,
+    describe('make()', () => {
+        it('should generate gql type declaration', async () => {
+            const schema = new Schema({
+                schema: schemaJSON,
+                draft: true,
+                version: 2,
+            });
+            const gql = TypeGenerator.make(schema);
+            expect(gql).toMatchSnapshot();
         });
-        const gql = TypeGenerator.make(schema);
-        expect(gql).toMatchSnapshot();
+
+        it('should handle empty schema correctly', async () => {
+            const schema = new Schema({});
+            const gql = TypeGenerator.make(schema);
+            expect(gql).toEqual([]);
+        });
     });
 });

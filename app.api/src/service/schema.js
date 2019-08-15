@@ -9,11 +9,7 @@ class SchemaService {
             draft: type === 'draft',
         });
 
-        if (!schema) {
-            return null;
-        }
-
-        return new Schema(schema);
+        return new Schema(schema || {});
     }
 
     static async put(type, schema, connectionManager) {
