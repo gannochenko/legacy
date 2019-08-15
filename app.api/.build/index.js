@@ -1930,7 +1930,7 @@
                                     type: 'varchar',
                                     length:
                                         project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
-                                            'DB_CODE_COLUMN_LENGTH'
+                                            'ENTITY_ID_FIELD_LENGTH'
                                         ],
                                     nullable: false,
                                 },

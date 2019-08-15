@@ -180,4 +180,8 @@ describe('DatabaseEntityManager', () => {
             });
         });
     });
+
+    describe('getDDLByEntity()', () => {
+        throw new Error('Todo');
+    });
 });

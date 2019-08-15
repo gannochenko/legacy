@@ -759,7 +759,7 @@
                 r.d(t, 'DB_VARCHAR_DEF_LENGTH', function() {
                     return s;
                 }),
-                r.d(t, 'DB_CODE_COLUMN_LENGTH', function() {
+                r.d(t, 'ENTITY_ID_FIELD_LENGTH', function() {
                     return 36;
                 }),
                 r.d(t, 'DB_QUERY_FIND_MAX_PAGE_SIZE', function() {

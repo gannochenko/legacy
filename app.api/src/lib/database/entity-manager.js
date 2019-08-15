@@ -8,7 +8,10 @@ import {
     DB_ENTITY_TABLE_PREFIX,
     DB_IDENTIFIER_LENGTH,
     DB_REF_TABLE_PREFIX,
-    DB_CODE_COLUMN_LENGTH,
+    ENTITY_ID_FIELD_NAME,
+    ENTITY_PK_FIELD_NAME,
+    REFERENCE_ENTITY_PARENT_FIELD_NAME,
+    REFERENCE_ENTITY_CHILD_FIELD_NAME,
 } from 'project-minimum-core';
 
 /**
@@ -58,6 +61,10 @@ export default class EntityManager {
             return field.isMultiple() ? null : 'integer';
         }
 
+        if (field.getName() === ENTITY_ID_FIELD_NAME) {
+            return 'uuid';
+        }
+
         const type = field.getActualType();
 
         switch (type) {
@@ -72,6 +79,15 @@ export default class EntityManager {
             default:
                 return 'string';
         }
+    }
+
+    static getDBGeneratedFlag(field) {
+        return field.getName() === ENTITY_ID_FIELD_NAME;
+    }
+
+    static getDBGeneratedType(field) {
+        throw new Error('Confirm this');
+        return field.getName() === ENTITY_ID_FIELD_NAME ? 'uuid' : false;
     }
 
     /**
@@ -93,20 +109,20 @@ export default class EntityManager {
             length: '',
             zerofill: false,
             unsigned: true,
-            name: 'id',
+            name: ENTITY_PK_FIELD_NAME,
             type: 'integer',
             generated: 'increment',
         });
 
         entity.getFields().forEach(field => {
-            if (field.isReference() && field.isMultipleField()) {
+            if (field.isReference() && field.isMultiple()) {
                 // we do not create any fields for many-to-may relation. Instead, a table should be created
                 return;
             }
 
             table.columns.push({
                 isNullable: !field.isRequired(),
-                isGenerated: false,
+                isGenerated: this.getDBGeneratedFlag(field),
                 isPrimary: false,
                 isUnique: field.isUnique(),
                 isArray: field.isMultiple(),
@@ -115,6 +131,7 @@ export default class EntityManager {
                 unsigned: false,
                 name: field.getName(),
                 type: this.getDBType(field),
+                generated: this.getDBGeneratedType(field),
             });
         });
 
@@ -159,16 +176,10 @@ export default class EntityManager {
 
         // get the entity itself
         const columns = {
-            id: {
+            [ENTITY_PK_FIELD_NAME]: {
                 primary: true,
                 type: 'integer',
                 generated: 'increment',
-                nullable: false,
-            },
-            // todo: should we remove this?
-            code: {
-                type: 'varchar',
-                length: DB_CODE_COLUMN_LENGTH,
                 nullable: false,
             },
         };
@@ -204,12 +215,12 @@ export default class EntityManager {
             result[this.constructor.getName(entity, field)] = new EntitySchema({
                 name: this.constructor.getReferenceTableName(entity, field),
                 columns: {
-                    self: {
+                    [REFERENCE_ENTITY_PARENT_FIELD_NAME]: {
                         type: 'integer',
                         nullable: false,
                         primary: true,
                     },
-                    rel: {
+                    [REFERENCE_ENTITY_CHILD_FIELD_NAME]: {
                         type: 'integer',
                         nullable: false,
                         primary: true,
