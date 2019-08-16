@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GQL Type generator Should generate gql type declaration 1`] = `
+exports[`GQL Type generator make() should generate gql type declaration 1`] = `
 Array [
   "
 type ImportantPersonResult {
@@ -82,7 +82,7 @@ input IImportantPersonSort {
 }
 
 type Query {
-    ImportantPersonGet(code: String!): ImportantPersonResult
+    ImportantPersonGet(id: String!): ImportantPersonResult
     ImportantPersonFind(
         filter: IImportantPersonFilter
         search: String
@@ -96,8 +96,8 @@ type Query {
 }
 
 type Mutation {
-    ImportantPersonDelete(code: String!): ImportantPersonResult
-    ImportantPersonPut(code: String, data: IImportantPerson!): ImportantPersonResult
+    ImportantPersonDelete(id: String!): ImportantPersonResult
+    ImportantPersonPut(id: String, data: IImportantPerson!): ImportantPersonResult
 }
         ",
   "
@@ -136,7 +136,7 @@ input IPetSort {
 }
 
 type Query {
-    PetGet(code: String!): PetResult
+    PetGet(id: String!): PetResult
     PetFind(
         filter: IPetFilter
         search: String
@@ -150,8 +150,8 @@ type Query {
 }
 
 type Mutation {
-    PetDelete(code: String!): PetResult
-    PetPut(code: String, data: IPet!): PetResult
+    PetDelete(id: String!): PetResult
+    PetPut(id: String, data: IPet!): PetResult
 }
         ",
   "
@@ -190,7 +190,7 @@ input IToolSort {
 }
 
 type Query {
-    ToolGet(code: String!): ToolResult
+    ToolGet(id: String!): ToolResult
     ToolFind(
         filter: IToolFilter
         search: String
@@ -204,8 +204,8 @@ type Query {
 }
 
 type Mutation {
-    ToolDelete(code: String!): ToolResult
-    ToolPut(code: String, data: ITool!): ToolResult
+    ToolDelete(id: String!): ToolResult
+    ToolPut(id: String, data: ITool!): ToolResult
 }
         ",
 ]

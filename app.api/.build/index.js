@@ -127,9 +127,9 @@
     })(
         /************************************************************************/
         /******/ {
-            /***/ './src/api/home.js':
+            /***/ './src/api/home.ts':
                 /*!*************************!*\
-  !*** ./src/api/home.js ***!
+  !*** ./src/api/home.ts ***!
   \*************************/
                 /*! exports provided: default */
                 /***/ function(
@@ -144,9 +144,6 @@
                     );
                     /* harmony import */ var ew_internals__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/ __webpack_require__.n(
                         ew_internals__WEBPACK_IMPORTED_MODULE_0__,
-                    );
-                    /* harmony import */ var _hz__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-                        /*! ./hz */ './src/api/hz.ts',
                     );
 
                     const useHomeAPI = app => {
@@ -169,248 +166,9 @@
                     /***/
                 },
 
-            /***/ './src/api/hz.ts':
-                /*!***********************!*\
-  !*** ./src/api/hz.ts ***!
-  \***********************/
-                /*! exports provided: default */
-                /***/ function(
-                    module,
-                    __webpack_exports__,
-                    __webpack_require__,
-                ) {
-                    'use strict';
-                    __webpack_require__.r(__webpack_exports__);
-                    const hz = 1;
-                    /* harmony default export */ __webpack_exports__[
-                        'default'
-                    ] = hz;
-
-                    /***/
-                },
-
-            /***/ './src/api/schema.js':
-                /*!***************************!*\
-  !*** ./src/api/schema.js ***!
-  \***************************/
-                /*! exports provided: default */
-                /***/ function(
-                    module,
-                    __webpack_exports__,
-                    __webpack_require__,
-                ) {
-                    'use strict';
-                    __webpack_require__.r(__webpack_exports__);
-                    /* WEBPACK VAR INJECTION */ (function(_) {
-                        /* harmony import */ var ew_internals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-                            /*! ew-internals */ 'ew-internals',
-                        );
-                        /* harmony import */ var ew_internals__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/ __webpack_require__.n(
-                            ew_internals__WEBPACK_IMPORTED_MODULE_0__,
-                        );
-                        /* harmony import */ var project_minimum_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-                            /*! project-minimum-core */ 'project-minimum-core',
-                        );
-                        /* harmony import */ var project_minimum_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/ __webpack_require__.n(
-                            project_minimum_core__WEBPACK_IMPORTED_MODULE_1__,
-                        );
-                        /* harmony import */ var _lib_schema_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
-                            /*! ../lib/schema-store */ './src/lib/schema-store.js',
-                        );
-
-                        // todo: move sendJSONResult() to ew-internals
-
-                        const sendJSONResult = (res, result, code = null) => {
-                            let status = 200;
-
-                            if (code) {
-                                status = code;
-                            } else if (
-                                result.errors.find(
-                                    error => error.type === 'internal',
-                                )
-                            ) {
-                                status = 500;
-                            } else if (
-                                result.errors.find(
-                                    error => error.type === 'request',
-                                )
-                            ) {
-                                status = 400;
-                            }
-
-                            return res
-                                .header('Content-Type', 'application/json')
-                                .status(status)
-                                .send(JSON.stringify(result));
-                        };
-
-                        const useSchemaAPI = (app, params = {}) => {
-                            const { connectionManager } = params;
-                            /**
-                             * Get schema entity (draft or actual)
-                             */
-
-                            app.get(
-                                '/schema/:type/:entity',
-                                Object(
-                                    ew_internals__WEBPACK_IMPORTED_MODULE_0__[
-                                        'wrapError'
-                                    ],
-                                )(async (req, res) => {
-                                    const result = {
-                                        errors: [],
-                                        data: null,
-                                    };
-
-                                    const entity = _.get(req, 'params.entity');
-
-                                    const type = _.get(req, 'params.type');
-
-                                    if (type !== 'draft' && type !== 'actual') {
-                                        result.errors.push({
-                                            message: 'Illegal schema type',
-                                            code: 'illegal_schema_type',
-                                            type: 'request',
-                                        });
-                                        return sendJSONResult(res, result);
-                                    }
-
-                                    const schema = await _lib_schema_store__WEBPACK_IMPORTED_MODULE_2__[
-                                        'default'
-                                    ].load(type, connectionManager);
-
-                                    if (schema) {
-                                        result.data = schema.getEntity(entity);
-                                    }
-
-                                    return sendJSONResult(
-                                        res,
-                                        result,
-                                        !result.data ? 404 : null,
-                                    );
-                                }),
-                            );
-                            /**
-                             * Get the entire schema (draft or actual)
-                             */
-
-                            app.get(
-                                '/schema/:type',
-                                Object(
-                                    ew_internals__WEBPACK_IMPORTED_MODULE_0__[
-                                        'wrapError'
-                                    ],
-                                )(async (req, res) => {
-                                    const result = {
-                                        errors: [],
-                                        data: null,
-                                    };
-
-                                    const type = _.get(req, 'params.type');
-
-                                    if (type !== 'draft' && type !== 'actual') {
-                                        result.errors.push({
-                                            message: 'Illegal schema type',
-                                            code: 'illegal_schema_type',
-                                            type: 'request',
-                                        });
-                                        return sendJSONResult(res, result);
-                                    }
-
-                                    result.data = await _lib_schema_store__WEBPACK_IMPORTED_MODULE_2__[
-                                        'default'
-                                    ].load(type, connectionManager);
-                                    return sendJSONResult(
-                                        res,
-                                        result,
-                                        !result.data ? 404 : null,
-                                    );
-                                }),
-                            );
-                            /**
-                             * Commit the draft schema to the actual schema
-                             */
-
-                            app.put(
-                                '/schema',
-                                Object(
-                                    ew_internals__WEBPACK_IMPORTED_MODULE_0__[
-                                        'wrapError'
-                                    ],
-                                )(async (req, res) => {
-                                    const result = {
-                                        errors: [],
-                                    }; // replace an actual schema with a draft
-
-                                    const draftSchema = await _lib_schema_store__WEBPACK_IMPORTED_MODULE_2__[
-                                        'default'
-                                    ].load('draft', connectionManager);
-
-                                    if (draftSchema) {
-                                        result.errors = await _lib_schema_store__WEBPACK_IMPORTED_MODULE_2__[
-                                            'default'
-                                        ].put(
-                                            'actual',
-                                            draftSchema,
-                                            connectionManager,
-                                        );
-                                    }
-
-                                    return sendJSONResult(res, result);
-                                }),
-                            );
-                            /**
-                             * Save draft schema
-                             */
-
-                            app.patch(
-                                '/schema',
-                                Object(
-                                    ew_internals__WEBPACK_IMPORTED_MODULE_0__[
-                                        'wrapError'
-                                    ],
-                                )(async (req, res) => {
-                                    // save new schema as draft, check first
-                                    const result = {
-                                        errors: [],
-                                    };
-
-                                    const schema = _.get(req, 'index.ts.ts');
-
-                                    result.errors = await _lib_schema_store__WEBPACK_IMPORTED_MODULE_2__[
-                                        'default'
-                                    ].put(
-                                        'draft',
-                                        new project_minimum_core__WEBPACK_IMPORTED_MODULE_1__[
-                                            'Schema'
-                                        ]({
-                                            schema,
-                                        }).getSchema(), // todo: this makes a vulnerability
-                                        connectionManager,
-                                    );
-                                    return sendJSONResult(res, result);
-                                }),
-                            );
-                        };
-
-                        /* harmony default export */ __webpack_exports__[
-                            'default'
-                        ] = useSchemaAPI;
-                        /* WEBPACK VAR INJECTION */
-                    }.call(
-                        this,
-                        __webpack_require__(
-                            /*! ./src/lib/lodash.js */ './src/lib/lodash.js',
-                        )['default'],
-                    ));
-
-                    /***/
-                },
-
-            /***/ './src/api/sync.js':
+            /***/ './src/api/sync.ts':
                 /*!*************************!*\
-  !*** ./src/api/sync.js ***!
+  !*** ./src/api/sync.ts ***!
   \*************************/
                 /*! exports provided: default */
                 /***/ function(
@@ -453,11 +211,38 @@
                     /***/
                 },
 
-            /***/ './src/entity/schema.js':
-                /*!******************************!*\
-  !*** ./src/entity/schema.js ***!
-  \******************************/
-                /*! exports provided: schema, default */
+            /***/ './src/controller/index.ts':
+                /*!*********************************!*\
+  !*** ./src/controller/index.ts ***!
+  \*********************************/
+                /*! exports provided: default */
+                /***/ function(
+                    module,
+                    __webpack_exports__,
+                    __webpack_require__,
+                ) {
+                    'use strict';
+                    __webpack_require__.r(__webpack_exports__);
+                    /* harmony import */ var _schema__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+                        /*! ./schema */ './src/controller/schema/index.ts',
+                    );
+
+                    /* harmony default export */ __webpack_exports__[
+                        'default'
+                    ] = [
+                        _schema__WEBPACK_IMPORTED_MODULE_0__[
+                            'SchemaController'
+                        ],
+                    ];
+
+                    /***/
+                },
+
+            /***/ './src/controller/schema/index.ts':
+                /*!****************************************!*\
+  !*** ./src/controller/schema/index.ts ***!
+  \****************************************/
+                /*! exports provided: SchemaController */
                 /***/ function(
                     module,
                     __webpack_exports__,
@@ -467,62 +252,446 @@
                     __webpack_require__.r(__webpack_exports__);
                     /* harmony export (binding) */ __webpack_require__.d(
                         __webpack_exports__,
-                        'index.ts.ts',
+                        'SchemaController',
                         function() {
-                            return schema;
+                            return SchemaController;
                         },
                     );
-                    /* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-                        /*! typeorm */ 'typeorm',
-                    );
-                    /* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/ __webpack_require__.n(
-                        typeorm__WEBPACK_IMPORTED_MODULE_0__,
-                    );
-                    /* harmony import */ var project_minimum_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+                    /* harmony import */ var project_minimum_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
                         /*! project-minimum-core */ 'project-minimum-core',
                     );
-                    /* harmony import */ var project_minimum_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/ __webpack_require__.n(
-                        project_minimum_core__WEBPACK_IMPORTED_MODULE_1__,
+                    /* harmony import */ var project_minimum_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/ __webpack_require__.n(
+                        project_minimum_core__WEBPACK_IMPORTED_MODULE_0__,
                     );
+                    /* harmony import */ var _lib_msc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+                        /*! ../../lib/msc */ './src/lib/msc/index.ts',
+                    );
+                    /* harmony import */ var _service_schema__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+                        /*! ../../service/schema */ './src/service/schema.js',
+                    );
+                    /* harmony import */ var _input_dto__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+                        /*! ./input.dto */ './src/controller/schema/input.dto.ts',
+                    );
+                    var _dec,
+                        _dec2,
+                        _dec3,
+                        _dec4,
+                        _dec5,
+                        _dec6,
+                        _class,
+                        _class2;
 
-                    const schema = {
-                        name:
-                            project_minimum_core__WEBPACK_IMPORTED_MODULE_1__[
-                                'DB_SCHEMA_TABLE_NAME'
-                            ],
-                        columns: {
-                            id: {
-                                primary: true,
-                                type: 'integer',
-                                generated: 'increment',
-                                nullable: false,
-                            },
-                            draft: {
-                                type: 'boolean',
-                                nullable: false,
-                            },
-                            schema: {
-                                type: 'json',
-                                nullable: false,
-                            },
-                            version: {
-                                type: 'integer',
-                                defaultValue: 0,
-                            },
-                        },
-                    };
-                    /* harmony default export */ __webpack_exports__[
-                        'default'
-                    ] = new typeorm__WEBPACK_IMPORTED_MODULE_0__[
-                        'EntitySchema'
-                    ](schema);
+                    function _applyDecoratedDescriptor(
+                        target,
+                        property,
+                        decorators,
+                        descriptor,
+                        context,
+                    ) {
+                        var desc = {};
+                        Object['ke' + 'ys'](descriptor).forEach(function(key) {
+                            desc[key] = descriptor[key];
+                        });
+                        desc.enumerable = !!desc.enumerable;
+                        desc.configurable = !!desc.configurable;
+                        if ('value' in desc || desc.initializer) {
+                            desc.writable = true;
+                        }
+                        desc = decorators
+                            .slice()
+                            .reverse()
+                            .reduce(function(desc, decorator) {
+                                return (
+                                    decorator(target, property, desc) || desc
+                                );
+                            }, desc);
+                        if (context && desc.initializer !== void 0) {
+                            desc.value = desc.initializer
+                                ? desc.initializer.call(context)
+                                : void 0;
+                            desc.initializer = undefined;
+                        }
+                        if (desc.initializer === void 0) {
+                            Object['define' + 'Property'](
+                                target,
+                                property,
+                                desc,
+                            );
+                            desc = null;
+                        }
+                        return desc;
+                    }
+
+                    let SchemaController = ((_dec = Object(
+                        _lib_msc__WEBPACK_IMPORTED_MODULE_1__['Endpoint'],
+                    )('/schema')),
+                    (_dec2 = Object(
+                        _lib_msc__WEBPACK_IMPORTED_MODULE_1__['Get'],
+                    )(':type/:entity')),
+                    (_dec3 = Object(
+                        _lib_msc__WEBPACK_IMPORTED_MODULE_1__['Get'],
+                    )(':type')),
+                    (_dec4 = Object(
+                        _lib_msc__WEBPACK_IMPORTED_MODULE_1__['Put'],
+                    )()),
+                    (_dec5 = Object(
+                        _lib_msc__WEBPACK_IMPORTED_MODULE_1__['Patch'],
+                    )()),
+                    (_dec6 = Object(
+                        _lib_msc__WEBPACK_IMPORTED_MODULE_1__['BodyInput'],
+                    )(
+                        _input_dto__WEBPACK_IMPORTED_MODULE_3__[
+                            'SchemaInputDTO'
+                        ],
+                    )),
+                    _dec(
+                        (_class = ((_class2 = class SchemaController {
+                            async getEntity(
+                                { type, entity },
+                                {
+                                    runtime: { connectionManager },
+                                },
+                            ) {
+                                const result = new _lib_msc__WEBPACK_IMPORTED_MODULE_1__[
+                                    'Result'
+                                ]();
+
+                                if (type !== 'draft' && type !== 'actual') {
+                                    result.errors.push({
+                                        message: 'Illegal schema type',
+                                        code: 'illegal_schema_type',
+                                        type:
+                                            _lib_msc__WEBPACK_IMPORTED_MODULE_1__[
+                                                'ERROR_REQUEST'
+                                            ],
+                                    });
+                                    return result;
+                                }
+
+                                const schema = await _service_schema__WEBPACK_IMPORTED_MODULE_2__[
+                                    'default'
+                                ].load(type, connectionManager);
+
+                                if (schema) {
+                                    result.data = schema.getEntity(entity);
+                                }
+
+                                if (!result.data) {
+                                    result.status = 404;
+                                }
+
+                                return result;
+                            }
+
+                            async get(
+                                { type },
+                                {
+                                    runtime: { connectionManager },
+                                },
+                            ) {
+                                const result = new _lib_msc__WEBPACK_IMPORTED_MODULE_1__[
+                                    'Result'
+                                ]();
+
+                                if (type !== 'draft' && type !== 'actual') {
+                                    result.errors.push({
+                                        message: 'Illegal schema type',
+                                        code: 'illegal_schema_type',
+                                        type:
+                                            _lib_msc__WEBPACK_IMPORTED_MODULE_1__[
+                                                'ERROR_REQUEST'
+                                            ],
+                                    });
+                                    return result;
+                                }
+
+                                result.data = await _service_schema__WEBPACK_IMPORTED_MODULE_2__[
+                                    'default'
+                                ].load(type, connectionManager);
+                                return result;
+                            }
+
+                            async commit(
+                                args,
+                                {
+                                    runtime: { connectionManager },
+                                },
+                            ) {
+                                const result = new _lib_msc__WEBPACK_IMPORTED_MODULE_1__[
+                                    'Result'
+                                ](); // replace an actual schema with a draft
+
+                                const draftSchema = await _service_schema__WEBPACK_IMPORTED_MODULE_2__[
+                                    'default'
+                                ].load('draft', connectionManager);
+
+                                if (draftSchema) {
+                                    result.errors = await _service_schema__WEBPACK_IMPORTED_MODULE_2__[
+                                        'default'
+                                    ].put(
+                                        'actual',
+                                        draftSchema,
+                                        connectionManager,
+                                    );
+                                }
+
+                                return result;
+                            }
+
+                            async patch(
+                                params,
+                                {
+                                    body,
+                                    runtime: { connectionManager },
+                                },
+                            ) {
+                                const result = new _lib_msc__WEBPACK_IMPORTED_MODULE_1__[
+                                    'Result'
+                                ]();
+                                const schema = body.index.ts;
+                                result.errors = await _service_schema__WEBPACK_IMPORTED_MODULE_2__[
+                                    'default'
+                                ].put(
+                                    'draft',
+                                    new project_minimum_core__WEBPACK_IMPORTED_MODULE_0__[
+                                        'Schema'
+                                    ]({
+                                        schema,
+                                    }).getSchema(), // todo: this makes a vulnerability, check if healthy before saving!!!
+                                    connectionManager,
+                                );
+                                return result;
+                            }
+                        }),
+                        (_applyDecoratedDescriptor(
+                            _class2.prototype,
+                            'getEntity',
+                            [_dec2],
+                            Object.getOwnPropertyDescriptor(
+                                _class2.prototype,
+                                'getEntity',
+                            ),
+                            _class2.prototype,
+                        ),
+                        _applyDecoratedDescriptor(
+                            _class2.prototype,
+                            'get',
+                            [_dec3],
+                            Object.getOwnPropertyDescriptor(
+                                _class2.prototype,
+                                'get',
+                            ),
+                            _class2.prototype,
+                        ),
+                        _applyDecoratedDescriptor(
+                            _class2.prototype,
+                            'commit',
+                            [_dec4],
+                            Object.getOwnPropertyDescriptor(
+                                _class2.prototype,
+                                'commit',
+                            ),
+                            _class2.prototype,
+                        ),
+                        _applyDecoratedDescriptor(
+                            _class2.prototype,
+                            'patch',
+                            [_dec5, _dec6],
+                            Object.getOwnPropertyDescriptor(
+                                _class2.prototype,
+                                'patch',
+                            ),
+                            _class2.prototype,
+                        )),
+                        _class2)),
+                    ) || _class);
 
                     /***/
                 },
 
-            /***/ './src/graphql/resolvers/index.js':
+            /***/ './src/controller/schema/input.dto.ts':
+                /*!********************************************!*\
+  !*** ./src/controller/schema/input.dto.ts ***!
+  \********************************************/
+                /*! exports provided: SchemaInputDTO */
+                /***/ function(
+                    module,
+                    __webpack_exports__,
+                    __webpack_require__,
+                ) {
+                    'use strict';
+                    __webpack_require__.r(__webpack_exports__);
+                    /* harmony export (binding) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'SchemaInputDTO',
+                        function() {
+                            return SchemaInputDTO;
+                        },
+                    );
+                    /* harmony import */ var _lib_msc__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+                        /*! ../../lib/msc */ './src/lib/msc/index.ts',
+                    );
+                    var _dec,
+                        _class,
+                        _dec2,
+                        _dec3,
+                        _class2,
+                        _class3,
+                        _descriptor,
+                        _temp,
+                        _dec4,
+                        _dec5,
+                        _class5,
+                        _class6,
+                        _descriptor2,
+                        _temp2;
+
+                    function _initializerDefineProperty(
+                        target,
+                        property,
+                        descriptor,
+                        context,
+                    ) {
+                        if (!descriptor) return;
+                        Object.defineProperty(target, property, {
+                            enumerable: descriptor.enumerable,
+                            configurable: descriptor.configurable,
+                            writable: descriptor.writable,
+                            value: descriptor.initializer
+                                ? descriptor.initializer.call(context)
+                                : void 0,
+                        });
+                    }
+
+                    function _applyDecoratedDescriptor(
+                        target,
+                        property,
+                        decorators,
+                        descriptor,
+                        context,
+                    ) {
+                        var desc = {};
+                        Object['ke' + 'ys'](descriptor).forEach(function(key) {
+                            desc[key] = descriptor[key];
+                        });
+                        desc.enumerable = !!desc.enumerable;
+                        desc.configurable = !!desc.configurable;
+                        if ('value' in desc || desc.initializer) {
+                            desc.writable = true;
+                        }
+                        desc = decorators
+                            .slice()
+                            .reverse()
+                            .reduce(function(desc, decorator) {
+                                return (
+                                    decorator(target, property, desc) || desc
+                                );
+                            }, desc);
+                        if (context && desc.initializer !== void 0) {
+                            desc.value = desc.initializer
+                                ? desc.initializer.call(context)
+                                : void 0;
+                            desc.initializer = undefined;
+                        }
+                        if (desc.initializer === void 0) {
+                            Object['define' + 'Property'](
+                                target,
+                                property,
+                                desc,
+                            );
+                            desc = null;
+                        }
+                        return desc;
+                    }
+
+                    function _initializerWarningHelper(descriptor, context) {
+                        throw new Error(
+                            'Decorating class property failed. Please ensure that ' +
+                                'proposal-class-properties is enabled and set to use loose mode. ' +
+                                'To use proposal-class-properties in spec mode with decorators, wait for ' +
+                                'the next major version of decorators in stage 2.',
+                        );
+                    }
+
+                    let TSDTO = ((_dec = Object(
+                        _lib_msc__WEBPACK_IMPORTED_MODULE_0__['DTO'],
+                    )()),
+                    _dec((_class = class TSDTO {})) || _class);
+                    let IndexDTO = ((_dec2 = Object(
+                        _lib_msc__WEBPACK_IMPORTED_MODULE_0__['DTO'],
+                    )()),
+                    (_dec3 = Object(
+                        _lib_msc__WEBPACK_IMPORTED_MODULE_0__['Attribute'],
+                    )({
+                        type: TSDTO,
+                        required: true,
+                    })),
+                    _dec2(
+                        (_class2 = ((_class3 = ((_temp = class IndexDTO {
+                            constructor() {
+                                _initializerDefineProperty(
+                                    this,
+                                    'ts',
+                                    _descriptor,
+                                    this,
+                                );
+                            }
+                        }),
+                        _temp)),
+                        (_descriptor = _applyDecoratedDescriptor(
+                            _class3.prototype,
+                            'ts',
+                            [_dec3],
+                            {
+                                configurable: true,
+                                enumerable: true,
+                                writable: true,
+                                initializer: null,
+                            },
+                        )),
+                        _class3)),
+                    ) || _class2);
+                    let SchemaInputDTO = ((_dec4 = Object(
+                        _lib_msc__WEBPACK_IMPORTED_MODULE_0__['DTO'],
+                    )()),
+                    (_dec5 = Object(
+                        _lib_msc__WEBPACK_IMPORTED_MODULE_0__['Attribute'],
+                    )({
+                        type: IndexDTO,
+                        required: true,
+                    })),
+                    _dec4(
+                        (_class5 = ((_class6 = ((_temp2 = class SchemaInputDTO {
+                            constructor() {
+                                _initializerDefineProperty(
+                                    this,
+                                    'index',
+                                    _descriptor2,
+                                    this,
+                                );
+                            }
+                        }),
+                        _temp2)),
+                        (_descriptor2 = _applyDecoratedDescriptor(
+                            _class6.prototype,
+                            'index',
+                            [_dec5],
+                            {
+                                configurable: true,
+                                enumerable: true,
+                                writable: true,
+                                initializer: null,
+                            },
+                        )),
+                        _class6)),
+                    ) || _class5);
+
+                    /***/
+                },
+
+            /***/ './src/graphql/resolvers/index.ts':
                 /*!****************************************!*\
-  !*** ./src/graphql/resolvers/index.js ***!
+  !*** ./src/graphql/resolvers/index.ts ***!
   \****************************************/
                 /*! exports provided: default */
                 /***/ function(
@@ -741,7 +910,7 @@
                                     },
                                     {
                                         kind: 'InputValueDefinition',
-                                        name: { kind: 'Name', value: 'ValueA' },
+                                        name: { kind: 'Name', value: 'Value' },
                                         type: {
                                             kind: 'NamedType',
                                             name: {
@@ -753,7 +922,7 @@
                                     },
                                     {
                                         kind: 'InputValueDefinition',
-                                        name: { kind: 'Name', value: 'ValueB' },
+                                        name: { kind: 'Name', value: 'Values' },
                                         type: {
                                             kind: 'ListType',
                                             type: {
@@ -769,11 +938,11 @@
                                 ],
                             },
                         ],
-                        loc: { start: 0, end: 236 },
+                        loc: { start: 0, end: 235 },
                     };
                     doc.loc.source = {
                         body:
-                            'enum FilterLogic {\n    AND\n    OR\n    NAND\n    NOR\n}\n\nenum FilterOperator {\n    EQ\n    NE\n    IN\n    NIN\n    GT\n    LT\n    GTE\n    LTE\n}\n\ninput IFilterFieldValue {\n    Operation: FilterOperator\n    ValueA: String\n    ValueB: [String]\n}\n',
+                            'enum FilterLogic {\n    AND\n    OR\n    NAND\n    NOR\n}\n\nenum FilterOperator {\n    EQ\n    NE\n    IN\n    NIN\n    GT\n    LT\n    GTE\n    LTE\n}\n\ninput IFilterFieldValue {\n    Operation: FilterOperator\n    Value: String\n    Values: [String]\n}\n',
                         name: 'GraphQL request',
                         locationOffset: { line: 1, column: 1 },
                     };
@@ -797,9 +966,9 @@
                     /***/
                 },
 
-            /***/ './src/graphql/types/index.js':
+            /***/ './src/graphql/types/index.ts':
                 /*!************************************!*\
-  !*** ./src/graphql/types/index.js ***!
+  !*** ./src/graphql/types/index.ts ***!
   \************************************/
                 /*! exports provided: default */
                 /***/ function(
@@ -949,19 +1118,28 @@
                             /*! ./lib/database/connection-manager */ './src/lib/database/connection-manager.js',
                         );
                         /* harmony import */ var _api_home__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(
-                            /*! ./api/home */ './src/api/home.js',
+                            /*! ./api/home */ './src/api/home.ts',
                         );
                         /* harmony import */ var _lib_graphql_apollo__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(
                             /*! ./lib/graphql/apollo */ './src/lib/graphql/apollo.js',
                         );
-                        /* harmony import */ var _api_schema__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(
-                            /*! ./api/schema */ './src/api/schema.js',
+                        /* harmony import */ var _api_sync__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(
+                            /*! ./api/sync */ './src/api/sync.ts',
                         );
-                        /* harmony import */ var _api_sync__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(
-                            /*! ./api/sync */ './src/api/sync.js',
+                        /* harmony import */ var _lib_msc__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(
+                            /*! ./lib/msc */ './src/lib/msc/index.ts',
+                        );
+                        /* harmony import */ var _controller__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(
+                            /*! ./controller */ './src/controller/index.ts',
                         );
 
                         // import { InterCom } from './lib/intercom';
+
+                        // simple API as middleware
+
+                        // import useSchemaAPI from './api/schema';
+
+                        // MSC-API
 
                         (async () => {
                             const app = express__WEBPACK_IMPORTED_MODULE_4___default()();
@@ -1022,7 +1200,10 @@
                                 settings,
                             });
                             const systemConnection = await connectionManager.getSystem();
-                            await systemConnection.runMigrations(); // const intercom = new InterCom({
+
+                            if (true) {
+                                await systemConnection.runMigrations();
+                            } // const intercom = new InterCom({
                             //     url: await settings.get('intercom.url', ''),
                             // });
                             // await intercom.start();
@@ -1031,9 +1212,7 @@
                                 _api_home__WEBPACK_IMPORTED_MODULE_9__[
                                     'default'
                                 ],
-                            )(app, {
-                                cache,
-                            });
+                            )(app);
                             Object(
                                 _lib_graphql_apollo__WEBPACK_IMPORTED_MODULE_10__[
                                     'default'
@@ -1044,22 +1223,27 @@
                                 connectionManager,
                             });
                             Object(
-                                _api_schema__WEBPACK_IMPORTED_MODULE_11__[
+                                _lib_msc__WEBPACK_IMPORTED_MODULE_12__[
+                                    'useMSC'
+                                ],
+                            )(
+                                app,
+                                _controller__WEBPACK_IMPORTED_MODULE_13__[
+                                    'default'
+                                ],
+                                {
+                                    connectionManager,
+                                },
+                            ); // todo: temporary endpoint
+
+                            Object(
+                                _api_sync__WEBPACK_IMPORTED_MODULE_11__[
                                     'default'
                                 ],
                             )(app, {
                                 cache,
                                 connectionManager,
                             });
-                            Object(
-                                _api_sync__WEBPACK_IMPORTED_MODULE_12__[
-                                    'default'
-                                ],
-                            )(app, {
-                                cache,
-                                connectionManager,
-                            }); // todo: temporary endpoint
-
                             app.listen(
                                 {
                                     port,
@@ -1110,7 +1294,7 @@
                             redis_tag_cache__WEBPACK_IMPORTED_MODULE_0__,
                         );
                         /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-                            /*! ./util */ './src/lib/util.js',
+                            /*! ./util */ './src/lib/util.ts',
                         );
                         function _objectSpread(target) {
                             for (var i = 1; i < arguments.length; i++) {
@@ -1343,88 +1527,6 @@
                     /***/
                 },
 
-            /***/ './src/lib/database/code-id.js':
-                /*!*************************************!*\
-  !*** ./src/lib/database/code-id.js ***!
-  \*************************************/
-                /*! exports provided: CodeId */
-                /***/ function(
-                    module,
-                    __webpack_exports__,
-                    __webpack_require__,
-                ) {
-                    'use strict';
-                    __webpack_require__.r(__webpack_exports__);
-                    /* harmony export (binding) */ __webpack_require__.d(
-                        __webpack_exports__,
-                        'CodeId',
-                        function() {
-                            return CodeId;
-                        },
-                    );
-                    /* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-                        /*! typeorm */ 'typeorm',
-                    );
-                    /* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/ __webpack_require__.n(
-                        typeorm__WEBPACK_IMPORTED_MODULE_0__,
-                    );
-
-                    class CodeId {
-                        constructor({ connection } = {}) {
-                            this.connection = connection;
-                            this.codeToId = {};
-                            this.codeToGet = {};
-                            this.entities = {};
-                        }
-
-                        addCode(code, databaseEntity) {
-                            if (this.codeToId[code]) {
-                                return;
-                            }
-
-                            const entityName = databaseEntity.options.name;
-                            this.entities[entityName] = databaseEntity;
-                            this.codeToGet[entityName] =
-                                this.codeToGet[entityName] || [];
-                            this.codeToGet[entityName].push(code);
-                        }
-
-                        getId(code) {
-                            return this.codeToId[code] || null;
-                        }
-
-                        async obtain() {
-                            await Promise.all(
-                                Object.keys(this.codeToGet).map(entityName => {
-                                    const entity = this.entities[entityName];
-                                    const repository = this.connection.getRepository(
-                                        entity,
-                                    );
-                                    return repository
-                                        .find({
-                                            where: {
-                                                code: Object(
-                                                    typeorm__WEBPACK_IMPORTED_MODULE_0__[
-                                                        'In'
-                                                    ],
-                                                )(this.codeToGet[entityName]),
-                                            },
-                                            select: ['id', 'code'],
-                                        })
-                                        .then(items => {
-                                            items.forEach(item => {
-                                                this.codeToId[item.code] =
-                                                    item.id;
-                                            });
-                                        });
-                                }),
-                            );
-                        }
-                    }
-
-                    /***/
-                },
-
             /***/ './src/lib/database/connection-manager.js':
                 /*!************************************************!*\
   !*** ./src/lib/database/connection-manager.js ***!
@@ -1450,20 +1552,20 @@
                     /* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/ __webpack_require__.n(
                         typeorm__WEBPACK_IMPORTED_MODULE_0__,
                     );
-                    /* harmony import */ var _entity_schema__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-                        /*! ../../entity/schema */ './src/entity/schema.js',
-                    );
-                    /* harmony import */ var _migrations_index__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
-                        /*! ../../migrations/index */ './src/migrations/index.js',
-                    );
-                    /* harmony import */ var project_minimum_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+                    /* harmony import */ var project_minimum_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
                         /*! project-minimum-core */ 'project-minimum-core',
                     );
-                    /* harmony import */ var project_minimum_core__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/ __webpack_require__.n(
-                        project_minimum_core__WEBPACK_IMPORTED_MODULE_3__,
+                    /* harmony import */ var project_minimum_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/ __webpack_require__.n(
+                        project_minimum_core__WEBPACK_IMPORTED_MODULE_1__,
+                    );
+                    /* harmony import */ var _model_schema__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+                        /*! ../../model/schema */ './src/model/schema.ts',
+                    );
+                    /* harmony import */ var _migrations__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+                        /*! ../../migrations */ './src/migrations/index.ts',
                     );
                     /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
-                        /*! ../util */ './src/lib/util.js',
+                        /*! ../util */ './src/lib/util.ts',
                     );
                     function _objectSpread(target) {
                         for (var i = 1; i < arguments.length; i++) {
@@ -1519,15 +1621,15 @@
                          */
 
                         async get({ entities, preConnect }) {
-                            if (!this.connections.entity) {
-                                this.connections.entity = this.make({
+                            if (!this.connections.main) {
+                                this.connections.main = this.make({
                                     settings: this.settings,
                                     entities,
                                     preConnect,
                                 });
                             }
 
-                            return this.connections.entity;
+                            return this.connections.main;
                         }
                         /**
                          * Close current regular connection
@@ -1535,9 +1637,9 @@
                          */
 
                         async close() {
-                            if (this.connections.entity) {
-                                await this.connections.entity.close();
-                                this.connections.entity = null;
+                            if (this.connections.main) {
+                                await this.connections.main.close();
+                                this.connections.main = null;
                             }
                         }
                         /**
@@ -1546,27 +1648,27 @@
                          */
 
                         async getSystem() {
-                            if (!this.connections.simple) {
-                                this.connections.simple = this.make({
+                            if (!this.connections.system) {
+                                this.connections.system = this.make({
                                     name: 'system',
                                     settings: this.settings,
                                     entities: [
-                                        _entity_schema__WEBPACK_IMPORTED_MODULE_1__[
+                                        _model_schema__WEBPACK_IMPORTED_MODULE_2__[
                                             'default'
                                         ],
                                     ],
                                     migrationsTableName:
-                                        project_minimum_core__WEBPACK_IMPORTED_MODULE_3__[
+                                        project_minimum_core__WEBPACK_IMPORTED_MODULE_1__[
                                             'DB_MIGRATION_TABLE_NAME'
                                         ],
                                     migrations:
-                                        _migrations_index__WEBPACK_IMPORTED_MODULE_2__[
+                                        _migrations__WEBPACK_IMPORTED_MODULE_3__[
                                             'default'
                                         ],
                                 });
                             }
 
-                            return this.connections.simple;
+                            return this.connections.system;
                         }
 
                         async invalidateConnections() {
@@ -1685,7 +1787,7 @@
                         __webpack_exports__,
                         'default',
                         function() {
-                            return EntityManager;
+                            return DatabaseEntityManager;
                         },
                     );
                     /* harmony import */ var md5__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
@@ -1748,10 +1850,14 @@
                     }
 
                     /**
+                     * https://github.com/typeorm/typeorm/blob/master/src/driver/types/ColumnTypes.ts
+                     */
+
+                    /**
                      * This class creates database entities based on the schema
                      */
 
-                    class EntityManager {
+                    class DatabaseEntityManager {
                         /**
                          * @param entity Schema entity (not database entity)
                          * @param field
@@ -1809,6 +1915,15 @@
                                 return field.isMultiple() ? null : 'integer';
                             }
 
+                            if (
+                                field.getName() ===
+                                project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                    'ENTITY_ID_FIELD_NAME'
+                                ]
+                            ) {
+                                return 'uuid';
+                            }
+
                             const type = field.getActualType();
 
                             switch (type) {
@@ -1827,6 +1942,46 @@
                                 default:
                                     return 'string';
                             }
+                        }
+
+                        static getDBFieldGenerationStrategy(field) {
+                            const name = field.getName();
+
+                            if (
+                                name ===
+                                project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                    'ENTITY_ID_FIELD_NAME'
+                                ]
+                            ) {
+                                return 'uuid';
+                            }
+
+                            if (
+                                name ===
+                                project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                    'ENTITY_PK_FIELD_NAME'
+                                ]
+                            ) {
+                                return 'increment';
+                            }
+
+                            return null;
+                        }
+
+                        static getDBFieldLength(field) {
+                            const length = field.getLength(); // length is not supported by uuid field
+
+                            if (
+                                length &&
+                                field.getName() !==
+                                    project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                        'ENTITY_ID_FIELD_NAME'
+                                    ]
+                            ) {
+                                return length;
+                            }
+
+                            return undefined;
                         }
                         /**
                          * Accepts a schema entity and returns a DDL structure of the table to create
@@ -1847,31 +2002,43 @@
                                 length: '',
                                 zerofill: false,
                                 unsigned: true,
-                                name: 'id',
+                                name:
+                                    project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                        'ENTITY_PK_FIELD_NAME'
+                                    ],
                                 type: 'integer',
                                 generated: 'increment',
                             });
                             entity.getFields().forEach(field => {
-                                if (
-                                    field.isReference() &&
-                                    field.isMultipleField()
-                                ) {
+                                if (field.isReference() && field.isMultiple()) {
                                     // we do not create any fields for many-to-may relation. Instead, a table should be created
                                     return;
                                 }
 
-                                table.columns.push({
+                                let columnMeta = {
                                     isNullable: !field.isRequired(),
                                     isGenerated: false,
                                     isPrimary: false,
                                     isUnique: field.isUnique(),
                                     isArray: field.isMultiple(),
-                                    length: field.getLength(),
+                                    length: this.getDBFieldLength(field),
                                     zerofill: false,
                                     unsigned: false,
                                     name: field.getName(),
                                     type: this.getDBType(field),
-                                });
+                                };
+                                const generationStrategy = this.getDBFieldGenerationStrategy(
+                                    field,
+                                );
+
+                                if (generationStrategy) {
+                                    columnMeta = _objectSpread({}, columnMeta, {
+                                        isGenerated: true,
+                                        generationStrategy,
+                                    });
+                                }
+
+                                table.columns.push(columnMeta);
                             });
                             return table;
                         }
@@ -1919,19 +2086,12 @@
                             const result = {}; // get the entity itself
 
                             const columns = {
-                                id: {
+                                [project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                    'ENTITY_PK_FIELD_NAME'
+                                ]]: {
                                     primary: true,
                                     type: 'integer',
                                     generated: 'increment',
-                                    nullable: false,
-                                },
-                                // todo: should we remove this?
-                                code: {
-                                    type: 'varchar',
-                                    length:
-                                        project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
-                                            'ENTITY_ID_FIELD_LENGTH'
-                                        ],
                                     nullable: false,
                                 },
                             };
@@ -1943,18 +2103,14 @@
                                     return;
                                 }
 
-                                const column = {
+                                columns[field.getName()] = {
                                     type: this.constructor.getDBType(field),
                                     nullable: !field.isRequired(),
                                     array: field.isMultiple(),
+                                    length: this.constructor.getDBFieldLength(
+                                        field,
+                                    ),
                                 };
-                                const length = field.getLength();
-
-                                if (length !== null) {
-                                    column.length = length;
-                                }
-
-                                columns[field.getName()] = column;
                             });
                             result[
                                 this.constructor.getName(entity)
@@ -1976,12 +2132,16 @@
                                         field,
                                     ),
                                     columns: {
-                                        self: {
+                                        [project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                            'REFERENCE_ENTITY_PARENT_FIELD_NAME'
+                                        ]]: {
                                             type: 'integer',
                                             nullable: false,
                                             primary: true,
                                         },
-                                        rel: {
+                                        [project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                            'REFERENCE_ENTITY_CHILD_FIELD_NAME'
+                                        ]]: {
                                             type: 'integer',
                                             nullable: false,
                                             primary: true,
@@ -1990,6 +2150,113 @@
                                 });
                             });
                             return result;
+                        }
+                    }
+
+                    /***/
+                },
+
+            /***/ './src/lib/database/id-mapper.js':
+                /*!***************************************!*\
+  !*** ./src/lib/database/id-mapper.js ***!
+  \***************************************/
+                /*! exports provided: IdMapper */
+                /***/ function(
+                    module,
+                    __webpack_exports__,
+                    __webpack_require__,
+                ) {
+                    'use strict';
+                    __webpack_require__.r(__webpack_exports__);
+                    /* harmony export (binding) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'IdMapper',
+                        function() {
+                            return IdMapper;
+                        },
+                    );
+                    /* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+                        /*! typeorm */ 'typeorm',
+                    );
+                    /* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/ __webpack_require__.n(
+                        typeorm__WEBPACK_IMPORTED_MODULE_0__,
+                    );
+                    /* harmony import */ var project_minimum_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+                        /*! project-minimum-core */ 'project-minimum-core',
+                    );
+                    /* harmony import */ var project_minimum_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/ __webpack_require__.n(
+                        project_minimum_core__WEBPACK_IMPORTED_MODULE_1__,
+                    );
+
+                    class IdMapper {
+                        constructor({ connection } = {}) {
+                            this.connection = connection;
+                            this.idToInternal = {};
+                            this.idToGet = {};
+                            this.entities = {};
+                        }
+
+                        addId(id, databaseEntity) {
+                            if (this.idToInternal[id]) {
+                                return;
+                            }
+
+                            const entityName = databaseEntity.options.name;
+                            this.entities[entityName] = databaseEntity;
+                            this.idToGet[entityName] =
+                                this.idToGet[entityName] || [];
+                            this.idToGet[entityName].push(id);
+                        }
+
+                        getInternalId(id) {
+                            return this.idToInternal[id] || null;
+                        }
+
+                        async obtain() {
+                            await Promise.all(
+                                Object.keys(this.idToGet).map(entityName => {
+                                    const entity = this.entities[entityName];
+                                    const repository = this.connection.getRepository(
+                                        entity,
+                                    );
+                                    return repository
+                                        .find({
+                                            where: {
+                                                [project_minimum_core__WEBPACK_IMPORTED_MODULE_1__[
+                                                    'ENTITY_ID_FIELD_NAME'
+                                                ]]: Object(
+                                                    typeorm__WEBPACK_IMPORTED_MODULE_0__[
+                                                        'In'
+                                                    ],
+                                                )(this.idToGet[entityName]),
+                                            },
+                                            select: [
+                                                project_minimum_core__WEBPACK_IMPORTED_MODULE_1__[
+                                                    'ENTITY_PK_FIELD_NAME'
+                                                ],
+                                                project_minimum_core__WEBPACK_IMPORTED_MODULE_1__[
+                                                    'ENTITY_ID_FIELD_NAME'
+                                                ],
+                                            ],
+                                        })
+                                        .then(items => {
+                                            items.forEach(item => {
+                                                this.idToInternal[
+                                                    item[
+                                                        project_minimum_core__WEBPACK_IMPORTED_MODULE_1__[
+                                                            'ENTITY_ID_FIELD_NAME'
+                                                        ]
+                                                    ]
+                                                ] =
+                                                    item[
+                                                        project_minimum_core__WEBPACK_IMPORTED_MODULE_1__[
+                                                            'ENTITY_PK_FIELD_NAME'
+                                                        ]
+                                                    ];
+                                            });
+                                        });
+                                }),
+                            );
                         }
                     }
 
@@ -2494,12 +2761,40 @@
                                     this.getLegalFields(entity),
                                 ).map(fieldName => `${prefix}${fieldName}`);
 
-                                if (!toSelect.includes(`${prefix}id`)) {
-                                    toSelect.push(`${prefix}id`);
+                                if (
+                                    !toSelect.includes(
+                                        `${prefix}${
+                                            project_minimum_core__WEBPACK_IMPORTED_MODULE_0__[
+                                                'ENTITY_PK_FIELD_NAME'
+                                            ]
+                                        }`,
+                                    )
+                                ) {
+                                    toSelect.push(
+                                        `${prefix}${
+                                            project_minimum_core__WEBPACK_IMPORTED_MODULE_0__[
+                                                'ENTITY_PK_FIELD_NAME'
+                                            ]
+                                        }`,
+                                    );
                                 }
 
-                                if (!toSelect.includes(`${prefix}code`)) {
-                                    toSelect.push(`${prefix}code`);
+                                if (
+                                    !toSelect.includes(
+                                        `${prefix}${
+                                            project_minimum_core__WEBPACK_IMPORTED_MODULE_0__[
+                                                'ENTITY_ID_FIELD_NAME'
+                                            ]
+                                        }`,
+                                    )
+                                ) {
+                                    toSelect.push(
+                                        `${prefix}${
+                                            project_minimum_core__WEBPACK_IMPORTED_MODULE_0__[
+                                                'ENTITY_ID_FIELD_NAME'
+                                            ]
+                                        }`,
+                                    );
                                 }
 
                                 return toSelect;
@@ -2621,8 +2916,8 @@
                     /* harmony import */ var _graphql_express__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
                         /*! ./graphql-express */ './src/lib/graphql/graphql-express.js',
                     );
-                    /* harmony import */ var _lib_schema_store__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
-                        /*! ../../lib/schema-store */ './src/lib/schema-store.js',
+                    /* harmony import */ var _service_schema__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
+                        /*! ../../service/schema */ './src/service/schema.js',
                     );
                     /* harmony import */ var _type_generator__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(
                         /*! ./type-generator */ './src/lib/graphql/type-generator.js',
@@ -2630,17 +2925,17 @@
                     /* harmony import */ var _resolver_generator__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(
                         /*! ./resolver-generator */ './src/lib/graphql/resolver-generator.js',
                     );
-                    /* harmony import */ var _lib_database_entity_manager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(
-                        /*! ../../lib/database/entity-manager */ './src/lib/database/entity-manager.js',
+                    /* harmony import */ var _database_entity_manager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(
+                        /*! ../database/entity-manager */ './src/lib/database/entity-manager.js',
                     );
-                    /* harmony import */ var _lib_database_data_loader_pool__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(
-                        /*! ../../lib/database/data-loader-pool */ './src/lib/database/data-loader-pool.js',
+                    /* harmony import */ var _database_data_loader_pool__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(
+                        /*! ../database/data-loader-pool */ './src/lib/database/data-loader-pool.js',
                     );
                     /* harmony import */ var _graphql_types__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(
-                        /*! ../../graphql/types */ './src/graphql/types/index.js',
+                        /*! ../../graphql/types */ './src/graphql/types/index.ts',
                     );
                     /* harmony import */ var _graphql_resolvers__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(
-                        /*! ../../graphql/resolvers */ './src/graphql/resolvers/index.js',
+                        /*! ../../graphql/resolvers */ './src/graphql/resolvers/index.ts',
                     );
 
                     let server = null;
@@ -2655,10 +2950,10 @@
                                 await connectionManager.close();
                             }
 
-                            const schema = await _lib_schema_store__WEBPACK_IMPORTED_MODULE_6__[
+                            const schema = await _service_schema__WEBPACK_IMPORTED_MODULE_6__[
                                 'default'
                             ].load('actual', connectionManager);
-                            const databaseEntityManager = new _lib_database_entity_manager__WEBPACK_IMPORTED_MODULE_9__[
+                            const databaseEntityManager = new _database_entity_manager__WEBPACK_IMPORTED_MODULE_9__[
                                 'default'
                             ](schema);
                             const connection = await connectionManager.get({
@@ -2705,7 +3000,7 @@
                                 context: async ({ req, res }) => {
                                     return {
                                         requestId: uuid_v4__WEBPACK_IMPORTED_MODULE_4___default()(),
-                                        dataLoaderPool: new _lib_database_data_loader_pool__WEBPACK_IMPORTED_MODULE_10__[
+                                        dataLoaderPool: new _database_data_loader_pool__WEBPACK_IMPORTED_MODULE_10__[
                                             'default'
                                         ](),
                                     };
@@ -2984,8 +3279,8 @@
                         /* harmony import */ var _ast__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
                             /*! ./ast */ './src/lib/graphql/ast.js',
                         );
-                        /* harmony import */ var _database_code_id__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
-                            /*! ../database/code-id */ './src/lib/database/code-id.js',
+                        /* harmony import */ var _database_id_mapper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+                            /*! ../database/id-mapper */ './src/lib/database/id-mapper.js',
                         );
                         /* harmony import */ var _database_query__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
                             /*! ../database/query */ './src/lib/database/query.js',
@@ -3068,13 +3363,20 @@
                                         errors: [],
                                         data: null,
                                     };
-                                    const { code } = args;
+                                    const { id } = args;
 
-                                    if (!_.isne(code)) {
+                                    if (!_.isne(id)) {
                                         result.errors.push({
-                                            code: 'code_missing',
-                                            message:
-                                                'Code is missing in the request',
+                                            code: `${
+                                                project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                                    'ENTITY_ID_FIELD_NAME'
+                                                ]
+                                            }_missing`,
+                                            message: `Argument "${
+                                                project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                                    'ENTITY_ID_FIELD_NAME'
+                                                ]
+                                            }" is missing in the request`,
                                         });
                                         return result;
                                     }
@@ -3091,9 +3393,13 @@
                                     await this.wrap(async () => {
                                         dbItem = await repository.findOne({
                                             where: {
-                                                code: code.trim(),
+                                                [project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                                    'ENTITY_ID_FIELD_NAME'
+                                                ]]: id.trim(),
                                             },
-                                            select: this.getRealFields(
+                                            select: _database_query__WEBPACK_IMPORTED_MODULE_5__[
+                                                'Query'
+                                            ].prepareSelect(
                                                 selectedFields,
                                                 entity,
                                             ),
@@ -3143,7 +3449,9 @@
                                     const {
                                         limit,
                                         offset,
-                                    } = this.getLimitOffset(args);
+                                    } = _database_query__WEBPACK_IMPORTED_MODULE_5__[
+                                        'Query'
+                                    ].prepareLimitOffset(args);
 
                                     if (
                                         limit >
@@ -3158,6 +3466,9 @@
                                         return result;
                                     }
 
+                                    result.limit = limit;
+                                    result.offset = offset;
+
                                     if (
                                         filter !== undefined &&
                                         search !== undefined
@@ -3170,8 +3481,6 @@
                                         return result;
                                     }
 
-                                    result.limit = limit;
-                                    result.offset = offset;
                                     const selectedFields = Object(
                                         _ast__WEBPACK_IMPORTED_MODULE_3__[
                                             'getSelectionAt'
@@ -3186,14 +3495,18 @@
                                     );
                                     await this.wrap(async () => {
                                         result.data = (await repository.find({
-                                            select: this.getRealFields(
+                                            select: _database_query__WEBPACK_IMPORTED_MODULE_5__[
+                                                'Query'
+                                            ].prepareSelect(
                                                 selectedFields,
                                                 entity,
                                             ),
                                             where,
-                                            order: _.ione(sort) ? sort : {},
-                                            skip: result.offset,
-                                            take: result.limit,
+                                            order: _database_query__WEBPACK_IMPORTED_MODULE_5__[
+                                                'Query'
+                                            ].prepareOrderBy(sort, entity),
+                                            skip: offset,
+                                            take: limit,
                                         })).map(item =>
                                             this.convertToPlain(item, entity),
                                         );
@@ -3232,47 +3545,52 @@
                                 return async (source, args) => {
                                     const result = {
                                         errors: [],
-                                        code: null,
+                                        [project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                            'ENTITY_ID_FIELD_NAME'
+                                        ]]: null,
                                         data: {},
                                     };
-                                    let { code, data } = args;
+                                    let { id, data } = args;
                                     const repository = connection.getRepository(
                                         databaseEntity,
                                     );
-                                    delete data.code; // there is no way to set the code manually
+                                    delete data[
+                                        project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                            'ENTITY_ID_FIELD_NAME'
+                                        ]
+                                    ]; // there is no way to set the id manually
 
                                     let isNewItem = false;
 
-                                    if (
-                                        typeof code !== 'string' ||
-                                        !code.length
-                                    ) {
-                                        code = uuid_v4__WEBPACK_IMPORTED_MODULE_1___default()();
-                                        data.code = code;
+                                    if (typeof id !== 'string' || !id.length) {
+                                        id = uuid_v4__WEBPACK_IMPORTED_MODULE_1___default()();
+                                        data[
+                                            project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                                'ENTITY_ID_FIELD_NAME'
+                                            ]
+                                        ] = id;
                                         isNewItem = true;
                                     } // cast everything that is possible to cast
 
-                                    data = entity.prepareData(data); // then validate
+                                    data = entity.castData(data); // then validate
 
-                                    const {
-                                        errors,
-                                        data: safeData,
-                                    } = await entity.validateData(data);
+                                    const errors = await entity.validateData(
+                                        data,
+                                    );
 
                                     if (errors) {
                                         result.errors = errors.map(error => ({
                                             message: error.message,
                                             code: 'validation',
-                                            reference: error.scalar,
+                                            reference: error.fieldName,
                                         }));
                                         return result;
                                     }
 
-                                    data = safeData;
                                     const singleReferences = entity.getSingleReferences();
                                     await this.wrap(async () => {
-                                        const codeToId = new _database_code_id__WEBPACK_IMPORTED_MODULE_4__[
-                                            'CodeId'
+                                        const idToInternal = new _database_id_mapper__WEBPACK_IMPORTED_MODULE_4__[
+                                            'IdMapper'
                                         ]({
                                             connection,
                                         }); // translate all single-reference codes to ids
@@ -3293,14 +3611,14 @@
                                             );
 
                                             if (referenceFieldName in data) {
-                                                codeToId.addCode(
+                                                idToInternal.addId(
                                                     data[referenceFieldName],
                                                     referencedDatabaseEntity,
                                                 );
                                             }
                                         }
 
-                                        await codeToId.obtain();
+                                        await idToInternal.obtain();
 
                                         for (
                                             let i = 0;
@@ -3314,7 +3632,7 @@
                                             if (referenceFieldName in data) {
                                                 data[
                                                     referenceFieldName
-                                                ] = codeToId.getId(
+                                                ] = idToInternal.getInternalId(
                                                     data[referenceFieldName],
                                                 );
                                             }
@@ -3331,9 +3649,15 @@
                                             databaseItem = await repository.findOne(
                                                 {
                                                     where: {
-                                                        code: code.trim(),
+                                                        [project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                                            'ENTITY_ID_FIELD_NAME'
+                                                        ]]: id.trim(),
                                                     },
-                                                    select: ['id'],
+                                                    select: [
+                                                        project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                                            'ENTITY_PK_FIELD_NAME'
+                                                        ],
+                                                    ],
                                                 },
                                             );
 
@@ -3357,11 +3681,22 @@
                                             entity,
                                             databaseEntityManager,
                                             connection,
-                                            id: databaseItem.id,
+                                            [project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                                'ENTITY_PK_FIELD_NAME'
+                                            ]]:
+                                                databaseItem[
+                                                    project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                                        'ENTITY_PK_FIELD_NAME'
+                                                    ]
+                                                ],
                                             data,
                                             schema,
                                         });
-                                        result.code = code;
+                                        result[
+                                            project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                                'ENTITY_ID_FIELD_NAME'
+                                            ]
+                                        ] = id;
                                         result.data = this.convertToPlain(
                                             databaseItem,
                                             entity,
@@ -3383,31 +3718,40 @@
                                 return async (source, args) => {
                                     const result = {
                                         errors: [],
-                                        code: null,
+                                        [project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                            'ENTITY_ID_FIELD_NAME'
+                                        ]]: null,
                                         data: {},
                                     };
-                                    const { code } = args;
+                                    const { id } = args;
 
-                                    if (
-                                        typeof code !== 'string' ||
-                                        !code.length
-                                    ) {
+                                    if (typeof id !== 'string' || !id.length) {
                                         result.errors.push({
-                                            code: 'illegal_code',
-                                            message: 'Code is illegal',
+                                            code: 'illegal_id',
+                                            message: 'Id is illegal',
                                         });
                                         return result;
                                     }
 
-                                    result.code = code;
+                                    result[
+                                        project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                            'ENTITY_ID_FIELD_NAME'
+                                        ]
+                                    ] = id;
                                     const repository = connection.getRepository(
                                         databaseEntity,
                                     );
                                     const item = await repository.findOne({
                                         where: {
-                                            code: code.trim(),
+                                            [project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                                'ENTITY_ID_FIELD_NAME'
+                                            ]]: id.trim(),
                                         },
-                                        select: ['id'],
+                                        select: [
+                                            project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                                'ENTITY_PK_FIELD_NAME'
+                                            ],
+                                        ],
                                     });
 
                                     if (!item) {
@@ -3416,9 +3760,11 @@
                                             message: 'Element not found',
                                         });
                                     } else {
-                                        const id = repository.getId(item);
+                                        const idInternal = repository.getId(
+                                            item,
+                                        );
                                         await this.wrap(async () => {
-                                            await repository.delete(id);
+                                            await repository.delete(idInternal);
                                         }, result.errors); // drop reference data
 
                                         const references = entity.getMultipleReferences();
@@ -3520,7 +3866,7 @@
                                 databaseEntityManager,
                                 schema,
                                 connection,
-                                id,
+                                idInternal,
                                 data,
                             }) {
                                 const references = entity.getMultipleReferences();
@@ -3547,21 +3893,25 @@
                                             Array.isArray(values) &&
                                             values.length
                                         ) {
-                                            const codeToId = new _database_code_id__WEBPACK_IMPORTED_MODULE_4__[
-                                                'CodeId'
+                                            const idMapper = new _database_id_mapper__WEBPACK_IMPORTED_MODULE_4__[
+                                                'IdMapper'
                                             ]({
                                                 connection,
                                             });
-                                            values.forEach(code =>
-                                                codeToId.addCode(
-                                                    code,
+                                            values.forEach(idItem =>
+                                                idMapper.addId(
+                                                    idItem,
                                                     referencedDatabaseEntity,
                                                 ),
                                             ); // eslint-disable-next-line no-await-in-loop
 
-                                            await codeToId.obtain();
-                                            values.forEach(code =>
-                                                ids.push(codeToId.getId(code)),
+                                            await idMapper.obtain();
+                                            values.forEach(idItem =>
+                                                ids.push(
+                                                    idMapper.getInternalId(
+                                                        idItem,
+                                                    ),
+                                                ),
                                             );
                                         }
 
@@ -3577,7 +3927,7 @@
                                             .delete()
                                             .from(referenceTableName)
                                             .where('self = :id', {
-                                                id,
+                                                idInternal,
                                             })
                                             .execute(); // and re-create
 
@@ -3588,7 +3938,7 @@
                                                 .into(referenceTableName)
                                                 .values(
                                                     ids.map(referenceId => ({
-                                                        self: id,
+                                                        self: idInternal,
                                                         rel: referenceId,
                                                     })),
                                                 )
@@ -3678,10 +4028,9 @@
                                             'getSelectionAt'
                                         ],
                                     )(info);
-                                    const select = this.getRealFields(
-                                        selectedFields,
-                                        entity,
-                                    );
+                                    const select = _database_query__WEBPACK_IMPORTED_MODULE_5__[
+                                        'Query'
+                                    ].prepareSelect(selectedFields, entity);
                                     const referencedRepository = connection.getRepository(
                                         referencedDatabaseEntity,
                                     );
@@ -3698,7 +4047,7 @@
                                                 const items = await referencedRepository.find(
                                                     {
                                                         where: {
-                                                            id: Object(
+                                                            idInternal: Object(
                                                                 typeorm__WEBPACK_IMPORTED_MODULE_0__[
                                                                     'In'
                                                                 ],
@@ -3708,7 +4057,7 @@
                                                     },
                                                 );
                                                 items.forEach(item => {
-                                                    map[item.id] = item;
+                                                    map[item.idInternal] = item;
                                                 });
                                             } catch (e) {
                                                 errors.push({
@@ -3751,7 +4100,12 @@
                             }) {
                                 return async (source, args, context, info) => {
                                     // check if the parent item data does not have any value that we can reference with
-                                    const referenceValue = source.id;
+                                    const referenceValue =
+                                        source[
+                                            project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                                'ENTITY_PK_FIELD_NAME'
+                                            ]
+                                        ];
 
                                     if (!parseInt(referenceValue, 10)) {
                                         return [];
@@ -3809,7 +4163,11 @@
                                             .innerJoinAndSelect(
                                                 referenceTableName,
                                                 referenceFieldName,
-                                                `${referenceFieldNameSafe}.rel = ${referencedTableNameSafe}.id and ${referenceFieldNameSafe}.self = :referenceValue`,
+                                                `${referenceFieldNameSafe}.rel = ${referencedTableNameSafe}.${
+                                                    project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                                        'ENTITY_PK_FIELD_NAME'
+                                                    ]
+                                                } and ${referenceFieldNameSafe}.self = :referenceValue`,
                                                 {
                                                     referenceValue,
                                                 },
@@ -3850,7 +4208,11 @@
 
                                 if (_.isne(search)) {
                                     // a very basic type of search - by the part of code
-                                    where.code = Object(
+                                    where[
+                                        project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                            'ENTITY_ID_FIELD_NAME'
+                                        ]
+                                    ] = Object(
                                         typeorm__WEBPACK_IMPORTED_MODULE_0__[
                                             'Like'
                                         ],
@@ -3906,85 +4268,24 @@
                                     }
                                 }); // plus id, always there
 
-                                if ('id' in dbItem) {
-                                    plain.id = dbItem.id;
-                                }
-
-                                return plain;
-                            }
-                            /**
-                             * @deprecated
-                             * @param fields
-                             * @param entity
-                             * @returns {*}
-                             */
-
-                            static getRealFields(fields, entity) {
-                                const realFields = entity
-                                    .getFields()
-                                    .filter(
-                                        field =>
-                                            !(
-                                                field.isReference() &&
-                                                field.isMultiple()
-                                            ),
-                                    )
-                                    .map(field => field.getName());
-
-                                const toSelect = _.intersection(
-                                    fields,
-                                    realFields,
-                                );
-
-                                if (!toSelect.includes('id')) {
-                                    toSelect.push('id');
-                                }
-
-                                if (!toSelect.includes('code')) {
-                                    toSelect.push('code');
-                                }
-
-                                return toSelect;
-                            }
-                            /**
-                             * @deprecated
-                             * @param args
-                             * @returns {{offset: *, limit: *}}
-                             */
-
-                            static getLimitOffset(args) {
-                                let { limit, offset, page, pageSize } = args;
-                                limit = parseInt(limit, 10);
-
-                                if (Number.isNaN(limit)) {
-                                    limit =
+                                if (
+                                    project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                        'ENTITY_PK_FIELD_NAME'
+                                    ] in dbItem
+                                ) {
+                                    plain[
                                         project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
-                                            'DB_QUERY_FIND_MAX_PAGE_SIZE'
+                                            'ENTITY_PK_FIELD_NAME'
+                                        ]
+                                    ] =
+                                        dbItem[
+                                            project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
+                                                'ENTITY_PK_FIELD_NAME'
+                                            ]
                                         ];
                                 }
 
-                                offset = parseInt(offset, 10);
-
-                                if (Number.isNaN(offset)) {
-                                    offset = 0;
-                                }
-
-                                pageSize = parseInt(pageSize, 10);
-
-                                if (!Number.isNaN(pageSize)) {
-                                    limit = pageSize;
-                                }
-
-                                page = parseInt(page, 10);
-
-                                if (!Number.isNaN(page)) {
-                                    offset = (page - 1) * limit;
-                                }
-
-                                return {
-                                    limit,
-                                    offset,
-                                };
+                                return plain;
                             }
 
                             static getReferenceAttributes(
@@ -4047,19 +4348,7 @@
                                     referenceDatabaseEntity,
                                     referenceTableName,
                                 };
-                            } // static getSingleReferences(entity) {
-                            //     return entity
-                            //         .getFields()
-                            //         .filter(field => field.isReference() && !field.isMultiple());
-                            // }
-                            // static getMultipleReferences(entity) {
-                            //     return entity
-                            //         .getFields()
-                            //         .filter(field => field.isReference() && field.isMultiple());
-                            // }
-                            // static getReferences(entity) {
-                            //     return entity.getFields().filter(field => field.isReference());
-                            // }
+                            }
                         }
                         /* WEBPACK VAR INJECTION */
                     }.call(
@@ -4103,10 +4392,15 @@
 
                     class TypeGenerator {
                         static make(schema) {
-                            const gqlTypes = Object.values(
-                                schema.getSchema(),
-                            ).map(entity => this.makeForEntity(entity, schema));
-                            return gqlTypes;
+                            const entities = Object.values(schema.getSchema());
+
+                            if (!entities.length) {
+                                return [];
+                            }
+
+                            return entities.map(entity =>
+                                this.makeForEntity(entity, schema),
+                            );
                         }
                         /**
                          * @private
@@ -4182,7 +4476,11 @@ ${sFields.map(x => `    ${x}`).join('\n')}
 }
 
 type Query {
-    ${name}Get(code: String!): ${name}Result
+    ${name}Get(${
+                                project_minimum_core__WEBPACK_IMPORTED_MODULE_0__[
+                                    'ENTITY_ID_FIELD_NAME'
+                                ]
+                            }: String!): ${name}Result
     ${name}Find(
         filter: I${name}Filter
         search: String
@@ -4196,8 +4494,16 @@ type Query {
 }
 
 type Mutation {
-    ${name}Delete(code: String!): ${name}Result
-    ${name}Put(code: String, data: I${name}!): ${name}Result
+    ${name}Delete(${
+                                project_minimum_core__WEBPACK_IMPORTED_MODULE_0__[
+                                    'ENTITY_ID_FIELD_NAME'
+                                ]
+                            }: String!): ${name}Result
+    ${name}Put(${
+                                project_minimum_core__WEBPACK_IMPORTED_MODULE_0__[
+                                    'ENTITY_ID_FIELD_NAME'
+                                ]
+                            }: String, data: I${name}!): ${name}Result
 }
         `;
                         }
@@ -4299,41 +4605,35 @@ type Mutation {
                     /* harmony import */ var lodash_isobject__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/ __webpack_require__.n(
                         lodash_isobject__WEBPACK_IMPORTED_MODULE_0__,
                     );
-                    /* harmony import */ var lodash_isfunction__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-                        /*! lodash.isfunction */ 'lodash.isfunction',
-                    );
-                    /* harmony import */ var lodash_isfunction__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/ __webpack_require__.n(
-                        lodash_isfunction__WEBPACK_IMPORTED_MODULE_1__,
-                    );
-                    /* harmony import */ var lodash_union__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+                    /* harmony import */ var lodash_union__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
                         /*! lodash.union */ 'lodash.union',
                     );
-                    /* harmony import */ var lodash_union__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/ __webpack_require__.n(
-                        lodash_union__WEBPACK_IMPORTED_MODULE_2__,
+                    /* harmony import */ var lodash_union__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/ __webpack_require__.n(
+                        lodash_union__WEBPACK_IMPORTED_MODULE_1__,
                     );
-                    /* harmony import */ var lodash_intersection__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+                    /* harmony import */ var lodash_intersection__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
                         /*! lodash.intersection */ 'lodash.intersection',
                     );
-                    /* harmony import */ var lodash_intersection__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/ __webpack_require__.n(
-                        lodash_intersection__WEBPACK_IMPORTED_MODULE_3__,
+                    /* harmony import */ var lodash_intersection__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/ __webpack_require__.n(
+                        lodash_intersection__WEBPACK_IMPORTED_MODULE_2__,
                     );
-                    /* harmony import */ var lodash_difference__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+                    /* harmony import */ var lodash_difference__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
                         /*! lodash.difference */ 'lodash.difference',
                     );
-                    /* harmony import */ var lodash_difference__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/ __webpack_require__.n(
-                        lodash_difference__WEBPACK_IMPORTED_MODULE_4__,
+                    /* harmony import */ var lodash_difference__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/ __webpack_require__.n(
+                        lodash_difference__WEBPACK_IMPORTED_MODULE_3__,
                     );
-                    /* harmony import */ var lodash_get__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
+                    /* harmony import */ var lodash_get__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
                         /*! lodash.get */ 'lodash.get',
                     );
-                    /* harmony import */ var lodash_get__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/ __webpack_require__.n(
-                        lodash_get__WEBPACK_IMPORTED_MODULE_5__,
+                    /* harmony import */ var lodash_get__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/ __webpack_require__.n(
+                        lodash_get__WEBPACK_IMPORTED_MODULE_4__,
                     );
-                    /* harmony import */ var lodash_clonedeep__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
+                    /* harmony import */ var lodash_clonedeep__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
                         /*! lodash.clonedeep */ 'lodash.clonedeep',
                     );
-                    /* harmony import */ var lodash_clonedeep__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/ __webpack_require__.n(
-                        lodash_clonedeep__WEBPACK_IMPORTED_MODULE_6__,
+                    /* harmony import */ var lodash_clonedeep__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/ __webpack_require__.n(
+                        lodash_clonedeep__WEBPACK_IMPORTED_MODULE_5__,
                     );
                     // const random = require('lodash.random');
                     // const isNumber = require('lodash.isnumber');
@@ -4346,12 +4646,12 @@ type Mutation {
                     ] = {
                         isArray: Array.isArray,
                         isObject: lodash_isobject__WEBPACK_IMPORTED_MODULE_0___default(),
-                        isFunction: lodash_isfunction__WEBPACK_IMPORTED_MODULE_1___default(),
-                        union: lodash_union__WEBPACK_IMPORTED_MODULE_2___default(),
-                        intersection: lodash_intersection__WEBPACK_IMPORTED_MODULE_3___default(),
-                        difference: lodash_difference__WEBPACK_IMPORTED_MODULE_4___default(),
-                        cloneDeep: lodash_clonedeep__WEBPACK_IMPORTED_MODULE_6___default(),
-                        get: lodash_get__WEBPACK_IMPORTED_MODULE_5___default(),
+                        isFunction: arg => typeof arg === 'function',
+                        union: lodash_union__WEBPACK_IMPORTED_MODULE_1___default(),
+                        intersection: lodash_intersection__WEBPACK_IMPORTED_MODULE_2___default(),
+                        difference: lodash_difference__WEBPACK_IMPORTED_MODULE_3___default(),
+                        cloneDeep: lodash_clonedeep__WEBPACK_IMPORTED_MODULE_5___default(),
+                        get: lodash_get__WEBPACK_IMPORTED_MODULE_4___default(),
                         iane: arg => {
                             return Array.isArray(arg) && arg.length > 0;
                         },
@@ -4370,10 +4670,1529 @@ type Mutation {
                     /***/
                 },
 
-            /***/ './src/lib/schema-store.js':
+            /***/ './src/lib/msc/api.ts':
+                /*!****************************!*\
+  !*** ./src/lib/msc/api.ts ***!
+  \****************************/
+                /*! exports provided: Result, ERROR_INTERNAL, ERROR_REQUEST, useMSC */
+                /***/ function(
+                    module,
+                    __webpack_exports__,
+                    __webpack_require__,
+                ) {
+                    'use strict';
+                    __webpack_require__.r(__webpack_exports__);
+                    /* WEBPACK VAR INJECTION */ (function(_) {
+                        /* harmony export (binding) */ __webpack_require__.d(
+                            __webpack_exports__,
+                            'Result',
+                            function() {
+                                return Result;
+                            },
+                        );
+                        /* harmony export (binding) */ __webpack_require__.d(
+                            __webpack_exports__,
+                            'ERROR_INTERNAL',
+                            function() {
+                                return ERROR_INTERNAL;
+                            },
+                        );
+                        /* harmony export (binding) */ __webpack_require__.d(
+                            __webpack_exports__,
+                            'ERROR_REQUEST',
+                            function() {
+                                return ERROR_REQUEST;
+                            },
+                        );
+                        /* harmony export (binding) */ __webpack_require__.d(
+                            __webpack_exports__,
+                            'useMSC',
+                            function() {
+                                return useMSC;
+                            },
+                        );
+                        /* harmony import */ var ew_internals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+                            /*! ew-internals */ 'ew-internals',
+                        );
+                        /* harmony import */ var ew_internals__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/ __webpack_require__.n(
+                            ew_internals__WEBPACK_IMPORTED_MODULE_0__,
+                        );
+                        /* harmony import */ var _vault__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+                            /*! ./vault */ './src/lib/msc/vault.ts',
+                        );
+                        /* harmony import */ var _dto_compiler__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+                            /*! ./dto-compiler */ './src/lib/msc/dto-compiler.ts',
+                        );
+
+                        class Result {
+                            constructor() {
+                                this.data = null;
+                                this.errors = [];
+                                this.status = null;
+                            }
+
+                            toJSON() {
+                                return {
+                                    data: this.data,
+                                    errors: this.errors,
+                                };
+                            }
+                        }
+                        const ERROR_INTERNAL = 'internal';
+                        const ERROR_REQUEST = 'request';
+                        const useMSC = (
+                            app,
+                            controllers,
+                            runtimeParameters = {
+                                connectionManager: null,
+                            },
+                        ) => {
+                            controllers.forEach(controller => {
+                                if (
+                                    !Object(
+                                        _vault__WEBPACK_IMPORTED_MODULE_1__[
+                                            'hasVaultFor'
+                                        ],
+                                    )(controller)
+                                ) {
+                                    return;
+                                }
+
+                                const {
+                                    endpoint: rootEndpoint,
+                                    methods,
+                                } = Object(
+                                    _vault__WEBPACK_IMPORTED_MODULE_1__[
+                                        'getVaultFor'
+                                    ],
+                                )(controller);
+
+                                if (_.isne(rootEndpoint) && _.ione(methods)) {
+                                    Object.keys(methods).forEach(methodName => {
+                                        const methodRecord =
+                                            methods[methodName];
+                                        const {
+                                            method,
+                                            fn,
+                                            endpoint = '',
+                                            bodyDTO,
+                                            outputDTO,
+                                        } = methodRecord;
+
+                                        if (
+                                            !_.isne(method) &&
+                                            !_.isFunction(fn)
+                                        ) {
+                                            return;
+                                        }
+
+                                        app[method](
+                                            `${rootEndpoint}/${endpoint}`,
+                                            Object(
+                                                ew_internals__WEBPACK_IMPORTED_MODULE_0__[
+                                                    'wrapError'
+                                                ],
+                                            )(async (req, res) => {
+                                                const errors = [];
+
+                                                if (bodyDTO) {
+                                                    const validator = Object(
+                                                        _dto_compiler__WEBPACK_IMPORTED_MODULE_2__[
+                                                            'getValidator'
+                                                        ],
+                                                    )(bodyDTO);
+
+                                                    if (validator) {
+                                                        try {
+                                                            // @ts-ignore
+                                                            await validator.validate(
+                                                                req.body,
+                                                                {
+                                                                    abortEarly: false,
+                                                                },
+                                                            );
+                                                            req.body = Object(
+                                                                _dto_compiler__WEBPACK_IMPORTED_MODULE_2__[
+                                                                    'filterStructure'
+                                                                ],
+                                                            )(
+                                                                req.body,
+                                                                bodyDTO,
+                                                            );
+                                                        } catch (e) {
+                                                            e.inner.forEach(
+                                                                error => {
+                                                                    errors.push(
+                                                                        {
+                                                                            message:
+                                                                                error.message,
+                                                                            code:
+                                                                                'validation',
+                                                                            type: ERROR_REQUEST,
+                                                                        },
+                                                                    );
+                                                                },
+                                                            );
+                                                        }
+                                                    }
+                                                }
+
+                                                let result = null;
+
+                                                if (errors.length) {
+                                                    result = new Result();
+                                                    result.errors = errors;
+                                                } else {
+                                                    result = await fn(
+                                                        req.params || {},
+                                                        {
+                                                            req,
+                                                            res,
+                                                            body: req.body,
+                                                            headers:
+                                                                req.headers,
+                                                            runtime: runtimeParameters,
+                                                        },
+                                                    );
+                                                }
+
+                                                let status = 200;
+
+                                                if (result instanceof Result) {
+                                                    if (result.status) {
+                                                        // eslint-disable-next-line prefer-destructuring
+                                                        status = result.status;
+                                                    } else if (
+                                                        result.errors.find(
+                                                            error =>
+                                                                error.type ===
+                                                                ERROR_INTERNAL,
+                                                        )
+                                                    ) {
+                                                        status = 500;
+                                                    } else if (
+                                                        result.errors.find(
+                                                            error =>
+                                                                error.type ===
+                                                                ERROR_REQUEST,
+                                                        )
+                                                    ) {
+                                                        status = 400;
+                                                    }
+
+                                                    if (outputDTO) {
+                                                        result.data = Object(
+                                                            _dto_compiler__WEBPACK_IMPORTED_MODULE_2__[
+                                                                'filterStructure'
+                                                            ],
+                                                        )(
+                                                            result.data,
+                                                            outputDTO,
+                                                        );
+                                                    }
+                                                }
+
+                                                res.status(status);
+                                                const headers = res.getHeaders();
+
+                                                if (
+                                                    !('Content-Type' in headers)
+                                                ) {
+                                                    res.header(
+                                                        'Content-Type',
+                                                        'application/json',
+                                                    );
+                                                }
+
+                                                return res.send(
+                                                    JSON.stringify(result),
+                                                );
+                                            }),
+                                        );
+                                    });
+                                }
+                            });
+                        };
+                        /* WEBPACK VAR INJECTION */
+                    }.call(
+                        this,
+                        __webpack_require__(
+                            /*! ./src/lib/lodash.js */ './src/lib/lodash.js',
+                        )['default'],
+                    ));
+
+                    /***/
+                },
+
+            /***/ './src/lib/msc/decorator.ts':
+                /*!**********************************!*\
+  !*** ./src/lib/msc/decorator.ts ***!
+  \**********************************/
+                /*! exports provided: Endpoint, Get, Post, Put, Patch, Delete, BodyInput, Output, DTO, Attribute */
+                /***/ function(
+                    module,
+                    __webpack_exports__,
+                    __webpack_require__,
+                ) {
+                    'use strict';
+                    __webpack_require__.r(__webpack_exports__);
+                    /* harmony export (binding) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'Endpoint',
+                        function() {
+                            return Endpoint;
+                        },
+                    );
+                    /* harmony export (binding) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'Get',
+                        function() {
+                            return Get;
+                        },
+                    );
+                    /* harmony export (binding) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'Post',
+                        function() {
+                            return Post;
+                        },
+                    );
+                    /* harmony export (binding) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'Put',
+                        function() {
+                            return Put;
+                        },
+                    );
+                    /* harmony export (binding) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'Patch',
+                        function() {
+                            return Patch;
+                        },
+                    );
+                    /* harmony export (binding) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'Delete',
+                        function() {
+                            return Delete;
+                        },
+                    );
+                    /* harmony export (binding) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'BodyInput',
+                        function() {
+                            return BodyInput;
+                        },
+                    );
+                    /* harmony export (binding) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'Output',
+                        function() {
+                            return Output;
+                        },
+                    );
+                    /* harmony export (binding) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'DTO',
+                        function() {
+                            return DTO;
+                        },
+                    );
+                    /* harmony export (binding) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'Attribute',
+                        function() {
+                            return Attribute;
+                        },
+                    );
+                    /* harmony import */ var _vault__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+                        /*! ./vault */ './src/lib/msc/vault.ts',
+                    );
+
+                    const Endpoint = endpoint => {
+                        return constructor => {
+                            const vault = Object(
+                                _vault__WEBPACK_IMPORTED_MODULE_0__[
+                                    'getVaultFor'
+                                ],
+                            )(constructor);
+                            vault.endpoint = endpoint;
+                            return constructor;
+                        };
+                    };
+                    const Get = endpoint => {
+                        return (target, property, descriptor) => {
+                            const vault = Object(
+                                _vault__WEBPACK_IMPORTED_MODULE_0__[
+                                    'getVaultFor'
+                                ],
+                            )(target.constructor);
+                            vault.methods = vault.methods || {};
+                            vault.methods[property] =
+                                vault.methods[property] || {};
+                            Object.assign(vault.methods[property], {
+                                endpoint,
+                                method: 'get',
+                                fn: descriptor.value,
+                            });
+                            return descriptor;
+                        };
+                    };
+                    const Post = endpoint => {
+                        return (target, property, descriptor) => {
+                            const vault = Object(
+                                _vault__WEBPACK_IMPORTED_MODULE_0__[
+                                    'getVaultFor'
+                                ],
+                            )(target.constructor);
+                            vault.methods = vault.methods || {};
+                            vault.methods[property] =
+                                vault.methods[property] || {};
+                            Object.assign(vault.methods[property], {
+                                endpoint,
+                                method: 'post',
+                                fn: descriptor.value,
+                            });
+                            return descriptor;
+                        };
+                    };
+                    const Put = endpoint => {
+                        return (target, property, descriptor) => {
+                            const vault = Object(
+                                _vault__WEBPACK_IMPORTED_MODULE_0__[
+                                    'getVaultFor'
+                                ],
+                            )(target.constructor);
+                            vault.methods = vault.methods || {};
+                            vault.methods[property] =
+                                vault.methods[property] || {};
+                            Object.assign(vault.methods[property], {
+                                endpoint,
+                                method: 'put',
+                                fn: descriptor.value,
+                            });
+                            return descriptor;
+                        };
+                    };
+                    const Patch = endpoint => {
+                        return (target, property, descriptor) => {
+                            const vault = Object(
+                                _vault__WEBPACK_IMPORTED_MODULE_0__[
+                                    'getVaultFor'
+                                ],
+                            )(target.constructor);
+                            vault.methods = vault.methods || {};
+                            vault.methods[property] =
+                                vault.methods[property] || {};
+                            Object.assign(vault.methods[property], {
+                                endpoint,
+                                method: 'patch',
+                                fn: descriptor.value,
+                            });
+                            return descriptor;
+                        };
+                    };
+                    const Delete = endpoint => {
+                        return (target, property, descriptor) => {
+                            const vault = Object(
+                                _vault__WEBPACK_IMPORTED_MODULE_0__[
+                                    'getVaultFor'
+                                ],
+                            )(target.constructor);
+                            vault.methods = vault.methods || {};
+                            vault.methods[property] =
+                                vault.methods[property] || {};
+                            Object.assign(vault.methods[property], {
+                                endpoint,
+                                method: 'delete',
+                                fn: descriptor.value,
+                            });
+                            return descriptor;
+                        };
+                    };
+                    const BodyInput = dto => {
+                        return (target, property, descriptor) => {
+                            const vault = Object(
+                                _vault__WEBPACK_IMPORTED_MODULE_0__[
+                                    'getVaultFor'
+                                ],
+                            )(target.constructor);
+                            vault.methods = vault.methods || {};
+                            vault.methods[property] =
+                                vault.methods[property] || {};
+                            Object.assign(vault.methods[property], {
+                                bodyDTO: dto,
+                            });
+                            return descriptor;
+                        };
+                    };
+                    const Output = dto => {
+                        return (target, property, descriptor) => {
+                            const vault = Object(
+                                _vault__WEBPACK_IMPORTED_MODULE_0__[
+                                    'getVaultFor'
+                                ],
+                            )(target.constructor);
+                            vault.methods = vault.methods || {};
+                            vault.methods[property] =
+                                vault.methods[property] || {};
+                            Object.assign(vault.methods[property], {
+                                outputDTO: dto,
+                            });
+                            return descriptor;
+                        };
+                    };
+                    const DTO = () => {
+                        return constructor => {
+                            const vault = Object(
+                                _vault__WEBPACK_IMPORTED_MODULE_0__[
+                                    'getVaultFor'
+                                ],
+                            )(constructor);
+                            vault.isDTO = true;
+                            return constructor;
+                        };
+                    };
+                    const Attribute = params => {
+                        return (target, property, descriptor) => {
+                            const { initializer } = descriptor;
+                            const vault = Object(
+                                _vault__WEBPACK_IMPORTED_MODULE_0__[
+                                    'getVaultFor'
+                                ],
+                            )(target.constructor);
+                            vault.attributes = vault.attributes || {};
+                            vault.attributes[property] = Object.assign(
+                                {},
+                                {
+                                    params,
+                                    value: initializer ? initializer() : null,
+                                },
+                            );
+                            return descriptor;
+                        };
+                    };
+
+                    /***/
+                },
+
+            /***/ './src/lib/msc/dto-compiler.ts':
+                /*!*************************************!*\
+  !*** ./src/lib/msc/dto-compiler.ts ***!
+  \*************************************/
+                /*! exports provided: getValidator, filterStructure */
+                /***/ function(
+                    module,
+                    __webpack_exports__,
+                    __webpack_require__,
+                ) {
+                    'use strict';
+                    __webpack_require__.r(__webpack_exports__);
+                    /* WEBPACK VAR INJECTION */ (function(_) {
+                        /* harmony export (binding) */ __webpack_require__.d(
+                            __webpack_exports__,
+                            'getValidator',
+                            function() {
+                                return getValidator;
+                            },
+                        );
+                        /* harmony export (binding) */ __webpack_require__.d(
+                            __webpack_exports__,
+                            'filterStructure',
+                            function() {
+                                return filterStructure;
+                            },
+                        );
+                        /* harmony import */ var yup__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+                            /*! yup */ 'yup',
+                        );
+                        /* harmony import */ var yup__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/ __webpack_require__.n(
+                            yup__WEBPACK_IMPORTED_MODULE_0__,
+                        );
+                        /* harmony import */ var _vault__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+                            /*! ./vault */ './src/lib/msc/vault.ts',
+                        );
+
+                        const cache = new Map();
+                        const getValidator = (dto, depth = 1) => {
+                            if (depth > 30) {
+                                return null;
+                            }
+
+                            const vault = Object(
+                                _vault__WEBPACK_IMPORTED_MODULE_1__[
+                                    'getVaultFor'
+                                ],
+                            )(dto);
+
+                            if (!vault || !vault.isDTO) {
+                                return null;
+                            }
+
+                            if (depth === 1 && cache[dto]) {
+                                return cache[dto];
+                            }
+
+                            let result = yup__WEBPACK_IMPORTED_MODULE_0__[
+                                'object'
+                            ]();
+                            const { attributes } = vault;
+
+                            if (!_.ione(attributes)) {
+                                return result;
+                            }
+
+                            Object.keys(attributes).forEach(attributeName => {
+                                const {
+                                    params: { required, type },
+                                } = attributes[attributeName];
+                                const shape = {};
+                                let subType = null;
+                                let fieldType = type;
+                                let isArray = false;
+
+                                if (_.isArray(type)) {
+                                    [fieldType] = type;
+                                    isArray = true;
+                                }
+
+                                if (_.isFunction(fieldType)) {
+                                    subType = getValidator(
+                                        fieldType,
+                                        depth + 1,
+                                    );
+                                } else {
+                                    // only basic stuff so far
+                                    if (fieldType === 'string') {
+                                        subType = yup__WEBPACK_IMPORTED_MODULE_0__[
+                                            'string'
+                                        ]();
+                                    } else if (fieldType === 'number') {
+                                        subType = yup__WEBPACK_IMPORTED_MODULE_0__[
+                                            'number'
+                                        ]();
+                                    } else if (fieldType === 'boolean') {
+                                        subType = yup__WEBPACK_IMPORTED_MODULE_0__[
+                                            'boolean'
+                                        ]();
+                                    } else {
+                                        subType = yup__WEBPACK_IMPORTED_MODULE_0__[
+                                            'string'
+                                        ]();
+                                    }
+                                }
+
+                                if (subType === null) {
+                                    throw new Error(
+                                        `No DTO found for "${attributeName}" attribute`,
+                                    );
+                                }
+
+                                if (isArray) {
+                                    subType = yup__WEBPACK_IMPORTED_MODULE_0__[
+                                        'array'
+                                    ]().of(subType);
+                                }
+
+                                if (required) {
+                                    subType = subType.required();
+                                } // todo: show "path" here
+
+                                subType = subType.typeError(
+                                    `Member "${attributeName}" should be of type "${type}"`,
+                                );
+                                shape[attributeName] = subType;
+                                result = result.shape(shape);
+                            });
+
+                            if (depth === 1) {
+                                cache[dto] = result;
+                            }
+
+                            return result;
+                        };
+                        const filterStructure = (structure, dto, depth = 1) => {
+                            if (depth > 30) {
+                                return {};
+                            }
+
+                            const vault = Object(
+                                _vault__WEBPACK_IMPORTED_MODULE_1__[
+                                    'getVaultFor'
+                                ],
+                            )(dto);
+
+                            if (!vault || !vault.isDTO) {
+                                return {};
+                            }
+
+                            const { attributes } = vault;
+
+                            if (!_.ione(attributes)) {
+                                return {};
+                            }
+
+                            const legalKeys = _.intersection(
+                                Object.keys(structure),
+                                Object.keys(attributes),
+                            );
+
+                            const result = {};
+                            legalKeys.forEach(key => {
+                                const attribute = attributes[key];
+                                const {
+                                    params: { type },
+                                } = attribute;
+                                const structureValue = structure[key];
+
+                                if (_.isArray(type)) {
+                                    const [subType] = type;
+
+                                    if (_.isArray(structure[key])) {
+                                        // check each subitem
+                                        if (_.isFunction(subType)) {
+                                            result[key] = structureValue.map(
+                                                subValue =>
+                                                    filterStructure(
+                                                        subValue,
+                                                        subType,
+                                                        depth + 1,
+                                                    ),
+                                            );
+                                        } else {
+                                            result[key] = structureValue;
+                                        }
+                                    } else {
+                                        result[key] = [];
+                                    }
+                                } else {
+                                    if (_.isFunction(type)) {
+                                        result[key] = filterStructure(
+                                            structureValue,
+                                            type,
+                                            depth + 1,
+                                        );
+                                    } else {
+                                        result[key] = structureValue;
+                                    }
+                                }
+                            });
+                            return result;
+                        };
+                        /* WEBPACK VAR INJECTION */
+                    }.call(
+                        this,
+                        __webpack_require__(
+                            /*! ./src/lib/lodash.js */ './src/lib/lodash.js',
+                        )['default'],
+                    ));
+
+                    /***/
+                },
+
+            /***/ './src/lib/msc/index.ts':
+                /*!******************************!*\
+  !*** ./src/lib/msc/index.ts ***!
+  \******************************/
+                /*! no static exports found */
+                /***/ function(
+                    module,
+                    __webpack_exports__,
+                    __webpack_require__,
+                ) {
+                    'use strict';
+                    __webpack_require__.r(__webpack_exports__);
+                    /* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+                        /*! ./api */ './src/lib/msc/api.ts',
+                    );
+                    /* harmony reexport (safe) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'Result',
+                        function() {
+                            return _api__WEBPACK_IMPORTED_MODULE_0__['Result'];
+                        },
+                    );
+
+                    /* harmony reexport (safe) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'ERROR_INTERNAL',
+                        function() {
+                            return _api__WEBPACK_IMPORTED_MODULE_0__[
+                                'ERROR_INTERNAL'
+                            ];
+                        },
+                    );
+
+                    /* harmony reexport (safe) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'ERROR_REQUEST',
+                        function() {
+                            return _api__WEBPACK_IMPORTED_MODULE_0__[
+                                'ERROR_REQUEST'
+                            ];
+                        },
+                    );
+
+                    /* harmony reexport (safe) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'useMSC',
+                        function() {
+                            return _api__WEBPACK_IMPORTED_MODULE_0__['useMSC'];
+                        },
+                    );
+
+                    /* harmony import */ var _decorator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+                        /*! ./decorator */ './src/lib/msc/decorator.ts',
+                    );
+                    /* harmony reexport (safe) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'Endpoint',
+                        function() {
+                            return _decorator__WEBPACK_IMPORTED_MODULE_1__[
+                                'Endpoint'
+                            ];
+                        },
+                    );
+
+                    /* harmony reexport (safe) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'Get',
+                        function() {
+                            return _decorator__WEBPACK_IMPORTED_MODULE_1__[
+                                'Get'
+                            ];
+                        },
+                    );
+
+                    /* harmony reexport (safe) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'Post',
+                        function() {
+                            return _decorator__WEBPACK_IMPORTED_MODULE_1__[
+                                'Post'
+                            ];
+                        },
+                    );
+
+                    /* harmony reexport (safe) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'Put',
+                        function() {
+                            return _decorator__WEBPACK_IMPORTED_MODULE_1__[
+                                'Put'
+                            ];
+                        },
+                    );
+
+                    /* harmony reexport (safe) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'Patch',
+                        function() {
+                            return _decorator__WEBPACK_IMPORTED_MODULE_1__[
+                                'Patch'
+                            ];
+                        },
+                    );
+
+                    /* harmony reexport (safe) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'Delete',
+                        function() {
+                            return _decorator__WEBPACK_IMPORTED_MODULE_1__[
+                                'Delete'
+                            ];
+                        },
+                    );
+
+                    /* harmony reexport (safe) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'BodyInput',
+                        function() {
+                            return _decorator__WEBPACK_IMPORTED_MODULE_1__[
+                                'BodyInput'
+                            ];
+                        },
+                    );
+
+                    /* harmony reexport (safe) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'Output',
+                        function() {
+                            return _decorator__WEBPACK_IMPORTED_MODULE_1__[
+                                'Output'
+                            ];
+                        },
+                    );
+
+                    /* harmony reexport (safe) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'DTO',
+                        function() {
+                            return _decorator__WEBPACK_IMPORTED_MODULE_1__[
+                                'DTO'
+                            ];
+                        },
+                    );
+
+                    /* harmony reexport (safe) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'Attribute',
+                        function() {
+                            return _decorator__WEBPACK_IMPORTED_MODULE_1__[
+                                'Attribute'
+                            ];
+                        },
+                    );
+
+                    /* harmony import */ var _type__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+                        /*! ./type */ './src/lib/msc/type.ts',
+                    );
+                    /* harmony import */ var _type__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/ __webpack_require__.n(
+                        _type__WEBPACK_IMPORTED_MODULE_2__,
+                    );
+                    /* harmony reexport (unknown) */ for (var __WEBPACK_IMPORT_KEY__ in _type__WEBPACK_IMPORTED_MODULE_2__)
+                        if (
+                            [
+                                'Result',
+                                'ERROR_INTERNAL',
+                                'ERROR_REQUEST',
+                                'useMSC',
+                                'Endpoint',
+                                'Get',
+                                'Post',
+                                'Put',
+                                'Patch',
+                                'Delete',
+                                'BodyInput',
+                                'Output',
+                                'DTO',
+                                'Attribute',
+                                'default',
+                            ].indexOf(__WEBPACK_IMPORT_KEY__) < 0
+                        )
+                            (function(key) {
+                                __webpack_require__.d(
+                                    __webpack_exports__,
+                                    key,
+                                    function() {
+                                        return _type__WEBPACK_IMPORTED_MODULE_2__[
+                                            key
+                                        ];
+                                    },
+                                );
+                            })(__WEBPACK_IMPORT_KEY__);
+
+                    // @ts-ignore
+
+                    /***/
+                },
+
+            /***/ './src/lib/msc/type.ts':
+                /*!*****************************!*\
+  !*** ./src/lib/msc/type.ts ***!
+  \*****************************/
+                /*! no static exports found */
+                /***/ function(module, exports) {
+                    /***/
+                },
+
+            /***/ './src/lib/msc/vault.ts':
+                /*!******************************!*\
+  !*** ./src/lib/msc/vault.ts ***!
+  \******************************/
+                /*! exports provided: getVaultFor, hasVaultFor, getVault */
+                /***/ function(
+                    module,
+                    __webpack_exports__,
+                    __webpack_require__,
+                ) {
+                    'use strict';
+                    __webpack_require__.r(__webpack_exports__);
+                    /* harmony export (binding) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'getVaultFor',
+                        function() {
+                            return getVaultFor;
+                        },
+                    );
+                    /* harmony export (binding) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'hasVaultFor',
+                        function() {
+                            return hasVaultFor;
+                        },
+                    );
+                    /* harmony export (binding) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'getVault',
+                        function() {
+                            return getVault;
+                        },
+                    );
+                    const vault = new Map();
+                    const getVaultFor = obj => {
+                        if (!vault[obj]) {
+                            vault[obj] = {};
+                        }
+
+                        return vault[obj];
+                    };
+                    const hasVaultFor = obj => !!vault[obj];
+                    const getVault = () => vault;
+
+                    /***/
+                },
+
+            /***/ './src/lib/util.ts':
+                /*!*************************!*\
+  !*** ./src/lib/util.ts ***!
+  \*************************/
+                /*! exports provided: injectPassword, decomposeURL, convertToCamel */
+                /***/ function(
+                    module,
+                    __webpack_exports__,
+                    __webpack_require__,
+                ) {
+                    'use strict';
+                    __webpack_require__.r(__webpack_exports__);
+                    /* WEBPACK VAR INJECTION */ (function(_) {
+                        /* harmony export (binding) */ __webpack_require__.d(
+                            __webpack_exports__,
+                            'injectPassword',
+                            function() {
+                                return injectPassword;
+                            },
+                        );
+                        /* harmony export (binding) */ __webpack_require__.d(
+                            __webpack_exports__,
+                            'decomposeURL',
+                            function() {
+                                return decomposeURL;
+                            },
+                        );
+                        /* harmony export (binding) */ __webpack_require__.d(
+                            __webpack_exports__,
+                            'convertToCamel',
+                            function() {
+                                return convertToCamel;
+                            },
+                        );
+                        /* harmony import */ var naming_style__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+                            /*! naming-style */ 'naming-style',
+                        );
+                        /* harmony import */ var naming_style__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/ __webpack_require__.n(
+                            naming_style__WEBPACK_IMPORTED_MODULE_0__,
+                        );
+
+                        const injectPassword = (url, password = null) => {
+                            if (
+                                typeof password === 'string' &&
+                                password.length
+                            ) {
+                                const oUrl = new URL(url);
+                                oUrl.password = password;
+                                url = oUrl.toString();
+                            }
+
+                            return url;
+                        };
+                        const decomposeURL = url => {
+                            const oUrl = new URL(url);
+                            const parts = {
+                                host: oUrl.hostname,
+                                port: oUrl.port,
+                                password: oUrl.password,
+                            };
+
+                            if (!_.isne(parts.host)) {
+                                // invalid url
+                                return null;
+                            }
+
+                            if (Number.isNaN(Number(parts.port))) {
+                                delete parts.port;
+                            }
+
+                            return parts;
+                        };
+                        /**
+                         * @deprecated
+                         * @param str
+                         * @returns {string}
+                         */
+
+                        const convertToCamel = str => {
+                            str = Object(
+                                naming_style__WEBPACK_IMPORTED_MODULE_0__[
+                                    'camel'
+                                ],
+                            )(str.toLowerCase());
+                            return `${str
+                                .substr(0, 1)
+                                .toUpperCase()}${str.substr(
+                                1,
+                                str.length - 1,
+                            )}`;
+                        };
+                        /* WEBPACK VAR INJECTION */
+                    }.call(
+                        this,
+                        __webpack_require__(
+                            /*! ./src/lib/lodash.js */ './src/lib/lodash.js',
+                        )['default'],
+                    ));
+
+                    /***/
+                },
+
+            /***/ './src/migrations/1517934720430-Seed.ts':
+                /*!**********************************************!*\
+  !*** ./src/migrations/1517934720430-Seed.ts ***!
+  \**********************************************/
+                /*! exports provided: Seed1517934720430 */
+                /***/ function(
+                    module,
+                    __webpack_exports__,
+                    __webpack_require__,
+                ) {
+                    'use strict';
+                    __webpack_require__.r(__webpack_exports__);
+                    /* harmony export (binding) */ __webpack_require__.d(
+                        __webpack_exports__,
+                        'Seed1517934720430',
+                        function() {
+                            return Seed1517934720430;
+                        },
+                    );
+                    /* harmony import */ var ew_internals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+                        /*! ew-internals */ 'ew-internals',
+                    );
+                    /* harmony import */ var ew_internals__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/ __webpack_require__.n(
+                        ew_internals__WEBPACK_IMPORTED_MODULE_0__,
+                    );
+                    /* harmony import */ var project_minimum_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+                        /*! project-minimum-core */ 'project-minimum-core',
+                    );
+                    /* harmony import */ var project_minimum_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/ __webpack_require__.n(
+                        project_minimum_core__WEBPACK_IMPORTED_MODULE_1__,
+                    );
+                    /* harmony import */ var _model_schema__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+                        /*! ../model/schema */ './src/model/schema.ts',
+                    );
+
+                    /**
+                     * https://github.com/typeorm/typeorm/blob/master/docs/migrations.md
+                     */
+
+                    class Seed1517934720430 {
+                        async up(queryRunner) {
+                            await queryRunner.connection.synchronize(false);
+
+                            if (true) {
+                                const repository = queryRunner.connection.getRepository(
+                                    _model_schema__WEBPACK_IMPORTED_MODULE_2__[
+                                        'default'
+                                    ],
+                                );
+                                const current = await repository.find({
+                                    where: {
+                                        draft: false,
+                                    },
+                                });
+
+                                if (!current.length) {
+                                    const schema = new _model_schema__WEBPACK_IMPORTED_MODULE_2__[
+                                        'default'
+                                    ]();
+                                    schema.draft = false;
+                                    schema.version = 1; // eslint-disable-next-line no-use-before-define,@typescript-eslint/no-use-before-define
+
+                                    schema.schema = demoSchema;
+                                    await repository.save(schema);
+                                }
+                            }
+
+                            ew_internals__WEBPACK_IMPORTED_MODULE_0__[
+                                'logger'
+                            ].info('🌱 Seed migration applied');
+                        } // eslint-disable-next-line no-empty-function
+
+                        async down() {}
+                    }
+                    const demoSchema = [
+                        {
+                            name: 'important_person',
+                            schema: [
+                                {
+                                    name:
+                                        project_minimum_core__WEBPACK_IMPORTED_MODULE_1__[
+                                            'ENTITY_ID_FIELD_NAME'
+                                        ],
+                                    type: 'string',
+                                    label: 'Id',
+                                    length:
+                                        project_minimum_core__WEBPACK_IMPORTED_MODULE_1__[
+                                            'ENTITY_ID_FIELD_LENGTH'
+                                        ],
+                                    unique: true,
+                                    system: true,
+                                },
+                                {
+                                    name: 'full_name',
+                                    type: 'string',
+                                    label: 'Full name',
+                                    required: true,
+                                },
+                                {
+                                    name: 'tags',
+                                    type: ['string'],
+                                    label: 'Tags',
+                                },
+                                {
+                                    name: 'lucky_numbers',
+                                    type: ['integer'],
+                                    label: 'Lucky numbers',
+                                },
+                                {
+                                    name: 'birth_date',
+                                    type: 'datetime',
+                                    label: 'Birth date',
+                                },
+                                {
+                                    name: 'has_pets',
+                                    type: 'boolean',
+                                    label: 'Has pets',
+                                },
+                                {
+                                    name: 'pets',
+                                    type: ['pet'],
+                                    label: 'Pets',
+                                },
+                                {
+                                    name: 'tools',
+                                    type: ['tool'],
+                                    label: 'Tools',
+                                },
+                                {
+                                    name: 'partner',
+                                    type: 'important_person',
+                                    label: 'Partner',
+                                },
+                            ],
+                        },
+                        {
+                            name: 'pet',
+                            schema: [
+                                {
+                                    name:
+                                        project_minimum_core__WEBPACK_IMPORTED_MODULE_1__[
+                                            'ENTITY_ID_FIELD_NAME'
+                                        ],
+                                    type: 'string',
+                                    label: 'Id',
+                                    length:
+                                        project_minimum_core__WEBPACK_IMPORTED_MODULE_1__[
+                                            'ENTITY_ID_FIELD_LENGTH'
+                                        ],
+                                    unique: true,
+                                    system: true,
+                                },
+                                {
+                                    name: 'nickname',
+                                    type: 'string',
+                                    label: 'Nickname',
+                                    required: true,
+                                },
+                            ],
+                        },
+                        {
+                            name: 'tool',
+                            schema: [
+                                {
+                                    name:
+                                        project_minimum_core__WEBPACK_IMPORTED_MODULE_1__[
+                                            'ENTITY_ID_FIELD_NAME'
+                                        ],
+                                    type: 'string',
+                                    label: 'Id',
+                                    length:
+                                        project_minimum_core__WEBPACK_IMPORTED_MODULE_1__[
+                                            'ENTITY_ID_FIELD_LENGTH'
+                                        ],
+                                    unique: true,
+                                    system: true,
+                                },
+                                {
+                                    name: 'name',
+                                    type: 'string',
+                                    label: 'Name',
+                                    required: true,
+                                },
+                            ],
+                        },
+                    ];
+
+                    /***/
+                },
+
+            /***/ './src/migrations/index.ts':
                 /*!*********************************!*\
-  !*** ./src/lib/schema-store.js ***!
+  !*** ./src/migrations/index.ts ***!
   \*********************************/
+                /*! exports provided: default */
+                /***/ function(
+                    module,
+                    __webpack_exports__,
+                    __webpack_require__,
+                ) {
+                    'use strict';
+                    __webpack_require__.r(__webpack_exports__);
+                    /* harmony import */ var _1517934720430_Seed__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+                        /*! ./1517934720430-Seed */ './src/migrations/1517934720430-Seed.ts',
+                    );
+
+                    /* harmony default export */ __webpack_exports__[
+                        'default'
+                    ] = [
+                        _1517934720430_Seed__WEBPACK_IMPORTED_MODULE_0__[
+                            'Seed1517934720430'
+                        ],
+                    ];
+
+                    /***/
+                },
+
+            /***/ './src/model/schema.ts':
+                /*!*****************************!*\
+  !*** ./src/model/schema.ts ***!
+  \*****************************/
+                /*! exports provided: default */
+                /***/ function(
+                    module,
+                    __webpack_exports__,
+                    __webpack_require__,
+                ) {
+                    'use strict';
+                    __webpack_require__.r(__webpack_exports__);
+                    /* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+                        /*! typeorm */ 'typeorm',
+                    );
+                    /* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/ __webpack_require__.n(
+                        typeorm__WEBPACK_IMPORTED_MODULE_0__,
+                    );
+                    /* harmony import */ var project_minimum_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+                        /*! project-minimum-core */ 'project-minimum-core',
+                    );
+                    /* harmony import */ var project_minimum_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/ __webpack_require__.n(
+                        project_minimum_core__WEBPACK_IMPORTED_MODULE_1__,
+                    );
+                    var _dec,
+                        _dec2,
+                        _dec3,
+                        _dec4,
+                        _dec5,
+                        _class,
+                        _class2,
+                        _descriptor,
+                        _descriptor2,
+                        _descriptor3,
+                        _descriptor4,
+                        _temp;
+
+                    function _initializerDefineProperty(
+                        target,
+                        property,
+                        descriptor,
+                        context,
+                    ) {
+                        if (!descriptor) return;
+                        Object.defineProperty(target, property, {
+                            enumerable: descriptor.enumerable,
+                            configurable: descriptor.configurable,
+                            writable: descriptor.writable,
+                            value: descriptor.initializer
+                                ? descriptor.initializer.call(context)
+                                : void 0,
+                        });
+                    }
+
+                    function _applyDecoratedDescriptor(
+                        target,
+                        property,
+                        decorators,
+                        descriptor,
+                        context,
+                    ) {
+                        var desc = {};
+                        Object['ke' + 'ys'](descriptor).forEach(function(key) {
+                            desc[key] = descriptor[key];
+                        });
+                        desc.enumerable = !!desc.enumerable;
+                        desc.configurable = !!desc.configurable;
+                        if ('value' in desc || desc.initializer) {
+                            desc.writable = true;
+                        }
+                        desc = decorators
+                            .slice()
+                            .reverse()
+                            .reduce(function(desc, decorator) {
+                                return (
+                                    decorator(target, property, desc) || desc
+                                );
+                            }, desc);
+                        if (context && desc.initializer !== void 0) {
+                            desc.value = desc.initializer
+                                ? desc.initializer.call(context)
+                                : void 0;
+                            desc.initializer = undefined;
+                        }
+                        if (desc.initializer === void 0) {
+                            Object['define' + 'Property'](
+                                target,
+                                property,
+                                desc,
+                            );
+                            desc = null;
+                        }
+                        return desc;
+                    }
+
+                    function _initializerWarningHelper(descriptor, context) {
+                        throw new Error(
+                            'Decorating class property failed. Please ensure that ' +
+                                'proposal-class-properties is enabled and set to use loose mode. ' +
+                                'To use proposal-class-properties in spec mode with decorators, wait for ' +
+                                'the next major version of decorators in stage 2.',
+                        );
+                    }
+
+                    /**
+                     * https://github.com/typeorm/typeorm/blob/master/docs/entities.md
+                     * https://github.com/typeorm/typeorm/blob/master/src/driver/types/ColumnTypes.ts
+                     */
+
+                    let SchemaEntity = ((_dec = Object(
+                        typeorm__WEBPACK_IMPORTED_MODULE_0__['Entity'],
+                    )({
+                        name:
+                            project_minimum_core__WEBPACK_IMPORTED_MODULE_1__[
+                                'DB_SCHEMA_TABLE_NAME'
+                            ],
+                    })),
+                    (_dec2 = Object(
+                        typeorm__WEBPACK_IMPORTED_MODULE_0__[
+                            'PrimaryGeneratedColumn'
+                        ],
+                    )()),
+                    (_dec3 = Object(
+                        typeorm__WEBPACK_IMPORTED_MODULE_0__['Column'],
+                    )({
+                        type: 'boolean',
+                        nullable: false,
+                    })),
+                    (_dec4 = Object(
+                        typeorm__WEBPACK_IMPORTED_MODULE_0__['Column'],
+                    )({
+                        type: 'json',
+                        nullable: false,
+                    })),
+                    (_dec5 = Object(
+                        typeorm__WEBPACK_IMPORTED_MODULE_0__['Column'],
+                    )({
+                        type: 'smallint',
+                        default: 0,
+                    })),
+                    _dec(
+                        (_class = ((_class2 = ((_temp = class SchemaEntity {
+                            constructor() {
+                                _initializerDefineProperty(
+                                    this,
+                                    'id',
+                                    _descriptor,
+                                    this,
+                                );
+
+                                _initializerDefineProperty(
+                                    this,
+                                    'draft',
+                                    _descriptor2,
+                                    this,
+                                );
+
+                                _initializerDefineProperty(
+                                    this,
+                                    'schema',
+                                    _descriptor3,
+                                    this,
+                                );
+
+                                _initializerDefineProperty(
+                                    this,
+                                    'version',
+                                    _descriptor4,
+                                    this,
+                                );
+                            }
+                        }),
+                        _temp)),
+                        ((_descriptor = _applyDecoratedDescriptor(
+                            _class2.prototype,
+                            'id',
+                            [_dec2],
+                            {
+                                configurable: true,
+                                enumerable: true,
+                                writable: true,
+                                initializer: null,
+                            },
+                        )),
+                        (_descriptor2 = _applyDecoratedDescriptor(
+                            _class2.prototype,
+                            'draft',
+                            [_dec3],
+                            {
+                                configurable: true,
+                                enumerable: true,
+                                writable: true,
+                                initializer: null,
+                            },
+                        )),
+                        (_descriptor3 = _applyDecoratedDescriptor(
+                            _class2.prototype,
+                            'schema',
+                            [_dec4],
+                            {
+                                configurable: true,
+                                enumerable: true,
+                                writable: true,
+                                initializer: null,
+                            },
+                        )),
+                        (_descriptor4 = _applyDecoratedDescriptor(
+                            _class2.prototype,
+                            'version',
+                            [_dec5],
+                            {
+                                configurable: true,
+                                enumerable: true,
+                                writable: true,
+                                initializer: null,
+                            },
+                        ))),
+                        _class2)),
+                    ) || _class);
+                    /* harmony default export */ __webpack_exports__[
+                        'default'
+                    ] = SchemaEntity;
+
+                    /***/
+                },
+
+            /***/ './src/service/schema.js':
+                /*!*******************************!*\
+  !*** ./src/service/schema.js ***!
+  \*******************************/
                 /*! exports provided: default */
                 /***/ function(
                     module,
@@ -4389,30 +6208,25 @@ type Mutation {
                         /* harmony import */ var project_minimum_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/ __webpack_require__.n(
                             project_minimum_core__WEBPACK_IMPORTED_MODULE_0__,
                         );
-                        /* harmony import */ var _entity_schema__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-                            /*! ../entity/schema */ './src/entity/schema.js',
+                        /* harmony import */ var _model_schema__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+                            /*! ../model/schema */ './src/model/schema.ts',
                         );
 
-                        class SchemaStore {
+                        class SchemaService {
                             static async load(type, connectionManager) {
                                 const connection = await connectionManager.getSystem();
                                 const schema = await connection
                                     .getRepository(
-                                        _entity_schema__WEBPACK_IMPORTED_MODULE_1__[
+                                        _model_schema__WEBPACK_IMPORTED_MODULE_1__[
                                             'default'
                                         ],
                                     )
                                     .findOne({
                                         draft: type === 'draft',
                                     });
-
-                                if (!schema) {
-                                    return null;
-                                }
-
                                 return new project_minimum_core__WEBPACK_IMPORTED_MODULE_0__[
                                     'Schema'
-                                ](schema);
+                                ](schema || {});
                             }
 
                             static async put(type, schema, connectionManager) {
@@ -4421,14 +6235,14 @@ type Mutation {
                                 if (!_.iane(errors)) {
                                     const connection = await connectionManager.getSystem();
                                     const repo = connection.getRepository(
-                                        _entity_schema__WEBPACK_IMPORTED_MODULE_1__[
+                                        _model_schema__WEBPACK_IMPORTED_MODULE_1__[
                                             'default'
                                         ],
                                     ); // get current
 
                                     let current = await connection
                                         .getRepository(
-                                            _entity_schema__WEBPACK_IMPORTED_MODULE_1__[
+                                            _model_schema__WEBPACK_IMPORTED_MODULE_1__[
                                                 'default'
                                             ],
                                         )
@@ -4479,7 +6293,7 @@ type Mutation {
 
                         /* harmony default export */ __webpack_exports__[
                             'default'
-                        ] = SchemaStore;
+                        ] = SchemaService;
                         /* WEBPACK VAR INJECTION */
                     }.call(
                         this,
@@ -4490,251 +6304,6 @@ type Mutation {
                             'logger'
                         ],
                     ));
-
-                    /***/
-                },
-
-            /***/ './src/lib/util.js':
-                /*!*************************!*\
-  !*** ./src/lib/util.js ***!
-  \*************************/
-                /*! exports provided: injectPassword, decomposeURL, convertToCamel */
-                /***/ function(
-                    module,
-                    __webpack_exports__,
-                    __webpack_require__,
-                ) {
-                    'use strict';
-                    __webpack_require__.r(__webpack_exports__);
-                    /* WEBPACK VAR INJECTION */ (function(_) {
-                        /* harmony export (binding) */ __webpack_require__.d(
-                            __webpack_exports__,
-                            'injectPassword',
-                            function() {
-                                return injectPassword;
-                            },
-                        );
-                        /* harmony export (binding) */ __webpack_require__.d(
-                            __webpack_exports__,
-                            'decomposeURL',
-                            function() {
-                                return decomposeURL;
-                            },
-                        );
-                        /* harmony export (binding) */ __webpack_require__.d(
-                            __webpack_exports__,
-                            'convertToCamel',
-                            function() {
-                                return convertToCamel;
-                            },
-                        );
-                        /* harmony import */ var naming_style__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-                            /*! naming-style */ 'naming-style',
-                        );
-                        /* harmony import */ var naming_style__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/ __webpack_require__.n(
-                            naming_style__WEBPACK_IMPORTED_MODULE_0__,
-                        );
-
-                        const injectPassword = (url, password = null) => {
-                            if (_.isne(password)) {
-                                const oUrl = new URL(url);
-                                oUrl.password = password;
-                                url = oUrl.toString();
-                            }
-
-                            return url;
-                        };
-                        const decomposeURL = url => {
-                            const oUrl = new URL(url);
-                            const parts = {
-                                host: oUrl.hostname,
-                                port: oUrl.port,
-                                password: oUrl.password,
-                            };
-
-                            if (!_.isne(parts.host)) {
-                                // invalid url
-                                return null;
-                            }
-
-                            if (Number.isNaN(parts.port)) {
-                                delete parts.port;
-                            }
-
-                            return parts;
-                        };
-                        /**
-                         * @deprecated
-                         * @param str
-                         * @returns {string}
-                         */
-
-                        const convertToCamel = str => {
-                            str = Object(
-                                naming_style__WEBPACK_IMPORTED_MODULE_0__[
-                                    'camel'
-                                ],
-                            )(str.toLowerCase());
-                            return `${str
-                                .substr(0, 1)
-                                .toUpperCase()}${str.substr(
-                                1,
-                                str.length - 1,
-                            )}`;
-                        };
-                        /* WEBPACK VAR INJECTION */
-                    }.call(
-                        this,
-                        __webpack_require__(
-                            /*! ./src/lib/lodash.js */ './src/lib/lodash.js',
-                        )['default'],
-                    ));
-
-                    /***/
-                },
-
-            /***/ './src/migrations/1517934720430-Seed.js':
-                /*!**********************************************!*\
-  !*** ./src/migrations/1517934720430-Seed.js ***!
-  \**********************************************/
-                /*! exports provided: Seed1517934720430 */
-                /***/ function(
-                    module,
-                    __webpack_exports__,
-                    __webpack_require__,
-                ) {
-                    'use strict';
-                    __webpack_require__.r(__webpack_exports__);
-                    /* WEBPACK VAR INJECTION */ (function(logger) {
-                        /* harmony export (binding) */ __webpack_require__.d(
-                            __webpack_exports__,
-                            'Seed1517934720430',
-                            function() {
-                                return Seed1517934720430;
-                            },
-                        );
-                        /* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-                            /*! typeorm */ 'typeorm',
-                        );
-                        /* harmony import */ var typeorm__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/ __webpack_require__.n(
-                            typeorm__WEBPACK_IMPORTED_MODULE_0__,
-                        );
-                        /* harmony import */ var project_minimum_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-                            /*! project-minimum-core */ 'project-minimum-core',
-                        );
-                        /* harmony import */ var project_minimum_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/ __webpack_require__.n(
-                            project_minimum_core__WEBPACK_IMPORTED_MODULE_1__,
-                        );
-
-                        /**
-                         * https://github.com/typeorm/typeorm/blob/master/docs/migrations.md
-                         */
-
-                        class Seed1517934720430 {
-                            async up(queryRunner) {
-                                await queryRunner.createTable(
-                                    new typeorm__WEBPACK_IMPORTED_MODULE_0__[
-                                        'Table'
-                                    ]({
-                                        name:
-                                            project_minimum_core__WEBPACK_IMPORTED_MODULE_1__[
-                                                'DB_SCHEMA_TABLE_NAME'
-                                            ],
-                                        columns: [
-                                            {
-                                                name: 'id',
-                                                type: 'integer',
-                                                isNullable: false,
-                                                isGenerated: true,
-                                                isPrimary: true,
-                                                isUnique: true,
-                                                isArray: false,
-                                                length: '',
-                                                zerofill: false,
-                                                unsigned: true,
-                                                generated: 'increment',
-                                            },
-                                            {
-                                                name: 'draft',
-                                                type: 'boolean',
-                                                isNullable: false,
-                                                isGenerated: false,
-                                                isPrimary: false,
-                                                isUnique: false,
-                                                isArray: false,
-                                                length: '',
-                                                zerofill: false,
-                                                unsigned: true,
-                                            },
-                                            {
-                                                name: 'declaration',
-                                                type: 'json',
-                                                isNullable: false,
-                                                isGenerated: false,
-                                                isPrimary: false,
-                                                isUnique: false,
-                                                isArray: false,
-                                                length: '',
-                                                zerofill: false,
-                                                unsigned: true,
-                                            },
-                                            {
-                                                name: 'version',
-                                                type: 'integer',
-                                                isNullable: true,
-                                                isGenerated: false,
-                                                isPrimary: false,
-                                                isUnique: false,
-                                                isArray: false,
-                                                length: '',
-                                                zerofill: false,
-                                                unsigned: true,
-                                            },
-                                        ],
-                                    }),
-                                    true,
-                                ); // todo: users
-                                // todo: groups
-
-                                logger.info('🌱 Seed migration applied');
-                            }
-
-                            async down(queryRunner) {}
-                        }
-                        /* WEBPACK VAR INJECTION */
-                    }.call(
-                        this,
-                        __webpack_require__(/*! ew-internals */ 'ew-internals')[
-                            'logger'
-                        ],
-                    ));
-
-                    /***/
-                },
-
-            /***/ './src/migrations/index.js':
-                /*!*********************************!*\
-  !*** ./src/migrations/index.js ***!
-  \*********************************/
-                /*! exports provided: default */
-                /***/ function(
-                    module,
-                    __webpack_exports__,
-                    __webpack_require__,
-                ) {
-                    'use strict';
-                    __webpack_require__.r(__webpack_exports__);
-                    /* harmony import */ var _1517934720430_Seed__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-                        /*! ./1517934720430-Seed */ './src/migrations/1517934720430-Seed.js',
-                    );
-
-                    /* harmony default export */ __webpack_exports__[
-                        'default'
-                    ] = [
-                        _1517934720430_Seed__WEBPACK_IMPORTED_MODULE_0__[
-                            'Seed1517934720430'
-                        ],
-                    ];
 
                     /***/
                 },
@@ -4893,17 +6462,6 @@ type Mutation {
                     /***/
                 },
 
-            /***/ 'lodash.isfunction':
-                /*!************************************!*\
-  !*** external "lodash.isfunction" ***!
-  \************************************/
-                /*! no static exports found */
-                /***/ function(module, exports) {
-                    module.exports = require('lodash.isfunction');
-
-                    /***/
-                },
-
             /***/ 'lodash.isobject':
                 /*!**********************************!*\
   !*** external "lodash.isobject" ***!
@@ -5010,6 +6568,17 @@ type Mutation {
                 /*! no static exports found */
                 /***/ function(module, exports) {
                     module.exports = require('uuid/v4');
+
+                    /***/
+                },
+
+            /***/ yup:
+                /*!**********************!*\
+  !*** external "yup" ***!
+  \**********************/
+                /*! no static exports found */
+                /***/ function(module, exports) {
+                    module.exports = require('yup');
 
                     /***/
                 },
