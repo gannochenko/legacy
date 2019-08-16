@@ -2,7 +2,7 @@
  * https://typeorm.io/#/migrations
  */
 
-import { Table, TableColumn, TableIndex } from 'typeorm';
+import { Table, TableColumn } from 'typeorm';
 import {
     DB_TABLE_PREFIX,
     DB_REF_TABLE_PREFIX,
@@ -171,8 +171,19 @@ export default class Migrator {
         };
     }
 
-    static async migrate(params) {
+    static async apply(params) {
         const delta = await this.getDelta(params);
+        const { connection } = params;
+        const queryRunner = connection.createQueryRunner('master');
+
+        // create
+        if (delta.create.length) {
+            await Promise.all(
+                delta.create.map(table =>
+                    queryRunner.createTable(new Table(table), true),
+                ),
+            );
+        }
     }
 
     static async getTables(connection) {

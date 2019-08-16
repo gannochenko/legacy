@@ -44,7 +44,7 @@ describe('GQL Resolver Generator', () => {
         );
     });
     beforeEach(async () => {
-        connection.cleanup();
+        connection.mockClear();
     });
 
     describe('get()', () => {

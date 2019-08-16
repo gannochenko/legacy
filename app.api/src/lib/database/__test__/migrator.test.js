@@ -2,25 +2,31 @@
  * https://github.com/sapegin/jest-cheat-sheet
  */
 
+import { Table } from 'typeorm';
 import Migrator from '../migrator';
 import schemaData from '../../../__test__/schema';
+import { makeConnection } from '../../../__test__/repository.mock';
 import { Schema } from 'project-minimum-core';
 
+let connection = null;
+
 describe('Migrator', () => {
-    // beforeAll(async () => {
-    // });
-    // beforeEach(async () => {
-    // });
+    beforeAll(async () => {
+        connection = makeConnection();
+    });
+    beforeEach(async () => {
+        connection.mockClear();
+    });
     // afterEach(async () => {
     // });
     describe('getDelta()', () => {
         it('should detect tables to create', async () => {
-            const schema = new Schema({ schema: schemaData, connection: null });
+            const schema = new Schema({ schema: schemaData });
 
             const spy = jest.spyOn(Migrator, 'getTables');
             spy.mockImplementationOnce(() => []);
 
-            const delta = await Migrator.getDelta({ schema });
+            const delta = await Migrator.getDelta({ schema, connection: null });
 
             expect(delta.create).toHaveLength(5);
             expect(delta.create).toMatchSnapshot();
@@ -29,7 +35,7 @@ describe('Migrator', () => {
             expect(delta.drop).toEqual([]);
         });
         it('should detect tables to drop', async () => {
-            const schema = new Schema({ schema: schemaData, connection: null });
+            const schema = new Schema({ schema: schemaData });
 
             const spy = jest.spyOn(Migrator, 'getTables');
             spy.mockImplementationOnce(() => [
@@ -43,13 +49,13 @@ describe('Migrator', () => {
                 },
             ]);
 
-            const delta = await Migrator.getDelta({ schema });
+            const delta = await Migrator.getDelta({ schema, connection: null });
 
             expect(delta.alter).toEqual({});
             expect(delta.drop).toEqual(['foo', 'bar']);
         });
         it('should detect tables to alter', async () => {
-            const schema = new Schema({ schema: schemaData, connection: null });
+            const schema = new Schema({ schema: schemaData });
 
             const spy = jest.spyOn(Migrator, 'getTables');
             spy.mockImplementationOnce(() => [
@@ -101,13 +107,59 @@ describe('Migrator', () => {
                 },
             ]);
 
-            const delta = await Migrator.getDelta({ schema });
+            const delta = await Migrator.getDelta({ schema, connection: null });
 
             expect(Object.keys(delta.alter)).toHaveLength(2);
             expect(delta.alter['eq_e_important_person']).toBeDefined();
             expect(delta.alter['eq_e_pet']).toBeDefined();
 
             expect(delta.alter).toMatchSnapshot();
+        });
+    });
+
+    describe('apply()', () => {
+        it('should create tables', async () => {
+            const schema = new Schema({ schema: schemaData });
+
+            const spy = jest.spyOn(Migrator, 'getTables');
+            spy.mockImplementationOnce(() => []);
+
+            await Migrator.apply({ schema, connection });
+
+            const queryRunner = connection.createQueryRunner();
+
+            const calls = queryRunner.createTable.mock.calls;
+            expect(calls).toHaveLength(5);
+
+            expect(calls[0][0]).toBeInstanceOf(Table);
+            expect(calls[0][0].name).toEqual('eq_e_important_person');
+            expect(JSON.stringify(calls[0][0].columns)).toMatchSnapshot();
+
+            expect(calls[1][0]).toBeInstanceOf(Table);
+            expect(calls[1][0].name).toEqual('eq_e_pet');
+            expect(JSON.stringify(calls[1][0].columns)).toMatchSnapshot();
+
+            expect(calls[2][0]).toBeInstanceOf(Table);
+            expect(calls[2][0].name).toEqual('eq_e_tool');
+            expect(JSON.stringify(calls[2][0].columns)).toMatchSnapshot();
+
+            expect(calls[3][0]).toBeInstanceOf(Table);
+            expect(calls[3][0].name).toEqual(
+                'eq_ref_ba4ed80327568d335915e4452eb0703a',
+            );
+            expect(JSON.stringify(calls[3][0].columns)).toMatchSnapshot();
+
+            expect(calls[4][0]).toBeInstanceOf(Table);
+            expect(calls[4][0].name).toEqual(
+                'eq_ref_b1fb992f85e4af08fa10b2256811daae',
+            );
+            expect(JSON.stringify(calls[4][0].columns)).toMatchSnapshot();
+        });
+        it('should drop tables', async () => {
+            throw new Error('Todo');
+        });
+        it('should alter tables', async () => {
+            throw new Error('Todo');
         });
     });
 });

@@ -37,6 +37,12 @@ export const makeQueryBuilder = () => {
     return queryBuilder;
 };
 
+export const makeQueryRunner = () => {
+    return {
+        createTable: jest.fn().mockReturnThis(),
+    };
+};
+
 export const makeRepository = entityName => {
     const data = _.cloneDeep(mockData[entityName]);
     const queryBuilder = makeQueryBuilder();
@@ -111,6 +117,7 @@ export const makeRepository = entityName => {
 
 export const makeConnection = () => {
     const repositories = {};
+    let queryRunner = null;
 
     const getRepository = jest.fn(entity => {
         const name = entity.options.name.replace(DB_ENTITY_TABLE_PREFIX, '');
@@ -123,11 +130,17 @@ export const makeConnection = () => {
     return {
         getCurrentRepositories: () => repositories,
         getRepository,
-        createQueryRunner: () => {}, // todo
+        createQueryRunner: () => {
+            if (!queryRunner) {
+                queryRunner = makeQueryRunner();
+            }
+
+            return queryRunner;
+        },
         getRepositoryByEntityName: name => {
             return getRepository({ options: { name } });
         },
-        cleanup: () => {
+        mockClear: () => {
             Object.keys(repositories).forEach(entityName => {
                 const repository = repositories[entityName];
                 Object.keys(repository).forEach(memberKey => {
@@ -147,6 +160,15 @@ export const makeConnection = () => {
                     }
                 });
             });
+
+            if (queryRunner) {
+                Object.keys(queryRunner).forEach(memberKey => {
+                    const member = queryRunner[memberKey];
+                    if (typeof member === 'function' && 'mockReset' in member) {
+                        member.mockClear();
+                    }
+                });
+            }
         },
     };
 };
