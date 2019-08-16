@@ -16,7 +16,7 @@ import EntityManager from './entity-manager';
 
 export default class Migrator {
     static async getDelta({ schema, connection } = {}) {
-        const tables = this.getTables(connection);
+        const tables = await this.getTables(connection);
 
         const tablesToCreate = [];
         let tableNamesToDrop = [];

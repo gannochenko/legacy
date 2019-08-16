@@ -17,8 +17,6 @@ describe('Migrator', () => {
     beforeEach(async () => {
         connection.mockClear();
     });
-    // afterEach(async () => {
-    // });
     describe('getDelta()', () => {
         it('should detect tables to create', async () => {
             const schema = new Schema({ schema: schemaData });
