@@ -1,10 +1,10 @@
 import { State } from './type';
 import { Action } from '../../store/type';
 
-export const LOAD = 'index.ts.ts.load';
-export const LOAD_SUCCESS = 'index.ts.ts.load.success';
-export const LOAD_FAILURE = 'index.ts.ts.load.failure';
-export const UNLOAD = 'index.ts.ts.unload';
+export const LOAD = 'schema.load';
+export const LOAD_SUCCESS = 'schema.load.success';
+export const LOAD_FAILURE = 'schema.load.failure';
+export const UNLOAD = 'schema.unload';
 
 const initialState: State = {
     loading: false,
