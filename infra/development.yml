@@ -82,28 +82,28 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     environment:
       - PORT=2000
-#  admin:
-#    image: "admin:dev"
-#    build:
-#      context: ../app.admin/
-#      dockerfile: infra/development.dockerfile
-#    expose:
-#      - "8888"
-#      - "3000"
-#      - "3001"
-#    ports:
-#      - "8888:8888"
-#      - "3000:3000"
-#      - "3001:3001"
-#    depends_on: []
-#    volumes:
-#      - "../app.admin/:/app/"
-#    environment:
-#      - NODE_ENV=development
-#      - DEBUG_COLORS=1
-#      - DEBUG_HIDE_DATE=1
-#      - NETWORK__CORS=*
-#      - API__URL=http://localhost:4000
-#    labels:
-#      com.list.name: Admin
-#      com.list.link.analyzer: Bundle analyzer|http://localhost:8888
+  admin:
+    image: "admin:dev"
+    build:
+      context: ../app.admin/
+      dockerfile: infra/development.dockerfile
+    expose:
+      - "8888"
+      - "3000"
+      - "3001"
+    ports:
+      - "8888:8888"
+      - "3000:3000"
+      - "3001:3001"
+    depends_on: []
+    volumes:
+      - "../app.admin/:/app/"
+    environment:
+      - NODE_ENV=development
+      - DEBUG_COLORS=1
+      - DEBUG_HIDE_DATE=1
+      - NETWORK__CORS=*
+      - API__URL=http://localhost:4000
+    labels:
+      com.list.name: Admin
+      com.list.link.analyzer: Bundle analyzer|http://localhost:8888
