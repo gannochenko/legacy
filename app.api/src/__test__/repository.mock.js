@@ -2,6 +2,7 @@ import mockData from './data.mock';
 import {
     ENTITY_ID_FIELD_NAME,
     ENTITY_PK_FIELD_NAME,
+    DB_ENTITY_TABLE_PREFIX,
 } from 'project-minimum-core';
 
 const filterKeys = (result, select) => {
@@ -15,9 +16,8 @@ const filterKeys = (result, select) => {
     });
 };
 
-export const makeRepository = entityName => {
-    const data = _.cloneDeep(mockData[entityName]);
-
+// query builder makes raw queries from JS declarations
+export const makeQueryBuilder = () => {
     const queryBuilder = {
         delete: jest.fn(() => queryBuilder),
         from: () => queryBuilder,
@@ -33,6 +33,13 @@ export const makeRepository = entityName => {
         innerJoinAndSelect: jest.fn(() => queryBuilder),
         getMany: jest.fn(() => []),
     };
+
+    return queryBuilder;
+};
+
+export const makeRepository = entityName => {
+    const data = _.cloneDeep(mockData[entityName]);
+    const queryBuilder = makeQueryBuilder();
 
     return {
         findOne: jest.fn(async (parameters = {}) => {
@@ -106,7 +113,7 @@ export const makeConnection = () => {
     const repositories = {};
 
     const getRepository = jest.fn(entity => {
-        const name = entity.options.name.replace('eq_e_', '');
+        const name = entity.options.name.replace(DB_ENTITY_TABLE_PREFIX, '');
         if (!repositories[name]) {
             repositories[name] = makeRepository(name);
         }
@@ -116,6 +123,7 @@ export const makeConnection = () => {
     return {
         getCurrentRepositories: () => repositories,
         getRepository,
+        createQueryRunner: () => {}, // todo
         getRepositoryByEntityName: name => {
             return getRepository({ options: { name } });
         },

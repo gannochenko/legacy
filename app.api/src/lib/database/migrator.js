@@ -15,12 +15,8 @@ import {
 import EntityManager from './entity-manager';
 
 export default class Migrator {
-    static async getDelta({ schema, connectionManager } = {}) {
-        const queryRunner = (await connectionManager.getSystem()).createQueryRunner(
-            'master',
-        );
-
-        const tables = this.getTables(queryRunner);
+    static async getDelta({ schema, connection } = {}) {
+        const tables = this.getTables(connection);
 
         const tablesToCreate = [];
         let tableNamesToDrop = [];
@@ -47,6 +43,7 @@ export default class Migrator {
                 tablesToProbablyAlter.push(table);
             }
         });
+
         Object.values(currentTables).forEach(table => {
             if (
                 !(table.name in futureTables) &&
@@ -78,12 +75,12 @@ export default class Migrator {
             );
 
             const fieldsToAdd = _.difference(
-                tableCurrentFieldNames,
                 tableFutureFieldNames,
+                tableCurrentFieldNames,
             );
             const fieldsToDelete = _.difference(
-                tableFutureFieldNames,
                 tableCurrentFieldNames,
+                tableFutureFieldNames,
             );
 
             for (let j = 0; j < futureTable.columns.length; j += 1) {
@@ -178,7 +175,8 @@ export default class Migrator {
         const delta = await this.getDelta(params);
     }
 
-    static async getTables(queryRunner) {
+    static async getTables(connection) {
+        const queryRunner = connection.createQueryRunner('master');
         const entityTableNames = (await queryRunner.query(
             `select * from information_schema.tables where table_schema='public' and table_name like '${DB_TABLE_PREFIX}%'`,
         )).map(t => t.table_name);
