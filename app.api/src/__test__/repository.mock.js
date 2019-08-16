@@ -41,6 +41,8 @@ export const makeQueryRunner = () => {
     return {
         createTable: jest.fn().mockReturnThis(),
         dropTable: jest.fn().mockReturnThis(),
+        addColumn: jest.fn().mockReturnThis(),
+        dropColumn: jest.fn().mockReturnThis(),
     };
 };
 

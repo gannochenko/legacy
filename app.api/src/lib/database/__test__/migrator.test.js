@@ -176,7 +176,69 @@ describe('Migrator', () => {
             expect(calls).toEqual([['foo', true], ['bar', true]]);
         });
         it('should alter tables', async () => {
-            throw new Error('Todo');
+            const schema = new Schema({ schema: schemaData });
+
+            const spy = jest.spyOn(Migrator, 'getTables');
+            spy.mockImplementationOnce(() => [
+                {
+                    name: 'eq_e_important_person',
+                    columns: [
+                        {
+                            isNullable: false,
+                            isGenerated: false,
+                            isPrimary: false,
+                            isUnique: false,
+                            isArray: false,
+                            length: 255,
+                            zerofill: false,
+                            unsigned: false,
+                            name: 'full_name',
+                            type: 'varchar',
+                        },
+                        {
+                            isNullable: false,
+                            isGenerated: false,
+                            isPrimary: false,
+                            isUnique: false,
+                            isArray: false,
+                            length: 255,
+                            zerofill: false,
+                            unsigned: false,
+                            name: 'something_else',
+                            type: 'varchar',
+                        },
+                    ],
+                },
+                {
+                    name: 'eq_e_pet',
+                    columns: [
+                        {
+                            isNullable: false,
+                            isGenerated: false,
+                            isPrimary: false,
+                            isUnique: false,
+                            isArray: false,
+                            length: 255,
+                            zerofill: false,
+                            unsigned: false,
+                            name: 'something_else',
+                            type: 'varchar',
+                        },
+                    ],
+                },
+            ]);
+
+            await Migrator.apply({ schema, connection });
+
+            const queryRunner = connection.createQueryRunner();
+            const callsAdd = queryRunner.addColumn.mock.calls;
+            const callsDel = queryRunner.dropColumn.mock.calls;
+
+            expect(callsAdd).toHaveLength(10);
+            expect(callsDel).toEqual([
+                ['eq_e_important_person', 'something_else'],
+                ['eq_e_pet', 'something_else'],
+            ]);
         });
     });
 });

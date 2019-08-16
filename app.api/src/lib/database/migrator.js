@@ -196,8 +196,27 @@ export default class Migrator {
 
         // alter
         if (Object.keys(delta.alter).length) {
-            // await qr.addColumn(table.name, new TableColumn(field));
-            // await qr.dropColumn(cTable.name, field.name);
+            await Promise.all(
+                Object.keys(delta.alter).map(tableName => {
+                    const { add, delete: del } = delta.alter[tableName];
+
+                    return Promise.all([
+                        Promise.all(
+                            add.map(column =>
+                                queryRunner.addColumn(
+                                    tableName,
+                                    new TableColumn(column),
+                                ),
+                            ),
+                        ),
+                        Promise.all(
+                            del.map(column =>
+                                queryRunner.dropColumn(tableName, column.name),
+                            ),
+                        ),
+                    ]);
+                }),
+            );
         }
     }
 
