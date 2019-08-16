@@ -184,6 +184,21 @@ export default class Migrator {
                 ),
             );
         }
+
+        // drop
+        if (delta.drop.length) {
+            await Promise.all(
+                delta.drop.map(tableName =>
+                    queryRunner.dropTable(tableName, true),
+                ),
+            );
+        }
+
+        // alter
+        if (Object.keys(delta.alter).length) {
+            // await qr.addColumn(table.name, new TableColumn(field));
+            // await qr.dropColumn(cTable.name, field.name);
+        }
     }
 
     static async getTables(connection) {

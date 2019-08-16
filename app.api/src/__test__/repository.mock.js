@@ -40,6 +40,7 @@ export const makeQueryBuilder = () => {
 export const makeQueryRunner = () => {
     return {
         createTable: jest.fn().mockReturnThis(),
+        dropTable: jest.fn().mockReturnThis(),
     };
 };
 

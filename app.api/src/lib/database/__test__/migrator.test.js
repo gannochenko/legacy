@@ -125,8 +125,8 @@ describe('Migrator', () => {
             await Migrator.apply({ schema, connection });
 
             const queryRunner = connection.createQueryRunner();
-
             const calls = queryRunner.createTable.mock.calls;
+
             expect(calls).toHaveLength(5);
 
             expect(calls[0][0]).toBeInstanceOf(Table);
@@ -154,7 +154,26 @@ describe('Migrator', () => {
             expect(JSON.stringify(calls[4][0].columns)).toMatchSnapshot();
         });
         it('should drop tables', async () => {
-            throw new Error('Todo');
+            const schema = new Schema({ schema: schemaData });
+
+            const spy = jest.spyOn(Migrator, 'getTables');
+            spy.mockImplementationOnce(() => [
+                {
+                    name: 'foo',
+                    columns: [],
+                },
+                {
+                    name: 'bar',
+                    columns: [],
+                },
+            ]);
+
+            await Migrator.apply({ schema, connection });
+
+            const queryRunner = connection.createQueryRunner();
+            const calls = queryRunner.dropTable.mock.calls;
+
+            expect(calls).toEqual([['foo', true], ['bar', true]]);
         });
         it('should alter tables', async () => {
             throw new Error('Todo');
