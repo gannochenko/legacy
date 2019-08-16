@@ -84,7 +84,7 @@ ${sFields.map(x => `    ${x}`).join('\n')}
 }
 
 type Query {
-    ${name}Get(code: String!): ${name}Result
+    ${name}Get(${ENTITY_ID_FIELD_NAME}: String!): ${name}Result
     ${name}Find(
         filter: I${name}Filter
         search: String
@@ -98,8 +98,8 @@ type Query {
 }
 
 type Mutation {
-    ${name}Delete(code: String!): ${name}Result
-    ${name}Put(code: String, data: I${name}!): ${name}Result
+    ${name}Delete(${ENTITY_ID_FIELD_NAME}: String!): ${name}Result
+    ${name}Put(${ENTITY_ID_FIELD_NAME}: String, data: I${name}!): ${name}Result
 }
         `;
     }
