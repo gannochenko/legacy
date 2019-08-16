@@ -18,14 +18,14 @@ export default class ConnectionManager {
      * @returns {Promise<*>}
      */
     async get({ entities, preConnect }) {
-        if (!this.connections.entity) {
-            this.connections.entity = this.make({
+        if (!this.connections.main) {
+            this.connections.main = this.make({
                 settings: this.settings,
                 entities,
                 preConnect,
             });
         }
-        return this.connections.entity;
+        return this.connections.main;
     }
 
     /**
@@ -33,9 +33,9 @@ export default class ConnectionManager {
      * @returns {Promise<void>}
      */
     async close() {
-        if (this.connections.entity) {
-            await this.connections.entity.close();
-            this.connections.entity = null;
+        if (this.connections.main) {
+            await this.connections.main.close();
+            this.connections.main = null;
         }
     }
 
@@ -44,8 +44,8 @@ export default class ConnectionManager {
      * @returns {Promise<*|CacheConfigurator.simple|buttonStyle.simple|{'&,&:focus,&:hover,&:visited', '&$primary', '&$info', '&$success', '&$warning', '&$rose', '&$danger', '&$twitter', '&$facebook', '&$google', '&$github'}>}
      */
     async getSystem() {
-        if (!this.connections.simple) {
-            this.connections.simple = this.make({
+        if (!this.connections.system) {
+            this.connections.system = this.make({
                 name: 'system',
                 settings: this.settings,
                 entities: [SchemaEntity],
@@ -53,7 +53,7 @@ export default class ConnectionManager {
                 migrations,
             });
         }
-        return this.connections.simple;
+        return this.connections.system;
     }
 
     async invalidateConnections() {

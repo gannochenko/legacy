@@ -95,6 +95,16 @@ export default class DatabaseEntityManager {
         return null;
     }
 
+    static getDBFieldLength(field) {
+        const length = field.getLength();
+        // length is not supported by uuid field
+        if (length && field.getName() !== ENTITY_ID_FIELD_NAME) {
+            return length;
+        }
+
+        return undefined;
+    }
+
     /**
      * Accepts a schema entity and returns a DDL structure of the table to create
      */
@@ -131,7 +141,7 @@ export default class DatabaseEntityManager {
                 isPrimary: false,
                 isUnique: field.isUnique(),
                 isArray: field.isMultiple(),
-                length: field.getLength(),
+                length: this.getDBFieldLength(field),
                 zerofill: false,
                 unsigned: false,
                 name: field.getName(),
@@ -206,18 +216,12 @@ export default class DatabaseEntityManager {
                 return;
             }
 
-            const column = {
+            columns[field.getName()] = {
                 type: this.constructor.getDBType(field),
                 nullable: !field.isRequired(),
                 array: field.isMultiple(),
+                length: this.constructor.getDBFieldLength(field),
             };
-
-            const length = field.getLength();
-            if (length !== null) {
-                column.length = length;
-            }
-
-            columns[field.getName()] = column;
         });
 
         result[this.constructor.getName(entity)] = new EntitySchema({

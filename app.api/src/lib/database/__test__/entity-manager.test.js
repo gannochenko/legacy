@@ -156,7 +156,7 @@ describe('DatabaseEntityManager', () => {
                         type: 'uuid',
                         nullable: true,
                         array: false,
-                        length: 36,
+                        length: undefined,
                     },
                     full_name: {
                         type: 'varchar',
