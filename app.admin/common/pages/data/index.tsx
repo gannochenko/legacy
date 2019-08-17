@@ -91,7 +91,7 @@ const DataPageComponent: FunctionComponent<DataPageProperties> = ({
     const displayName = entity ? entity.getDisplayName() : 'Unknown entity';
     const columns = useMemo(() => {
         if (entity) {
-            return entity.getFields().map(field => ({
+            return entity.getFields().map((field: Field) => ({
                 name: field.getName(),
                 displayName: field.getDisplayName(),
                 sortable: field.isSortable(),
