@@ -6,7 +6,7 @@ import {
     FIELD_TYPE_DATETIME,
 } from 'project-minimum-core';
 
-export const buildQueryLoad = ({ entity, schema, code }) => {
+export const buildQueryLoad = ({ entity, schema, id }) => {
     const selectedFields = entity.getFields().map(field => {
         const name = field.getName();
         if (field.isReference()) {
@@ -27,7 +27,7 @@ export const buildQueryLoad = ({ entity, schema, code }) => {
     const queryName = `${entity.getCamelName()}Get`;
     const query = gql`
         query {
-            ${sanitize(queryName)}(code: "${sanitize(code)}") {
+            ${sanitize(queryName)}(${ENTITY_ID_FIELD_NAME}: "${sanitize(id)}") {
                 errors {
                     code
                     message
@@ -54,7 +54,7 @@ export const buildQuerySearch = ({ entity, text }) => {
                     message
                 }
                 data {
-                    code
+                    ${ENTITY_ID_FIELD_NAME}
                     ${presentationalField ? presentationalField.getName() : ''}
                 }
             }
@@ -101,10 +101,12 @@ export const buildMutationPut = ({ entity, schema, data, code }) => {
     const mutation = gql`
         mutation {
             ${sanitize(mutationName)}(data: {${dataStr.join(', ')}}${
-        _.isne(code) && code !== 'new' ? `, code: "${sanitize(code)}"` : ''
+        _.isne(code) && code !== 'new'
+            ? `, ${ENTITY_ID_FIELD_NAME}: "${sanitize(code)}"`
+            : ''
     }) {
                 data {
-                    code
+                    ${ENTITY_ID_FIELD_NAME}
                 }
                 errors {
                     code
@@ -121,7 +123,9 @@ export const buildMutationDelete = ({ entity, code }) => {
     const mutationName = `${entity.getCamelName()}Delete`;
     const mutation = gql`
         mutation {
-            ${sanitize(mutationName)}(code: "${sanitize(code)}") {
+            ${sanitize(mutationName)}(${ENTITY_ID_FIELD_NAME}: "${sanitize(
+        code,
+    )}") {
             errors {
                 code
                 message

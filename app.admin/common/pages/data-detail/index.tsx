@@ -1,29 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withNotification } from 'ew-internals-ui';
-import { ENTITY_ID_FIELD_NAME } from 'project-minimum-core';
+import { Entity, ENTITY_ID_FIELD_NAME } from 'project-minimum-core';
 import { useErrorNotification, useDispatchUnload } from '../../lib/hooks';
 import { withClient } from '../../lib/client';
 import { Form, Layout } from '../../components';
 
 import mapDispatchToProps from './dispatch';
+import { DataDetailPageProperties } from './type';
 
-const DataPage = ({
+const DataPage: FunctionComponent<DataDetailPageProperties> = ({
     client,
     route,
     schema,
-    ready,
-    data,
-    formData,
-    notify,
-    error,
-    saveCounter,
-    dispatch,
-    dispatchLoad,
-    dispatchUnload,
-    dispatchSuccess,
-    dispatchDelete,
-    dispatchSave,
+    ready = false,
+    data = [],
+    formData = {},
+    notify = () => {},
+    error = null,
+    saveCounter = 0,
+    dispatch = () => {},
+    dispatchLoad = () => {},
+    dispatchUnload = () => {},
+    dispatchSuccess = () => {},
+    dispatchDelete = () => {},
+    dispatchSave = () => {},
 }) => {
     useErrorNotification(error, notify);
     useDispatchUnload(dispatchUnload);
@@ -39,7 +40,7 @@ const DataPage = ({
         }
     }, [saveCounter]);
 
-    let entity = null;
+    let entity: Nullable<Entity> = null;
     let entityName = '';
     let id = '';
 
@@ -59,7 +60,7 @@ const DataPage = ({
         }
 
         if (id !== 'new') {
-            dispatchLoad(client, entity, schema, id);
+            dispatchLoad(client, { entity, schema, id });
         } else {
             dispatchSuccess();
         }
@@ -73,9 +74,7 @@ const DataPage = ({
 
     let displayId = '';
     if (ready) {
-        displayId = data[ENTITY_ID_FIELD_NAME]
-            ? data[ENTITY_ID_FIELD_NAME]
-            : 'new';
+        displayId = data[ENTITY_ID_FIELD_NAME] || 'new';
     }
 
     return (
@@ -88,13 +87,19 @@ const DataPage = ({
                     dispatch={dispatch}
                     formData={formData}
                     onSubmit={(values, formActions) => {
-                        dispatchSave(client, entity, values, formActions, id);
+                        dispatchSave(client, {
+                            entity,
+                            values,
+                            formActions,
+                            id,
+                        });
                     }}
                     onActionClick={action => {
-                        if (action === 'delete' && displayId) {
-                            dispatchDelete(client, entity, displayId);
+                        if (action === 'delete' && id) {
+                            dispatchDelete(client, { entity, id });
                         }
                     }}
+                    F
                 />
             )}
         </Layout>

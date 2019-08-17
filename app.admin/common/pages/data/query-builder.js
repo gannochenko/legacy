@@ -52,7 +52,9 @@ export const buildMutationDelete = ({ entity, code }) => {
     const mutationName = `${entity.getCamelName()}Delete`;
     const mutation = gql`
         mutation {
-            ${sanitize(mutationName)}(code: "${sanitize(code)}") {
+            ${sanitize(mutationName)}(${ENTITY_ID_FIELD_NAME}: "${sanitize(
+        code,
+    )}") {
                 errors {
                     code
                     message

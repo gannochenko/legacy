@@ -665,7 +665,7 @@
                             constructor() {
                                 _initializerDefineProperty(
                                     this,
-                                    'index',
+                                    'index.tsx',
                                     _descriptor2,
                                     this,
                                 );
@@ -674,7 +674,7 @@
                         _temp2)),
                         (_descriptor2 = _applyDecoratedDescriptor(
                             _class6.prototype,
-                            'index',
+                            'index.tsx',
                             [_dec5],
                             {
                                 configurable: true,

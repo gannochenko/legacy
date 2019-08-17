@@ -8,11 +8,9 @@ import {
     buildMutationDelete,
 } from './query-builder';
 
-function* load(params) {
-    const { payload } = params || {};
-    const { client } = payload || {};
+function* load(client, parameters) {
     try {
-        const [queryName, query] = buildQueryLoad(payload);
+        const [queryName, query] = buildQueryLoad(parameters);
         const apolloResult = yield call(() => {
             return client.query({
                 query,

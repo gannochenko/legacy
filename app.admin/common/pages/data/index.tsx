@@ -53,13 +53,11 @@ const DataPageComponent: FunctionComponent<DataPageProperties> = ({
         }
     }, [entityName, search]);
 
-    if (!entity) {
-        return null;
-    }
+    const displayName = entity ? entity.getDisplayName() : 'Unknown entity';
 
     return (
         <Layout
-            title={entity.getDisplayName()}
+            title={displayName}
             actions={
                 <>
                     <Button
@@ -73,40 +71,42 @@ const DataPageComponent: FunctionComponent<DataPageProperties> = ({
                 </>
             }
         >
-            <List
-                entity={entity}
-                data={data || []}
-                count={count}
-                {...pageParams}
-                sort={{
-                    field: pageParams.sort[0] || null,
-                    way: pageParams.sort[1] || null,
-                }}
-                onPageChange={page =>
-                    dispatchUpdateSearch(route, {
-                        page,
-                    })
-                }
-                onSortChange={sort =>
-                    dispatchUpdateSearch(route, {
-                        sort: `${sort.scalar}:${sort.way}`,
-                    })
-                }
-                onActionClick={(action: string, item: EntityItemData) => {
-                    const { code } = item;
-                    if (action === 'edit') {
-                        dispatchNavigateToDetail(entity as Entity, code);
+            {!!entity && (
+                <List
+                    entity={entity}
+                    data={data || []}
+                    count={count}
+                    {...pageParams}
+                    sort={{
+                        field: pageParams.sort[0] || null,
+                        way: pageParams.sort[1] || null,
+                    }}
+                    onPageChange={page =>
+                        dispatchUpdateSearch(route, {
+                            page,
+                        })
                     }
-                    if (action === 'delete') {
-                        dispatchDelete(
-                            client,
-                            entity as Entity,
-                            code,
-                            pageParams,
-                        );
+                    onSortChange={sort =>
+                        dispatchUpdateSearch(route, {
+                            sort: `${sort.scalar}:${sort.way}`,
+                        })
                     }
-                }}
-            />
+                    onActionClick={(action: string, item: EntityItemData) => {
+                        const { code } = item;
+                        if (action === 'edit') {
+                            dispatchNavigateToDetail(entity as Entity, code);
+                        }
+                        if (action === 'delete') {
+                            dispatchDelete(
+                                client,
+                                entity as Entity,
+                                code,
+                                pageParams,
+                            );
+                        }
+                    }}
+                />
+            )}
         </Layout>
     );
 };
