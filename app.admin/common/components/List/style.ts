@@ -86,7 +86,7 @@ export const ItemActions = withTheme(styled.div`
     box-shadow: 4px 6px 15px -4px rgba(0, 0, 0, 0.21);
 `);
 
-export const ItemAction = styled.div`
+const getItemActionStyle = () => `
     ${props => iconLabel(props.icon, '0.8rem', '0.2rem', 'baseline', '2rem')}
     ${bgColor('transparent', '#e0e3ec', null, '200ms')}
 	padding-right: 1rem;
@@ -94,8 +94,12 @@ export const ItemAction = styled.div`
     cursor: pointer;
 `;
 
-export const ButtonWrap = styled.div`
-    display: inline-block;
+export const ItemAction = styled.div`
+    ${getItemActionStyle()}
+`;
+
+export const ItemActionLink = styled.a`
+    ${getItemActionStyle()}
 `;
 
 export const ActionPanel = withTheme(DropPanel, 'dropPanel');

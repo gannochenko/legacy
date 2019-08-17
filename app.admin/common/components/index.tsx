@@ -1,6 +1,7 @@
 export * from './Application';
 export * from './DatePicker';
 export * from './Form';
+export * from './List';
 export * from './Layout';
 export * from './FormField';
 export * from './FormFieldBoolean';
@@ -8,7 +9,6 @@ export * from './FormFieldDate';
 export * from './FormFieldMultiplier';
 export * from './FormFieldReference';
 export * from './FormFieldScalar';
-export * from './List';
 export * from './ListCellBoolean';
 export * from './ListCellCode';
 export * from './ListCellDate';

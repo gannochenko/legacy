@@ -24,14 +24,6 @@ export default dispatch => ({
         dispatch({
             type: UNLOAD,
         }),
-    dispatchNavigateToDetail: (entity: Entity, itemCode?: string) =>
-        dispatch(
-            push(
-                `/data/${encodeURIComponent(
-                    entity.getName(),
-                )}/${encodeURIComponent(itemCode || 'new')}/`,
-            ),
-        ),
     dispatchDelete: (
         client: Client,
         entity: Entity,
@@ -49,4 +41,5 @@ export default dispatch => ({
         }),
     dispatchUpdateSearch: (route: Route, parameters: object) =>
         dispatch(push(putSearchParameters(route.location.search, parameters))),
+    dispatchNavigate: (url: string) => dispatch(push(url)),
 });

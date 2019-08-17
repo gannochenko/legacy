@@ -21,6 +21,7 @@ export interface ControllerProperties {
     dispatch?: (action: Action) => void;
     dispatchLoad?: DispatchLoad;
     dispatchUnload?: DispatchUnload;
+    dispatchNavigate: (url: string) => void;
     notify: Notify;
 }
 

@@ -1,17 +1,57 @@
 import React, { FunctionComponent, useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
-import { withNotification } from 'ew-internals-ui';
+import { withNotification, withModal } from 'ew-internals-ui';
+import {
+    ENTITY_ID_FIELD_NAME,
+    FIELD_TYPE_STRING,
+    FIELD_TYPE_DATETIME,
+    FIELD_TYPE_BOOLEAN,
+} from 'project-minimum-core';
 import { useErrorNotification, useDispatchUnload } from '../../lib/hooks';
 import { withClient } from '../../lib/client';
 import { parseSearch } from '../../lib/util';
 import Button from '../../material-kit/CustomButtons';
 import mapDispatchToProps from './dispatch';
 import { extractPageParameters } from './util';
+import { ButtonWrap } from './style';
 
 import { DataPageProperties } from './type';
 
-import { Layout, List } from '../../components';
-import { Entity, EntityItemData } from '../../lib/project-minimum-core';
+import {
+    Layout,
+    List,
+    ListCellCode,
+    ListCellReference,
+    ListCellString,
+    ListCellDate,
+    ListCellBoolean,
+} from '../../components';
+import { Entity, Field, Item } from '../../lib/project-minimum-core';
+
+const getFieldRenderer = (field: Field) => {
+    if (field.getName() === ENTITY_ID_FIELD_NAME) {
+        return ListCellCode;
+    }
+    if (field.isReference()) {
+        return ListCellReference;
+    }
+    if (field.getActualType() === FIELD_TYPE_STRING) {
+        return ListCellString;
+    }
+    if (field.getActualType() === FIELD_TYPE_DATETIME) {
+        return ListCellDate;
+    }
+    if (field.getActualType() === FIELD_TYPE_BOOLEAN) {
+        return ListCellBoolean;
+    }
+
+    return ListCellString;
+};
+
+const getDetailURL = (item: Nullable<Item>, entity: Entity) =>
+    `/data/${encodeURIComponent(entity.getName())}/${encodeURIComponent(
+        item ? item.id : 'new',
+    )}/`;
 
 const DataPageComponent: FunctionComponent<DataPageProperties> = ({
     client,
@@ -23,15 +63,15 @@ const DataPageComponent: FunctionComponent<DataPageProperties> = ({
     notify = () => {},
     dispatchLoad = () => {},
     dispatchUnload = () => {},
-    dispatchNavigateToDetail = () => {},
     dispatchDelete = () => {},
     dispatchUpdateSearch = () => {},
+    dispatchNavigate = () => {},
+    openConfirmModal = () => {},
 }) => {
-    const search = useMemo(
-        () => (route ? parseSearch(route.location.search) : ''),
-        [route],
-    );
-    const pageParams = extractPageParameters(search);
+    const pageParams = useMemo(() => {
+        const search = route ? parseSearch(route.location.search) : '';
+        return extractPageParameters(search);
+    }, [route]);
 
     useDispatchUnload(dispatchUnload);
     useErrorNotification(error, notify);
@@ -41,19 +81,81 @@ const DataPageComponent: FunctionComponent<DataPageProperties> = ({
         entity = schema.getEntity(_.get(route, 'match.params.entity_name'));
     }
 
-    let entityName = '';
-    if (entity) {
-        entityName = entity.getName();
-    }
-
     // load data on component mount
     useEffect(() => {
         if (entity) {
             dispatchLoad(client, { entity, pageParams });
         }
-    }, [entityName, search]);
+    }, [entity, client, pageParams]);
 
     const displayName = entity ? entity.getDisplayName() : 'Unknown entity';
+    const columns = useMemo(() => {
+        if (entity) {
+            return entity.getFields().map(field => ({
+                name: field.getName(),
+                displayName: field.getDisplayName(),
+                sortable: field.isSortable(),
+                renderer: getFieldRenderer(field),
+            }));
+        }
+
+        return [];
+    }, [entity]);
+
+    const itemActions = useMemo(() => {
+        if (entity) {
+            return [
+                {
+                    name: 'edit',
+                    displayName: 'Edit',
+                    icon: 'edit',
+                    onClick: null,
+                    getHref: (item: Item) =>
+                        getDetailURL(item, entity as Entity),
+                },
+                {
+                    name: 'delete',
+                    displayName: 'Delete',
+                    icon: 'clear',
+                    onClick: (name: string, item: Item, closePanel) => {
+                        closePanel();
+                        openConfirmModal(
+                            <>
+                                Do you really want to delete item {item.id}?
+                                <br />
+                                You will not be able to un-do this.
+                            </>,
+                            ({ closeModal }) => {
+                                return [
+                                    <ButtonWrap key="yes">
+                                        <Button
+                                            onClick={() => {
+                                                dispatchDelete(
+                                                    client,
+                                                    entity as Entity,
+                                                    item.id,
+                                                    pageParams,
+                                                );
+                                                closeModal();
+                                            }}
+                                        >
+                                            Yes
+                                        </Button>
+                                    </ButtonWrap>,
+                                    <ButtonWrap key="no">
+                                        <Button onClick={closeModal}>No</Button>
+                                    </ButtonWrap>,
+                                ];
+                            },
+                        );
+                    },
+                    getHref: null,
+                },
+            ];
+        }
+
+        return [];
+    }, [entity]);
 
     return (
         <Layout
@@ -63,7 +165,9 @@ const DataPageComponent: FunctionComponent<DataPageProperties> = ({
                     <Button
                         type="button"
                         onClick={() =>
-                            dispatchNavigateToDetail(entity as Entity)
+                            dispatchNavigate(
+                                getDetailURL(null, entity as Entity),
+                            )
                         }
                     >
                         Add
@@ -73,49 +177,39 @@ const DataPageComponent: FunctionComponent<DataPageProperties> = ({
         >
             {!!entity && (
                 <List
-                    entity={entity}
-                    data={data || []}
+                    columns={columns}
+                    data={data}
                     count={count}
                     {...pageParams}
                     sort={{
-                        field: pageParams.sort[0] || null,
-                        way: pageParams.sort[1] || null,
+                        cell: pageParams.sort[0],
+                        way: pageParams.sort[1] === 'asc' ? 'asc' : 'desc',
                     }}
-                    onPageChange={page =>
+                    onPageChange={(page: number) =>
                         dispatchUpdateSearch(route, {
                             page,
                         })
                     }
                     onSortChange={sort =>
                         dispatchUpdateSearch(route, {
-                            sort: `${sort.scalar}:${sort.way}`,
+                            sort: `${sort.cell}:${sort.way}`,
                         })
                     }
-                    onActionClick={(action: string, item: EntityItemData) => {
-                        const { code } = item;
-                        if (action === 'edit') {
-                            dispatchNavigateToDetail(entity as Entity, code);
-                        }
-                        if (action === 'delete') {
-                            dispatchDelete(
-                                client,
-                                entity as Entity,
-                                code,
-                                pageParams,
-                            );
-                        }
-                    }}
+                    keyProperty={ENTITY_ID_FIELD_NAME}
+                    itemActions={itemActions}
                 />
             )}
         </Layout>
     );
 };
 
-export default withNotification(
-    withClient(
-        connect(
-            s => ({ ...s.data, schema: s.application.index }),
-            mapDispatchToProps,
-        )(DataPageComponent),
+export default withModal(
+    withNotification(
+        withClient(
+            connect(
+                s => ({ ...s.data, schema: s.application.schema }),
+                mapDispatchToProps,
+            )(DataPageComponent),
+        ),
     ),
 );

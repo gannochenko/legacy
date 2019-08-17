@@ -99,7 +99,6 @@ const DataPage: FunctionComponent<DataDetailPageProperties> = ({
                             dispatchDelete(client, { entity, id });
                         }
                     }}
-                    F
                 />
             )}
         </Layout>
@@ -109,7 +108,7 @@ const DataPage: FunctionComponent<DataDetailPageProperties> = ({
 export default withNotification(
     withClient(
         connect(
-            s => ({ ...s['data-detail'], schema: s.application.index }),
+            s => ({ ...s['data-detail'], schema: s.application.schema }),
             mapDispatchToProps,
         )(DataPage),
     ),

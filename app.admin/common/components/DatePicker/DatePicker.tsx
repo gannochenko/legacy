@@ -1,4 +1,4 @@
-import React, { useMemo, FunctionComponent } from 'react';
+import React, { useMemo, FunctionComponent, SyntheticEvent } from 'react';
 import {
     getCalendar,
     convertLocalDateToUTC,

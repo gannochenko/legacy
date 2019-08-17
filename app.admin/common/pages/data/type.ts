@@ -1,5 +1,6 @@
+import { ReactNode } from 'react';
 import { PageProperties, PageState } from '../../store/type';
-import { Schema, Entity, EntityItemData } from '../../lib/project-minimum-core';
+import { Schema, Entity, EntityItemData } from 'project-minimum-core';
 import { Route } from '../../lib/type';
 import { Client } from '../../lib/client';
 
@@ -7,7 +8,6 @@ export interface DataPageProperties extends PageProperties {
     schema: Schema;
     data: EntityItemData[];
     count: number;
-    dispatchNavigateToDetail: (entity: Entity, itemCode?: string) => void;
     dispatchDelete: (
         client: Client,
         entity: Entity,
@@ -15,6 +15,10 @@ export interface DataPageProperties extends PageProperties {
         pageParams: object,
     ) => void;
     dispatchUpdateSearch: (route: Route, parameters: object) => void;
+    openConfirmModal: (
+        text: ReactNode,
+        renderButtons: (params: { closeModal: () => void }) => ReactNode[],
+    ) => void;
 }
 
 export interface State extends PageState {
