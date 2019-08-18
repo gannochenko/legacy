@@ -8,6 +8,8 @@ module.exports = (env, argv) => {
     const development =
         argv.mode === 'development' || env.NODE_ENV === 'development';
 
+    const destinationFolder = path.join(__dirname, '.build');
+
     return {
         entry: ['webpack/hot/poll?1000', './server/index'],
         watch: development,
@@ -92,7 +94,7 @@ module.exports = (env, argv) => {
             }),
         ],
         output: {
-            path: path.join(__dirname, '.build'),
+            path: destinationFolder,
             filename: 'server.js',
             libraryTarget: 'commonjs',
         },
