@@ -13,12 +13,12 @@
         "isolatedModules": true,
         "noEmit": true,
         "experimentalDecorators": true,
-        "lib": ["esnext.asynciterable", "esnext", "es2017"],
+        "lib": ["esnext.asynciterable", "esnext", "es2017", "dom"],
         "removeComments": true,
         "emitDecoratorMetadata": true,
         "sourceMap": true,
         "baseUrl": "./src/"
     },
     "exclude": ["node_modules", ".build"],
-    "include": ["src/**/*"]
+    "include": ["src/**/*", "src/global.d.ts"]
 }

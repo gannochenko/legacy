@@ -1,3 +1,4 @@
+// @ts-ignore
 import { camel } from 'naming-style';
 
 export const injectPassword = (
