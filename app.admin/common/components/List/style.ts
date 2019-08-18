@@ -44,6 +44,12 @@ export const TD = styled.td`
     border-bottom: 1px solid #b6b9c2;
 `;
 
+export const TDNotFound = styled(TD)`
+    text-align: center;
+    font-size: 0.6rem;
+    color: gray;
+`;
+
 export const ActionTD = styled.th`
     border-bottom: 1px solid #b6b9c2;
     width: ${actionW};

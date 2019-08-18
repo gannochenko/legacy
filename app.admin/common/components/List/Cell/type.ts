@@ -1,6 +1,6 @@
-import { Cell } from '../type';
+import { ListCell } from '../type';
 
 export interface CellProperties {
-    cell: Cell;
+    cell: ListCell;
     value: any;
 }

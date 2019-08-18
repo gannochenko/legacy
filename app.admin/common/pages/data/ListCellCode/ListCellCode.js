@@ -1,7 +1,7 @@
 import React from 'react';
 import { ListCellCodeContainer, Link } from './style';
 
-export const ListCellCode = ({ field, value, entity }) => {
+export const ListCellCode = ({ reference: { field, entity }, value }) => {
     if (typeof value === 'undefined' || value === null) {
         return null;
     }

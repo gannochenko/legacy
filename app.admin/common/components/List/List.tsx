@@ -8,6 +8,7 @@ import {
     TH,
     TR,
     TD,
+    TDNotFound,
     ActionTH,
     ActionTD,
     HeaderLink,
@@ -122,94 +123,107 @@ export const List: FunctionComponent<ListProperties> = ({
     onPageChange = () => {},
     onSortChange = () => {},
     keyProperty = 'id',
-}) => (
-    <Container>
-        <Table cellPadding="0" cellSpacing="0">
-            <THead>
-                <TR>
-                    <ActionTH />
-                    {columns.map(cell => (
-                        <TH key={cell.name}>
-                            <HeaderLink
-                                sortable={cell.sortable}
-                                sign={renderSortOrderSign(cell, sort)}
-                                onClick={() => {
-                                    if (!_.isFunction(onSortChange)) {
-                                        return;
-                                    }
+}) => {
+    const hasActions = !!itemActions.length;
 
-                                    if (cell.sortable) {
-                                        onSortChange({
-                                            cell: cell.name,
-                                            way:
-                                                sort.way === 'asc'
-                                                    ? 'desc'
-                                                    : 'asc',
-                                        });
-                                    }
-                                }}
+    return (
+        <Container>
+            <Table cellPadding="0" cellSpacing="0">
+                <THead>
+                    <TR>
+                        {hasActions && <ActionTH />}
+                        {columns.map(cell => (
+                            <TH key={cell.name}>
+                                <HeaderLink
+                                    sortable={cell.sortable}
+                                    sign={renderSortOrderSign(cell, sort)}
+                                    onClick={() => {
+                                        if (!_.isFunction(onSortChange)) {
+                                            return;
+                                        }
+
+                                        if (cell.sortable) {
+                                            onSortChange({
+                                                cell: cell.name,
+                                                way:
+                                                    sort.way === 'asc'
+                                                        ? 'desc'
+                                                        : 'asc',
+                                            });
+                                        }
+                                    }}
+                                >
+                                    {cell.displayName}
+                                </HeaderLink>
+                            </TH>
+                        ))}
+                    </TR>
+                </THead>
+                <TBody>
+                    {_.iane(data) &&
+                        data.map(item => {
+                            return (
+                                <TR key={item[keyProperty]}>
+                                    {hasActions && (
+                                        <ActionTD>
+                                            <ActionPanel
+                                                panel={({ closePanel }) =>
+                                                    renderItemActions(
+                                                        itemActions,
+                                                        item,
+                                                        closePanel,
+                                                    )
+                                                }
+                                                openOnChildrenClick
+                                            >
+                                                {() => <Actions />}
+                                            </ActionPanel>
+                                        </ActionTD>
+                                    )}
+                                    {columns.map((cell: ListCell) => {
+                                        const CellComponent = getCellComponent(
+                                            cell,
+                                        );
+                                        return (
+                                            <TD
+                                                key={`${item[keyProperty]}_${
+                                                    cell.name
+                                                }`}
+                                            >
+                                                <CellComponent
+                                                    data={item[cell.name]}
+                                                    cell={cell}
+                                                />
+                                            </TD>
+                                        );
+                                    })}
+                                </TR>
+                            );
+                        })}
+                    {!_.iane(data) && (
+                        <TR>
+                            <TDNotFound
+                                colSpan={columns.length + (hasActions ? 1 : 0)}
                             >
-                                {cell.displayName}
-                            </HeaderLink>
-                        </TH>
-                    ))}
-                </TR>
-            </THead>
-            <TBody>
-                {_.iane(data) &&
-                    data.map(item => {
-                        return (
-                            <TR key={item[keyProperty]}>
-                                {!!itemActions.length && (
-                                    <ActionTD>
-                                        <ActionPanel
-                                            panel={({ closePanel }) =>
-                                                renderItemActions(
-                                                    itemActions,
-                                                    item,
-                                                    closePanel,
-                                                )
-                                            }
-                                            openOnChildrenClick
-                                        >
-                                            {() => <Actions />}
-                                        </ActionPanel>
-                                    </ActionTD>
-                                )}
-                                {columns.map((cell: ListCell) => {
-                                    const CellComponent = getCellComponent(
-                                        cell,
-                                    );
-                                    return (
-                                        <TD
-                                            key={`${item[keyProperty]}_${
-                                                cell.name
-                                            }`}
-                                        >
-                                            <CellComponent
-                                                data={item[cell.name]}
-                                                cell={cell}
-                                            />
-                                        </TD>
-                                    );
-                                })}
-                            </TR>
-                        );
-                    })}
-            </TBody>
-        </Table>
-        {count !== null && (
-            <Footer>
-                <Counter>Count: {count}</Counter>
-                {count > pageSize && (
-                    <PageNavigation
-                        count={count}
-                        page={page}
-                        onNavigate={onPageChange}
-                        pageSize={pageSize}
-                    />
-                )}
-            </Footer>
-        )}
-    </Container>
-);
+                                No items found
+                            </TDNotFound>
+                        </TR>
+                    )}
+                </TBody>
+            </Table>
+            {count !== null && (
+                <Footer>
+                    <Counter>Count: {count}</Counter>
+                    {count > pageSize && (
+                        <PageNavigation
+                            count={count}
+                            page={page}
+                            onNavigate={onPageChange}
+                            pageSize={pageSize}
+                        />
+                    )}
+                </Footer>
+            )}
+        </Container>
+    );
+};
