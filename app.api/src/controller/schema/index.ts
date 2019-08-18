@@ -5,7 +5,6 @@ import {
     Put,
     Patch,
     BodyInput,
-    Output,
     Result,
     InputContext,
     ERROR_REQUEST,
