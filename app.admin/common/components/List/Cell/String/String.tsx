@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from 'react';
 import { StringContainer, Empty } from './style';
-import { CellProperties } from '../type';
+import { ListCellProperties } from '../type';
 
-export const StringCell: FunctionComponent<CellProperties> = ({
+export const StringCell: FunctionComponent<ListCellProperties> = ({
     cell,
     value,
 }) => {

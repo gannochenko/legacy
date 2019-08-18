@@ -1,8 +1,3 @@
-/** @deprecated */
-export interface EntityItemData {
-    code: string;
-}
-
 export interface Item {
     id: string;
 }

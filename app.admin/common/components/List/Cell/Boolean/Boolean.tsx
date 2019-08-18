@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from 'react';
 import { BooleanContainer, Empty } from './style';
-import { CellProperties } from '../type';
+import { ListCellProperties } from '../type';
 
-export const BooleanCell: FunctionComponent<CellProperties> = ({
+export const BooleanCell: FunctionComponent<ListCellProperties> = ({
     cell,
     value,
 }) => {

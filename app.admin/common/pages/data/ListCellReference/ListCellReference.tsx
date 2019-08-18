@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import { ListCellReferenceContainer, Empty } from './style';
+import { ListCellProperties } from '../../../components/List/Cell/type';
 
-export const ListCellReference = ({ reference: { field }, value }) => {
+export const ListCellReference: FunctionComponent<ListCellProperties> = ({
+    cell: { reference: { field } = {} },
+    value,
+}) => {
     if (
+        !field ||
         typeof value === 'undefined' ||
         value === null ||
         (_.isArray(value) && !value.length)

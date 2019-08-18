@@ -1,4 +1,4 @@
-import { Item } from '../../lib/project-minimum-core';
+import { Item, Field, Entity } from '../../lib/project-minimum-core';
 
 export type ListCellType =
     | 'string'
@@ -7,14 +7,19 @@ export type ListCellType =
     | 'integer'
     | 'other';
 
+export interface ListCellReference {
+    field?: Field;
+    entity?: Entity;
+}
+
 export interface ListCell {
     name: string;
     displayName: string;
-    sortable: boolean;
-    renderer?: Nullable<Function>;
-    reference?: Nullable<object>;
     type: ListCellType;
     multiple: boolean;
+    sortable: boolean;
+    renderer?: Nullable<Function>;
+    reference: ListCellReference;
 }
 
 export type ListOrderType = 'asc' | 'desc';

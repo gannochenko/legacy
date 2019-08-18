@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import { ListCellCodeContainer, Link } from './style';
 
-export const ListCellCode = ({ reference: { field, entity }, value }) => {
-    if (typeof value === 'undefined' || value === null) {
+import { ListCellProperties } from '../../../components/List/Cell/type';
+
+export const ListCellCode: FunctionComponent<ListCellProperties> = ({
+    cell: { reference: { field, entity } = {} },
+    value,
+}) => {
+    if (typeof value === 'undefined' || value === null || !field || !entity) {
         return null;
     }
 

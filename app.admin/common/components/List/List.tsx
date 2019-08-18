@@ -191,7 +191,7 @@ export const List: FunctionComponent<ListProperties> = ({
                                                 }`}
                                             >
                                                 <CellComponent
-                                                    data={item[cell.name]}
+                                                    value={item[cell.name]}
                                                     cell={cell}
                                                 />
                                             </TD>

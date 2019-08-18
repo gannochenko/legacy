@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from 'react';
 import moment from 'moment';
 import { DateContainer, Empty } from './style';
-import { CellProperties } from '../type';
+import { ListCellProperties } from '../type';
 
-export const DateTimeCell: FunctionComponent<CellProperties> = ({
+export const DateTimeCell: FunctionComponent<ListCellProperties> = ({
     cell,
     value,
 }) => {

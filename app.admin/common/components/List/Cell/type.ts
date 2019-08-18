@@ -1,6 +1,6 @@
 import { ListCell } from '../type';
 
-export interface CellProperties {
+export interface ListCellProperties {
     cell: ListCell;
     value: any;
 }
