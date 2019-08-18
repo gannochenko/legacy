@@ -78,7 +78,7 @@ const DataPageComponent: FunctionComponent<DataPageProperties> = ({
                 displayName: field.getDisplayName(),
                 sortable: field.isSortable(),
                 renderer: getFieldRenderer(field),
-                reference: { field, entity },
+                reference: { field, entity: entity as Entity },
                 type: field.getActualType() as ListCellType,
                 multiple: field.isMultiple(),
             }));
