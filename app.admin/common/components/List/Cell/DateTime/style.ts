@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const ListCellStringContainer = styled.div`
+export const DateContainer = styled.div`
     font-size: 0.6rem;
 `;
 

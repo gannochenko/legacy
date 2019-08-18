@@ -1,12 +1,7 @@
 import React, { FunctionComponent, useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { withNotification, withModal } from 'ew-internals-ui';
-import {
-    ENTITY_ID_FIELD_NAME,
-    FIELD_TYPE_STRING,
-    FIELD_TYPE_DATETIME,
-    FIELD_TYPE_BOOLEAN,
-} from 'project-minimum-core';
+import { ENTITY_ID_FIELD_NAME } from 'project-minimum-core';
 import { useErrorNotification, useDispatchUnload } from '../../lib/hooks';
 import { withClient } from '../../lib/client';
 import { parseSearch } from '../../lib/util';
@@ -17,15 +12,11 @@ import { ButtonWrap } from './style';
 
 import { DataPageProperties } from './type';
 
-import {
-    Layout,
-    List,
-    ListCellCode,
-    ListCellReference,
-    ListCellString,
-    ListCellDate,
-    ListCellBoolean,
-} from '../../components';
+import { Layout, List, ListCellType, ListOrderType } from '../../components';
+
+import { ListCellCode } from './ListCellCode';
+import { ListCellReference } from './ListCellReference';
+
 import { Entity, Field, Item } from '../../lib/project-minimum-core';
 
 const getFieldRenderer = (field: Field) => {
@@ -35,17 +26,8 @@ const getFieldRenderer = (field: Field) => {
     if (field.isReference()) {
         return ListCellReference;
     }
-    if (field.getActualType() === FIELD_TYPE_STRING) {
-        return ListCellString;
-    }
-    if (field.getActualType() === FIELD_TYPE_DATETIME) {
-        return ListCellDate;
-    }
-    if (field.getActualType() === FIELD_TYPE_BOOLEAN) {
-        return ListCellBoolean;
-    }
 
-    return ListCellString;
+    return null;
 };
 
 const getDetailURL = (item: Nullable<Item>, entity: Entity) =>
@@ -96,6 +78,9 @@ const DataPageComponent: FunctionComponent<DataPageProperties> = ({
                 displayName: field.getDisplayName(),
                 sortable: field.isSortable(),
                 renderer: getFieldRenderer(field),
+                reference: field,
+                type: field.getActualType() as ListCellType,
+                multiple: field.isMultiple(),
             }));
         }
 
@@ -183,7 +168,7 @@ const DataPageComponent: FunctionComponent<DataPageProperties> = ({
                     {...pageParams}
                     sort={{
                         cell: pageParams.sort[0],
-                        way: pageParams.sort[1] === 'asc' ? 'asc' : 'desc',
+                        way: pageParams.sort[1] as ListOrderType,
                     }}
                     onPageChange={(page: number) =>
                         dispatchUpdateSearch(route, {

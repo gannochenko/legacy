@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
-export const ListCellDateContainer = styled.div`
+export const BooleanContainer = styled.div`
     font-size: 0.6rem;
+    text-align: center;
 `;
 
 export const Empty = styled.div`

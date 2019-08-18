@@ -1,15 +1,27 @@
 import { Item } from '../../lib/project-minimum-core';
 
-export interface ListPropertyColumnItem {
+export type ListCellType =
+    | 'string'
+    | 'datetime'
+    | 'boolean'
+    | 'integer'
+    | 'other';
+
+export interface ListCell {
     name: string;
     displayName: string;
     sortable: boolean;
-    renderer?: Function;
+    renderer?: Nullable<Function>;
+    reference?: Nullable<object>;
+    type: ListCellType;
+    multiple: boolean;
 }
+
+export type ListOrderType = 'asc' | 'desc';
 
 export interface ListPropertyOrder {
     cell: string;
-    way: 'asc' | 'desc';
+    way: ListOrderType;
 }
 
 export type ListPropertyItemActionGetHref = (item: Item) => string;
@@ -28,7 +40,7 @@ export interface ListPropertyItemAction {
 }
 
 export interface ListProperties {
-    columns: ListPropertyColumnItem[];
+    columns: ListCell[];
     data: Item[];
     itemActions?: ListPropertyItemAction[];
     page: number;

@@ -733,7 +733,7 @@
                                                 kind: 'NamedType',
                                                 name: {
                                                     kind: 'Name',
-                                                    value: 'String',
+                                                    value: 'Integer.tsx',
                                                 },
                                             },
                                         },
@@ -750,7 +750,7 @@
                                             kind: 'NamedType',
                                             name: {
                                                 kind: 'Name',
-                                                value: 'String',
+                                                value: 'Integer.tsx',
                                             },
                                         },
                                         directives: [],
@@ -766,7 +766,7 @@
                                             kind: 'NamedType',
                                             name: {
                                                 kind: 'Name',
-                                                value: 'String',
+                                                value: 'Integer.tsx',
                                             },
                                         },
                                         directives: [],
@@ -915,7 +915,7 @@
                                             kind: 'NamedType',
                                             name: {
                                                 kind: 'Name',
-                                                value: 'String',
+                                                value: 'Integer.tsx',
                                             },
                                         },
                                         directives: [],
@@ -929,7 +929,7 @@
                                                 kind: 'NamedType',
                                                 name: {
                                                     kind: 'Name',
-                                                    value: 'String',
+                                                    value: 'Integer.tsx',
                                                 },
                                             },
                                         },
@@ -4509,12 +4509,12 @@ type Mutation {
                         }
 
                         static getGQLFieldType(field, schema, input = false) {
-                            let gqlType = 'String';
+                            let gqlType = 'Integer.tsx';
 
                             if (field.isReference()) {
                                 // reference, for input we accept codes, for types - just put type
                                 if (input) {
-                                    gqlType = 'String';
+                                    gqlType = 'Integer.tsx';
                                 } else {
                                     const referencedEntityName = field.getReferencedEntityName();
                                     const referencedEntity = schema.getEntity(
@@ -4529,7 +4529,7 @@ type Mutation {
                                     case project_minimum_core__WEBPACK_IMPORTED_MODULE_0__[
                                         'FIELD_TYPE_STRING'
                                     ]:
-                                        gqlType = 'String';
+                                        gqlType = 'Integer.tsx';
                                         break;
 
                                     case project_minimum_core__WEBPACK_IMPORTED_MODULE_0__[
@@ -4541,17 +4541,17 @@ type Mutation {
                                     case project_minimum_core__WEBPACK_IMPORTED_MODULE_0__[
                                         'FIELD_TYPE_DATETIME'
                                     ]:
-                                        gqlType = 'String';
+                                        gqlType = 'Integer.tsx';
                                         break;
 
                                     case project_minimum_core__WEBPACK_IMPORTED_MODULE_0__[
                                         'FIELD_TYPE_BOOLEAN'
                                     ]:
-                                        gqlType = 'Boolean';
+                                        gqlType = 'Boolean.tsx';
                                         break;
 
                                     default:
-                                        gqlType = 'String';
+                                        gqlType = 'Integer.tsx';
                                 }
                             }
 

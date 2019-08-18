@@ -19,16 +19,18 @@ import {
     ItemActionLink,
     ActionPanel,
 } from './style';
-import { ListCellString, PageNavigation } from '..';
+import { PageNavigation } from '..';
 import {
     ListProperties,
-    ListPropertyColumnItem,
+    ListCell,
     ListPropertyOrder,
     ListPropertyItemAction,
     ListPropertyItemActionGetHref,
     ListPropertyItemActionOnClick,
 } from './type';
 import { Item } from '../../lib/project-minimum-core';
+
+import { BooleanCell, StringCell, DateTimeCell, IntegerCell } from './Cell';
 
 const renderItemActions = (
     itemActions: ListPropertyItemAction[],
@@ -77,10 +79,7 @@ const renderItemActions = (
     );
 };
 
-const renderSortOrderSign = (
-    cell: ListPropertyColumnItem,
-    sort: ListPropertyOrder,
-) => {
+const renderSortOrderSign = (cell: ListCell, sort: ListPropertyOrder) => {
     if (cell.name !== sort.cell) {
         return 'remove';
     }
@@ -88,12 +87,28 @@ const renderSortOrderSign = (
     return sort.way === 'desc' ? 'arrow_drop_up' : 'arrow_drop_down';
 };
 
-const getCellComponent = (cell: ListPropertyColumnItem) => {
+const getCellComponent = (cell: ListCell) => {
     if (cell.renderer) {
         return cell.renderer;
     }
 
-    return ListCellString;
+    if (cell.type === 'string') {
+        return StringCell;
+    }
+
+    if (cell.type === 'boolean') {
+        return BooleanCell;
+    }
+
+    if (cell.type === 'datetime') {
+        return DateTimeCell;
+    }
+
+    if (cell.type === 'integer') {
+        return IntegerCell;
+    }
+
+    return StringCell;
 };
 
 export const List: FunctionComponent<ListProperties> = ({
@@ -161,15 +176,17 @@ export const List: FunctionComponent<ListProperties> = ({
                                         </ActionPanel>
                                     </ActionTD>
                                 )}
-                                {columns.map((cell: ListPropertyColumnItem) => {
-                                    const Cell = getCellComponent(cell);
+                                {columns.map((cell: ListCell) => {
+                                    const CellComponent = getCellComponent(
+                                        cell,
+                                    );
                                     return (
                                         <TD
                                             key={`${item[keyProperty]}_${
                                                 cell.name
                                             }`}
                                         >
-                                            <Cell
+                                            <CellComponent
                                                 data={item[cell.name]}
                                                 cell={cell}
                                             />

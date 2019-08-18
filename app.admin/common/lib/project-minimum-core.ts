@@ -24,4 +24,5 @@ export interface Field {
     isSortable: () => boolean;
     isReference: () => boolean;
     getActualType: () => string;
+    isMultiple: () => boolean;
 }
