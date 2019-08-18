@@ -3,7 +3,6 @@
  */
 
 type Nullable<X> = X | null;
-type Scalar = string | number | boolean;
 
 declare module '*.graphql' {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
