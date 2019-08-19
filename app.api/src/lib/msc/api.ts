@@ -4,7 +4,12 @@ import { wrapError } from 'ew-internals';
 import { getVaultFor, hasVaultFor } from './vault';
 import { getValidator, filterStructure } from './dto-compiler';
 
-import { ResultError } from './type';
+import {
+    MethodRecord,
+    RuntimeParameters,
+    ResultError,
+    APIVaultRecord,
+} from './type';
 
 export class Result {
     public data?: any = null;
@@ -25,17 +30,19 @@ export const ERROR_REQUEST = 'request';
 export const useMSC = (
     app: Express,
     controllers: Function[],
-    runtimeParameters: MapStringToAny = { connectionManager: null },
+    runtimeParameters: RuntimeParameters = { connectionManager: null },
 ) => {
     controllers.forEach((controller: Function) => {
         if (!hasVaultFor(controller)) {
             return;
         }
 
-        const { endpoint: rootEndpoint, methods } = getVaultFor(controller);
+        const { endpoint: rootEndpoint, methods } = getVaultFor(
+            controller,
+        ) as APIVaultRecord;
         if (_.isne(rootEndpoint) && _.ione(methods)) {
             Object.keys(methods).forEach((methodName: string) => {
-                const methodRecord: MapStringToAny = methods[methodName];
+                const methodRecord = methods[methodName];
 
                 const {
                     method,

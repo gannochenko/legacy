@@ -4,8 +4,8 @@
 
 type Nullable<X> = X | null;
 
-interface MapStringToAny {
-    [key: string]: any;
+interface MapStringTo<P> {
+    [key: string]: P;
 }
 
 interface GenericClass {

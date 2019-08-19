@@ -1,18 +1,15 @@
-// @ts-ignore
 import * as yup from 'yup';
 import { getVaultFor } from './vault';
+import { DTOAttributeType, DTOType, DTOVaultRecord } from './type';
 
-const cache = new Map<GenericClass, Nullable<object>>();
+const cache = new Map<DTOType, Nullable<object>>();
 
-export const getValidator = (
-    dto: GenericClass,
-    depth = 1,
-): Nullable<object> => {
+export const getValidator = (dto: DTOType, depth = 1): Nullable<object> => {
     if (depth > 30) {
         return null;
     }
 
-    const vault = getVaultFor(dto);
+    const vault = getVaultFor(dto) as DTOVaultRecord;
 
     if (!vault || !vault.isDTO) {
         return null;
@@ -29,60 +26,58 @@ export const getValidator = (
         return result;
     }
 
-    Object.keys(attributes as MapStringToAny).forEach(
-        (attributeName: string) => {
-            const {
-                params: { required, type },
-            } = attributes[attributeName];
-            const shape: MapStringToAny = {};
+    Object.keys(attributes).forEach(attributeName => {
+        const {
+            params: { required, type },
+        } = attributes[attributeName];
+        const shape: MapStringTo<any> = {};
 
-            let subType: any = null;
-            let fieldType = type;
-            let isArray = false;
-            if (_.isArray(type)) {
-                [fieldType] = type;
-                isArray = true;
-            }
+        let subType: Nullable<object> = null;
+        let fieldType: DTOAttributeType;
+        let isArray = false;
+        if (_.isArray(type)) {
+            [fieldType] = type as DTOAttributeType[];
+            isArray = true;
+        } else {
+            fieldType = type as DTOAttributeType;
+        }
 
-            if (_.isFunction(fieldType)) {
-                subType = getValidator(fieldType, depth + 1);
+        if (_.isFunction(fieldType)) {
+            subType = getValidator(fieldType as DTOType, depth + 1);
+        } else {
+            // only basic stuff so far
+            if (fieldType === 'string') {
+                subType = yup.string();
+            } else if (fieldType === 'number') {
+                subType = yup.number();
+            } else if (fieldType === 'boolean') {
+                subType = yup.boolean();
             } else {
-                // only basic stuff so far
-                if (fieldType === 'string') {
-                    subType = yup.string();
-                } else if (fieldType === 'number') {
-                    subType = yup.number();
-                } else if (fieldType === 'boolean') {
-                    subType = yup.boolean();
-                } else {
-                    subType = yup.string();
-                }
+                subType = yup.string();
             }
+        }
 
-            if (subType === null) {
-                throw new Error(
-                    `No DTO found for "${attributeName}" attribute`,
-                );
-            }
+        if (subType === null) {
+            throw new Error(`No DTO found for "${attributeName}" attribute`);
+        }
 
-            if (isArray) {
-                subType = yup.array().of(subType);
-            }
+        if (isArray) {
+            subType = yup.array().of(subType);
+        }
 
-            if (required) {
-                subType = subType.required();
-            }
+        if (required) {
+            subType = subType.required();
+        }
 
-            // todo: show "path" here
-            subType = subType.typeError(
-                `Member "${attributeName}" should be of type "${type}"`,
-            );
+        // todo: show "path" here
+        subType = subType.typeError(
+            `Member "${attributeName}" should be of type "${type}"`,
+        );
 
-            shape[attributeName] = subType;
+        shape[attributeName] = subType;
 
-            result = result.shape(shape);
-        },
-    );
+        result = result.shape(shape);
+    });
 
     if (depth === 1) {
         cache.set(dto, result);
@@ -92,10 +87,10 @@ export const getValidator = (
 };
 
 export const filterStructure = (
-    structure: MapStringToAny,
-    dto: Function,
+    structure: MapStringTo<any>,
+    dto: DTOType,
     depth = 1,
-): MapStringToAny => {
+): MapStringTo<any> => {
     if (depth > 30) {
         return {};
     }
@@ -116,7 +111,7 @@ export const filterStructure = (
         Object.keys(attributes),
     );
 
-    const result: MapStringToAny = {};
+    const result: MapStringTo<any> = {};
     legalKeys.forEach((key: string) => {
         const attribute = attributes[key];
         const {
