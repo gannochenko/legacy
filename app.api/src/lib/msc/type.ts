@@ -9,6 +9,7 @@ export type PropertyDescriptor = TypedPropertyDescriptor<
 export interface RuntimeParameters {
     connectionManager?: ConnectionManager;
 }
+
 export interface InputContext {
     req: Request;
     res: Response;
@@ -22,12 +23,9 @@ export interface ResultError {
     code: string;
     type?: string;
 }
+
 export interface Result {
     data?: any;
     errors: ResultError[];
     status?: number;
-}
-
-export interface StringMap {
-    [key: string]: any;
 }

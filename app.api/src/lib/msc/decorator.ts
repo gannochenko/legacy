@@ -1,4 +1,4 @@
-import { PropertyDescriptor, StringMap } from './type';
+import { PropertyDescriptor, HashStringToAny } from './type';
 import { getVaultFor, hasVaultFor } from './vault';
 
 export const Endpoint = (endpoint: string): Function => {
@@ -12,7 +12,7 @@ export const Endpoint = (endpoint: string): Function => {
 
 export const Get = (endpoint?: string): Function => {
     return (
-        target,
+        target: any,
         property: string,
         descriptor: PropertyDescriptor,
     ): PropertyDescriptor => {
@@ -31,7 +31,7 @@ export const Get = (endpoint?: string): Function => {
 
 export const Post = (endpoint?: string): Function => {
     return (
-        target,
+        target: any,
         property: string,
         descriptor: PropertyDescriptor,
     ): PropertyDescriptor => {
@@ -50,7 +50,7 @@ export const Post = (endpoint?: string): Function => {
 
 export const Put = (endpoint?: string): Function => {
     return (
-        target,
+        target: any,
         property: string,
         descriptor: PropertyDescriptor,
     ): PropertyDescriptor => {
@@ -69,7 +69,7 @@ export const Put = (endpoint?: string): Function => {
 
 export const Patch = (endpoint?: string): Function => {
     return (
-        target,
+        target: any,
         property: string,
         descriptor: PropertyDescriptor,
     ): PropertyDescriptor => {
@@ -88,7 +88,7 @@ export const Patch = (endpoint?: string): Function => {
 
 export const Delete = (endpoint?: string): Function => {
     return (
-        target,
+        target: any,
         property: string,
         descriptor: PropertyDescriptor,
     ): PropertyDescriptor => {
@@ -107,7 +107,7 @@ export const Delete = (endpoint?: string): Function => {
 
 export const BodyInput = (dto?: Function): Function => {
     return (
-        target,
+        target: any,
         property: string,
         descriptor: PropertyDescriptor,
     ): PropertyDescriptor => {
@@ -124,7 +124,7 @@ export const BodyInput = (dto?: Function): Function => {
 
 export const Output = (dto?: Function): Function => {
     return (
-        target,
+        target: any,
         property: string,
         descriptor: PropertyDescriptor,
     ): PropertyDescriptor => {
@@ -148,9 +148,9 @@ export const DTO = (): Function => {
     };
 };
 
-export const Attribute = (params: StringMap): Function => {
+export const Attribute = (params: HashStringToAny): Function => {
     return (
-        target,
+        target: any,
         property: string,
         descriptor: PropertyDescriptor,
     ): PropertyDescriptor => {

@@ -1,8 +1,8 @@
-import { StringMap } from './type';
+import { HashStringToAny } from './type';
 
 const vault = new Map();
 
-export const getVaultFor = (obj: any): StringMap => {
+export const getVaultFor = (obj: any): HashStringToAny => {
     if (!vault[obj]) {
         vault[obj] = {};
     }

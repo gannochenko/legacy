@@ -1,10 +1,9 @@
 import * as yup from 'yup';
 import { getVaultFor } from './vault';
-import { StringMap } from './type';
 
 const cache = new Map();
 
-export const getValidator = (dto: any, depth = 1): object => {
+export const getValidator = (dto: any, depth = 1): Nullable<object> => {
     if (depth > 30) {
         return null;
     }
@@ -26,56 +25,60 @@ export const getValidator = (dto: any, depth = 1): object => {
         return result;
     }
 
-    Object.keys(attributes as StringMap).forEach((attributeName: string) => {
-        const {
-            params: { required, type },
-        } = attributes[attributeName];
-        const shape = {};
+    Object.keys(attributes as HashStringToAny).forEach(
+        (attributeName: string) => {
+            const {
+                params: { required, type },
+            } = attributes[attributeName];
+            const shape: HashStringToAny = {};
 
-        let subType = null;
-        let fieldType = type;
-        let isArray = false;
-        if (_.isArray(type)) {
-            [fieldType] = type;
-            isArray = true;
-        }
-
-        if (_.isFunction(fieldType)) {
-            subType = getValidator(fieldType, depth + 1);
-        } else {
-            // only basic stuff so far
-            if (fieldType === 'string') {
-                subType = yup.string();
-            } else if (fieldType === 'number') {
-                subType = yup.number();
-            } else if (fieldType === 'boolean') {
-                subType = yup.boolean();
-            } else {
-                subType = yup.string();
+            let subType: any = null;
+            let fieldType = type;
+            let isArray = false;
+            if (_.isArray(type)) {
+                [fieldType] = type;
+                isArray = true;
             }
-        }
 
-        if (subType === null) {
-            throw new Error(`No DTO found for "${attributeName}" attribute`);
-        }
+            if (_.isFunction(fieldType)) {
+                subType = getValidator(fieldType, depth + 1);
+            } else {
+                // only basic stuff so far
+                if (fieldType === 'string') {
+                    subType = yup.string();
+                } else if (fieldType === 'number') {
+                    subType = yup.number();
+                } else if (fieldType === 'boolean') {
+                    subType = yup.boolean();
+                } else {
+                    subType = yup.string();
+                }
+            }
 
-        if (isArray) {
-            subType = yup.array().of(subType);
-        }
+            if (subType === null) {
+                throw new Error(
+                    `No DTO found for "${attributeName}" attribute`,
+                );
+            }
 
-        if (required) {
-            subType = subType.required();
-        }
+            if (isArray) {
+                subType = yup.array().of(subType);
+            }
 
-        // todo: show "path" here
-        subType = subType.typeError(
-            `Member "${attributeName}" should be of type "${type}"`,
-        );
+            if (required) {
+                subType = subType.required();
+            }
 
-        shape[attributeName] = subType;
+            // todo: show "path" here
+            subType = subType.typeError(
+                `Member "${attributeName}" should be of type "${type}"`,
+            );
 
-        result = result.shape(shape);
-    });
+            shape[attributeName] = subType;
+
+            result = result.shape(shape);
+        },
+    );
 
     if (depth === 1) {
         cache[dto] = result;
@@ -85,10 +88,10 @@ export const getValidator = (dto: any, depth = 1): object => {
 };
 
 export const filterStructure = (
-    structure: StringMap,
+    structure: HashStringToAny,
     dto: Function,
     depth = 1,
-): StringMap => {
+): HashStringToAny => {
     if (depth > 30) {
         return {};
     }
@@ -109,7 +112,7 @@ export const filterStructure = (
         Object.keys(attributes),
     );
 
-    const result = {};
+    const result: HashStringToAny = {};
     legalKeys.forEach((key: string) => {
         const attribute = attributes[key];
         const {
