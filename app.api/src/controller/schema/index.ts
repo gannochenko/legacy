@@ -1,3 +1,4 @@
+// @ts-ignore
 import { Schema } from 'project-minimum-core';
 import {
     Endpoint,
@@ -17,7 +18,7 @@ import { SchemaInputDTO } from './input.dto';
 export class SchemaController {
     @Get(':type/:entity')
     public async getEntity(
-        { type, entity },
+        { type, entity } = { type: '', entity: '' },
         { runtime: { connectionManager } }: InputContext,
     ): Promise<Result> {
         const result = new Result();
@@ -45,7 +46,7 @@ export class SchemaController {
 
     @Get(':type')
     public async get(
-        { type },
+        { type } = { type: '' },
         { runtime: { connectionManager } }: InputContext,
     ): Promise<Result> {
         const result = new Result();
@@ -66,7 +67,7 @@ export class SchemaController {
 
     @Put()
     public async commit(
-        args,
+        params: MapStringToAny,
         { runtime: { connectionManager } }: InputContext,
     ): Promise<Result> {
         const result = new Result();
@@ -90,7 +91,7 @@ export class SchemaController {
     @Patch()
     @BodyInput(SchemaInputDTO)
     public async patch(
-        params,
+        params: MapStringToAny,
         { body, runtime: { connectionManager } }: InputContext,
     ): Promise<Result> {
         const result = new Result();

@@ -1,15 +1,13 @@
-import { HashStringToAny } from './type';
+const vault = new Map<any, MapStringToAny>();
 
-const vault = new Map();
-
-export const getVaultFor = (obj: any): HashStringToAny => {
-    if (!vault[obj]) {
-        vault[obj] = {};
+export const getVaultFor = (key: any): MapStringToAny => {
+    if (!vault.has(key)) {
+        vault.set(key, {});
     }
 
-    return vault[obj];
+    return vault.get(key) as MapStringToAny;
 };
 
-export const hasVaultFor = (obj: any): boolean => !!vault[obj];
+export const hasVaultFor = (obj: any): boolean => vault.has(obj);
 
 export const getVault = () => vault;

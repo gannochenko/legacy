@@ -1,9 +1,13 @@
+// @ts-ignore
 import * as yup from 'yup';
 import { getVaultFor } from './vault';
 
-const cache = new Map();
+const cache = new Map<GenericClass, Nullable<object>>();
 
-export const getValidator = (dto: any, depth = 1): Nullable<object> => {
+export const getValidator = (
+    dto: GenericClass,
+    depth = 1,
+): Nullable<object> => {
     if (depth > 30) {
         return null;
     }
@@ -14,8 +18,8 @@ export const getValidator = (dto: any, depth = 1): Nullable<object> => {
         return null;
     }
 
-    if (depth === 1 && cache[dto]) {
-        return cache[dto];
+    if (depth === 1 && cache.has(dto)) {
+        return cache.get(dto) as object;
     }
 
     let result = yup.object();
@@ -25,12 +29,12 @@ export const getValidator = (dto: any, depth = 1): Nullable<object> => {
         return result;
     }
 
-    Object.keys(attributes as HashStringToAny).forEach(
+    Object.keys(attributes as MapStringToAny).forEach(
         (attributeName: string) => {
             const {
                 params: { required, type },
             } = attributes[attributeName];
-            const shape: HashStringToAny = {};
+            const shape: MapStringToAny = {};
 
             let subType: any = null;
             let fieldType = type;
@@ -81,17 +85,17 @@ export const getValidator = (dto: any, depth = 1): Nullable<object> => {
     );
 
     if (depth === 1) {
-        cache[dto] = result;
+        cache.set(dto, result);
     }
 
     return result;
 };
 
 export const filterStructure = (
-    structure: HashStringToAny,
+    structure: MapStringToAny,
     dto: Function,
     depth = 1,
-): HashStringToAny => {
+): MapStringToAny => {
     if (depth > 30) {
         return {};
     }
@@ -112,7 +116,7 @@ export const filterStructure = (
         Object.keys(attributes),
     );
 
-    const result: HashStringToAny = {};
+    const result: MapStringToAny = {};
     legalKeys.forEach((key: string) => {
         const attribute = attributes[key];
         const {

@@ -6,11 +6,11 @@ class TSDTO {}
 @DTO()
 class IndexDTO {
     @Attribute({ type: TSDTO, required: true })
-    public ts: object;
+    public ts: object | undefined;
 }
 
 @DTO()
 export class SchemaInputDTO {
     @Attribute({ type: IndexDTO, required: true })
-    public index: object;
+    public index: object | undefined;
 }

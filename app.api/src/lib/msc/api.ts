@@ -3,7 +3,7 @@ import { wrapError } from 'ew-internals';
 import { getVaultFor, hasVaultFor } from './vault';
 import { getValidator, filterStructure } from './dto-compiler';
 
-import { ResultError, HashStringToAny } from './type';
+import { ResultError } from './type';
 
 export class Result {
     public data?: any = null;
@@ -24,7 +24,7 @@ export const ERROR_REQUEST = 'request';
 export const useMSC = (
     app: Express,
     controllers: Function[],
-    runtimeParameters: HashStringToAny = { connectionManager: null },
+    runtimeParameters: MapStringToAny = { connectionManager: null },
 ) => {
     controllers.forEach((controller: Function) => {
         if (!hasVaultFor(controller)) {
@@ -34,7 +34,7 @@ export const useMSC = (
         const { endpoint: rootEndpoint, methods } = getVaultFor(controller);
         if (_.isne(rootEndpoint) && _.ione(methods)) {
             Object.keys(methods).forEach((methodName: string) => {
-                const methodRecord: HashStringToAny = methods[methodName];
+                const methodRecord: MapStringToAny = methods[methodName];
 
                 const {
                     method,

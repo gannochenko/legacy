@@ -1,5 +1,5 @@
-import { PropertyDescriptor, HashStringToAny } from './type';
-import { getVaultFor, hasVaultFor } from './vault';
+import { PropertyDescriptor } from './type';
+import { getVaultFor } from './vault';
 
 export const Endpoint = (endpoint: string): Function => {
     return (constructor: Function) => {
@@ -148,7 +148,7 @@ export const DTO = (): Function => {
     };
 };
 
-export const Attribute = (params: HashStringToAny): Function => {
+export const Attribute = (params: MapStringToAny): Function => {
     return (
         target: any,
         property: string,
