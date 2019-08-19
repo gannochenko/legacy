@@ -1,4 +1,5 @@
 import { Request, Response, Express } from 'express';
+// @ts-ignore
 import { wrapError } from 'ew-internals';
 
 const useHomeAPI = (app: Express) => {

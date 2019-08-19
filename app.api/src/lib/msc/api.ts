@@ -1,4 +1,5 @@
 import { Express, Response, Request } from 'express';
+// @ts-ignore
 import { wrapError } from 'ew-internals';
 import { getVaultFor, hasVaultFor } from './vault';
 import { getValidator, filterStructure } from './dto-compiler';
@@ -8,7 +9,7 @@ import { ResultError } from './type';
 export class Result {
     public data?: any = null;
     public errors: ResultError[] = [];
-    public status?: number = null;
+    public status?: Nullable<number> = null;
 
     public toJSON(): object {
         return {
@@ -47,7 +48,26 @@ export const useMSC = (
                     return;
                 }
 
-                app[method](
+                let appFunction: Nullable<Function> = null;
+                if (method === 'get') {
+                    appFunction = app.get;
+                } else if (method === 'post') {
+                    appFunction = app.post;
+                } else if (method === 'put') {
+                    appFunction = app.put;
+                } else if (method === 'patch') {
+                    appFunction = app.patch;
+                } else if (method === 'delete') {
+                    appFunction = app.delete;
+                }
+
+                if (!appFunction) {
+                    throw new Error(
+                        `Unsupported method produced by a decorator: ${method}`,
+                    );
+                }
+
+                appFunction(
                     `${rootEndpoint}/${endpoint}`,
                     wrapError(async (req: Request, res: Response) => {
                         const errors: ResultError[] = [];
