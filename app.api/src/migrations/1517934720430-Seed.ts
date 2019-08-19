@@ -1,8 +1,10 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
+// @ts-ignore
 import { logger } from 'ew-internals';
 import {
     ENTITY_ID_FIELD_NAME,
     ENTITY_ID_FIELD_LENGTH,
+    // @ts-ignore
 } from 'project-minimum-core';
 import SchemaEntity from '../model/schema';
 
