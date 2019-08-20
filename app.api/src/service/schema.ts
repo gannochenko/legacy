@@ -1,8 +1,15 @@
+// @ts-ignore
 import { Schema } from 'project-minimum-core';
 import SchemaEntity from '../model/schema';
+import ConnectionManager from '../lib/database/connection-manager';
+
+export type SchemaType = 'draft' | 'actual';
 
 class SchemaService {
-    static async load(type, connectionManager) {
+    public static async load(
+        type: SchemaType,
+        connectionManager: ConnectionManager,
+    ): Promise<Schema> {
         const connection = await connectionManager.getSystem();
 
         const schema = await connection.getRepository(SchemaEntity).findOne({
@@ -12,7 +19,11 @@ class SchemaService {
         return new Schema(schema || {});
     }
 
-    static async put(type, schema, connectionManager) {
+    public static async put(
+        type: SchemaType,
+        schema: Schema,
+        connectionManager: ConnectionManager,
+    ): Promise<object[]> {
         const errors = await schema.getHealth();
         if (!_.isArrayNotEmpty(errors)) {
             const connection = await connectionManager.getSystem();

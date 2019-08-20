@@ -5,6 +5,8 @@
 
 // @ts-ignore
 import TagCache from 'redis-tag-cache';
+// @ts-ignore
+import { Settings } from 'ew-internals';
 import { injectPassword, decomposeURL } from './util';
 
 interface TagCache {
@@ -13,10 +15,14 @@ interface TagCache {
     invalidate(...args: any[]): Promise<void>;
 }
 
+interface CacheParameters {
+    settings: Nullable<Settings>;
+}
+
 export default class Cache {
     private readonly cache: Nullable<TagCache> = null;
 
-    public static async make(params = {}) {
+    public static async make(params: CacheParameters = { settings: null }) {
         const { settings } = params;
         if (!settings) {
             throw new Error('No settings provided');
