@@ -1351,11 +1351,11 @@
                                 }
 
                                 const url = await settings.get(
-                                    'cache.url',
+                                    'cache.ts.еs.url',
                                     null,
                                 );
                                 const password = await settings.get(
-                                    'cache.password',
+                                    'cache.ts.еs.password',
                                     null,
                                 );
                                 return new this({

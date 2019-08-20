@@ -3,18 +3,30 @@
  * no cache endpoint provided
  */
 
+// @ts-ignore
 import TagCache from 'redis-tag-cache';
 import { injectPassword, decomposeURL } from './util';
 
+interface TagCache {
+    set(...args: any[]): Promise<void>;
+    get(...args: any[]): Promise<any>;
+    invalidate(...args: any[]): Promise<void>;
+}
+
 export default class Cache {
-    static async make(params = {}) {
+    private readonly cache: Nullable<TagCache> = null;
+
+    public static async make(params = {}) {
         const { settings } = params;
         if (!settings) {
             throw new Error('No settings provided');
         }
 
-        const url = await settings.get('cache.url', null);
-        const password = await settings.get('cache.password', null);
+        const url = (await settings.get('cache.еs.url', null)) as string;
+        const password = (await settings.get(
+            'cache.еs.password',
+            null,
+        )) as string;
 
         return new this({
             url,
@@ -22,9 +34,8 @@ export default class Cache {
         });
     }
 
-    constructor(props = {}) {
+    public constructor(props = { url: '', password: '' }) {
         const { url, password } = props;
-        this.cache = null;
         if (_.isStringNotEmpty(url)) {
             const sUrl = decomposeURL(injectPassword(url, password));
             if (sUrl === null) {
@@ -41,7 +52,7 @@ export default class Cache {
         }
     }
 
-    async get(...args) {
+    public async get(...args: any[]) {
         if (this.cache) {
             return this.cache.get(...args);
         }
@@ -49,7 +60,7 @@ export default class Cache {
         return null;
     }
 
-    async set(...args) {
+    public async set(...args: any[]) {
         if (this.cache) {
             return this.cache.set(...args);
         }
@@ -57,7 +68,7 @@ export default class Cache {
         return null;
     }
 
-    async invalidate(...args) {
+    public async invalidate(...args: any[]) {
         if (this.cache) {
             return this.cache.invalidate(...args);
         }

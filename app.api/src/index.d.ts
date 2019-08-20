@@ -2,7 +2,7 @@
  * Add custom type declarations here
  */
 
-type Nullable<X> = X | null;
+type Nullable<X = any> = X | null;
 
 interface StringMap<P = any> {
     [key: string]: P;
