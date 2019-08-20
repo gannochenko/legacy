@@ -1,28 +1,41 @@
-import { createConnection } from 'typeorm';
+import { createConnection, Connection } from 'typeorm';
 
+// @ts-ignore
 import { DB_MIGRATION_TABLE_NAME } from 'project-minimum-core';
+// @ts-ignore
+import { Settings } from 'ew-internals';
 import SchemaEntity from '../../model/schema';
 import migrations from '../../migrations';
 import { injectPassword } from '../util';
 
+interface ConnectionManagerParameters {
+    settings: Nullable<Settings>;
+}
+
+interface ConnectionOptions {
+    settings?: Nullable<Settings>;
+    entities?: GenericClass[];
+    migrationsTableName?: string;
+    name?: string;
+    migrations?: Function[];
+    [key: string]: any;
+}
+
 export default class ConnectionManager {
-    constructor({ settings }) {
+    private readonly settings: Nullable<Settings> = null;
+    private connections: StringMap<Nullable<Connection>> = {};
+
+    public constructor(
+        { settings }: ConnectionManagerParameters = { settings: null },
+    ) {
         this.settings = settings;
-        this.connections = {};
     }
 
-    /**
-     * Creates a regular connection to get data over
-     * @param entities
-     * @param preConnect
-     * @returns {Promise<*>}
-     */
-    async get({ entities, preConnect }) {
+    public async get({ entities }: ConnectionOptions = {}) {
         if (!this.connections.main) {
-            this.connections.main = this.make({
+            this.connections.main = await this.make({
                 settings: this.settings,
                 entities,
-                preConnect,
             });
         }
         return this.connections.main;
@@ -32,7 +45,7 @@ export default class ConnectionManager {
      * Close current regular connection
      * @returns {Promise<void>}
      */
-    async close() {
+    public async close() {
         if (this.connections.main) {
             await this.connections.main.close();
             this.connections.main = null;
@@ -41,38 +54,39 @@ export default class ConnectionManager {
 
     /**
      * Creates a system connection to get the schema over
-     * @returns {Promise<*|CacheConfigurator.simple|buttonStyle.simple|{'&,&:focus,&:hover,&:visited', '&$primary', '&$info', '&$success', '&$warning', '&$rose', '&$danger', '&$twitter', '&$facebook', '&$google', '&$github'}>}
      */
-    async getSystem() {
+    public async getSystem() {
         if (!this.connections.system) {
-            this.connections.system = this.make({
+            this.connections.system = await this.make({
                 name: 'system',
                 settings: this.settings,
                 entities: [SchemaEntity],
-                migrationsTableName: DB_MIGRATION_TABLE_NAME,
+                migrationsTableName: DB_MIGRATION_TABLE_NAME as string,
                 migrations,
             });
         }
         return this.connections.system;
     }
 
-    async invalidateConnections() {
+    public async invalidateConnections() {
         await this.close();
         this.connections = {};
     }
 
-    async make(params = {}) {
-        const { settings } = params;
+    public async make(parameters: ConnectionOptions = {}) {
+        const { settings } = parameters;
         if (!settings) {
             throw new Error('No settings provided');
         }
 
-        const url = await settings.get('db.url', null);
-        const password = await settings.get('db.password', null);
+        const url = (await settings.get('db.url', null)) as Nullable<string>;
+        const password = (await settings.get('db.password', null)) as Nullable<
+            string
+        >;
         const sUrl = injectPassword(url, password);
 
         return createConnection({
-            ...params,
+            ...parameters,
             url: sUrl,
             type: 'postgres',
         });

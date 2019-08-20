@@ -2,9 +2,13 @@
 import { camel } from 'naming-style';
 
 export const injectPassword = (
-    url: string,
+    url: Nullable<string>,
     password: Nullable<string> = null,
 ) => {
+    if (url === null) {
+        return '';
+    }
+
     if (typeof password === 'string' && password.length) {
         const oUrl = new URL(url);
         oUrl.password = password;
