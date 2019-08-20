@@ -4,15 +4,10 @@ import { wrapError } from 'ew-internals';
 import { getVaultFor, hasVaultFor } from './vault';
 import { getValidator, filterStructure } from './dto-compiler';
 
-import {
-    MethodRecord,
-    RuntimeParameters,
-    ResultError,
-    APIVaultRecord,
-} from './type';
+import { RuntimeParameters, ResultError, APIVaultRecord } from './type';
 
 export class Result {
-    public data?: any = null;
+    public data?: MapStringTo<any> = [];
     public errors: ResultError[] = [];
     public status?: Nullable<number> = null;
 
@@ -137,7 +132,7 @@ export const useMSC = (
 
                             if (outputDTO) {
                                 result.data = filterStructure(
-                                    result.data,
+                                    result.data || [],
                                     outputDTO,
                                 );
                             }

@@ -4,6 +4,7 @@ import {
     DTOVaultRecord,
     MapStringToAny,
     DTOType,
+    DTORecordParameter,
 } from './type';
 import { getVaultFor } from './vault';
 
@@ -154,7 +155,7 @@ export const DTO = (): Function => {
     };
 };
 
-export const Attribute = (params: MapStringToAny): Function => {
+export const Attribute = (params: DTORecordParameter): Function => {
     return (
         target: GenericClass,
         property: string,

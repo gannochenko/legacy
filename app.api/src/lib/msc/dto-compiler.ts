@@ -1,10 +1,25 @@
 import * as yup from 'yup';
+import {
+    Schema,
+    StringSchema,
+    NumberSchema,
+    BooleanSchema,
+    ArraySchema,
+    ObjectSchema,
+} from 'yup';
 import { getVaultFor } from './vault';
 import { DTOAttributeType, DTOType, DTOVaultRecord } from './type';
 
+type YupSchemaScalar =
+    | StringSchema
+    | NumberSchema
+    | BooleanSchema
+    | ObjectSchema;
+type YupSchema = YupSchemaScalar | ArraySchema<YupSchemaScalar>;
+
 const cache = new Map<DTOType, Nullable<object>>();
 
-export const getValidator = (dto: DTOType, depth = 1): Nullable<object> => {
+export const getValidator = (dto: DTOType, depth = 1): Nullable<YupSchema> => {
     if (depth > 30) {
         return null;
     }
@@ -16,7 +31,7 @@ export const getValidator = (dto: DTOType, depth = 1): Nullable<object> => {
     }
 
     if (depth === 1 && cache.has(dto)) {
-        return cache.get(dto) as object;
+        return cache.get(dto) as YupSchema;
     }
 
     let result = yup.object();
@@ -32,7 +47,7 @@ export const getValidator = (dto: DTOType, depth = 1): Nullable<object> => {
         } = attributes[attributeName];
         const shape: MapStringTo<any> = {};
 
-        let subType: Nullable<object> = null;
+        let subType: Nullable<YupSchema> = null;
         let fieldType: DTOAttributeType;
         let isArray = false;
         if (_.isArray(type)) {
@@ -62,7 +77,9 @@ export const getValidator = (dto: DTOType, depth = 1): Nullable<object> => {
         }
 
         if (isArray) {
-            subType = yup.array().of(subType);
+            subType = yup.array().of(subType as Schema<unknown>) as ArraySchema<
+                YupSchemaScalar
+            >;
         }
 
         if (required) {

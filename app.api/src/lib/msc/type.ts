@@ -6,10 +6,6 @@ export type PropertyDescriptor = TypedPropertyDescriptor<
     (params: any) => Promise<any>
 > & { initializer?: Function } & { value?: Function };
 
-// export interface RuntimeParameters {
-//     connectionManager?: ConnectionManager;
-// }
-
 export interface InputContext {
     req: Request;
     res: Response;

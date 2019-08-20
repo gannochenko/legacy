@@ -1,5 +1,7 @@
 const config = require('./config.js');
 
-module.exports = Object.assign({}, config, {
+module.exports = {
+    ...config,
     testRegex: '\\.e2e\\.js$',
-});
+    setupFiles: [...config.setupFiles, '<rootDir>/../jest/env-seed.js'],
+};
