@@ -7,7 +7,7 @@ import { getValidator, filterStructure } from './dto-compiler';
 import { RuntimeParameters, ResultError, APIVaultRecord } from './type';
 
 export class Result {
-    public data?: MapStringTo<any> = [];
+    public data?: StringMap = {};
     public errors: ResultError[] = [];
     public status?: Nullable<number> = null;
 

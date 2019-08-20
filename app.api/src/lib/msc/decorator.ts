@@ -2,7 +2,6 @@ import {
     PropertyDescriptor,
     APIVaultRecord,
     DTOVaultRecord,
-    MapStringToAny,
     DTOType,
     DTORecordParameter,
 } from './type';

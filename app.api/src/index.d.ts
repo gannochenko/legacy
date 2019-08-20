@@ -4,7 +4,7 @@
 
 type Nullable<X> = X | null;
 
-interface MapStringTo<P> {
+interface StringMap<P = any> {
     [key: string]: P;
 }
 

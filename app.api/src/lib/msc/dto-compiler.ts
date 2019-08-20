@@ -45,7 +45,7 @@ export const getValidator = (dto: DTOType, depth = 1): Nullable<YupSchema> => {
         const {
             params: { required, type },
         } = attributes[attributeName];
-        const shape: MapStringTo<any> = {};
+        const shape: StringMap = {};
 
         let subType: Nullable<YupSchema> = null;
         let fieldType: DTOAttributeType;
@@ -104,10 +104,10 @@ export const getValidator = (dto: DTOType, depth = 1): Nullable<YupSchema> => {
 };
 
 export const filterStructure = (
-    structure: MapStringTo<any>,
+    structure: StringMap,
     dto: DTOType,
     depth = 1,
-): MapStringTo<any> => {
+): StringMap => {
     if (depth > 30) {
         return {};
     }
@@ -128,7 +128,7 @@ export const filterStructure = (
         Object.keys(attributes),
     );
 
-    const result: MapStringTo<any> = {};
+    const result: StringMap = {};
     legalKeys.forEach((key: string) => {
         const attribute = attributes[key];
         const {

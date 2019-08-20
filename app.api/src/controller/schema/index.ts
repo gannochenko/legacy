@@ -9,7 +9,7 @@ import {
     Result,
     InputContext,
     ERROR_REQUEST,
-    MapStringToAny,
+    StringMap,
 } from '../../lib/msc';
 import SchemaService from '../../service/schema';
 
@@ -68,7 +68,7 @@ export class SchemaController {
 
     @Put()
     public async commit(
-        params: MapStringToAny,
+        params: StringMap,
         { runtime: { connectionManager } }: InputContext,
     ): Promise<Result> {
         const result = new Result();
@@ -92,7 +92,7 @@ export class SchemaController {
     @Patch()
     @BodyInput(SchemaInputDTO)
     public async patch(
-        params: MapStringToAny,
+        params: StringMap,
         { body, runtime: { connectionManager } }: InputContext,
     ): Promise<Result> {
         const result = new Result();

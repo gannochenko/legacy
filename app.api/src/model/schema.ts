@@ -6,7 +6,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 // @ts-ignore
 import { DB_SCHEMA_TABLE_NAME } from 'project-minimum-core';
-import { MapStringToAny } from '../lib/msc';
 
 @Entity({ name: DB_SCHEMA_TABLE_NAME })
 class SchemaEntity {
@@ -18,7 +17,7 @@ class SchemaEntity {
 
     // todo: use types from project-minimum-core here, when ready
     @Column({ type: 'json', nullable: false })
-    public schema: MapStringToAny = {};
+    public schema: StringMap = {};
 
     @Column({ type: 'smallint', default: 0 })
     public version: number | undefined;

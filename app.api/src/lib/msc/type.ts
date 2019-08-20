@@ -26,9 +26,7 @@ export interface Result {
     status?: number;
 }
 
-export type MapStringToAny = MapStringTo<any>;
-
-export interface RuntimeParameters extends MapStringToAny {
+export interface RuntimeParameters extends StringMap {
     connectionManager: Nullable<ConnectionManager>;
 }
 
@@ -44,19 +42,19 @@ interface MethodRecordCallbackContext {
     runtime: RuntimeParameters;
 }
 
-export interface MethodRecord extends MapStringToAny {
+export interface MethodRecord extends StringMap {
     method: string;
     endpoint: string;
-    fn: (params: MapStringToAny, context: MethodRecordCallbackContext) => void;
+    fn: (params: StringMap, context: MethodRecordCallbackContext) => void;
     bodyDTO: DTOType;
     outputDTO: DTOType;
 }
 
-export interface VaultRecord extends MapStringToAny {}
+export interface VaultRecord extends StringMap {}
 
 export interface APIVaultRecord extends VaultRecord {
     endpoint: string;
-    methods: MapStringTo<MethodRecord>;
+    methods: StringMap<MethodRecord>;
 }
 
 export interface DTORecordParameter {
@@ -70,5 +68,5 @@ export interface DTORecord {
 
 export interface DTOVaultRecord extends VaultRecord {
     isDTO: boolean;
-    attributes: MapStringTo<DTORecord>;
+    attributes: StringMap<DTORecord>;
 }
