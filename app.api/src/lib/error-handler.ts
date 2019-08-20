@@ -1,4 +1,6 @@
-const useErrorHandler = app => {
+import { Request, Response, Express, NextFunction } from 'express';
+
+const useErrorHandler = (app: Express) => {
     // catching async unhandled rejections
     process
         .on('unhandledRejection', err => {
@@ -9,9 +11,9 @@ const useErrorHandler = app => {
         });
 
     // catching normal unhandled exceptions
-    app.use((err, req, res, next) => {
+    app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
         logger.error('Uncaught exception', err);
-        res.send('Nasty error'); // todo: explain here
+        return res.send('Nasty error'); // todo: explain here
     });
 };
 

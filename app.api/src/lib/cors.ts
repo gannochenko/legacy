@@ -1,8 +1,12 @@
 import cors from 'cors';
+import { Express } from 'express';
+// @ts-ignore
+import { Settings } from 'ew-internals';
 
-const useCORS = (app, settings) => {
+const useCORS = (app: Express, settings: Settings) => {
     app.use(
         cors({
+            // eslint-disable-next-line consistent-return
             origin: (origin, cb) => {
                 // allow requests with no origin, like mobile apps or curl requests
                 if (!origin) {
@@ -12,7 +16,7 @@ const useCORS = (app, settings) => {
                 // get cors settings on each hit, to be able to change it at the run-time
                 settings
                     .get('network.cors', null)
-                    .then(corsSettings => {
+                    .then((corsSettings: string) => {
                         if (corsSettings === '*') {
                             return cb(null, true);
                         }
@@ -29,11 +33,11 @@ const useCORS = (app, settings) => {
 
                         if (match) {
                             return cb(null, true);
-                        } else {
-                            return cb(new Error('CORS mismatch'), false); // todo: throw 403
                         }
+
+                        return cb(new Error('CORS mismatch'), false); // todo: throw 403
                     })
-                    .catch(error => {
+                    .catch((error: Error) => {
                         logger.error(
                             'Error occurred when checking CORS',
                             error,
