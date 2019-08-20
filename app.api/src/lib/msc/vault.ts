@@ -1,8 +1,10 @@
-import { VaultRecord } from './type';
+import { DTOType, VaultRecord } from './type';
 
-const vault = new Map<any, VaultRecord>();
+type VaultKey = Function | DTOType;
 
-export const getVaultFor = (key: any): VaultRecord => {
+const vault = new Map<VaultKey, VaultRecord>();
+
+export const getVaultFor = (key: VaultKey): VaultRecord => {
     if (!vault.has(key)) {
         vault.set(key, {});
     }
@@ -10,6 +12,6 @@ export const getVaultFor = (key: any): VaultRecord => {
     return vault.get(key) as VaultRecord;
 };
 
-export const hasVaultFor = (obj: any): boolean => vault.has(obj);
+export const hasVaultFor = (obj: VaultKey): boolean => vault.has(obj);
 
 export const getVault = () => vault;
