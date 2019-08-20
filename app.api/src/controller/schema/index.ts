@@ -9,7 +9,6 @@ import {
     Result,
     InputContext,
     ERROR_REQUEST,
-    StringMap,
 } from '../../lib/msc';
 import SchemaService from '../../service/schema';
 

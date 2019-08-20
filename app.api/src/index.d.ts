@@ -9,7 +9,7 @@ interface StringMap<P = any> {
 }
 
 interface GenericClass {
-    new (...args: any[]);
+    new (...args: any[]): {};
 }
 
 declare module '*.graphql' {
