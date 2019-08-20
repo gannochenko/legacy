@@ -1368,7 +1368,7 @@
                                 const { url, password } = props;
                                 this.cache = null;
 
-                                if (_.isne(url)) {
+                                if (_.isStringNotEmpty(url)) {
                                     const sUrl = Object(
                                         _util__WEBPACK_IMPORTED_MODULE_1__[
                                             'decomposeURL'
@@ -1467,7 +1467,7 @@
                                                     return cb(null, true);
                                                 }
 
-                                                const origins = _.isne(
+                                                const origins = _.isStringNotEmpty(
                                                     corsSettings,
                                                 )
                                                     ? corsSettings
@@ -1476,7 +1476,9 @@
                                                     : [];
                                                 let match = false;
 
-                                                if (_.iane(origins)) {
+                                                if (
+                                                    _.isArrayNotEmpty(origins)
+                                                ) {
                                                     // we have CORS settings
                                                     match =
                                                         origins.indexOf(
@@ -1743,7 +1745,7 @@
 
                             get(loaderId, fn) {
                                 if (
-                                    !_.isne(loaderId) ||
+                                    !_.isStringNotEmpty(loaderId) ||
                                     typeof fn !== 'function'
                                 ) {
                                     return null;
@@ -2682,7 +2684,7 @@
                                 entity,
                                 { alias = '' } = {},
                             ) {
-                                if (!_.ione(order)) {
+                                if (!_.isObjectNotEmpty(order)) {
                                     return null;
                                 }
 
@@ -3365,7 +3367,7 @@
                                     };
                                     const { id } = args;
 
-                                    if (!_.isne(id)) {
+                                    if (!_.isStringNotEmpty(id)) {
                                         result.errors.push({
                                             code: `${
                                                 project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
@@ -4206,7 +4208,7 @@
                             static makeWhereFind(filter, search) {
                                 const where = {};
 
-                                if (_.isne(search)) {
+                                if (_.isStringNotEmpty(search)) {
                                     // a very basic type of search - by the part of code
                                     where[
                                         project_minimum_core__WEBPACK_IMPORTED_MODULE_2__[
@@ -4600,37 +4602,37 @@ type Mutation {
                     'use strict';
                     __webpack_require__.r(__webpack_exports__);
                     /* harmony import */ var lodash_isobject__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-                        /*! lodash.isobject */ 'lodash.isobject',
+                        /*! lodash.isobject */ 'lodash.ts.isobject',
                     );
                     /* harmony import */ var lodash_isobject__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/ __webpack_require__.n(
                         lodash_isobject__WEBPACK_IMPORTED_MODULE_0__,
                     );
                     /* harmony import */ var lodash_union__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-                        /*! lodash.union */ 'lodash.union',
+                        /*! lodash.union */ 'lodash.ts.union',
                     );
                     /* harmony import */ var lodash_union__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/ __webpack_require__.n(
                         lodash_union__WEBPACK_IMPORTED_MODULE_1__,
                     );
                     /* harmony import */ var lodash_intersection__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
-                        /*! lodash.intersection */ 'lodash.intersection',
+                        /*! lodash.intersection */ 'lodash.ts.intersection',
                     );
                     /* harmony import */ var lodash_intersection__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/ __webpack_require__.n(
                         lodash_intersection__WEBPACK_IMPORTED_MODULE_2__,
                     );
                     /* harmony import */ var lodash_difference__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
-                        /*! lodash.difference */ 'lodash.difference',
+                        /*! lodash.difference */ 'lodash.ts.difference',
                     );
                     /* harmony import */ var lodash_difference__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/ __webpack_require__.n(
                         lodash_difference__WEBPACK_IMPORTED_MODULE_3__,
                     );
                     /* harmony import */ var lodash_get__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
-                        /*! lodash.get */ 'lodash.get',
+                        /*! lodash.get */ 'lodash.ts.get',
                     );
                     /* harmony import */ var lodash_get__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/ __webpack_require__.n(
                         lodash_get__WEBPACK_IMPORTED_MODULE_4__,
                     );
                     /* harmony import */ var lodash_clonedeep__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
-                        /*! lodash.clonedeep */ 'lodash.clonedeep',
+                        /*! lodash.clonedeep */ 'lodash.ts.clonedeep',
                     );
                     /* harmony import */ var lodash_clonedeep__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/ __webpack_require__.n(
                         lodash_clonedeep__WEBPACK_IMPORTED_MODULE_5__,
@@ -4652,17 +4654,17 @@ type Mutation {
                         difference: lodash_difference__WEBPACK_IMPORTED_MODULE_3___default(),
                         cloneDeep: lodash_clonedeep__WEBPACK_IMPORTED_MODULE_5___default(),
                         get: lodash_get__WEBPACK_IMPORTED_MODULE_4___default(),
-                        iane: arg => {
+                        isArrayNotEmpty: arg => {
                             return Array.isArray(arg) && arg.length > 0;
                         },
-                        ione: arg => {
+                        isObjectNotEmpty: arg => {
                             return (
                                 lodash_isobject__WEBPACK_IMPORTED_MODULE_0___default()(
                                     arg,
                                 ) && Object.keys(arg).length > 0
                             );
                         },
-                        isne: arg => {
+                        isStringNotEmpty: arg => {
                             return typeof arg === 'string' && !!arg.length;
                         },
                     };
@@ -4767,7 +4769,10 @@ type Mutation {
                                     ],
                                 )(controller);
 
-                                if (_.isne(rootEndpoint) && _.ione(methods)) {
+                                if (
+                                    _.isStringNotEmpty(rootEndpoint) &&
+                                    _.isObjectNotEmpty(methods)
+                                ) {
                                     Object.keys(methods).forEach(methodName => {
                                         const methodRecord =
                                             methods[methodName];
@@ -4780,7 +4785,7 @@ type Mutation {
                                         } = methodRecord;
 
                                         if (
-                                            !_.isne(method) &&
+                                            !_.isStringNotEmpty(method) &&
                                             !_.isFunction(fn)
                                         ) {
                                             return;
@@ -5239,7 +5244,7 @@ type Mutation {
                             ]();
                             const { attributes } = vault;
 
-                            if (!_.ione(attributes)) {
+                            if (!_.isObjectNotEmpty(attributes)) {
                                 return result;
                             }
 
@@ -5329,7 +5334,7 @@ type Mutation {
 
                             const { attributes } = vault;
 
-                            if (!_.ione(attributes)) {
+                            if (!_.isObjectNotEmpty(attributes)) {
                                 return {};
                             }
 
@@ -5705,7 +5710,7 @@ type Mutation {
                                 password: oUrl.password,
                             };
 
-                            if (!_.isne(parts.host)) {
+                            if (!_.isStringNotEmpty(parts.host)) {
                                 // invalid url
                                 return null;
                             }
@@ -6232,7 +6237,7 @@ type Mutation {
                             static async put(type, schema, connectionManager) {
                                 const errors = await schema.getHealth();
 
-                                if (!_.iane(errors)) {
+                                if (!_.isArrayNotEmpty(errors)) {
                                     const connection = await connectionManager.getSystem();
                                     const repo = connection.getRepository(
                                         _model_schema__WEBPACK_IMPORTED_MODULE_1__[

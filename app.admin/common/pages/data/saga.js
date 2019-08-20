@@ -15,7 +15,7 @@ function* load({ payload = {} }) {
         });
 
         const result = _.get(apolloResult, `data.${queryName}`);
-        if (_.iane(result.errors)) {
+        if (_.isArrayNotEmpty(result.errors)) {
             yield put({
                 type: reducer.LOAD_FAILURE,
                 payload: result.errors,
@@ -47,7 +47,7 @@ function* remove({ payload = {} }) {
         });
 
         const result = _.get(apolloResult, `data.${mutationName}`);
-        if (_.iane(result.errors)) {
+        if (_.isArrayNotEmpty(result.errors)) {
             yield put({
                 type: reducer.DELETE_FAILURE,
                 payload: result.errors,

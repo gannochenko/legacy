@@ -16,14 +16,14 @@ import unique from 'lodash.uniq';
 export default {
     isArray: Array.isArray,
     isObject,
-    iane: arg => {
+    isArrayNotEmpty: arg => {
         return Array.isArray(arg) && arg.length > 0;
     },
-    ione: arg => {
+    isObjectNotEmpty: arg => {
         return isObject(arg) && Object.keys(arg).length > 0;
     },
     isString,
-    isne: arg => {
+    isStringNotEmpty: arg => {
         return isString(arg) && arg.length > 0;
     },
     isDate: arg => arg instanceof Date,

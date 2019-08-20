@@ -14,7 +14,7 @@ class SchemaService {
 
     static async put(type, schema, connectionManager) {
         const errors = await schema.getHealth();
-        if (!_.iane(errors)) {
+        if (!_.isArrayNotEmpty(errors)) {
             const connection = await connectionManager.getSystem();
             const repo = connection.getRepository(SchemaEntity);
 

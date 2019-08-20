@@ -55,14 +55,13 @@ export const FormComponent = ({
     formData,
     openConfirmModal,
 }) => {
-    const initial = useMemo(() => _.cloneDeep(data), [data]);
     const validator = useMemo(() => entity.getValidator(), [entity]);
     const form = useRef();
     return (
         <FormContainer>
             <Formik
                 ref={form}
-                initialValues={initial}
+                initialValues={data}
                 onSubmit={onSubmit}
                 validationSchema={validator}
             >
@@ -116,7 +115,7 @@ export const FormComponent = ({
                                         Save
                                     </Button>
                                 </ButtonWrap>
-                                {_.isne(data.code) && (
+                                {_.isStringNotEmpty(data.code) && (
                                     <DeleteButton
                                         href="javascript:void(0)"
                                         onClick={event => {

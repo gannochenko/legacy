@@ -18,7 +18,7 @@ function* load(client, parameters) {
         });
 
         const result = _.get(apolloResult, `data.${queryName}`);
-        if (_.iane(result.errors)) {
+        if (_.isArrayNotEmpty(result.errors)) {
             yield put({
                 type: reducer.LOAD_FAILURE,
                 payload: result.errors,
@@ -42,7 +42,7 @@ function* itemSearch(params) {
     const { payload } = params;
     const { client, field, text } = payload || {};
 
-    if (!_.isne(text)) {
+    if (!_.isStringNotEmpty(text)) {
         yield put({
             type: reducer.ITEM_SEARCH_SUCCESS,
             payload: { field: field.getName(), data: [] },
@@ -59,7 +59,7 @@ function* itemSearch(params) {
         });
 
         const result = _.get(apolloResult, `data.${queryName}`);
-        if (_.iane(result.errors)) {
+        if (_.isArrayNotEmpty(result.errors)) {
             yield put({
                 type: reducer.ITEM_SEARCH_FAILURE,
                 payload: result.errors,
@@ -98,7 +98,7 @@ function* save(params) {
         }
 
         const result = _.get(apolloResult, `data.${mutationName}`);
-        if (_.iane(result.errors)) {
+        if (_.isArrayNotEmpty(result.errors)) {
             yield put({
                 type: reducer.SAVE_FAILURE,
                 payload: result.errors,
@@ -141,7 +141,7 @@ function* remove(params) {
         });
 
         const result = _.get(apolloResult, `data.${mutationName}`);
-        if (_.iane(result.errors)) {
+        if (_.isArrayNotEmpty(result.errors)) {
             yield put({
                 type: reducer.DELETE_FAILURE,
                 payload: result.errors,

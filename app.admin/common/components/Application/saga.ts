@@ -8,7 +8,7 @@ function* load({ payload: { client } }) {
 
         const result = yield call(() => client.get(`schema/draft`));
         let schema = null;
-        if (!_.iane(result.data.errors)) {
+        if (!_.isArrayNotEmpty(result.data.errors)) {
             schema = new Schema(result.data.data);
         } else {
             yield put({

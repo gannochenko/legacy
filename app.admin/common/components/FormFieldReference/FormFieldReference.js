@@ -116,7 +116,7 @@ const FormFieldReferenceComponent = ({
                         <ScrollPanel>
                             {() => (
                                 <SearchResults>
-                                    {_.iane(formData.result) &&
+                                    {_.isArrayNotEmpty(formData.result) &&
                                         formData.result.map(sResult => (
                                             <SearchItem key={sResult.code}>
                                                 <SearchItemData>
@@ -131,7 +131,7 @@ const FormFieldReferenceComponent = ({
                                                     >
                                                         {sResult.code}
                                                     </ItemLink>
-                                                    {_.isne(
+                                                    {_.isStringNotEmpty(
                                                         sResult[pFieldName],
                                                     ) && (
                                                         <>
@@ -227,14 +227,15 @@ const FormFieldReferenceComponent = ({
                                     >
                                         {item.code}
                                     </ItemLink>
-                                    {_.isne(pFieldName) && !!item[pFieldName] && (
-                                        <>
-                                            <br />
-                                            <ItemDescription>
-                                                {item[pFieldName]}
-                                            </ItemDescription>
-                                        </>
-                                    )}
+                                    {_.isStringNotEmpty(pFieldName) &&
+                                        !!item[pFieldName] && (
+                                            <>
+                                                <br />
+                                                <ItemDescription>
+                                                    {item[pFieldName]}
+                                                </ItemDescription>
+                                            </>
+                                        )}
                                 </ItemData>
                                 <ItemActions>
                                     <RemoveButton

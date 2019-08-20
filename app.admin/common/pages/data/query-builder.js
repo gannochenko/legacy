@@ -26,7 +26,7 @@ export const buildQueryFind = ({
                 page: ${parseInt(page, 10)}
                 pageSize: ${parseInt(pageSize, 10)}
                 ${
-                    _.iane(sort)
+                    _.isArrayNotEmpty(sort)
                         ? `sort: { ${sanitize(sort[0])}: ${sanitize(
                               sort[1],
                           ).toUpperCase()} }`

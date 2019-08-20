@@ -22,10 +22,10 @@ export class Entity {
 
     getSanitizedDeclaration(declaration) {
         let safeDeclaration = declaration;
-        if (!_.ione(safeDeclaration)) {
+        if (!_.isObjectNotEmpty(safeDeclaration)) {
             safeDeclaration = {};
         }
-        if (!_.iane(safeDeclaration.schema)) {
+        if (!_.isArrayNotEmpty(safeDeclaration.schema)) {
             safeDeclaration.schema = [];
         }
 
@@ -192,7 +192,7 @@ export class Entity {
     castData(data) {
         const processed = {};
 
-        if (!_.ione(data)) {
+        if (!_.isObjectNotEmpty(data)) {
             return processed;
         }
 

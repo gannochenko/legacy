@@ -25,7 +25,7 @@ export default class Cache {
     constructor(props = {}) {
         const { url, password } = props;
         this.cache = null;
-        if (_.isne(url)) {
+        if (_.isStringNotEmpty(url)) {
             const sUrl = decomposeURL(injectPassword(url, password));
             if (sUrl === null) {
                 // logger.warn('Illegal URL passed, will proceed without cache');

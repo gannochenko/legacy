@@ -17,12 +17,12 @@ const useCORS = (app, settings) => {
                             return cb(null, true);
                         }
 
-                        const origins = _.isne(corsSettings)
+                        const origins = _.isStringNotEmpty(corsSettings)
                             ? corsSettings.split(',').map(x => x.trim())
                             : [];
 
                         let match = false;
-                        if (_.iane(origins)) {
+                        if (_.isArrayNotEmpty(origins)) {
                             // we have CORS settings
                             match = origins.indexOf(origin) >= 0;
                         }

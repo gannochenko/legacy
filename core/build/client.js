@@ -98,13 +98,13 @@
                     },
                     isObject: a.a,
                     union: c.a,
-                    iane: function(e) {
+                    isArrayNotEmpty: function(e) {
                         return Array.isArray(e) && e.length > 0;
                     },
-                    ione: function(e) {
+                    isObjectNotEmpty: function(e) {
                         return a()(e) && Object.keys(e).length > 0;
                     },
-                    isne: function(e) {
+                    isStringNotEmpty: function(e) {
                         return 'string' == typeof e && e.length > 0;
                     },
                     unique: s.a,
@@ -165,7 +165,9 @@
                                                                     (r = this.getType()),
                                                                     (i = this.isMultiple()),
                                                                     (o = this.isUnique()),
-                                                                    f.isne(n) ||
+                                                                    f.isStringNotEmpty(
+                                                                        n,
+                                                                    ) ||
                                                                         t.push({
                                                                             message:
                                                                                 'Field does not have a name',
@@ -174,7 +176,9 @@
                                                                             fieldName:
                                                                                 '',
                                                                         }),
-                                                                    f.isne(r) ||
+                                                                    f.isStringNotEmpty(
+                                                                        r,
+                                                                    ) ||
                                                                         t.push({
                                                                             message:
                                                                                 'Field does not have a type',
@@ -268,10 +272,10 @@
                                 }
                                 var o = n.type;
                                 return (
-                                    f.isne(o) ||
+                                    f.isStringNotEmpty(o) ||
                                         (f.isArray(o) &&
                                             1 === o.length &&
-                                            f.isne(o[0])) ||
+                                            f.isStringNotEmpty(o[0])) ||
                                         delete n.type,
                                     n
                                 );
@@ -362,7 +366,9 @@
                         {
                             key: 'getDisplayName',
                             value: function() {
-                                return f.isne(this.declaration.label)
+                                return f.isStringNotEmpty(
+                                    this.declaration.label,
+                                )
                                     ? this.declaration.label
                                     : Object(r.uCFirst)(this.getName()).replace(
                                           /_/g,
@@ -1548,8 +1554,9 @@
                             value: function(e) {
                                 var t = e;
                                 return (
-                                    f.ione(t) || (t = {}),
-                                    f.iane(t.schema) || (t.schema = []),
+                                    f.isObjectNotEmpty(t) || (t = {}),
+                                    f.isArrayNotEmpty(t.schema) ||
+                                        (t.schema = []),
                                     {
                                         name: t.name || '',
                                         schema: t.schema.map(function(e) {
@@ -1836,7 +1843,7 @@
                             key: 'castData',
                             value: function(e) {
                                 var t = {};
-                                return f.ione(e)
+                                return f.isObjectNotEmpty(e)
                                     ? (this.getFields().forEach(function(n) {
                                           var r = n.getName();
                                           r in e && (t[r] = n.castValue(e[r]));
@@ -2137,8 +2144,9 @@
                         {
                             key: 'getSanitizedDeclaration',
                             value: function(e) {
-                                f.ione(e) || (e = {}),
-                                    f.iane(e.schema) || (e.schema = []);
+                                f.isObjectNotEmpty(e) || (e = {}),
+                                    f.isArrayNotEmpty(e.schema) ||
+                                        (e.schema = []);
                                 var t = parseInt(e.version, 10);
                                 return (
                                     Number.isNaN(t) && (t = 0),

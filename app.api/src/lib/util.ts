@@ -24,7 +24,7 @@ export const decomposeURL = (url: string) => {
         password: oUrl.password,
     };
 
-    if (!_.isne(parts.host)) {
+    if (!_.isStringNotEmpty(parts.host)) {
         // invalid url
         return null;
     }

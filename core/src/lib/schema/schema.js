@@ -58,10 +58,10 @@ export class Schema {
     }
 
     getSanitizedDeclaration(declaration) {
-        if (!_.ione(declaration)) {
+        if (!_.isObjectNotEmpty(declaration)) {
             declaration = {};
         }
-        if (!_.iane(declaration.schema)) {
+        if (!_.isArrayNotEmpty(declaration.schema)) {
             declaration.schema = [];
         }
 

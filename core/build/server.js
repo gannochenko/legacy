@@ -101,9 +101,9 @@
                     isString: e => 'string' == typeof e,
                     isObject: d.a,
                     union: m.a,
-                    iane: e => Array.isArray(e) && e.length > 0,
-                    ione: e => d()(e) && Object.keys(e).length > 0,
-                    isne: e => 'string' == typeof e && e.length > 0,
+                    isArrayNotEmpty: e => Array.isArray(e) && e.length > 0,
+                    isObjectNotEmpty: e => d()(e) && Object.keys(e).length > 0,
+                    isStringNotEmpty: e => 'string' == typeof e && e.length > 0,
                     unique: f.a,
                 };
             class y {
@@ -117,13 +117,13 @@
                         n = this.isMultiple(),
                         a = this.isUnique();
                     return (
-                        p.isne(t) ||
+                        p.isStringNotEmpty(t) ||
                             e.push({
                                 message: 'Field does not have a name',
                                 code: 'field_name_empty',
                                 fieldName: '',
                             }),
-                        p.isne(r) ||
+                        p.isStringNotEmpty(r) ||
                             e.push({
                                 message: 'Field does not have a type',
                                 code: 'field_type_empty',
@@ -178,8 +178,10 @@
                     }
                     const { type: i } = r;
                     return (
-                        p.isne(i) ||
-                            (p.isArray(i) && 1 === i.length && p.isne(i[0])) ||
+                        p.isStringNotEmpty(i) ||
+                            (p.isArray(i) &&
+                                1 === i.length &&
+                                p.isStringNotEmpty(i[0])) ||
                             delete r.type,
                         r
                     );
@@ -238,7 +240,7 @@
                     return this.declaration.name;
                 }
                 getDisplayName() {
-                    return p.isne(this.declaration.label)
+                    return p.isStringNotEmpty(this.declaration.label)
                         ? this.declaration.label
                         : Object(o.uCFirst)(this.getName()).replace(/_/g, ' ');
                 }
@@ -487,8 +489,8 @@
                 getSanitizedDeclaration(e) {
                     let t = e;
                     return (
-                        p.ione(t) || (t = {}),
-                        p.iane(t.schema) || (t.schema = []),
+                        p.isObjectNotEmpty(t) || (t = {}),
+                        p.isArrayNotEmpty(t.schema) || (t.schema = []),
                         { name: t.name || '', schema: t.schema.map(e => D(e)) }
                     );
                 }
@@ -608,7 +610,7 @@
                 }
                 castData(e) {
                     const t = {};
-                    return p.ione(e)
+                    return p.isObjectNotEmpty(e)
                         ? (this.getFields().forEach(r => {
                               const n = r.getName();
                               n in e && (t[n] = r.castValue(e[n]));
@@ -679,7 +681,8 @@
                     );
                 }
                 getSanitizedDeclaration(e) {
-                    p.ione(e) || (e = {}), p.iane(e.schema) || (e.schema = []);
+                    p.isObjectNotEmpty(e) || (e = {}),
+                        p.isArrayNotEmpty(e.schema) || (e.schema = []);
                     let t = parseInt(e.version, 10);
                     return (
                         Number.isNaN(t) && (t = 0),

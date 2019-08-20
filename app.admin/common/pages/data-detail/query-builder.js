@@ -101,7 +101,7 @@ export const buildMutationPut = ({ entity, schema, data, code }) => {
     const mutation = gql`
         mutation {
             ${sanitize(mutationName)}(data: {${dataStr.join(', ')}}${
-        _.isne(code) && code !== 'new'
+        _.isStringNotEmpty(code) && code !== 'new'
             ? `, ${ENTITY_ID_FIELD_NAME}: "${sanitize(code)}"`
             : ''
     }) {

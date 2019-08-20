@@ -47,7 +47,7 @@ export class Query {
     }
 
     static prepareOrderBy(order, entity, { alias = '' } = {}) {
-        if (!_.ione(order)) {
+        if (!_.isObjectNotEmpty(order)) {
             return null;
         }
 

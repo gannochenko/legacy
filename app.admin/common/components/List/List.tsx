@@ -160,7 +160,7 @@ export const List: FunctionComponent<ListProperties> = ({
                     </TR>
                 </THead>
                 <TBody>
-                    {_.iane(data) &&
+                    {_.isArrayNotEmpty(data) &&
                         data.map(item => {
                             return (
                                 <TR key={item[keyProperty]}>
@@ -200,7 +200,7 @@ export const List: FunctionComponent<ListProperties> = ({
                                 </TR>
                             );
                         })}
-                    {!_.iane(data) && (
+                    {!_.isArrayNotEmpty(data) && (
                         <TR>
                             <TDNotFound
                                 colSpan={columns.length + (hasActions ? 1 : 0)}

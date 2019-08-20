@@ -9,13 +9,13 @@ export default {
     isString: arg => typeof arg === 'string',
     isObject,
     union,
-    iane: arg => {
+    isArrayNotEmpty: arg => {
         return Array.isArray(arg) && arg.length > 0;
     },
-    ione: arg => {
+    isObjectNotEmpty: arg => {
         return isObject(arg) && Object.keys(arg).length > 0;
     },
-    isne: arg => {
+    isStringNotEmpty: arg => {
         return typeof arg === 'string' && arg.length > 0;
     },
     unique,

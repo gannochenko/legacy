@@ -39,7 +39,7 @@ export default class ResolverGenerator {
 
             const { id } = args;
 
-            if (!_.isne(id)) {
+            if (!_.isStringNotEmpty(id)) {
                 result.errors.push({
                     code: `${ENTITY_ID_FIELD_NAME}_missing`,
                     message: `Argument "${ENTITY_ID_FIELD_NAME}" is missing in the request`,
@@ -671,7 +671,7 @@ export default class ResolverGenerator {
     static makeWhereFind(filter, search) {
         const where = {};
 
-        if (_.isne(search)) {
+        if (_.isStringNotEmpty(search)) {
             // a very basic type of search - by the part of code
             where[ENTITY_ID_FIELD_NAME] = Like(
                 `%${search.replace(/[^a-zA-Z0-9_-]/, '')}%`,

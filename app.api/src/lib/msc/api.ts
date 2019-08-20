@@ -35,7 +35,7 @@ export const useMSC = (
         const { endpoint: rootEndpoint, methods } = getVaultFor(
             controller,
         ) as APIVaultRecord;
-        if (_.isne(rootEndpoint) && _.ione(methods)) {
+        if (_.isStringNotEmpty(rootEndpoint) && _.isObjectNotEmpty(methods)) {
             Object.keys(methods).forEach((methodName: string) => {
                 const methodRecord = methods[methodName];
 
@@ -46,7 +46,7 @@ export const useMSC = (
                     bodyDTO,
                     outputDTO,
                 } = methodRecord;
-                if (!_.isne(method) && !_.isFunction(fn)) {
+                if (!_.isStringNotEmpty(method) && !_.isFunction(fn)) {
                     return;
                 }
 

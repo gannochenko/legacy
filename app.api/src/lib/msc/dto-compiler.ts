@@ -37,7 +37,7 @@ export const getValidator = (dto: DTOType, depth = 1): Nullable<YupSchema> => {
     let result = yup.object();
 
     const { attributes } = vault;
-    if (!_.ione(attributes)) {
+    if (!_.isObjectNotEmpty(attributes)) {
         return result;
     }
 
@@ -119,7 +119,7 @@ export const filterStructure = (
     }
 
     const { attributes } = vault;
-    if (!_.ione(attributes)) {
+    if (!_.isObjectNotEmpty(attributes)) {
         return {};
     }
 

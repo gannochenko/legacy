@@ -18,7 +18,7 @@ export class BaseField {
         const isUnique = this.isUnique();
 
         // check that entity has a name
-        if (!_.isne(name)) {
+        if (!_.isStringNotEmpty(name)) {
             errors.push({
                 message: 'Field does not have a name',
                 code: 'field_name_empty',
@@ -27,7 +27,7 @@ export class BaseField {
         }
 
         // check that entity has a type
-        if (!_.isne(type)) {
+        if (!_.isStringNotEmpty(type)) {
             errors.push({
                 message: 'Field does not have a type',
                 code: 'field_type_empty',
@@ -101,8 +101,12 @@ export class BaseField {
 
         // check if type is string or [string] (not possible to do with yup?)
         if (
-            !_.isne(type) &&
-            !(_.isArray(type) && type.length === 1 && _.isne(type[0]))
+            !_.isStringNotEmpty(type) &&
+            !(
+                _.isArray(type) &&
+                type.length === 1 &&
+                _.isStringNotEmpty(type[0])
+            )
         ) {
             delete safeDeclaration.type;
         }
@@ -178,7 +182,7 @@ export class BaseField {
      * @returns {*}
      */
     getDisplayName() {
-        return _.isne(this.declaration.label)
+        return _.isStringNotEmpty(this.declaration.label)
             ? this.declaration.label
             : uCFirst(this.getName()).replace(/_/g, ' ');
     }
