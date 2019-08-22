@@ -17,7 +17,7 @@ class SchemaEntity {
 
     // todo: use types from project-minimum-core here, when ready
     @Column({ type: 'json', nullable: false })
-    public schema: StringMap = {};
+    public declaration: StringMap = {};
 
     @Column({ type: 'smallint', default: 0 })
     public version: number | undefined;
