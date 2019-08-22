@@ -1,6 +1,7 @@
 import { runHttpQuery, convertNodeHttpToRequest } from 'apollo-server-core';
+import { NextFunction, Request, Response } from 'express';
 
-export function graphqlExpress(options) {
+export function graphqlExpress(options: () => any) {
     if (!options) {
         throw new Error('Apollo Server requires options.');
     }
@@ -14,15 +15,16 @@ export function graphqlExpress(options) {
         );
     }
 
-    return (req, res, next) => {
+    return (req: Request, res: Response, next: NextFunction) => {
         runHttpQuery([req, res], {
             method: req.method,
-            options: options,
+            options,
             query: req.method === 'POST' ? req.body : req.query,
             request: convertNodeHttpToRequest(req),
         }).then(
             ({ graphqlResponse, responseInit }) => {
                 if (responseInit.headers) {
+                    // eslint-disable-next-line no-restricted-syntax
                     for (const [name, value] of Object.entries(
                         responseInit.headers,
                     )) {
@@ -32,14 +34,16 @@ export function graphqlExpress(options) {
                 res.write(graphqlResponse);
                 res.end();
             },
+            // eslint-disable-next-line consistent-return
             error => {
-                if ('HttpQueryError' !== error.name) {
+                if (error.name !== 'HttpQueryError') {
                     return next(error);
                 }
 
                 if (error.headers) {
+                    // eslint-disable-next-line no-restricted-syntax
                     for (const [name, value] of Object.entries(error.headers)) {
-                        res.setHeader(name, value);
+                        res.setHeader(name, value as string);
                     }
                 }
 
