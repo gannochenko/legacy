@@ -23,4 +23,5 @@ export interface Field {
     isRequired(): boolean;
     getActualType: () => string;
     isMultiple: () => boolean;
+    getReferencedEntityName(): string;
 }

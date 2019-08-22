@@ -4,10 +4,13 @@ import {
     FIELD_TYPE_DATETIME,
     FIELD_TYPE_INTEGER,
     ENTITY_ID_FIELD_NAME,
+    // @ts-ignore
 } from 'project-minimum-core';
 
+import { Schema, Entity, Field } from '../project-minimum-core';
+
 export default class TypeGenerator {
-    static make(schema) {
+    public static make(schema: Schema) {
         const entities = Object.values(schema.getSchema());
         if (!entities.length) {
             return [];
@@ -16,19 +19,13 @@ export default class TypeGenerator {
         return entities.map(entity => this.makeForEntity(entity, schema));
     }
 
-    /**
-     * @private
-     * @param entity
-     * @param schema
-     * @returns {string}
-     */
-    static makeForEntity(entity, schema) {
+    private static makeForEntity(entity: Entity, schema: Schema) {
         const name = entity.getCamelName();
 
-        const tFields = [];
-        const iFields = [];
-        const fFields = [];
-        const sFields = [];
+        const tFields: string[] = [];
+        const iFields: string[] = [];
+        const fFields: string[] = [];
+        const sFields: string[] = [];
         entity.getFields().forEach(field => {
             tFields.push(
                 `${this.getQueryFieldName(
@@ -44,7 +41,7 @@ export default class TypeGenerator {
                         field,
                         schema,
                         true,
-                    )}${false && field.isRequired() ? '!' : ''}`,
+                    )}`,
                 );
             }
             fFields.push(`${fieldName}: IFilterFieldValue`);
@@ -104,7 +101,11 @@ type Mutation {
         `;
     }
 
-    static getGQLFieldType(field, schema, input = false) {
+    private static getGQLFieldType(
+        field: Field,
+        schema: Schema,
+        input = false,
+    ) {
         let gqlType = 'String';
         if (field.isReference()) {
             // reference, for input we accept codes, for types - just put type
@@ -113,6 +114,11 @@ type Mutation {
             } else {
                 const referencedEntityName = field.getReferencedEntityName();
                 const referencedEntity = schema.getEntity(referencedEntityName);
+                if (!referencedEntity) {
+                    throw new Error(
+                        `No reference found by name: ${referencedEntityName}`,
+                    );
+                }
                 gqlType = referencedEntity.getCamelName();
             }
         } else {
@@ -142,10 +148,16 @@ type Mutation {
         return gqlType;
     }
 
-    static getQueryFieldName(field, schema) {
+    private static getQueryFieldName(field: Field, schema: Schema) {
         if (field.isReference() && field.isMultiple()) {
             const referencedEntityName = field.getReferencedEntityName();
             const referencedEntity = schema.getEntity(referencedEntityName);
+            if (!referencedEntity) {
+                throw new Error(
+                    `No reference found by name: ${referencedEntityName}`,
+                );
+            }
+
             const referencedEntityNameCamel = referencedEntity.getCamelName();
             return `${field.getName()}(
                 filter: I${referencedEntityNameCamel}Filter
