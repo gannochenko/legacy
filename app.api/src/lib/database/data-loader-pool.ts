@@ -1,11 +1,9 @@
-import DataLoader from 'dataloader';
+import DataLoader, { BatchLoadFn } from 'dataloader';
 
 export default class DataLoaderPool {
-    constructor() {
-        this.pool = {};
-    }
+    private readonly pool: StringMap<DataLoader<unknown, unknown>> = {};
 
-    get(loaderId, fn) {
+    public get(loaderId: string, fn: BatchLoadFn<unknown, unknown>) {
         if (!_.isStringNotEmpty(loaderId) || typeof fn !== 'function') {
             return null;
         }

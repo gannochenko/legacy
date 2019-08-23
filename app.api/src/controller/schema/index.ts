@@ -6,10 +6,12 @@ import {
     Put,
     Patch,
     BodyInput,
-    Result,
     InputContext,
     ERROR_REQUEST,
+    ERROR_INTERNAL,
 } from '../../lib/msc';
+import { Result } from '../../lib/result';
+
 import SchemaService from '../../service/schema';
 
 import { SchemaInputDTO } from './input.dto';
@@ -28,6 +30,15 @@ export class SchemaController {
                 message: 'Illegal schema type',
                 code: 'illegal_schema_type',
                 type: ERROR_REQUEST,
+            });
+            return result;
+        }
+
+        if (!connectionManager) {
+            result.errors.push({
+                message: 'No connection manager',
+                code: 'no_connection_manager',
+                type: ERROR_INTERNAL,
             });
             return result;
         }
@@ -60,6 +71,15 @@ export class SchemaController {
             return result;
         }
 
+        if (!connectionManager) {
+            result.errors.push({
+                message: 'No connection manager',
+                code: 'no_connection_manager',
+                type: ERROR_INTERNAL,
+            });
+            return result;
+        }
+
         result.data = await SchemaService.load(type, connectionManager);
 
         return result;
@@ -72,17 +92,22 @@ export class SchemaController {
     ): Promise<Result> {
         const result = new Result();
 
+        if (!connectionManager) {
+            result.errors.push({
+                message: 'No connection manager',
+                code: 'no_connection_manager',
+                type: ERROR_INTERNAL,
+            });
+            return result;
+        }
+
         // replace an actual schema with a draft
         const draftSchema = await SchemaService.load(
             'draft',
             connectionManager,
         );
         if (draftSchema) {
-            result.errors = await SchemaService.put(
-                'actual',
-                draftSchema,
-                connectionManager,
-            );
+            return SchemaService.put('actual', draftSchema, connectionManager);
         }
 
         return result;
@@ -94,15 +119,21 @@ export class SchemaController {
         params: StringMap,
         { body, runtime: { connectionManager } }: InputContext,
     ): Promise<Result> {
-        const result = new Result();
+        if (!connectionManager) {
+            const result = new Result();
+            result.errors.push({
+                message: 'No connection manager',
+                code: 'no_connection_manager',
+                type: ERROR_INTERNAL,
+            });
+            return result;
+        }
 
         const schema = body.index.ts;
-        result.errors = await SchemaService.put(
+        return SchemaService.put(
             'draft',
             new Schema({ schema }).getSchema(), // todo: this makes a vulnerability, check if healthy before saving!!!
             connectionManager,
         );
-
-        return result;
     }
 }

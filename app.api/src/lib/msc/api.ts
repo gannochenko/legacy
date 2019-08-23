@@ -4,20 +4,10 @@ import { wrapError } from 'ew-internals';
 import { getVaultFor, hasVaultFor } from './vault';
 import { getValidator, filterStructure } from './dto-compiler';
 
-import { RuntimeParameters, ResultError, APIVaultRecord } from './type';
+import { RuntimeParameters, APIVaultRecord } from './type';
 
-export class Result {
-    public data?: StringMap = {};
-    public errors: ResultError[] = [];
-    public status?: Nullable<number> = null;
-
-    public toJSON(): object {
-        return {
-            data: this.data,
-            errors: this.errors,
-        };
-    }
-}
+import { ResultError } from '../type';
+import { Result } from '../result';
 
 export const ERROR_INTERNAL = 'internal';
 export const ERROR_REQUEST = 'request';

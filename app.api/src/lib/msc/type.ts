@@ -14,18 +14,6 @@ export interface InputContext {
     runtime: RuntimeParameters;
 }
 
-export interface ResultError {
-    message?: string;
-    code: string;
-    type?: string;
-}
-
-export interface Result {
-    data?: any;
-    errors: ResultError[];
-    status?: number;
-}
-
 export interface RuntimeParameters extends StringMap {
     connectionManager: Nullable<ConnectionManager>;
 }

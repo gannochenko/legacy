@@ -2,6 +2,7 @@
 import { Schema } from 'project-minimum-core';
 import SchemaEntity from '../model/schema';
 import ConnectionManager from '../lib/database/connection-manager';
+import { Result } from '../lib/result';
 
 export type SchemaType = 'draft' | 'actual';
 
@@ -23,7 +24,9 @@ class SchemaService {
         type: SchemaType,
         schema: Schema,
         connectionManager: ConnectionManager,
-    ): Promise<object[]> {
+    ): Promise<Result> {
+        const result = new Result();
+
         const errors = await schema.getHealth();
         if (!_.isArrayNotEmpty(errors)) {
             const connection = await connectionManager.getSystem();
@@ -64,7 +67,9 @@ class SchemaService {
             }
         }
 
-        return errors;
+        result.setErrors(errors);
+
+        return result;
     }
 }
 

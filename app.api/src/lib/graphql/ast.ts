@@ -1,4 +1,4 @@
-interface ASTNode {
+export interface ASTNode {
     fieldNodes: ASTNode[];
     selectionSet: {
         selections: ASTNode[];

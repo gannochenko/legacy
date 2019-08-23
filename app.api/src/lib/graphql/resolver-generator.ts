@@ -2,20 +2,36 @@
  * https://github.com/typeorm/typeorm/blob/master/docs/repository-api.md
  */
 
-import { In, Like } from 'typeorm';
+import { Connection, In, Like } from 'typeorm';
+// @ts-ignore
 import uuid from 'uuid/v4';
 import {
     FIELD_TYPE_DATETIME,
     DB_QUERY_FIND_MAX_PAGE_SIZE,
     ENTITY_ID_FIELD_NAME,
     ENTITY_PK_FIELD_NAME,
+    // @ts-ignore
 } from 'project-minimum-core';
-import { getASTAt, getSelectionAt } from './ast';
+
+import { Schema, Entity, Field } from '../project-minimum-core';
+
+import { ASTNode, getASTAt, getSelectionAt } from './ast';
 import { IdMapper } from '../database/id-mapper';
 import { Query } from '../database/query';
+import DatabaseEntityManager from '../database/entity-manager';
+
+export interface GetQueryArguments {
+    id: string;
+}
+
+export interface Context {}
 
 export default class ResolverGenerator {
-    static make(schema, databaseEntityManager, connection) {
+    public static make(
+        schema: Schema,
+        databaseEntityManager: DatabaseEntityManager,
+        connection: Connection,
+    ) {
         const entities = Object.values(schema.getSchema());
 
         return entities.map(entity =>
@@ -28,10 +44,20 @@ export default class ResolverGenerator {
         );
     }
 
-    static makeGetForEntity(entity, schema, databaseEntityManager, connection) {
+    public static makeGetForEntity(
+        entity: Entity,
+        schema: Schema,
+        databaseEntityManager: DatabaseEntityManager,
+        connection: Connection,
+    ) {
         const databaseEntity = databaseEntityManager.getByDefinition(entity);
 
-        return async (source, args, context, info) => {
+        return async (
+            source: object,
+            args: GetQueryArguments,
+            context: Context,
+            info: ASTNode,
+        ) => {
             const result = {
                 errors: [],
                 data: null,
@@ -77,11 +103,11 @@ export default class ResolverGenerator {
         };
     }
 
-    static makeFindForEntity(
-        entity,
-        schema,
-        databaseEntityManager,
-        connection,
+    protected static makeFindForEntity(
+        entity: Entity,
+        schema: Schema,
+        databaseEntityManager: DatabaseEntityManager,
+        connection: Connection,
     ) {
         const databaseEntity = databaseEntityManager.getByDefinition(entity);
 
@@ -144,7 +170,12 @@ export default class ResolverGenerator {
         };
     }
 
-    static makePutForEntity(entity, schema, databaseEntityManager, connection) {
+    protected static makePutForEntity(
+        entity: Entity,
+        schema: Schema,
+        databaseEntityManager: DatabaseEntityManager,
+        connection: Connection,
+    ) {
         const databaseEntity = databaseEntityManager.getByDefinition(entity);
 
         return async (source, args) => {
@@ -259,11 +290,11 @@ export default class ResolverGenerator {
         };
     }
 
-    static makeDeleteForEntity(
-        entity,
-        schema,
-        databaseEntityManager,
-        connection,
+    protected static makeDeleteForEntity(
+        entity: Entity,
+        schema: Schema,
+        databaseEntityManager: DatabaseEntityManager,
+        connection: Connection,
     ) {
         const databaseEntity = databaseEntityManager.getByDefinition(entity);
 
@@ -342,15 +373,12 @@ export default class ResolverGenerator {
         };
     }
 
-    /**
-     *
-     * @param entity
-     * @param schema
-     * @param databaseEntityManager
-     * @param connection
-     * @returns {*}
-     */
-    static makeForEntity(entity, schema, databaseEntityManager, connection) {
+    protected static makeForEntity(
+        entity: Entity,
+        schema: Schema,
+        databaseEntityManager: DatabaseEntityManager,
+        connection: Connection,
+    ) {
         const name = entity.getCamelName();
         return {
             Query: {
@@ -390,7 +418,7 @@ export default class ResolverGenerator {
         };
     }
 
-    static async manageMultipleReferences({
+    private static async manageMultipleReferences({
         entity,
         databaseEntityManager,
         schema,
@@ -467,7 +495,7 @@ export default class ResolverGenerator {
         }
     }
 
-    static makeReferenceResolversForEntity(
+    private static makeReferenceResolversForEntity(
         entity,
         schema,
         databaseEntityManager,
@@ -500,7 +528,7 @@ export default class ResolverGenerator {
         return resolvers;
     }
 
-    static makeReferenceResolverSingle({
+    private static makeReferenceResolverSingle({
         referenceField,
         entity,
         databaseEntityManager,
@@ -572,7 +600,7 @@ export default class ResolverGenerator {
         };
     }
 
-    static makeReferenceResolverMultiple({
+    private static makeReferenceResolverMultiple({
         referenceField,
         entity,
         databaseEntityManager,
@@ -656,7 +684,7 @@ export default class ResolverGenerator {
         };
     }
 
-    static async wrap(fn, errors) {
+    private static async wrap(fn, errors) {
         try {
             await fn();
         } catch (e) {
@@ -668,7 +696,7 @@ export default class ResolverGenerator {
         }
     }
 
-    static makeWhereFind(filter, search) {
+    private static makeWhereFind(filter, search) {
         const where = {};
 
         if (_.isStringNotEmpty(search)) {
@@ -681,7 +709,7 @@ export default class ResolverGenerator {
         return where;
     }
 
-    static convertToPlain(dbItem, entity) {
+    private static convertToPlain(dbItem, entity: Entity) {
         const plain = {};
         entity.getFields().forEach(field => {
             const fieldName = field.getName();
@@ -719,11 +747,11 @@ export default class ResolverGenerator {
         return plain;
     }
 
-    static getReferenceAttributes(
-        referenceField,
-        databaseEntityManager,
-        entity,
-        schema,
+    private static getReferenceAttributes(
+        referenceField: Field,
+        databaseEntityManager: DatabaseEntityManager,
+        entity: Entity,
+        schema: Schema,
     ) {
         // the name of the field we use to access this relation (e.g. "partner" or "pets")
         const referenceFieldName = referenceField.getName();
