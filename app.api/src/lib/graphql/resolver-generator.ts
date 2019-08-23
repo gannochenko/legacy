@@ -15,16 +15,18 @@ import {
 
 import { Schema, Entity, Field } from '../project-minimum-core';
 
-import { ASTNode, getASTAt, getSelectionAt } from './ast';
+import { getASTAt, getSelectionAt } from './ast';
 import { IdMapper } from '../database/id-mapper';
 import { Query } from '../database/query';
 import DatabaseEntityManager from '../database/entity-manager';
+import { Result } from '../result';
 
-export interface GetQueryArguments {
-    id: string;
-}
-
-export interface Context {}
+import { ASTNode, Context, FindResult } from './type';
+import {
+    GetQueryArguments,
+    FindQueryArguments,
+    PutQueryArguments,
+} from '../type';
 
 export default class ResolverGenerator {
     public static make(
@@ -58,10 +60,7 @@ export default class ResolverGenerator {
             context: Context,
             info: ASTNode,
         ) => {
-            const result = {
-                errors: [],
-                data: null,
-            };
+            const result = new Result();
 
             const { id } = args;
 
@@ -111,26 +110,28 @@ export default class ResolverGenerator {
     ) {
         const databaseEntity = databaseEntityManager.getByDefinition(entity);
 
-        return async (source, args, context, info) => {
-            const result = {
-                errors: [],
-                data: [],
-                limit: DB_QUERY_FIND_MAX_PAGE_SIZE,
-                offset: 0,
-            };
+        return async (
+            source: object,
+            args: FindQueryArguments,
+            context: Context,
+            info: ASTNode,
+        ) => {
+            const result = new FindResult();
 
             const { filter, search, sort } = args;
 
             const { limit, offset } = Query.prepareLimitOffset(args);
-            if (limit > DB_QUERY_FIND_MAX_PAGE_SIZE) {
-                result.errors.push({
-                    code: 'limit_too_high',
-                    message: 'Limit too high',
-                });
+            if (limit) {
+                if (limit > DB_QUERY_FIND_MAX_PAGE_SIZE) {
+                    result.errors.push({
+                        code: 'limit_too_high',
+                        message: 'Limit too high',
+                    });
 
-                return result;
+                    return result;
+                }
+                result.limit = limit;
             }
-            result.limit = limit;
             result.offset = offset;
 
             if (filter !== undefined && search !== undefined) {
@@ -178,7 +179,7 @@ export default class ResolverGenerator {
     ) {
         const databaseEntity = databaseEntityManager.getByDefinition(entity);
 
-        return async (source, args) => {
+        return async (source: object, args: PutQueryArguments) => {
             const result = {
                 errors: [],
                 [ENTITY_ID_FIELD_NAME]: null,
@@ -191,7 +192,7 @@ export default class ResolverGenerator {
             delete data[ENTITY_ID_FIELD_NAME]; // there is no way to set the id manually
 
             let isNewItem = false;
-            if (typeof id !== 'string' || !id.length) {
+            if (id && !id.length) {
                 id = uuid();
                 data[ENTITY_ID_FIELD_NAME] = id;
                 isNewItem = true;
@@ -632,15 +633,15 @@ export default class ResolverGenerator {
             );
             const referencedQueryBuilder = referencedRepository.createQueryBuilder();
 
-            let { query } = Query.make({
-                args: { ...args, select: getSelectionAt(info) },
-                queryBuilder: referencedQueryBuilder,
-                entity: referencedEntity,
-                tableName: referencedTableName,
-                parameters: {
+            let { query } = Query.make(
+                { ...args, select: getSelectionAt(info) },
+                referencedQueryBuilder,
+                referencedEntity,
+                referencedTableName,
+                {
                     restrictLimit: false,
                 },
-            });
+            );
 
             // todo: this kind of query can be batched in some cases
             // const canBatch =
@@ -701,7 +702,7 @@ export default class ResolverGenerator {
 
         if (_.isStringNotEmpty(search)) {
             // a very basic type of search - by the part of code
-            where[ENTITY_ID_FIELD_NAME] = Like(
+            where[ENTITY_ID_FIELD_NAME as string] = Like(
                 `%${search.replace(/[^a-zA-Z0-9_-]/, '')}%`,
             );
         }

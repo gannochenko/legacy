@@ -1,12 +1,4 @@
-export interface ASTNode {
-    fieldNodes: ASTNode[];
-    selectionSet: {
-        selections: ASTNode[];
-    };
-    name: {
-        value: string;
-    };
-}
+import { ASTNode } from './type';
 
 export const getASTAt = (ast: Nullable<ASTNode> = null, path = '') => {
     if (!ast || !ast.fieldNodes || !ast.fieldNodes[0]) {
@@ -46,15 +38,15 @@ export const getASTAt = (ast: Nullable<ASTNode> = null, path = '') => {
     return node || null;
 };
 
-export const getSelectionAt = (ast: Nullable<ASTNode>, path = '') => {
+export const getSelectionAt = (ast: Nullable<ASTNode>, path = ''): string[] => {
     try {
         const node = getASTAt(ast, path);
         if (node) {
             return node.selectionSet.selections.map(field => field.name.value);
         }
 
-        return {};
+        return [];
     } catch (e) {
-        return {};
+        return [];
     }
 };

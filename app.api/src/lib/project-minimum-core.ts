@@ -6,8 +6,9 @@ export interface Entity {
     getName: () => string;
     getDisplayName: () => string;
     getCamelName(): string;
-
     getFields: () => Field[];
+    castData(data: StringMap): StringMap;
+    getSingleReferences(): Field[];
 }
 
 export interface Schema {
