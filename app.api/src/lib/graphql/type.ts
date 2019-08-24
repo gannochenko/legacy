@@ -3,9 +3,12 @@ import {
     // @ts-ignore
 } from 'project-minimum-core';
 
+import DataLoaderPool from '../database/data-loader-pool';
 import { Result } from '../result';
 
-export interface Context {}
+export interface Context {
+    dataLoaderPool: DataLoaderPool;
+}
 
 export class FindResult extends Result {
     public limit: number = DB_QUERY_FIND_MAX_PAGE_SIZE;

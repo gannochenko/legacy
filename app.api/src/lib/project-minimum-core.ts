@@ -1,7 +1,3 @@
-export interface Item {
-    id: string;
-}
-
 export interface Entity {
     getName: () => string;
     getDisplayName: () => string;

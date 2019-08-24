@@ -55,7 +55,7 @@ export default class ResolverGenerator {
         const databaseEntity = databaseEntityManager.getByDefinition(entity);
 
         return async (
-            source: object,
+            source: ObjectLiteral,
             args: GetDeleteQueryArguments,
             context: Context,
             info: ASTNode,
@@ -111,7 +111,7 @@ export default class ResolverGenerator {
         const databaseEntity = databaseEntityManager.getByDefinition(entity);
 
         return async (
-            source: object,
+            source: ObjectLiteral,
             args: FindQueryArguments,
             context: Context,
             info: ASTNode,
@@ -181,7 +181,7 @@ export default class ResolverGenerator {
     ) {
         const databaseEntity = databaseEntityManager.getByDefinition(entity);
 
-        return async (source: object, args: PutQueryArguments) => {
+        return async (source: ObjectLiteral, args: PutQueryArguments) => {
             const result = new PutDeleteResult();
 
             let { id, data } = args;
@@ -296,7 +296,7 @@ export default class ResolverGenerator {
     ) {
         const databaseEntity = databaseEntityManager.getByDefinition(entity);
 
-        return async (source: object, args: GetDeleteQueryArguments) => {
+        return async (source: ObjectLiteral, args: GetDeleteQueryArguments) => {
             const result = new PutDeleteResult();
 
             const { id } = args;
@@ -532,7 +532,12 @@ export default class ResolverGenerator {
         schema: Schema,
         connection: Connection,
     ) {
-        return async (source, args, { dataLoaderPool }, info) => {
+        return async (
+            source: ObjectLiteral,
+            args: ObjectLiteral,
+            { dataLoaderPool }: Context,
+            info: ASTNode,
+        ) => {
             const referenceFieldName = referenceField.getName();
 
             // check if the parent item data does not have any value that we can reference with
@@ -558,7 +563,7 @@ export default class ResolverGenerator {
             );
 
             const key = `${referencedEntityName}__${select.join('.')}`;
-            const loader = dataLoaderPool.get(key, async ids => {
+            const loader = dataLoaderPool.get(key, async (ids: string[]) => {
                 const errors = [];
                 const map = {};
 
