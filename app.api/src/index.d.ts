@@ -8,6 +8,10 @@ interface StringMap<P = any> {
     [key: string]: P;
 }
 
+interface IntegerMap<P = any> {
+    [key: number]: P;
+}
+
 interface GenericClass {
     new (...args: any[]): {};
 }

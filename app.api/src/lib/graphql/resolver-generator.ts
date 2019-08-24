@@ -21,12 +21,16 @@ import { Query } from '../database/query';
 import DatabaseEntityManager from '../database/entity-manager';
 import { Result } from '../result';
 
-import { ASTNode, Context, FindResult, PutDeleteResult } from './type';
 import {
+    ASTNode,
+    Context,
+    FindResult,
+    PutDeleteResult,
     GetDeleteQueryArguments,
     FindQueryArguments,
     PutQueryArguments,
-} from '../type';
+    Item,
+} from './type';
 
 export default class ResolverGenerator {
     public static make(
@@ -336,10 +340,8 @@ export default class ResolverGenerator {
                 for (let i = 0; i < references.length; i += 1) {
                     const referenceField = references[i];
                     const {
-                        // referenceFieldName,
                         referenceTableName,
                         referenceDatabaseEntity,
-                        // referencedDatabaseEntity,
                     } = this.getReferenceAttributes(
                         referenceField,
                         databaseEntityManager,
@@ -347,20 +349,22 @@ export default class ResolverGenerator {
                         schema,
                     );
 
-                    const referenceRepository = connection.getRepository(
-                        referenceDatabaseEntity,
-                    );
-                    const referenceQueryBuilder = referenceRepository.createQueryBuilder(
-                        referenceTableName,
-                    );
+                    if (referenceTableName) {
+                        const referenceRepository = connection.getRepository(
+                            referenceDatabaseEntity,
+                        );
+                        const referenceQueryBuilder = referenceRepository.createQueryBuilder(
+                            referenceTableName,
+                        );
 
-                    // delete all
-                    // eslint-disable-next-line no-await-in-loop
-                    await referenceQueryBuilder
-                        .delete()
-                        .from(referenceTableName)
-                        .where('self = :id', { id })
-                        .execute();
+                        // delete all
+                        // eslint-disable-next-line no-await-in-loop
+                        await referenceQueryBuilder
+                            .delete()
+                            .from(referenceTableName)
+                            .where('self = :id', { id })
+                            .execute();
+                    }
                 }
             }
 
@@ -437,7 +441,7 @@ export default class ResolverGenerator {
                 schema,
             );
 
-            if (referenceFieldName in data) {
+            if (referenceTableName && referenceFieldName in data) {
                 const ids: number[] = [];
                 const values = data[referenceFieldName];
 
@@ -563,9 +567,9 @@ export default class ResolverGenerator {
             );
 
             const key = `${referencedEntityName}__${select.join('.')}`;
-            const loader = dataLoaderPool.get(key, async (ids: string[]) => {
+            const loader = dataLoaderPool.get(key, async (ids: number[]) => {
                 const errors = [];
-                const map = {};
+                const map: IntegerMap = {};
 
                 try {
                     const items = await referencedRepository.find({
@@ -769,7 +773,7 @@ export default class ResolverGenerator {
             referencedEntityName,
         );
         // the table name of the referenced database entity (e.g. "eq_e_person" or "eq_e_pet")
-        const referencedTableName = databaseEntityManager.constructor.getTableName(
+        const referencedTableName = DatabaseEntityManager.getTableName(
             referencedEntity,
         );
 
@@ -781,22 +785,19 @@ export default class ResolverGenerator {
         // a table we use to store multiple references
         let referenceTableName = null;
         if (referenceField.isMultiple()) {
-            referenceEntityName = databaseEntityManager.constructor.getName(
+            referenceEntityName = DatabaseEntityManager.getName(
                 entity,
                 referenceField,
             );
 
-            referenceTableName = databaseEntityManager.constructor.getReferenceTableName(
+            referenceTableName = DatabaseEntityManager.getReferenceTableName(
                 entity,
                 referenceField,
             );
 
             // we need to get a database entity by its name
             referenceDatabaseEntity = databaseEntityManager.getByName(
-                databaseEntityManager.constructor.getName(
-                    entity,
-                    referenceField,
-                ),
+                DatabaseEntityManager.getName(entity, referenceField),
             );
         }
 
