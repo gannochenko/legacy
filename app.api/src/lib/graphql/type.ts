@@ -13,6 +13,11 @@ export class FindResult extends Result {
     public count?: number;
 }
 
+export class PutDeleteResult extends Result {
+    // ENTITY_ID_FIELD_NAME
+    public id: Nullable<string> = null;
+}
+
 export interface ASTNode {
     fieldNodes: ASTNode[];
     selectionSet: {

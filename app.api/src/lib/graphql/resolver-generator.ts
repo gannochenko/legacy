@@ -2,7 +2,7 @@
  * https://github.com/typeorm/typeorm/blob/master/docs/repository-api.md
  */
 
-import { Connection, In, Like } from 'typeorm';
+import { Connection, In, Like, ObjectLiteral } from 'typeorm';
 // @ts-ignore
 import uuid from 'uuid/v4';
 import {
@@ -21,9 +21,9 @@ import { Query } from '../database/query';
 import DatabaseEntityManager from '../database/entity-manager';
 import { Result } from '../result';
 
-import { ASTNode, Context, FindResult } from './type';
+import { ASTNode, Context, FindResult, PutDeleteResult } from './type';
 import {
-    GetQueryArguments,
+    GetDeleteQueryArguments,
     FindQueryArguments,
     PutQueryArguments,
 } from '../type';
@@ -56,7 +56,7 @@ export default class ResolverGenerator {
 
         return async (
             source: object,
-            args: GetQueryArguments,
+            args: GetDeleteQueryArguments,
             context: Context,
             info: ASTNode,
         ) => {
@@ -155,7 +155,9 @@ export default class ResolverGenerator {
                     order: Query.prepareOrderBy(sort, entity),
                     skip: offset,
                     take: limit,
-                })).map(item => this.convertToPlain(item, entity));
+                })).map(item =>
+                    this.convertToPlain(item as ObjectLiteral, entity),
+                );
             }, result.errors);
 
             if (getASTAt(info, 'count')) {
@@ -180,11 +182,7 @@ export default class ResolverGenerator {
         const databaseEntity = databaseEntityManager.getByDefinition(entity);
 
         return async (source: object, args: PutQueryArguments) => {
-            const result = {
-                errors: [],
-                [ENTITY_ID_FIELD_NAME]: null,
-                data: {},
-            };
+            const result = new PutDeleteResult();
 
             let { id, data } = args;
 
@@ -198,10 +196,7 @@ export default class ResolverGenerator {
                 isNewItem = true;
             }
 
-            // cast everything that is possible to cast
             data = entity.castData(data);
-            // then validate
-
             const errors = await entity.validateData(data);
             if (errors) {
                 result.errors = errors.map(error => ({
@@ -252,17 +247,17 @@ export default class ResolverGenerator {
                     }
                 }
 
-                let databaseItem = null;
+                let databaseItem: Nullable<ObjectLiteral> = null;
                 if (isNewItem) {
-                    databaseItem = repository.create(data);
+                    databaseItem = repository.create(data) as ObjectLiteral;
                 } else {
                     // find id by code
-                    databaseItem = await repository.findOne({
+                    databaseItem = (await repository.findOne({
                         where: {
-                            [ENTITY_ID_FIELD_NAME]: id.trim(),
+                            [ENTITY_ID_FIELD_NAME]: (id as string).trim(),
                         },
                         select: [ENTITY_PK_FIELD_NAME],
-                    });
+                    })) as ObjectLiteral;
                     if (!databaseItem) {
                         result.errors.push({
                             code: 'not_found',
@@ -274,15 +269,17 @@ export default class ResolverGenerator {
                 }
 
                 await repository.save(databaseItem);
-                await this.manageMultipleReferences({
+                await this.manageMultipleReferences(
                     entity,
                     databaseEntityManager,
-                    connection,
-                    [ENTITY_PK_FIELD_NAME]: databaseItem[ENTITY_PK_FIELD_NAME],
-                    data,
                     schema,
-                });
+                    connection,
+                    // @ts-ignore
+                    databaseItem[ENTITY_PK_FIELD_NAME],
+                    data,
+                );
 
+                // @ts-ignore
                 result[ENTITY_ID_FIELD_NAME] = id;
                 result.data = this.convertToPlain(databaseItem, entity);
             }, result.errors);
@@ -299,16 +296,12 @@ export default class ResolverGenerator {
     ) {
         const databaseEntity = databaseEntityManager.getByDefinition(entity);
 
-        return async (source, args) => {
-            const result = {
-                errors: [],
-                [ENTITY_ID_FIELD_NAME]: null,
-                data: {},
-            };
+        return async (source: object, args: GetDeleteQueryArguments) => {
+            const result = new PutDeleteResult();
 
             const { id } = args;
 
-            if (typeof id !== 'string' || !id.length) {
+            if (!id || !id.length) {
                 result.errors.push({
                     code: 'illegal_id',
                     message: 'Id is illegal',
@@ -317,6 +310,7 @@ export default class ResolverGenerator {
                 return result;
             }
 
+            // @ts-ignore
             result[ENTITY_ID_FIELD_NAME] = id;
 
             const repository = connection.getRepository(databaseEntity);
@@ -419,14 +413,14 @@ export default class ResolverGenerator {
         };
     }
 
-    private static async manageMultipleReferences({
-        entity,
-        databaseEntityManager,
-        schema,
-        connection,
-        idInternal,
-        data,
-    }) {
+    private static async manageMultipleReferences(
+        entity: Entity,
+        databaseEntityManager: DatabaseEntityManager,
+        schema: Schema,
+        connection: Connection,
+        idInternal: number,
+        data: StringMap,
+    ) {
         const references = entity.getMultipleReferences();
 
         for (let i = 0; i < references.length; i += 1) {
@@ -444,7 +438,7 @@ export default class ResolverGenerator {
             );
 
             if (referenceFieldName in data) {
-                const ids = [];
+                const ids: number[] = [];
                 const values = data[referenceFieldName];
 
                 if (Array.isArray(values) && values.length) {
@@ -497,12 +491,12 @@ export default class ResolverGenerator {
     }
 
     private static makeReferenceResolversForEntity(
-        entity,
-        schema,
-        databaseEntityManager,
-        connection,
+        entity: Entity,
+        schema: Schema,
+        databaseEntityManager: DatabaseEntityManager,
+        connection: Connection,
     ) {
-        const resolvers = {};
+        const resolvers: StringMap = {};
 
         // get all references
         const references = entity.getReferences();
@@ -510,32 +504,34 @@ export default class ResolverGenerator {
             return resolvers;
         }
 
-        const args = {
-            entity,
-            schema,
-            databaseEntityManager,
-            connection,
-        };
-
         references.forEach(referenceField => {
             resolvers[referenceField.getName()] = referenceField.isMultiple()
-                ? this.makeReferenceResolverMultiple({
+                ? this.makeReferenceResolverMultiple(
                       referenceField,
-                      ...args,
-                  })
-                : this.makeReferenceResolverSingle({ referenceField, ...args });
+                      entity,
+                      databaseEntityManager,
+                      schema,
+                      connection,
+                  )
+                : this.makeReferenceResolverSingle(
+                      referenceField,
+                      entity,
+                      databaseEntityManager,
+                      schema,
+                      connection,
+                  );
         });
 
         return resolvers;
     }
 
-    private static makeReferenceResolverSingle({
-        referenceField,
-        entity,
-        databaseEntityManager,
-        schema,
-        connection,
-    }) {
+    private static makeReferenceResolverSingle(
+        referenceField: Field,
+        entity: Entity,
+        databaseEntityManager: DatabaseEntityManager,
+        schema: Schema,
+        connection: Connection,
+    ) {
         return async (source, args, { dataLoaderPool }, info) => {
             const referenceFieldName = referenceField.getName();
 
@@ -601,13 +597,13 @@ export default class ResolverGenerator {
         };
     }
 
-    private static makeReferenceResolverMultiple({
-        referenceField,
-        entity,
-        databaseEntityManager,
-        schema,
-        connection,
-    }) {
+    private static makeReferenceResolverMultiple(
+        referenceField: Field,
+        entity: Entity,
+        databaseEntityManager: DatabaseEntityManager,
+        schema: Schema,
+        connection: Connection,
+    ) {
         return async (source, args, context, info) => {
             // check if the parent item data does not have any value that we can reference with
             const referenceValue = source[ENTITY_PK_FIELD_NAME];
@@ -710,7 +706,7 @@ export default class ResolverGenerator {
         return where;
     }
 
-    private static convertToPlain(dbItem, entity: Entity) {
+    private static convertToPlain(dbItem: ObjectLiteral, entity: Entity) {
         const plain = {};
         entity.getFields().forEach(field => {
             const fieldName = field.getName();

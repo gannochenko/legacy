@@ -8,7 +8,10 @@ export interface Entity {
     getCamelName(): string;
     getFields: () => Field[];
     castData(data: StringMap): StringMap;
+    validateData(data: StringMap): FieldError[];
     getSingleReferences(): Field[];
+    getMultipleReferences(): Field[];
+    getReferences(): Field[];
 }
 
 export interface Schema {
@@ -25,4 +28,9 @@ export interface Field {
     getActualType: () => string;
     isMultiple: () => boolean;
     getReferencedEntityName(): string;
+}
+
+export interface FieldError {
+    message?: string;
+    fieldName?: string;
 }

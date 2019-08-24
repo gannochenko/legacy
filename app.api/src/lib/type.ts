@@ -1,4 +1,4 @@
-export interface GetQueryArguments {
+export interface GetDeleteQueryArguments {
     id: string;
 }
 
