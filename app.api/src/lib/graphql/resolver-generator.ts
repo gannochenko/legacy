@@ -27,10 +27,10 @@ import {
     FindResult,
     PutDeleteResult,
     GetDeleteQueryArguments,
-    FindQueryArguments,
     PutQueryArguments,
-    Item,
 } from './type';
+
+import { FindQueryArguments, FindQueryFilter } from '../type';
 
 export default class ResolverGenerator {
     public static make(
@@ -633,6 +633,10 @@ export default class ResolverGenerator {
                 schema,
             );
 
+            if (!referencedEntity) {
+                throw new Error('Reference entity was not obtained');
+            }
+
             const referencedRepository = connection.getRepository(
                 referencedDatabaseEntity,
             );
@@ -690,7 +694,7 @@ export default class ResolverGenerator {
         };
     }
 
-    private static async wrap(fn, errors) {
+    private static async wrap(fn: Function, errors) {
         try {
             await fn();
         } catch (e) {
@@ -702,12 +706,12 @@ export default class ResolverGenerator {
         }
     }
 
-    private static makeWhereFind(filter, search) {
-        const where = {};
+    private static makeWhereFind(filter?: FindQueryFilter, search?: string) {
+        const where: StringMap = {};
 
-        if (_.isStringNotEmpty(search)) {
+        if (typeof search === 'string' && search.length) {
             // a very basic type of search - by the part of code
-            where[ENTITY_ID_FIELD_NAME as string] = Like(
+            where[ENTITY_ID_FIELD_NAME] = Like(
                 `%${search.replace(/[^a-zA-Z0-9_-]/, '')}%`,
             );
         }
@@ -716,7 +720,7 @@ export default class ResolverGenerator {
     }
 
     private static convertToPlain(dbItem: ObjectLiteral, entity: Entity) {
-        const plain = {};
+        const plain: StringMap = {};
         entity.getFields().forEach(field => {
             const fieldName = field.getName();
             const fieldType = field.getActualType();
@@ -726,7 +730,7 @@ export default class ResolverGenerator {
                 // todo: probably, apollo server is capable of casting Date to String by it's own?
                 if (fieldType === FIELD_TYPE_DATETIME) {
                     if (multiple) {
-                        plain[fieldName] = fieldValue.map(subItem =>
+                        plain[fieldName] = fieldValue.map((subItem: any) =>
                             subItem instanceof Date
                                 ? subItem.toISOString()
                                 : null,
@@ -768,6 +772,10 @@ export default class ResolverGenerator {
         const referencedEntityName = referenceField.getReferencedEntityName();
         // the referenced schema entity
         const referencedEntity = schema.getEntity(referencedEntityName);
+        if (!referencedEntity) {
+            throw new Error('Referenced entity was not obtained');
+        }
+
         // the referenced database entity
         const referencedDatabaseEntity = databaseEntityManager.getByName(
             referencedEntityName,

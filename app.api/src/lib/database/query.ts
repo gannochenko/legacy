@@ -9,7 +9,7 @@ import {
     // @ts-ignore
 } from 'project-minimum-core';
 import { Entity } from '../project-minimum-core';
-import { FindQueryArguments } from '../type';
+import { FindQueryArguments, FindQuerySort } from '../type';
 
 export class Query {
     public static make(
@@ -23,11 +23,12 @@ export class Query {
 
         const tableNameSafe = this.sanitize(tableName);
 
-        const selectSafe = this.prepareSelect(select, entity, {
+        const orderBySafe = this.prepareOrderBy(sort, entity, {
             ...parameters,
             alias: tableNameSafe,
         });
-        const orderBySafe = this.prepareOrderBy(sort, entity, {
+
+        const selectSafe = this.prepareSelect(select, entity, {
             ...parameters,
             alias: tableNameSafe,
         });
@@ -49,7 +50,11 @@ export class Query {
         return { query, limit };
     }
 
-    public static prepareOrderBy(order, entity: Entity, { alias = '' } = {}) {
+    public static prepareOrderBy(
+        order?: FindQuerySort,
+        entity: Entity,
+        { alias = '' } = {},
+    ) {
         if (!_.isObjectNotEmpty(order)) {
             return null;
         }
@@ -113,7 +118,7 @@ export class Query {
     }
 
     public static prepareSelect(
-        fieldNames: string[],
+        fieldNames?: string[],
         entity: Entity,
         { alias = '' } = {},
     ) {
@@ -140,7 +145,7 @@ export class Query {
             .map(field => field.getName());
     }
 
-    private static sanitize(value: string) {
+    public static sanitize(value: string) {
         return value.replace(/[^a-zA-Z0-9_]/g, '');
     }
 }

@@ -24,6 +24,8 @@ export interface Field {
     getActualType: () => string;
     isMultiple: () => boolean;
     getReferencedEntityName(): string;
+    getLength(): number;
+    isUnique(): boolean;
 }
 
 export interface FieldError {
