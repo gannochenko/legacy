@@ -4,5 +4,6 @@ module.exports = {
     setupFiles: ['<rootDir>/../jest/setup.ts'],
     transform: {
         '^.+\\.ts$': 'ts-jest',
+        '^.+\\.js$': 'babel-jest',
     },
 };

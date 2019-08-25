@@ -13,7 +13,7 @@ import {
 } from 'project-minimum-core';
 import schemaJSON from '../../../__test__/schema';
 
-let schema: Schema = null;
+let schema = null;
 
 describe('DatabaseEntityManager', () => {
     beforeAll(async () => {
@@ -32,7 +32,7 @@ describe('DatabaseEntityManager', () => {
             expect(EntityManager.getName(person)).toEqual('important_person');
             const singleReference = person
                 .getFields()
-                .find((field: Field) => field.getName() === 'partner');
+                .find(field => field.getName() === 'partner');
             expect(EntityManager.getName(person, singleReference)).toEqual(
                 'important_person',
             );

@@ -1,5 +1,6 @@
 import _ from '../src/lib/lodash';
 
+// @ts-ignore
 global._ = _;
 // @ts-ignore
 global.__TEST__ = true;
@@ -7,11 +8,11 @@ global.__TEST__ = true;
 global.__DEV__ = false;
 // @ts-ignore
 global.logger = {
-    error: (message, error) => {
+    error: (message: string, error: Error) => {
         console.error(message);
         console.error(error);
     },
-    info: message => {
+    info: (message: string) => {
         console.dir(message);
     },
     warn: () => {},
