@@ -26,7 +26,7 @@ const SchemaPage: FunctionComponent<SchemaPageProperties> = ({
 export default withNotification(
     withClient(
         connect(
-            x => x.index,
+            x => x.application,
             mapDispatchToProps,
         )(SchemaPage),
     ),

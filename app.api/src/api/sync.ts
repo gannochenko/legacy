@@ -4,9 +4,11 @@ import { wrapError } from 'ew-internals';
 import Migrator from '../lib/database/migrator';
 import SchemaService from '../service/schema';
 import ConnectionManager from '../lib/database/connection-manager';
+import Cache from '../lib/cache';
 
 interface SyncAPIParameters {
     connectionManager: ConnectionManager;
+    cache: Cache;
 }
 
 // todo: this is a temporary API

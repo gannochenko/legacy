@@ -511,7 +511,7 @@
             ''.concat('eq_', 'ref_'),
                 ''.concat('eq_', 'e_'),
                 ''.concat('eq_', 'migrations'),
-                ''.concat('eq_', 'schema.ts');
+                ''.concat('eq_', 'schema');
             function d(e) {
                 return (d =
                     'function' == typeof Symbol &&

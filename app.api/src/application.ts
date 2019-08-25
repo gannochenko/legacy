@@ -1,20 +1,20 @@
 import '@babel/polyfill';
+// @ts-ignore
 import { Settings } from 'ew-internals';
 import path from 'path';
+// @ts-ignore
 import helmet from 'helmet';
 import express from 'express';
 
 import useErrorHandler from './lib/error-handler';
 import useCORS from './lib/cors';
 
-// import { InterCom } from './lib/intercom';
 import Cache from './lib/cache';
 import ConnectionManager from './lib/database/connection-manager';
 
-// simple API as middleware
+// simple API
 import useHomeAPI from './api/home';
 import useGraphQL from './lib/graphql/apollo';
-// import useSchemaAPI from './api/schema';
 import useSyncAPI from './api/sync';
 
 // MSC-API
@@ -23,7 +23,7 @@ import controllers from './controller';
 
 (async () => {
     const app = express();
-    const settings = new Settings();
+    const settings: Settings = new Settings();
 
     useErrorHandler(app);
 
@@ -53,11 +53,6 @@ import controllers from './controller';
     if (__DEV__) {
         await systemConnection.runMigrations();
     }
-
-    // const intercom = new InterCom({
-    //     url: await settings.get('intercom.url', ''),
-    // });
-    // await intercom.start();
 
     useHomeAPI(app);
     useGraphQL(app, {

@@ -48,7 +48,7 @@
         "supertest": "^3.4.2",
         "ts-loader": "^5.3.3",
         "typescript": "^3.3.3333",
-        "webpack": "^4.29.6",
+        "webpack": "^4.39.2",
         "webpack-cli": "^3.2.3",
         "webpack-merge": "^4.2.1",
         "webpack-node-externals": "^1.7.2"

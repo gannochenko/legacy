@@ -1,19 +1,25 @@
-import { In } from 'typeorm';
+import { Connection, In, ObjectLiteral } from 'typeorm';
 import {
     ENTITY_PK_FIELD_NAME,
     ENTITY_ID_FIELD_NAME,
+    // @ts-ignore
 } from 'project-minimum-core';
 
 export class IdMapper {
-    constructor({ connection } = {}) {
-        this.connection = connection;
+    private readonly connection: Connection;
+    private idToInternal: StringMap<number> = {};
+    private idToGet: StringMap<string[]> = {};
+    private entities: StringMap = {};
 
-        this.idToInternal = {};
-        this.idToGet = {};
-        this.entities = {};
+    public constructor({ connection }: { connection?: Connection } = {}) {
+        if (!connection) {
+            throw new Error('No connection passed');
+        }
+
+        this.connection = connection;
     }
 
-    addId(id, databaseEntity) {
+    public addId(id: string, databaseEntity) {
         if (this.idToInternal[id]) {
             return;
         }
@@ -25,11 +31,11 @@ export class IdMapper {
         this.idToGet[entityName].push(id);
     }
 
-    getInternalId(id) {
+    public getInternalId(id: string) {
         return this.idToInternal[id] || null;
     }
 
-    async obtain() {
+    public async obtain() {
         await Promise.all(
             Object.keys(this.idToGet).map(entityName => {
                 const entity = this.entities[entityName];
@@ -44,7 +50,7 @@ export class IdMapper {
                         select: [ENTITY_PK_FIELD_NAME, ENTITY_ID_FIELD_NAME],
                     })
                     .then(items => {
-                        items.forEach(item => {
+                        (items as ObjectLiteral[]).forEach(item => {
                             this.idToInternal[item[ENTITY_ID_FIELD_NAME]] =
                                 item[ENTITY_PK_FIELD_NAME];
                         });

@@ -448,7 +448,7 @@
                                 const result = new _lib_msc__WEBPACK_IMPORTED_MODULE_1__[
                                     'Result'
                                 ]();
-                                const schema = body.index.ts;
+                                const schema = body.application.ts;
                                 result.errors = await _service_schema__WEBPACK_IMPORTED_MODULE_2__[
                                     'default'
                                 ].put(
@@ -665,7 +665,7 @@
                             constructor() {
                                 _initializerDefineProperty(
                                     this,
-                                    'index.tsx',
+                                    'application.tsx',
                                     _descriptor2,
                                     this,
                                 );
@@ -674,7 +674,7 @@
                         _temp2)),
                         (_descriptor2 = _applyDecoratedDescriptor(
                             _class6.prototype,
-                            'index.tsx',
+                            'application.tsx',
                             [_dec5],
                             {
                                 configurable: true,
@@ -6127,7 +6127,7 @@ type Mutation {
 
                                 _initializerDefineProperty(
                                     this,
-                                    'schema.ts',
+                                    'schema',
                                     _descriptor3,
                                     this,
                                 );
@@ -6165,7 +6165,7 @@ type Mutation {
                         )),
                         (_descriptor3 = _applyDecoratedDescriptor(
                             _class2.prototype,
-                            'schema.ts',
+                            'schema',
                             [_dec4],
                             {
                                 configurable: true,

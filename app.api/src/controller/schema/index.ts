@@ -129,7 +129,7 @@ export class SchemaController {
             return result;
         }
 
-        const schema = body.index.ts;
+        const schema = body.application.ts;
         return SchemaService.put(
             'draft',
             new Schema({ schema }).getSchema(), // todo: this makes a vulnerability, check if healthy before saving!!!

@@ -2,7 +2,7 @@
  * https://typeorm.io/#/migrations
  */
 
-import { Table, TableColumn } from 'typeorm';
+import { Connection, Table, TableColumn } from 'typeorm';
 import {
     DB_TABLE_PREFIX,
     DB_REF_TABLE_PREFIX,
@@ -10,12 +10,13 @@ import {
     ENTITY_PK_FIELD_NAME,
     REFERENCE_ENTITY_PARENT_FIELD_NAME,
     REFERENCE_ENTITY_CHILD_FIELD_NAME,
+    // @ts-ignore
 } from 'project-minimum-core';
 
 import EntityManager from './entity-manager';
 
 export default class Migrator {
-    static async getDelta({ schema, connection } = {}) {
+    public static async getDelta({ schema, connection } = {}) {
         const tables = await this.getTables(connection);
 
         const tablesToCreate = [];
@@ -171,7 +172,7 @@ export default class Migrator {
         };
     }
 
-    static async apply(params) {
+    public static async apply(params) {
         const delta = await this.getDelta(params);
         const { connection } = params;
         const queryRunner = connection.createQueryRunner('master');
@@ -220,11 +221,11 @@ export default class Migrator {
         }
     }
 
-    static async getTables(connection) {
+    private static async getTables(connection: Connection) {
         const queryRunner = connection.createQueryRunner('master');
         const entityTableNames = (await queryRunner.query(
             `select * from information_schema.tables where table_schema='public' and table_name like '${DB_TABLE_PREFIX}%'`,
-        )).map(t => t.table_name);
+        )).map((table: { table_name: string }) => table.table_name);
 
         let tables = [];
         if (entityTableNames.length) {

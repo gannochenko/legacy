@@ -2,6 +2,7 @@ import { ApolloServer } from 'apollo-server-express';
 import { renderPlaygroundPage } from '@apollographql/graphql-playground-html';
 import accepts from 'accepts';
 import { mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
+// @ts-ignore
 import uuid from 'uuid/v4';
 
 import { graphqlExpress } from './graphql-express';

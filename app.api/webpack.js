@@ -14,7 +14,7 @@ module.exports = (env, argv) => {
     const destinationFolder = path.join(__dirname, '.build');
 
     return {
-        entry: path.join(__dirname, 'src/index.js'),
+        entry: path.join(sourceFolder, 'application.ts'),
         target: 'node',
         node: {
             __filename: true,
@@ -25,7 +25,7 @@ module.exports = (env, argv) => {
         output: {
             libraryTarget: 'commonjs',
             path: destinationFolder,
-            filename: 'index.tsx.js',
+            filename: 'index.js',
         },
         resolve: {
             extensions: ['.js', '.ts'],
