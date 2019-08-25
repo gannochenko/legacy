@@ -2,9 +2,11 @@ import {
     DB_QUERY_FIND_MAX_PAGE_SIZE,
     // @ts-ignore
 } from 'project-minimum-core';
+import { ObjectLiteral } from 'typeorm';
 
 import DataLoaderPool from '../database/data-loader-pool';
 import { Result } from '../result';
+import { ResultError } from '../type';
 
 export interface Context {
     dataLoaderPool: DataLoaderPool;
@@ -40,7 +42,7 @@ export interface PutQueryArguments {
     data: StringMap;
 }
 
-export interface Item {
-    id: string;
-    idInternal: number;
+export interface ItemResult {
+    errors: ResultError[];
+    item: ObjectLiteral;
 }

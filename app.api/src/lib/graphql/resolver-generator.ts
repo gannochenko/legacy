@@ -28,9 +28,10 @@ import {
     PutDeleteResult,
     GetDeleteQueryArguments,
     PutQueryArguments,
+    ItemResult,
 } from './type';
 
-import { FindQueryArguments, FindQueryFilter } from '../type';
+import { FindQueryArguments, FindQueryFilter, ResultError } from '../type';
 
 export default class ResolverGenerator {
     public static make(
@@ -572,7 +573,7 @@ export default class ResolverGenerator {
 
             const key = `${referencedEntityName}__${select.join('.')}`;
             const loader = dataLoaderPool.get(key, async (ids: number[]) => {
-                const errors = [];
+                const errors: ResultError[] = [];
                 const map: IntegerMap = {};
 
                 try {
@@ -584,7 +585,7 @@ export default class ResolverGenerator {
                     })) as ObjectLiteral[];
 
                     items.forEach(item => {
-                        map[item.idInternal] = item;
+                        map[item[ENTITY_PK_FIELD_NAME]] = item;
                     });
                 } catch (e) {
                     errors.push({
@@ -598,18 +599,20 @@ export default class ResolverGenerator {
                 return ids.map(id => ({
                     item: id in map ? map[id] : null,
                     errors,
-                }));
+                })) as ItemResult[];
             });
             if (!loader) {
                 throw new Error('No loader obtained');
             }
 
-            const items = await loader.load(referenceValue);
-            if (items.errors.length) {
+            const itemResult = (await loader.load(
+                referenceValue,
+            )) as ItemResult;
+            if (itemResult.errors.length) {
                 return null;
             }
 
-            return items.item;
+            return itemResult.item;
         };
     }
 
@@ -706,7 +709,7 @@ export default class ResolverGenerator {
         };
     }
 
-    private static async wrap(fn: Function, errors) {
+    private static async wrap(fn: Function, errors: ResultError[]) {
         try {
             await fn();
         } catch (e) {
