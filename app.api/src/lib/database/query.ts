@@ -8,13 +8,14 @@ import {
     ENTITY_PK_FIELD_NAME,
     // @ts-ignore
 } from 'project-minimum-core';
+import { SelectQueryBuilder } from 'typeorm';
 import { Entity } from '../project-minimum-core';
 import { FindQueryArguments, FindQuerySort } from '../type';
 
 export class Query {
     public static make(
         args: FindQueryArguments,
-        queryBuilder,
+        queryBuilder: SelectQueryBuilder<unknown>,
         entity: Entity,
         tableName: string,
         parameters = { restrictLimit: true },
@@ -23,12 +24,12 @@ export class Query {
 
         const tableNameSafe = this.sanitize(tableName);
 
-        const orderBySafe = this.prepareOrderBy(sort, entity, {
+        const orderBySafe = this.prepareOrderBy(entity, sort, {
             ...parameters,
             alias: tableNameSafe,
         });
 
-        const selectSafe = this.prepareSelect(select, entity, {
+        const selectSafe = this.prepareSelect(entity, select, {
             ...parameters,
             alias: tableNameSafe,
         });
@@ -51,8 +52,8 @@ export class Query {
     }
 
     public static prepareOrderBy(
-        order?: FindQuerySort,
         entity: Entity,
+        order?: FindQuerySort,
         { alias = '' } = {},
     ) {
         if (!_.isObjectNotEmpty(order)) {
@@ -62,17 +63,42 @@ export class Query {
         const prefix = alias ? `${alias}.` : '';
         const legalFields = this.getLegalFieldNames(entity);
 
-        const keys = Object.keys(order).filter(fieldName =>
+        const keys = Object.keys(order as FindQuerySort).filter(fieldName =>
             legalFields.includes(fieldName),
         );
 
         return keys.reduce(
             (result, fieldName) => ({
-                [`${prefix}${fieldName}`]: order[fieldName],
+                [`${prefix}${fieldName}`]: (order as FindQuerySort)[fieldName],
                 ...result,
             }),
             {},
         );
+    }
+
+    public static prepareSelect(
+        entity: Entity,
+        fieldNames?: string[],
+        { alias = '' } = {},
+    ) {
+        const prefix = alias ? `${alias}.` : '';
+        let toSelect: string[] = [];
+
+        if (fieldNames && fieldNames.length) {
+            toSelect = _.intersection(
+                fieldNames,
+                this.getLegalFieldNames(entity),
+            );
+        }
+
+        if (!toSelect.includes(ENTITY_PK_FIELD_NAME)) {
+            toSelect.push(ENTITY_PK_FIELD_NAME);
+        }
+        if (!toSelect.includes(ENTITY_ID_FIELD_NAME)) {
+            toSelect.push(ENTITY_ID_FIELD_NAME);
+        }
+
+        return toSelect.map((fieldName: string) => `${prefix}${fieldName}`);
     }
 
     public static prepareLimitOffset(
@@ -115,27 +141,6 @@ export class Query {
         }
 
         return { limit: safeLimit, offset: safeOffset };
-    }
-
-    public static prepareSelect(
-        fieldNames?: string[],
-        entity: Entity,
-        { alias = '' } = {},
-    ) {
-        const prefix = alias ? `${alias}.` : '';
-        const toSelect = _.intersection(
-            fieldNames,
-            this.getLegalFieldNames(entity),
-        ).map((fieldName: string) => `${prefix}${fieldName}`);
-
-        if (!toSelect.includes(`${prefix}${ENTITY_PK_FIELD_NAME}`)) {
-            toSelect.push(`${prefix}${ENTITY_PK_FIELD_NAME}`);
-        }
-        if (!toSelect.includes(`${prefix}${ENTITY_ID_FIELD_NAME}`)) {
-            toSelect.push(`${prefix}${ENTITY_ID_FIELD_NAME}`);
-        }
-
-        return toSelect;
     }
 
     private static getLegalFieldNames(entity: Entity) {

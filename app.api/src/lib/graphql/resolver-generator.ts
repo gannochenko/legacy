@@ -85,7 +85,7 @@ export default class ResolverGenerator {
                     where: {
                         [ENTITY_ID_FIELD_NAME]: id.trim(),
                     },
-                    select: Query.prepareSelect(selectedFields, entity),
+                    select: Query.prepareSelect(entity, selectedFields),
                 });
             }, result.errors);
 
@@ -154,9 +154,9 @@ export default class ResolverGenerator {
 
             await this.wrap(async () => {
                 result.data = (await repository.find({
-                    select: Query.prepareSelect(selectedFields, entity),
+                    select: Query.prepareSelect(entity, selectedFields),
                     where,
-                    order: Query.prepareOrderBy(sort, entity),
+                    order: Query.prepareOrderBy(entity, sort),
                     skip: offset,
                     take: limit,
                 })).map(item =>
@@ -441,7 +441,11 @@ export default class ResolverGenerator {
                 schema,
             );
 
-            if (referenceTableName && referenceFieldName in data) {
+            if (!referenceTableName) {
+                throw new Error('No reference obtained');
+            }
+
+            if (referenceFieldName in data) {
                 const ids: number[] = [];
                 const values = data[referenceFieldName];
 
@@ -561,7 +565,7 @@ export default class ResolverGenerator {
             );
 
             const selectedFields = getSelectionAt(info);
-            const select = Query.prepareSelect(selectedFields, entity);
+            const select = Query.prepareSelect(entity, selectedFields);
             const referencedRepository = connection.getRepository(
                 referencedDatabaseEntity,
             );
@@ -572,12 +576,12 @@ export default class ResolverGenerator {
                 const map: IntegerMap = {};
 
                 try {
-                    const items = await referencedRepository.find({
+                    const items = (await referencedRepository.find({
                         where: {
                             idInternal: In(ids),
                         },
                         select,
-                    });
+                    })) as ObjectLiteral[];
 
                     items.forEach(item => {
                         map[item.idInternal] = item;
@@ -596,13 +600,16 @@ export default class ResolverGenerator {
                     errors,
                 }));
             });
+            if (!loader) {
+                throw new Error('No loader obtained');
+            }
 
-            const item = await loader.load(referenceValue);
-            if (item.errors.length) {
+            const items = await loader.load(referenceValue);
+            if (items.errors.length) {
                 return null;
             }
 
-            return item.item;
+            return items.item;
         };
     }
 
@@ -613,7 +620,12 @@ export default class ResolverGenerator {
         schema: Schema,
         connection: Connection,
     ) {
-        return async (source, args, context, info) => {
+        return async (
+            source: ObjectLiteral,
+            args: ObjectLiteral,
+            context: Context,
+            info: ASTNode,
+        ) => {
             // check if the parent item data does not have any value that we can reference with
             const referenceValue = source[ENTITY_PK_FIELD_NAME];
             if (!parseInt(referenceValue, 10)) {
@@ -633,7 +645,7 @@ export default class ResolverGenerator {
                 schema,
             );
 
-            if (!referencedEntity) {
+            if (!referencedEntity || !referenceTableName) {
                 throw new Error('Reference entity was not obtained');
             }
 
@@ -656,7 +668,7 @@ export default class ResolverGenerator {
             // const canBatch =
             //     typeof limit === 'undefined' && typeof offset === 'undefined';
 
-            let items = [];
+            let items: ObjectLiteral[] = [];
             const errors = [];
 
             try {
@@ -676,7 +688,7 @@ export default class ResolverGenerator {
                         { referenceValue },
                     );
 
-                items = await query.getMany();
+                items = (await query.getMany()) as ObjectLiteral[];
                 // items = await query.getRawMany();
             } catch (e) {
                 errors.push({
