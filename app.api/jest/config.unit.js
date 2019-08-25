@@ -1,5 +1,5 @@
 const config = require('./config.js');
 
 module.exports = Object.assign({}, config, {
-    testRegex: '\\.u?(test|spec)\\.ts$',
+    testRegex: '\\.test\\.(t|j)s$',
 });

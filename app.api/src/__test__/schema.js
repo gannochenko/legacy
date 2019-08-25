@@ -1,7 +1,6 @@
 import {
     ENTITY_ID_FIELD_NAME,
     ENTITY_ID_FIELD_LENGTH,
-    // @ts-ignore
 } from 'project-minimum-core';
 
 export default [

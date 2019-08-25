@@ -6127,7 +6127,7 @@ type Mutation {
 
                                 _initializerDefineProperty(
                                     this,
-                                    'schema',
+                                    'schema.js',
                                     _descriptor3,
                                     this,
                                 );
@@ -6165,7 +6165,7 @@ type Mutation {
                         )),
                         (_descriptor3 = _applyDecoratedDescriptor(
                             _class2.prototype,
-                            'schema',
+                            'schema.js',
                             [_dec4],
                             {
                                 configurable: true,
