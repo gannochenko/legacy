@@ -1,4 +1,5 @@
 import mockData from './data.mock';
+// @ts-ignore
 import {
     ENTITY_ID_FIELD_NAME,
     ENTITY_PK_FIELD_NAME,

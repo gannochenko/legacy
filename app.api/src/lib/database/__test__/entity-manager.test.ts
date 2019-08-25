@@ -6,12 +6,14 @@ import { EntitySchema } from 'typeorm';
 import EntityManager from '../entity-manager';
 import {
     Schema,
+    Field,
     ENTITY_ID_FIELD_NAME,
     ENTITY_PK_FIELD_NAME,
+    // @ts-ignore
 } from 'project-minimum-core';
 import schemaJSON from '../../../__test__/schema';
 
-let schema = null;
+let schema: Schema = null;
 
 describe('DatabaseEntityManager', () => {
     beforeAll(async () => {
@@ -30,7 +32,7 @@ describe('DatabaseEntityManager', () => {
             expect(EntityManager.getName(person)).toEqual('important_person');
             const singleReference = person
                 .getFields()
-                .find(field => field.getName() === 'partner');
+                .find((field: Field) => field.getName() === 'partner');
             expect(EntityManager.getName(person, singleReference)).toEqual(
                 'important_person',
             );
