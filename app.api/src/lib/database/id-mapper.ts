@@ -1,4 +1,4 @@
-import { Connection, In, ObjectLiteral } from 'typeorm';
+import { Connection, EntitySchema, In, ObjectLiteral } from 'typeorm';
 import {
     ENTITY_PK_FIELD_NAME,
     ENTITY_ID_FIELD_NAME,
@@ -19,7 +19,7 @@ export class IdMapper {
         this.connection = connection;
     }
 
-    public addId(id: string, databaseEntity) {
+    public addId(id: string, databaseEntity: EntitySchema) {
         if (this.idToInternal[id]) {
             return;
         }

@@ -2,22 +2,29 @@ import { ApolloServer } from 'apollo-server-express';
 import { renderPlaygroundPage } from '@apollographql/graphql-playground-html';
 import accepts from 'accepts';
 import { mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
+import { Express, NextFunction, Request, Response } from 'express';
 // @ts-ignore
 import uuid from 'uuid/v4';
-
 import { graphqlExpress } from './graphql-express';
 import SchemaService from '../../service/schema';
 import GQLTypeGenerator from './type-generator';
 import ResolverGenerator from './resolver-generator';
 import DatabaseEntityManager from '../database/entity-manager';
-import DataLoaderPool from '../database/data-loader-pool';
 
+import DataLoaderPool from '../database/data-loader-pool';
 import typeDefs from '../../graphql/types';
 import resolvers from '../../graphql/resolvers';
+import Cache from '../cache';
+import ConnectionManager from '../database/connection-manager';
 
-let server = null;
+interface ServerParams {
+    cache: Cache;
+    connectionManager: ConnectionManager;
+}
 
-const getServer = async ({ cache, connectionManager }) => {
+let server: Nullable<ApolloServer> = null;
+
+const getServer = async ({ cache, connectionManager }: ServerParams) => {
     if (!server || !(await cache.get('apollo.server.ready'))) {
         if (server) {
             await server.stop();
@@ -60,33 +67,36 @@ const getServer = async ({ cache, connectionManager }) => {
     return server;
 };
 
-const useGraphQL = (app, params = {}) => {
+const useGraphQL = (app: Express, params: ServerParams) => {
     // server.applyMiddleware({ app, cors: false });
 
-    app.use('/graphql', async (req, res, next) => {
-        if (__DEV__ && req.method === 'GET') {
-            const accept = accepts(req);
-            const types = accept.types();
-            const prefersHTML =
-                types.find(
-                    x => x === 'text/html' || x === 'application/json',
-                ) === 'text/html';
+    app.use(
+        '/graphql',
+        async (req: Request, res: Response, next: NextFunction) => {
+            if (__DEV__ && req.method === 'GET') {
+                const accept = accepts(req);
+                const types = accept.types() as string[];
+                const prefersHTML =
+                    types.find(
+                        x => x === 'text/html' || x === 'application/json',
+                    ) === 'text/html';
 
-            if (prefersHTML) {
-                res.setHeader('Content-Type', 'text/html');
-                const playground = renderPlaygroundPage({
-                    endpoint: '/graphql',
-                });
+                if (prefersHTML) {
+                    res.setHeader('Content-Type', 'text/html');
+                    const playground = renderPlaygroundPage({
+                        endpoint: '/graphql',
+                    });
 
-                return res.send(playground);
+                    return res.send(playground);
+                }
             }
-        }
 
-        const serverInstance = await getServer(params);
-        return graphqlExpress(() => {
-            return serverInstance.createGraphQLServerOptions(req, res);
-        })(req, res, next);
-    });
+            const serverInstance = await getServer(params);
+            return graphqlExpress(() => {
+                return serverInstance.createGraphQLServerOptions(req, res);
+            })(req, res, next);
+        },
+    );
 };
 
 export default useGraphQL;

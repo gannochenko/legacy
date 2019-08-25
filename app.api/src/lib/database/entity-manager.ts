@@ -167,7 +167,7 @@ export default class DatabaseEntityManager {
     }
 
     private readonly schema: Schema;
-    private entityList: StringMap = {};
+    private entityList: StringMap<EntitySchema> = {};
 
     public constructor(schema: Schema) {
         this.schema = schema;
@@ -198,7 +198,7 @@ export default class DatabaseEntityManager {
     }
 
     private getForEntity(entity: Entity) {
-        const result: StringMap = {};
+        const result: StringMap<EntitySchema> = {};
 
         // get the entity itself
         const columns: StringMap = {

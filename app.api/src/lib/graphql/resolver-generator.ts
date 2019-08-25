@@ -350,22 +350,24 @@ export default class ResolverGenerator {
                         schema,
                     );
 
-                    if (referenceTableName) {
-                        const referenceRepository = connection.getRepository(
-                            referenceDatabaseEntity,
-                        );
-                        const referenceQueryBuilder = referenceRepository.createQueryBuilder(
-                            referenceTableName,
-                        );
-
-                        // delete all
-                        // eslint-disable-next-line no-await-in-loop
-                        await referenceQueryBuilder
-                            .delete()
-                            .from(referenceTableName)
-                            .where('self = :id', { id })
-                            .execute();
+                    if (!referenceTableName || !referenceDatabaseEntity) {
+                        throw new Error('No reference obtained');
                     }
+
+                    const referenceRepository = connection.getRepository(
+                        referenceDatabaseEntity,
+                    );
+                    const referenceQueryBuilder = referenceRepository.createQueryBuilder(
+                        referenceTableName,
+                    );
+
+                    // delete all
+                    // eslint-disable-next-line no-await-in-loop
+                    await referenceQueryBuilder
+                        .delete()
+                        .from(referenceTableName)
+                        .where('self = :id', { id })
+                        .execute();
                 }
             }
 
@@ -442,7 +444,7 @@ export default class ResolverGenerator {
                 schema,
             );
 
-            if (!referenceTableName) {
+            if (!referenceTableName || !referenceDatabaseEntity) {
                 throw new Error('No reference obtained');
             }
 
@@ -462,7 +464,7 @@ export default class ResolverGenerator {
                     await idMapper.obtain();
 
                     values.forEach(idItem =>
-                        ids.push(idMapper.getInternalId(idItem)),
+                        ids.push(idMapper.getInternalId(idItem) as number),
                     );
                 }
 
