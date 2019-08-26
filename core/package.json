@@ -3,18 +3,9 @@
     "version": "1.0.10",
     "description": "Some core stuff for the Project Minimum microservices",
     "main": "index.js",
-    "browser": {
-        "./build/server.js": "./build/client.js"
-    },
     "scripts": {
         "prepare": "install-self-peers -- --ignore-scripts",
-        "start": "npm-run-all --parallel build:*:dev",
-        "build": "npm-run-all --parallel build:*:prod",
-        "build:server:prod": "webpack --config webpack.server.js --mode production",
-        "build:client:prod": "webpack --config webpack.client.js --mode production",
-        "build:dev": "npm-run-all --parallel build:*:dev",
-        "build:server:dev": "webpack --config webpack.server.js --mode development --watch",
-        "build:client:dev": "webpack --config webpack.client.js --mode development --watch",
+        "build": "NODE_ENV=build babel ./src/ --ignore *.test.*s --out-dir ./build",
         "test:u": "jest -c ./jest/config.unit.js --forceExit --passWithNoTests",
         "test:u:dev": "jest -c ./jest/config.unit.js --watch",
         "lint": "eslint ./src",
