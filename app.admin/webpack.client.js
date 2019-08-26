@@ -12,7 +12,7 @@ module.exports = (env, argv) => {
         argv.mode === 'development' || env.NODE_ENV === 'development';
 
     const sourceFolder = path.join(__dirname, 'common');
-    const destinationFolder = path.join(__dirname, '.build');
+    const destinationFolder = path.join(__dirname, 'build');
 
     return {
         entry: [

@@ -2,7 +2,7 @@
     "scripts": {
         "start:server": "rm -rf ./build && webpack --config webpack.server.js --mode development",
         "start:client": "webpack-dev-server --config webpack.client.js --mode development",
-        "start": "rm -rf ./.build && npm-run-all --parallel start:server start:client",
+        "start": "rm -rf ./build && npm-run-all --parallel start:server start:client",
         "test:u": "jest -c ./jest/config.unit.js --forceExit",
         "test:u:dev": "jest -c ./jest/config.unit.js --watch",
         "test:i": "jest -c ./jest/config.integration.js --runInBand --forceExit",

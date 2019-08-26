@@ -58,7 +58,7 @@ typings/
 .env
 
 # Build folder
-.build
+build
 
 # IDE
 .idea

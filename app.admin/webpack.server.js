@@ -92,7 +92,7 @@ module.exports = (env, argv) => {
             }),
         ],
         output: {
-            path: path.join(__dirname, '.build'),
+            path: path.join(__dirname, 'build'),
             filename: 'server.js',
             libraryTarget: 'commonjs',
         },
