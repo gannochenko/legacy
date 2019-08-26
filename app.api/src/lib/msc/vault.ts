@@ -1,6 +1,7 @@
 import { DTOType, VaultRecord } from './type';
+import { EntitySchema } from 'typeorm';
 
-type VaultKey = Function | DTOType;
+type VaultKey = EntitySchema | DTOType | Function;
 
 const vault = new Map<VaultKey, VaultRecord>();
 

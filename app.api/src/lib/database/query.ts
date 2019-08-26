@@ -8,7 +8,7 @@ import {
     ENTITY_PK_FIELD_NAME,
     // @ts-ignore
 } from 'project-minimum-core';
-import { SelectQueryBuilder } from 'typeorm';
+import { FindConditions, SelectQueryBuilder } from 'typeorm';
 import { Entity } from '../project-minimum-core';
 import { FindQueryArguments, FindQuerySort } from '../type';
 
@@ -55,9 +55,9 @@ export class Query {
         entity: Entity,
         order?: FindQuerySort,
         { alias = '' } = {},
-    ) {
+    ): FindQuerySort {
         if (!_.isObjectNotEmpty(order)) {
-            return null;
+            return {};
         }
 
         const prefix = alias ? `${alias}.` : '';
@@ -80,7 +80,7 @@ export class Query {
         entity: Entity,
         fieldNames?: string[],
         { alias = '' } = {},
-    ) {
+    ): string[] {
         const prefix = alias ? `${alias}.` : '';
         let toSelect: string[] = [];
 
@@ -104,11 +104,11 @@ export class Query {
     public static prepareLimitOffset(
         args: FindQueryArguments,
         parameters = { restrictLimit: true },
-    ): { limit: Nullable<number>; offset: number } {
+    ): { limit?: number; offset: number } {
         let { limit, page, pageSize } = args;
         const { offset } = args;
-        let safeLimit: Nullable<number> = null;
-        let safeOffset: Nullable<number> = 0;
+        let safeLimit: number | undefined;
+        let safeOffset = 0;
 
         if (limit !== null && limit !== undefined) {
             limit = parseInt(limit as string, 10);
@@ -143,14 +143,14 @@ export class Query {
         return { limit: safeLimit, offset: safeOffset };
     }
 
+    public static sanitize(value: string) {
+        return value.replace(/[^a-zA-Z0-9_]/g, '');
+    }
+
     private static getLegalFieldNames(entity: Entity) {
         return entity
             .getFields()
             .filter(field => !(field.isReference() && field.isMultiple()))
             .map(field => field.getName());
-    }
-
-    public static sanitize(value: string) {
-        return value.replace(/[^a-zA-Z0-9_]/g, '');
     }
 }

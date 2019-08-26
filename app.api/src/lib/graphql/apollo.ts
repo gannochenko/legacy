@@ -5,6 +5,8 @@ import { mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import { Express, NextFunction, Request, Response } from 'express';
 // @ts-ignore
 import uuid from 'uuid/v4';
+// @ts-ignore
+import { Settings } from 'ew-internals';
 import { graphqlExpress } from './graphql-express';
 import SchemaService from '../../service/schema';
 import GQLTypeGenerator from './type-generator';
@@ -20,6 +22,7 @@ import ConnectionManager from '../database/connection-manager';
 interface ServerParams {
     cache: Cache;
     connectionManager: ConnectionManager;
+    settings: Settings;
 }
 
 let server: Nullable<ApolloServer> = null;

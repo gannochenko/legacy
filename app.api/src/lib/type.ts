@@ -1,5 +1,5 @@
 export interface FindQuerySort<E = {}> {
-    [key: string]: 'asc' | 'desc';
+    [key: string]: 'ASC' | 'DESC';
 }
 
 export interface ResultError {

@@ -8,16 +8,17 @@ import { RuntimeParameters, APIVaultRecord } from './type';
 
 import { ResultError } from '../type';
 import { Result } from '../result';
+import { EntitySchema } from 'typeorm';
 
 export const ERROR_INTERNAL = 'internal';
 export const ERROR_REQUEST = 'request';
 
 export const useMSC = (
     app: Express,
-    controllers: Function[],
+    controllers: EntitySchema[],
     runtimeParameters: RuntimeParameters = { connectionManager: null },
 ) => {
-    controllers.forEach((controller: Function) => {
+    controllers.forEach((controller: EntitySchema) => {
         if (!hasVaultFor(controller)) {
             return;
         }

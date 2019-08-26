@@ -1,4 +1,4 @@
-import { createConnection, Connection } from 'typeorm';
+import { createConnection, Connection, EntitySchema } from 'typeorm';
 
 // @ts-ignore
 import { DB_MIGRATION_TABLE_NAME } from 'project-minimum-core';
@@ -14,7 +14,7 @@ interface ConnectionManagerParameters {
 
 interface ConnectionOptions {
     settings?: Nullable<Settings>;
-    entities?: GenericClass[];
+    entities?: EntitySchema[];
     migrationsTableName?: string;
     name?: string;
     migrations?: Function[];
@@ -60,7 +60,9 @@ export default class ConnectionManager {
             this.connections.system = await this.make({
                 name: 'system',
                 settings: this.settings,
-                entities: [SchemaEntity],
+                // converting to EntitySchema, because typescript does not work with
+                // decorators well enough so far
+                entities: [(SchemaEntity as unknown) as EntitySchema],
                 migrationsTableName: DB_MIGRATION_TABLE_NAME as string,
                 migrations,
             });

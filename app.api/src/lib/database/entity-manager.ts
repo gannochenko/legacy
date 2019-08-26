@@ -178,7 +178,7 @@ export default class DatabaseEntityManager {
      */
     public get() {
         if (!this.entityList) {
-            let result: StringMap = {};
+            let result: StringMap<EntitySchema> = {};
             this.schema.getSchema().forEach(entity => {
                 result = { ...result, ...this.getForEntity(entity) };
             });
