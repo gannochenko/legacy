@@ -29,6 +29,8 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "@typescript-eslint/explicit-function-return-type": "off",
+    "lines-between-class-members": "off",
+    "no-lonely-if": "off",
     "react/prop-types": "off"
   },
   "parserOptions": {
@@ -48,7 +50,7 @@
   },
   "settings": {
     "react": {
-      "version": "16.3.2"
+      "version": "16.8"
     },
     "import/resolver": {
       "node": {
