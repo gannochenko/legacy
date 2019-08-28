@@ -195,8 +195,8 @@ export default class ResolverGenerator {
             delete data[ENTITY_ID_FIELD_NAME]; // there is no way to set the id manually
 
             let isNewItem = false;
-            if (id && !id.length) {
-                id = uuid();
+            if (!id || !id.length) {
+                id = uuid() as string;
                 data[ENTITY_ID_FIELD_NAME] = id;
                 isNewItem = true;
             }
@@ -715,6 +715,8 @@ export default class ResolverGenerator {
         try {
             await fn();
         } catch (e) {
+            console.log('e');
+            console.log(e);
             errors.push({
                 code: 'internal',
                 message: __DEV__ ? e.message : 'Internal error',

@@ -216,8 +216,6 @@ describe('GQL Resolver Generator', () => {
             const find = resolvers[0].Query.ImportantPersonFind;
 
             let result = await find({}, { limit: 1000 }, null, {});
-            console.log('res');
-            console.log(result);
 
             expect(result.data).toHaveLength(0);
             expect(result.errors).toHaveLength(1);
