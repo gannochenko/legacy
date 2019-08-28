@@ -8,7 +8,7 @@ import {
     ENTITY_PK_FIELD_NAME,
     // @ts-ignore
 } from 'project-minimum-core';
-import { FindConditions, SelectQueryBuilder } from 'typeorm';
+import { SelectQueryBuilder } from 'typeorm';
 import { Entity } from '../project-minimum-core';
 import { FindQueryArguments, FindQuerySort } from '../type';
 
@@ -20,6 +20,7 @@ export class Query {
         tableName: string,
         parameters = { restrictLimit: true },
     ) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { select, filter, sort } = args;
 
         const tableNameSafe = this.sanitize(tableName);
