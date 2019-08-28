@@ -7,6 +7,6 @@ declare global {
 
     declare const _ = lodash;
     declare const logger = logger_;
-    declare const __DEV__;
-    declare const __TEST__;
+    declare const __DEV__: boolean;
+    declare const __TEST__: boolean;
 }

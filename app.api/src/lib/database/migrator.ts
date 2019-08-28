@@ -3,6 +3,9 @@
  */
 
 import { Connection, Table, TableColumn } from 'typeorm';
+import { TableOptions } from 'typeorm/schema-builder/options/TableOptions';
+import { TableColumnOptions } from 'typeorm/schema-builder/options/TableColumnOptions';
+
 import {
     DB_TABLE_PREFIX,
     DB_REF_TABLE_PREFIX,
@@ -10,31 +13,38 @@ import {
     ENTITY_PK_FIELD_NAME,
     REFERENCE_ENTITY_PARENT_FIELD_NAME,
     REFERENCE_ENTITY_CHILD_FIELD_NAME,
+    Schema,
+    Entity,
     // @ts-ignore
 } from 'project-minimum-core';
-
 import EntityManager from './entity-manager';
+import { Field } from '../project-minimum-core';
+
+interface MigratorParameters {
+    schema: Schema;
+    connection: Connection;
+}
 
 export default class Migrator {
-    public static async getDelta({ schema, connection } = {}) {
+    public static async getDelta({ schema, connection }: MigratorParameters) {
         const tables = await this.getTables(connection);
 
-        const tablesToCreate = [];
-        let tableNamesToDrop = [];
-        const tablesToProbablyAlter = [];
+        const tablesToCreate: TableOptions[] = [];
+        let tableNamesToDrop: string[] = [];
+        const tablesToProbablyAlter: TableOptions[] = [];
 
-        const currentTables = {};
-        const futureTables = {};
+        const currentTables: StringMap<Table> = {};
+        const futureTables: StringMap<TableOptions> = {};
 
         tables.forEach(table => {
             currentTables[table.name] = table;
         });
 
         const entities = schema.getSchema();
-        const tableToEntity = {};
+        const tableToEntity: StringMap<Entity> = {};
 
         // tables
-        entities.forEach(entity => {
+        entities.forEach((entity: Entity) => {
             const table = EntityManager.getDDLByEntity(entity);
             tableToEntity[table.name] = entity;
             futureTables[table.name] = table;
@@ -55,24 +65,36 @@ export default class Migrator {
         });
 
         // fields
-        const tablesToAlter = {};
+        const tablesToAlter: StringMap<{
+            add: TableColumnOptions[];
+            delete: TableColumnOptions[];
+        }> = {};
 
         for (let i = 0; i < tablesToProbablyAlter.length; i += 1) {
             const futureTable = tablesToProbablyAlter[i];
             const currentTable = currentTables[futureTable.name];
 
-            const tableFutureFieldNames = Object.keys(
-                futureTable.columns.reduce((result, item) => {
-                    result[item.name] = true;
-                    return result;
-                }, {}),
-            );
+            let tableFutureFieldNames: string[] = [];
+            if (futureTable.columns) {
+                tableFutureFieldNames = Object.keys(
+                    futureTable.columns.reduce(
+                        (result: StringMap<boolean>, item) => {
+                            result[item.name] = true;
+                            return result;
+                        },
+                        {},
+                    ),
+                );
+            }
 
             const tableCurrentFieldNames = Object.keys(
-                currentTable.columns.reduce((result, item) => {
-                    result[item.name] = true;
-                    return result;
-                }, {}),
+                currentTable.columns.reduce(
+                    (result: StringMap<boolean>, item) => {
+                        result[item.name] = true;
+                        return result;
+                    },
+                    {},
+                ),
             );
 
             const fieldsToAdd = _.difference(
@@ -84,16 +106,18 @@ export default class Migrator {
                 tableFutureFieldNames,
             );
 
-            for (let j = 0; j < futureTable.columns.length; j += 1) {
-                const field = futureTable.columns[j];
-                if (fieldsToAdd.includes(field.name)) {
-                    tablesToAlter[futureTable.name] = tablesToAlter[
-                        futureTable.name
-                    ] || {
-                        add: [],
-                        delete: [],
-                    };
-                    tablesToAlter[futureTable.name].add.push(field);
+            if (futureTable.columns) {
+                for (let j = 0; j < futureTable.columns.length; j += 1) {
+                    const field = futureTable.columns[j];
+                    if (fieldsToAdd.includes(field.name)) {
+                        if (!tablesToAlter[futureTable.name]) {
+                            tablesToAlter[futureTable.name] = {
+                                add: [],
+                                delete: [],
+                            };
+                        }
+                        tablesToAlter[futureTable.name].add.push(field);
+                    }
                 }
             }
 
@@ -126,12 +150,12 @@ export default class Migrator {
             )
             .filter(x => x);
 
-        const futureReferences = [];
+        const futureReferences: string[] = [];
 
         // find all refs in future tables
         Object.values(futureTables).forEach(table => {
             const entity = tableToEntity[table.name];
-            entity.getMultipleReferences().forEach(field => {
+            entity.getMultipleReferences().forEach((field: Field) => {
                 const referenceTableName = EntityManager.getReferenceTableName(
                     entity,
                     field,
@@ -172,7 +196,7 @@ export default class Migrator {
         };
     }
 
-    public static async apply(params) {
+    public static async apply(params: MigratorParameters) {
         const delta = await this.getDelta(params);
         const { connection } = params;
         const queryRunner = connection.createQueryRunner('master');
@@ -227,7 +251,7 @@ export default class Migrator {
             `select * from information_schema.tables where table_schema='public' and table_name like '${DB_TABLE_PREFIX}%'`,
         )).map((table: { table_name: string }) => table.table_name);
 
-        let tables = [];
+        let tables: Table[] = [];
         if (entityTableNames.length) {
             tables = await queryRunner.getTables(entityTableNames);
         }

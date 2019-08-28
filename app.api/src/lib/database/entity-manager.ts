@@ -15,6 +15,8 @@ import {
     REFERENCE_ENTITY_CHILD_FIELD_NAME,
     // @ts-ignore
 } from 'project-minimum-core';
+import { TableOptions } from 'typeorm/schema-builder/options/TableOptions';
+import { TableColumnOptions } from 'typeorm/schema-builder/options/TableColumnOptions';
 import { Entity, Field, Schema } from '../project-minimum-core';
 
 /**
@@ -112,10 +114,11 @@ export default class DatabaseEntityManager {
      * Accepts a schema entity and returns a DDL structure of the table to create
      */
     public static getDDLByEntity(entity: Entity) {
-        const table = {
+        const table: TableOptions = {
             name: this.getTableName(entity),
-            columns: [] as StringMap[],
         };
+
+        table.columns = [];
 
         // add "system" field: id
         table.columns.push({
@@ -127,9 +130,9 @@ export default class DatabaseEntityManager {
             length: '',
             zerofill: false,
             unsigned: true,
-            name: ENTITY_PK_FIELD_NAME,
+            name: ENTITY_PK_FIELD_NAME as string,
             type: 'integer',
-            generated: 'increment',
+            generationStrategy: 'increment',
         });
 
         entity.getFields().forEach(field => {
@@ -138,28 +141,38 @@ export default class DatabaseEntityManager {
                 return;
             }
 
-            let columnMeta: StringMap = {
+            let columnMeta: TableColumnOptions = {
                 isNullable: !field.isRequired(),
                 isGenerated: false,
                 isPrimary: false,
                 isUnique: field.isUnique(),
                 isArray: field.isMultiple(),
-                length: this.getDBFieldLength(field),
                 zerofill: false,
                 unsigned: false,
                 name: field.getName(),
-                type: this.getDBType(field),
+                type: 'string',
             };
+
+            const type = this.getDBType(field);
+            if (type) {
+                columnMeta.type = type;
+            }
+
+            const length = this.getDBFieldLength(field);
+            if (length !== undefined) {
+                columnMeta.length = length.toString();
+            }
 
             const generated = this.getDBFieldGenerationStrategy(field);
             if (generated) {
                 columnMeta = {
                     ...columnMeta,
                     isGenerated: true,
-                    generated,
+                    generationStrategy: generated,
                 };
             }
 
+            // @ts-ignore
             table.columns.push(columnMeta);
         });
 
