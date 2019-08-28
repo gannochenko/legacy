@@ -1,3 +1,5 @@
+import cloneDeep from 'clone-deep';
+
 import mockData from './data.mock';
 // @ts-ignore
 import {
@@ -48,7 +50,7 @@ export const makeQueryRunner = () => {
 };
 
 export const makeRepository = entityName => {
-    const data = _.cloneDeep(mockData[entityName]);
+    const data = cloneDeep(mockData[entityName]);
     const queryBuilder = makeQueryBuilder();
 
     return {
@@ -72,7 +74,7 @@ export const makeRepository = entityName => {
         }),
         find: jest.fn(async (parameters = {}) => {
             const { where, select, order, skip, take } = parameters;
-            let dataPart = _.cloneDeep(data);
+            let dataPart = cloneDeep(data);
             if (skip !== undefined && take !== undefined) {
                 dataPart = dataPart.splice(skip, take);
             }

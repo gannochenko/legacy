@@ -180,7 +180,7 @@ export default class DatabaseEntityManager {
     }
 
     private readonly schema: Schema;
-    private entityList: StringMap<EntitySchema> = {};
+    private entityList: Nullable<StringMap<EntitySchema>> = null;
 
     public constructor(schema: Schema) {
         this.schema = schema;

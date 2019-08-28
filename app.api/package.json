@@ -8,6 +8,7 @@
         "dev": "webpack --config webpack.js --mode development --watch",
         "test": "jest -c ./jest/config.unit.js --forceExit",
         "test:dev": "jest -c ./jest/config.unit.js --watch",
+        "test:debug": "node --inspect-brk=0.0.0.0:4001 -r tsconfig-paths/register -r ./node_modules/.bin/jest -c ./jest/config.unit.js  --runInBand",
         "e2e": "jest -c ./jest/config.e2e.js --runInBand --forceExit --passWithNoTests",
         "e2e:dev": "jest -c ./jest/config.e2e.js --runInBand --watch",
         "build": "webpack --config webpack.js --mode production",
