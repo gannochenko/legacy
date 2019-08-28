@@ -61,7 +61,7 @@ export class Query {
         }
 
         const prefix = alias ? `${alias}.` : '';
-        const legalFields = this.getLegalFieldNames(entity);
+        const legalFields = this.getSortableFieldNames(entity);
 
         const keys = Object.keys(order as FindQuerySort).filter(fieldName =>
             legalFields.includes(fieldName),
@@ -87,7 +87,7 @@ export class Query {
         if (fieldNames && fieldNames.length) {
             toSelect = _.intersection(
                 fieldNames,
-                this.getLegalFieldNames(entity),
+                this.getSelectableFieldNames(entity),
             );
         }
 
@@ -98,7 +98,7 @@ export class Query {
             toSelect.push(ENTITY_ID_FIELD_NAME);
         }
 
-        return toSelect.map((fieldName: string) => `${prefix}${fieldName}`);
+        return toSelect.map(fieldName => `${prefix}${fieldName}`);
     }
 
     public static prepareLimitOffset(
@@ -149,7 +149,14 @@ export class Query {
         return value.replace(/[^a-zA-Z0-9_]/g, '');
     }
 
-    private static getLegalFieldNames(entity: Entity) {
+    private static getSortableFieldNames(entity: Entity) {
+        return entity
+            .getFields()
+            .filter(field => field.isSortable())
+            .map(field => field.getName());
+    }
+
+    private static getSelectableFieldNames(entity: Entity) {
         return entity
             .getFields()
             .filter(field => !(field.isReference() && field.isMultiple()))
