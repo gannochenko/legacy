@@ -114,9 +114,26 @@ describe('Query', () => {
         });
     });
     describe('prepareLimitOffset()', () => {
-        throw new Error('Todo');
-    });
-    describe('sanitize()', () => {
-        throw new Error('Todo');
+        it('should work', async () => {
+            const result = Query.prepareLimitOffset({ limit: 1, offset: 1 });
+
+            expect(result).toMatchObject({ limit: 1, offset: 1 });
+        });
+        it('should set limit', async () => {
+            const result = Query.prepareLimitOffset({ offset: 1 });
+
+            expect(result).toEqual({
+                limit: DB_QUERY_FIND_MAX_PAGE_SIZE,
+                offset: 1,
+            });
+        });
+        it('should not set limit', async () => {
+            const result = Query.prepareLimitOffset(
+                { offset: 1 },
+                { restrictLimit: false },
+            );
+
+            expect(result).toEqual({ offset: 1 });
+        });
     });
 });

@@ -119,6 +119,8 @@ export class Query {
             } else {
                 safeLimit = limit;
             }
+        } else if (parameters.restrictLimit) {
+            safeLimit = DB_QUERY_FIND_MAX_PAGE_SIZE;
         }
 
         if (offset !== null && offset !== undefined) {
