@@ -124,8 +124,8 @@ export default class ResolverGenerator {
             const result = new FindResult();
 
             const { filter, search, sort } = args;
-
             const { limit, offset } = Query.prepareLimitOffset(args);
+
             if (limit) {
                 if (limit > DB_QUERY_FIND_MAX_PAGE_SIZE) {
                     result.errors.push({

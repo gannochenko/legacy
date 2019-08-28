@@ -116,6 +116,8 @@ export class Query {
                 if (parameters.restrictLimit) {
                     safeLimit = DB_QUERY_FIND_MAX_PAGE_SIZE;
                 }
+            } else {
+                safeLimit = limit;
             }
         }
 

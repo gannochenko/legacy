@@ -13,6 +13,7 @@ export interface Context {
 }
 
 export class FindResult extends Result {
+    public data?: any[] = [];
     public limit?: number = DB_QUERY_FIND_MAX_PAGE_SIZE;
     public offset: number = 0;
     public count?: number;
