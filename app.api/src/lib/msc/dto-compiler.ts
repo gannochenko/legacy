@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-duplicates
 import * as yup from 'yup';
 import {
     Schema,
@@ -6,6 +7,7 @@ import {
     BooleanSchema,
     ArraySchema,
     ObjectSchema,
+    // eslint-disable-next-line import/no-duplicates
 } from 'yup';
 import { getVaultFor } from './vault';
 import { DTOAttributeType, DTOType, DTOVaultRecord } from './type';

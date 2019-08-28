@@ -55,6 +55,7 @@ const getServer = async ({ cache, connectionManager }: ServerParams) => {
                 all: true,
             }),
             resolvers: mergeResolvers([...eResolver, ...resolvers]),
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             context: async ({ req, res }) => {
                 return {
                     requestId: uuid(),

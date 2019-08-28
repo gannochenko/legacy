@@ -715,8 +715,6 @@ export default class ResolverGenerator {
         try {
             await fn();
         } catch (e) {
-            console.log('e');
-            console.log(e);
             errors.push({
                 code: 'internal',
                 message: __DEV__ ? e.message : 'Internal error',

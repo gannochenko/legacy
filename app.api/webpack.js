@@ -107,7 +107,7 @@ module.exports = (env, argv) => {
                 }),
             new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
             new webpack.ProvidePlugin({
-                _: [path.join(__dirname, `src/lib/lodash.js`), 'default'],
+                _: [path.join(__dirname, `src/lib/lodash.ts`), 'default'],
                 logger: ['ew-internals', 'logger'],
             }),
             new webpack.DefinePlugin({

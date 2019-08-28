@@ -1,14 +1,14 @@
 import { Express, Response, Request } from 'express';
 // @ts-ignore
 import { wrapError } from 'ew-internals';
+import { EntitySchema } from 'typeorm';
+
 import { getVaultFor, hasVaultFor } from './vault';
 import { getValidator, filterStructure } from './dto-compiler';
 
 import { RuntimeParameters, APIVaultRecord } from './type';
-
 import { ResultError } from '../type';
 import { Result } from '../result';
-import { EntitySchema } from 'typeorm';
 
 export const ERROR_INTERNAL = 'internal';
 export const ERROR_REQUEST = 'request';

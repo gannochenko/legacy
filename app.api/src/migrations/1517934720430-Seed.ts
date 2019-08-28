@@ -25,7 +25,7 @@ export class Seed1517934720430 implements MigrationInterface {
                 schema.draft = false;
                 schema.version = 1;
                 // eslint-disable-next-line no-use-before-define,@typescript-eslint/no-use-before-define
-                schema.schema = demoSchema;
+                schema.declaration = demoSchema;
 
                 await repository.save(schema);
             }

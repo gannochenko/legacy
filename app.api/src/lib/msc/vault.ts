@@ -1,5 +1,5 @@
-import { DTOType, VaultRecord } from './type';
 import { EntitySchema } from 'typeorm';
+import { DTOType, VaultRecord } from './type';
 
 type VaultKey = EntitySchema | DTOType | Function;
 

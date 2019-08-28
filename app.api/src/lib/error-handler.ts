@@ -11,6 +11,7 @@ const useErrorHandler = (app: Express) => {
         });
 
     // catching normal unhandled exceptions
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
         logger.error('Uncaught exception', err);
         return res.send('Nasty error'); // todo: explain here
