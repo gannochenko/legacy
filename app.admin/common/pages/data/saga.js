@@ -8,11 +8,11 @@ function* load({ payload = {} }) {
     const { client } = payload;
     try {
         const [queryName, query] = buildQueryFind(payload);
-        const apolloResult = yield call(() => {
-            return client.query({
+        const apolloResult = yield call(() =>
+            client.query({
                 query,
-            });
-        });
+            }),
+        );
 
         const result = _.get(apolloResult, `data.${queryName}`);
         if (_.isArrayNotEmpty(result.errors)) {
