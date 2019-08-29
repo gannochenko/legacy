@@ -4,7 +4,7 @@ import { Endpoint, Get } from '../../lib/msc';
 @Endpoint('/')
 export class HomeController {
     @Get()
-    public async getEntity(): Promise<string> {
+    public respond() {
         return 'Hi from the Project Minimum!';
     }
 }
