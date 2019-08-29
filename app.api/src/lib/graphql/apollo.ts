@@ -71,7 +71,7 @@ const getServer = async ({ cache, connectionManager }: ServerParams) => {
     return server;
 };
 
-const useGraphQL = (app: Express, params: ServerParams) => {
+const useGraphQL = (app: Express, runtimeParameters: ServerParams) => {
     // server.applyMiddleware({ app, cors: false });
 
     app.use(
@@ -95,7 +95,7 @@ const useGraphQL = (app: Express, params: ServerParams) => {
                 }
             }
 
-            const serverInstance = await getServer(params);
+            const serverInstance = await getServer(runtimeParameters);
             return graphqlExpress(() => {
                 return serverInstance.createGraphQLServerOptions(req, res);
             })(req, res, next);

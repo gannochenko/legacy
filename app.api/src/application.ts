@@ -13,12 +13,10 @@ import Cache from './lib/cache';
 import ConnectionManager from './lib/database/connection-manager';
 
 // simple API
-import useHomeAPI from './api/home';
 import useGraphQL from './lib/graphql/apollo';
-import useSyncAPI from './api/sync';
 
 // MSC-API
-import { useMSC } from './lib/msc';
+import { useControllers } from './lib/msc';
 import controllers from './controller';
 
 (async () => {
@@ -54,17 +52,11 @@ import controllers from './controller';
         await systemConnection.runMigrations();
     }
 
-    useHomeAPI(app);
+    useControllers(app, controllers, {
+        connectionManager,
+    });
     useGraphQL(app, {
         settings,
-        cache,
-        connectionManager,
-    });
-    useMSC(app, controllers, {
-        connectionManager,
-    });
-    // todo: temporary endpoint
-    useSyncAPI(app, {
         cache,
         connectionManager,
     });

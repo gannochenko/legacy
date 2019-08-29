@@ -15,7 +15,7 @@ export interface InputContext {
 }
 
 export interface RuntimeParameters extends StringMap {
-    connectionManager: Nullable<ConnectionManager>;
+    connectionManager: ConnectionManager;
 }
 
 export interface DTOType extends GenericClass {}

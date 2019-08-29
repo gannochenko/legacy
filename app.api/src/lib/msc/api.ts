@@ -13,10 +13,10 @@ import { Result } from '../result';
 export const ERROR_INTERNAL = 'internal';
 export const ERROR_REQUEST = 'request';
 
-export const useMSC = (
+export const useControllers = (
     app: Express,
     controllers: EntitySchema[],
-    runtimeParameters: RuntimeParameters = { connectionManager: null },
+    runtimeParameters: RuntimeParameters,
 ) => {
     controllers.forEach((controller: EntitySchema) => {
         if (!hasVaultFor(controller)) {
