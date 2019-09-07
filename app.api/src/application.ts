@@ -60,6 +60,6 @@ import controllers from './controller';
     });
 
     app.listen({ port }, () => {
-        logInfo(`🚀 API server is ready at http://${host}:${port}`, !__TEST__);
+        logInfo(`🚀 API server is ready at http://${host}:${port}`);
     });
 })();
