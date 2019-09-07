@@ -1,5 +1,4 @@
-// @ts-ignore
-import { Endpoint, Get } from '../../lib/msc';
+import { Endpoint, Get } from '@bucket-of-bolts/express-mvc';
 
 @Endpoint('/')
 export class HomeController {

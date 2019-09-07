@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Endpoint, Get, InputContext } from '../../lib/msc';
+import { Endpoint, Get, InputContext } from '@bucket-of-bolts/express-mvc';
 import SchemaService from '../../service/schema';
 import Migrator from '../../lib/database/migrator';
 

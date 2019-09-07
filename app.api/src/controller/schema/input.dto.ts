@@ -1,4 +1,4 @@
-import { DTO, Attribute } from '../../lib/msc';
+import { DTO, Attribute } from '@bucket-of-bolts/express-mvc';
 
 @DTO()
 class TSDTO {}
