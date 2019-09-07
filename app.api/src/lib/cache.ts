@@ -5,7 +5,6 @@
 
 // @ts-ignore
 import TagCache from 'redis-tag-cache';
-// @ts-ignore
 import { Settings, injectPassword, decomposeURL } from '@bucket-of-bolts/util';
 
 interface TagCache {

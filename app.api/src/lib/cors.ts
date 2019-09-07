@@ -1,6 +1,5 @@
 import cors from 'cors';
 import { Express } from 'express';
-// @ts-ignore
 import { Settings } from '@bucket-of-bolts/util';
 
 const useCORS = (app: Express, settings: Settings) => {
