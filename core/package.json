@@ -56,7 +56,9 @@
         "webpack-cli": "^3.3.2",
         "webpack-node-externals": "^1.7.2"
     },
-    "dependencies": {},
+    "dependencies": {
+        "@bucket-of-bolts/util": "^1.0.4"
+    },
     "peerDependencies": {
         "ew-internals": "x.x",
         "lodash.isobject": "x.x",

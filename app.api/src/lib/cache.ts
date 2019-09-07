@@ -7,7 +7,7 @@
 import TagCache from 'redis-tag-cache';
 // @ts-ignore
 import { Settings } from 'ew-internals';
-import { injectPassword, decomposeURL } from './util';
+import { injectPassword, decomposeURL } from '@bucket-of-bolts/util';
 
 interface TagCache {
     set(...args: any[]): Promise<void>;

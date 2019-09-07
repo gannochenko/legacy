@@ -4,9 +4,9 @@ import { createConnection, Connection, EntitySchema } from 'typeorm';
 import { DB_MIGRATION_TABLE_NAME } from 'project-minimum-core';
 // @ts-ignore
 import { Settings } from 'ew-internals';
+import { injectPassword } from '@bucket-of-bolts/util';
 import SchemaEntity from '../../model/schema';
 import migrations from '../../migrations';
-import { injectPassword } from '../util';
 
 interface ConnectionManagerParameters {
     settings: Nullable<Settings>;

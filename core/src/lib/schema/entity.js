@@ -1,6 +1,7 @@
 /* eslint import/no-unresolved: 0 */
 
-import { uCFirst, convertToCamel } from 'ew-internals';
+import { uCFirst } from 'ew-internals';
+import { convertToCamel } from '@bucket-of-bolts/util';
 import * as yup from 'yup';
 import { FIELD_TYPE_STRING } from './field/type';
 import { ENTITY_ID_FIELD_NAME } from '../constants.both';
