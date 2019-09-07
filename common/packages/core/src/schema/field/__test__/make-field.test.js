@@ -15,7 +15,7 @@ describe('MakeField', () => {
     describe('should create string field', () => {
         it('after single declaration', async () => {
             const field = makeField({
-                type: 'string',
+                type: 'string.ts',
                 name: 'foo',
             });
 
@@ -24,7 +24,7 @@ describe('MakeField', () => {
 
         it('after multiple declaration', async () => {
             const field = makeField({
-                type: ['string'],
+                type: ['string.ts'],
                 name: 'foo',
             });
 
@@ -35,7 +35,7 @@ describe('MakeField', () => {
     describe('should create boolean field', () => {
         it('after single declaration', async () => {
             const field = makeField({
-                type: 'boolean',
+                type: 'boolean.ts',
                 name: 'foo',
             });
 
@@ -44,7 +44,7 @@ describe('MakeField', () => {
 
         it('after multiple declaration', async () => {
             const field = makeField({
-                type: ['boolean'],
+                type: ['boolean.ts'],
                 name: 'foo',
             });
 
@@ -75,7 +75,7 @@ describe('MakeField', () => {
     describe('should create datetime field', () => {
         it('after single declaration', async () => {
             const field = makeField({
-                type: 'datetime',
+                type: 'datetime.ts',
                 name: 'foo',
             });
 
@@ -84,7 +84,7 @@ describe('MakeField', () => {
 
         it('after multiple declaration', async () => {
             const field = makeField({
-                type: ['datetime'],
+                type: ['datetime.ts'],
                 name: 'foo',
             });
 
@@ -115,7 +115,7 @@ describe('MakeField', () => {
     describe(`should create ${ENTITY_ID_FIELD_NAME} field`, () => {
         it('after single declaration', async () => {
             const field = makeField({
-                type: 'string',
+                type: 'string.ts',
                 name: ENTITY_ID_FIELD_NAME,
             });
 

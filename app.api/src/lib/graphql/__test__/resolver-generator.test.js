@@ -635,7 +635,7 @@ describe('GQL Resolver Generator', () => {
         });
     });
 
-    describe('reference', () => {
+    describe('reference.ts', () => {
         describe('single', () => {
             it('should get referenced data', async () => {
                 const getPartner = resolvers[0].ImportantPerson.partner;

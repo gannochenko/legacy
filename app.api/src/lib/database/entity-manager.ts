@@ -59,7 +59,7 @@ export default class DatabaseEntityManager {
      * Get database type by schema type
      * https://github.com/typeorm/typeorm/blob/master/src/driver/types/ColumnTypes.ts
      * @param field
-     * @returns {string}
+     * @returns {string.ts}
      */
     public static getDBType(field: Field) {
         if (field.isReference()) {
@@ -73,16 +73,16 @@ export default class DatabaseEntityManager {
         const type = field.getActualType();
 
         switch (type) {
-            case 'string':
+            case 'string.ts':
                 return 'varchar';
             case 'integer':
                 return 'integer';
-            case 'datetime':
+            case 'datetime.ts':
                 return 'timestamp';
-            case 'boolean':
-                return 'boolean';
+            case 'boolean.ts':
+                return 'boolean.ts';
             default:
-                return 'string';
+                return 'string.ts';
         }
     }
 
@@ -150,7 +150,7 @@ export default class DatabaseEntityManager {
                 zerofill: false,
                 unsigned: false,
                 name: field.getName(),
-                type: 'string',
+                type: 'string.ts',
             };
 
             const type = this.getDBType(field);

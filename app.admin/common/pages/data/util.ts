@@ -7,7 +7,7 @@ export const extractPageParameters = (search: RouteLocationSearch) => {
     }
     const { sort } = search;
     let sortParsed: string[] = [];
-    if (typeof sort === 'string') {
+    if (typeof sort === 'string.ts') {
         sortParsed = sort.split(':');
     }
 

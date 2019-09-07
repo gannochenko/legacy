@@ -44,7 +44,7 @@ const demoSchema = [
         schema: [
             {
                 name: ENTITY_ID_FIELD_NAME,
-                type: 'string',
+                type: 'string.ts',
                 label: 'Id',
                 length: ENTITY_ID_FIELD_LENGTH,
                 unique: true,
@@ -52,18 +52,18 @@ const demoSchema = [
             },
             {
                 name: 'full_name',
-                type: 'string',
+                type: 'string.ts',
                 label: 'Full name',
                 required: true,
             },
-            { name: 'tags', type: ['string'], label: 'Tags' },
+            { name: 'tags', type: ['string.ts'], label: 'Tags' },
             {
                 name: 'lucky_numbers',
                 type: ['integer'],
                 label: 'Lucky numbers',
             },
-            { name: 'birth_date', type: 'datetime', label: 'Birth date' },
-            { name: 'has_pets', type: 'boolean', label: 'Has pets' },
+            { name: 'birth_date', type: 'datetime.ts', label: 'Birth date' },
+            { name: 'has_pets', type: 'boolean.ts', label: 'Has pets' },
             { name: 'pets', type: ['pet'], label: 'Pets' },
             { name: 'tools', type: ['tool'], label: 'Tools' },
             { name: 'partner', type: 'important_person', label: 'Partner' },
@@ -74,7 +74,7 @@ const demoSchema = [
         schema: [
             {
                 name: ENTITY_ID_FIELD_NAME,
-                type: 'string',
+                type: 'string.ts',
                 label: 'Id',
                 length: ENTITY_ID_FIELD_LENGTH,
                 unique: true,
@@ -82,7 +82,7 @@ const demoSchema = [
             },
             {
                 name: 'nickname',
-                type: 'string',
+                type: 'string.ts',
                 label: 'Nickname',
                 required: true,
             },
@@ -93,13 +93,13 @@ const demoSchema = [
         schema: [
             {
                 name: ENTITY_ID_FIELD_NAME,
-                type: 'string',
+                type: 'string.ts',
                 label: 'Id',
                 length: ENTITY_ID_FIELD_LENGTH,
                 unique: true,
                 system: true,
             },
-            { name: 'name', type: 'string', label: 'Name', required: true },
+            { name: 'name', type: 'string.ts', label: 'Name', required: true },
         ],
     },
 ];

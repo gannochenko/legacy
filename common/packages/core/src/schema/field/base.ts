@@ -1,15 +1,14 @@
-/* eslint import/no-unresolved: 0 */
-import { uCFirst } from 'ew-internals';
+import { uCFirst } from '@bucket-of-bolts/util';
 import * as yup from 'yup';
+import _ from '@bucket-of-bolts/microdash';
 import { ENTITY_PK_FIELD_NAME } from '../../constants.both';
-import _ from '../../lodash';
 
 export class BaseField {
-    constructor(declaration = {}) {
+    public constructor(declaration = {}) {
         this.declaration = declaration;
     }
 
-    async getHealth() {
+    public async getHealth() {
         const errors = [];
 
         const name = this.getName();
@@ -54,17 +53,17 @@ export class BaseField {
         return errors;
     }
 
-    set declaration(declaration) {
+    public set declaration(declaration) {
         this.declarationInternal = this.getSanitizedDeclaration(declaration);
     }
 
-    get declaration() {
+    public get declaration() {
         return this.declarationInternal;
     }
 
-    getSanitizedDeclaration(declaration) {
+    protected getSanitizedDeclaration(declaration) {
         const legal = [
-            'type',
+            'type.ts',
             'name',
             'label',
             'length',
@@ -114,7 +113,7 @@ export class BaseField {
         return safeDeclaration;
     }
 
-    getDeclarationValidator() {
+    protected getDeclarationValidator() {
         if (!this.fieldValidator) {
             this.fieldValidator = yup.object().shape({
                 name: yup
@@ -152,11 +151,11 @@ export class BaseField {
         return this.fieldValidator;
     }
 
-    getType() {
+    public getType() {
         return this.declaration.type || null;
     }
 
-    getActualType() {
+    public getActualType() {
         const type = this.getType();
         if (!type) {
             return null;
@@ -165,61 +164,59 @@ export class BaseField {
         return this.isMultiple() ? type[0] : type;
     }
 
-    getLength() {
+    public getLength() {
         return null;
     }
 
     /**
      * Returns field name, in snake_case
-     * @returns {*|string}
      */
-    getName() {
+    public getName() {
         return this.declaration.name;
     }
 
     /**
      * Returns field name in Readable format with spaces
-     * @returns {*}
      */
-    getDisplayName() {
+    public getDisplayName() {
         return _.isStringNotEmpty(this.declaration.label)
             ? this.declaration.label
             : uCFirst(this.getName()).replace(/_/g, ' ');
     }
 
-    getDeclaration() {
+    public getDeclaration() {
         return this.declaration;
     }
 
-    isMultiple() {
+    public isMultiple() {
         return _.isArray(this.declaration.type);
     }
 
-    isSortable() {
+    public isSortable() {
         return !(this.isMultiple() || this.isReference());
     }
 
-    isRequired() {
+    public isRequired() {
         return this.declaration.required === true;
     }
 
-    isPreview() {
+    public isPreview() {
         return this.declaration.preview === true;
     }
 
-    isUnique() {
+    public isUnique() {
         return this.declaration.unique === true;
     }
 
-    isSystem() {
+    public isSystem() {
         return this.declaration.system === true;
     }
 
-    toJSON() {
+    public toJSON() {
         return this.declaration;
     }
 
-    castValue(value) {
+    public castValue(value) {
         if (this.isMultiple()) {
             if (_.isArray(value)) {
                 // cast & remove all nulls, does not make sense to keep them
@@ -234,11 +231,11 @@ export class BaseField {
         return this.castValueItem(value);
     }
 
-    castValueItem(value) {
+    protected castValueItem(value) {
         return value;
     }
 
-    getValidator() {
+    protected getValidator() {
         let rule = this.createValueItemValidator();
 
         // multiple
@@ -256,19 +253,19 @@ export class BaseField {
         return rule;
     }
 
-    createValueItemValidator() {
+    protected createValueItemValidator() {
         throw new Error('Not implemented');
     }
 
-    getReferencedEntityName() {
+    protected getReferencedEntityName() {
         return null;
     }
 
-    isReference() {
+    public isReference() {
         return false;
     }
 
-    getTypeErrorMessage(what) {
+    protected getTypeErrorMessage(what) {
         return `The value of '${this.getDisplayName()}' is not ${what}`;
     }
 }

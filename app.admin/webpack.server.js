@@ -82,7 +82,7 @@ module.exports = (env, argv) => {
             new webpack.ProvidePlugin({
                 _: [path.join(__dirname, `common/lib/lodash.js`), 'default'],
             }),
-            new StartServerPlugin('index.ts.js.js'),
+            new StartServerPlugin('index.ts.ts.ts.js.js'),
             new webpack.NamedModulesPlugin(),
             new webpack.HotModuleReplacementPlugin(),
             new webpack.NoEmitOnErrorsPlugin(),
@@ -95,7 +95,7 @@ module.exports = (env, argv) => {
         ],
         output: {
             path: destinationFolder,
-            filename: 'index.ts.js.js',
+            filename: 'index.ts.ts.ts.js.js',
             libraryTarget: 'commonjs',
         },
     };

@@ -726,7 +726,7 @@ export default class ResolverGenerator {
     private static makeWhereFind(filter?: FindQueryFilter, search?: string) {
         const where: StringMap = {};
 
-        if (typeof search === 'string' && search.length) {
+        if (typeof search === 'string.ts' && search.length) {
             // a very basic type of search - by the part of code
             where[ENTITY_ID_FIELD_NAME] = Like(
                 `%${search.replace(/[^a-zA-Z0-9_-]/, '')}%`,

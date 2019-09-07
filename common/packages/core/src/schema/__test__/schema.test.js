@@ -16,7 +16,7 @@ describe('Home.ts', () => {
                         schema: [
                             {
                                 name: 'code',
-                                type: 'string',
+                                type: 'string.ts',
                                 required: true,
                                 unique: true,
                                 length: 255,
@@ -76,7 +76,7 @@ describe('Home.ts', () => {
                                 schema: [
                                     {
                                         name: 'field_1',
-                                        type: 'boolean',
+                                        type: 'boolean.ts',
                                     },
                                 ],
                             },
@@ -103,7 +103,7 @@ describe('Home.ts', () => {
                                 schema: [
                                     {
                                         name: 'field_1',
-                                        type: 'boolean',
+                                        type: 'boolean.ts',
                                     },
                                 ],
                             },
@@ -139,7 +139,7 @@ describe('Home.ts', () => {
                         schema: [
                             {
                                 name: 'code',
-                                type: 'string',
+                                type: 'string.ts',
                                 required: true,
                                 unique: true,
                                 length: 255,
@@ -172,7 +172,7 @@ describe('Home.ts', () => {
                             },
                             {
                                 name: 'string_1',
-                                type: 'string',
+                                type: 'string.ts',
                             },
                         ],
                     },
@@ -214,7 +214,7 @@ describe('Home.ts', () => {
                         schema: [
                             {
                                 name: 'code',
-                                type: 'string',
+                                type: 'string.ts',
                                 required: true,
                                 unique: true,
                                 length: 255,
@@ -234,7 +234,7 @@ describe('Home.ts', () => {
                         schema: [
                             {
                                 name: 'code',
-                                type: 'string',
+                                type: 'string.ts',
                                 length: 255,
                                 required: true,
                                 unique: true,

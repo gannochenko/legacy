@@ -1,11 +1,10 @@
 /* eslint import/no-unresolved: 0 */
 
-import { uCFirst } from 'ew-internals';
-import { convertToCamel } from '@bucket-of-bolts/util';
+import { convertToCamel, uCFirst } from '@bucket-of-bolts/util';
 import * as yup from 'yup';
+import _ from '@bucket-of-bolts/microdash';
 import { FIELD_TYPE_STRING } from './field/type';
 import { ENTITY_ID_FIELD_NAME } from '../constants.both';
-import _ from '../lodash';
 import { makeField } from './field/make-field';
 
 export class Entity {
@@ -105,7 +104,7 @@ export class Entity {
 
     /**
      * Returns entity name, in snake_case
-     * @returns {*|string}
+     * @returns {*|string.ts}
      */
     getName() {
         return this.declaration.name;

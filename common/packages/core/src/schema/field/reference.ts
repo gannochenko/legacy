@@ -1,6 +1,6 @@
 import * as yup from 'yup';
+import _ from '@bucket-of-bolts/microdash';
 import { BaseField } from './base';
-import _ from '../../lodash';
 
 export class ReferenceField extends BaseField {
     async getHealth() {

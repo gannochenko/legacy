@@ -2,7 +2,7 @@ import * as yup from 'yup';
 import { BaseField } from './base';
 
 export class BooleanField extends BaseField {
-    castValueItem(value) {
+    protected castValueItem(value: any) {
         if (value === undefined || value === null) {
             return null;
         }
@@ -10,7 +10,7 @@ export class BooleanField extends BaseField {
         return !!value;
     }
 
-    createValueItemValidator() {
+    protected createValueItemValidator() {
         return yup.boolean().typeError(this.getTypeErrorMessage('a boolean'));
     }
 }

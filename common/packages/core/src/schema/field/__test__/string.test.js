@@ -8,7 +8,7 @@ describe('StringField', () => {
     describe('castValue()', () => {
         it('should cast values to legal', async () => {
             const field = new StringField({
-                type: 'string',
+                type: 'string.ts',
                 name: 'foo',
             });
 
@@ -23,7 +23,7 @@ describe('StringField', () => {
     describe('getValidator()', () => {
         it('should not report data that can be casted', async () => {
             const field = new StringField({
-                type: 'string',
+                type: 'string.ts',
                 name: 'foo',
             });
 
@@ -44,7 +44,7 @@ describe('StringField', () => {
         });
         it('should not report legal data', async () => {
             const field = new StringField({
-                type: 'string',
+                type: 'string.ts',
                 name: 'foo',
             });
 

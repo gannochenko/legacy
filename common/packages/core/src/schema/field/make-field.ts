@@ -1,4 +1,4 @@
-import _ from '../../lodash';
+import _ from '@bucket-of-bolts/microdash';
 import {
     FIELD_TYPE_BOOLEAN,
     FIELD_TYPE_DATETIME,
@@ -24,7 +24,7 @@ export const makeField = declaration => {
         [type] = type;
     }
     if (!type) {
-        return new this(declaration);
+        return new StringField(declaration);
     }
 
     if (name === ENTITY_ID_FIELD_NAME) {
