@@ -40,6 +40,7 @@
         "typescript": "^3.6.2"
     },
     "dependencies": {
+        "@bucket-of-bolts/microdash": "^1.0.4",
         "@bucket-of-bolts/util": "^1.0.4",
         "yup": "^0.27.0"
     },
