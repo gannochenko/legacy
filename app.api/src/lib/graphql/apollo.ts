@@ -5,8 +5,7 @@ import { mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import { Express, NextFunction, Request, Response } from 'express';
 // @ts-ignore
 import uuid from 'uuid/v4';
-// @ts-ignore
-import { Settings } from 'ew-internals';
+import { Settings } from '@bucket-of-bolts/util';
 import { graphqlExpress } from './graphql-express';
 import SchemaService from '../../service/schema';
 import GQLTypeGenerator from './type-generator';

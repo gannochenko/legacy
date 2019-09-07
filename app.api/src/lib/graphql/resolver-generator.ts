@@ -3,8 +3,10 @@
  */
 
 import { Connection, In, Like, ObjectLiteral } from 'typeorm';
+import { Result } from '@bucket-of-bolts/express-mvc';
 // @ts-ignore
 import uuid from 'uuid/v4';
+
 import {
     FIELD_TYPE_DATETIME,
     DB_QUERY_FIND_MAX_PAGE_SIZE,
@@ -14,12 +16,10 @@ import {
 } from 'project-minimum-core';
 
 import { Schema, Entity, Field } from '../project-minimum-core';
-
 import { getASTAt, getSelectionAt } from './ast';
 import { IdMapper } from '../database/id-mapper';
 import { Query } from '../database/query';
 import DatabaseEntityManager from '../database/entity-manager';
-import { Result } from '../result';
 
 import {
     ASTNode,

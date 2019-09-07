@@ -1,22 +1,20 @@
 import '@babel/polyfill';
-// @ts-ignore
-import { Settings } from 'ew-internals';
+import { Settings } from '@bucket-of-bolts/util';
+import { useControllers } from '@bucket-of-bolts/express-mvc';
 import path from 'path';
-// @ts-ignore
 import helmet from 'helmet';
+
 import express from 'express';
-
 import useErrorHandler from './lib/error-handler';
+
 import useCORS from './lib/cors';
-
 import Cache from './lib/cache';
+
 import ConnectionManager from './lib/database/connection-manager';
-
 // simple API
-import useGraphQL from './lib/graphql/apollo';
 
+import useGraphQL from './lib/graphql/apollo';
 // MSC-API
-import { useControllers } from './lib/msc';
 import controllers from './controller';
 
 (async () => {

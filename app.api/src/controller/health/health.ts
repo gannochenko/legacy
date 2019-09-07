@@ -1,4 +1,3 @@
-// @ts-ignore
 import { Endpoint, Get } from '@bucket-of-bolts/express-mvc';
 
 @Endpoint('/health')

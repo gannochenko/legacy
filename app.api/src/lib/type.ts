@@ -1,3 +1,11 @@
+import { InputContext as MVCInputContext } from '@bucket-of-bolts/express-mvc/type';
+import ConnectionManager from './database/connection-manager';
+
+export interface RuntimeParameters extends StringMap {
+    connectionManager: ConnectionManager;
+}
+export type InputContext = MVCInputContext<RuntimeParameters>;
+
 export interface FindQuerySort<E = {}> {
     [key: string]: 'ASC' | 'DESC';
 }

@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 // @ts-ignore
-import { logger } from 'ew-internals';
+import { info } from '@bucket-of-bolts/util';
 import {
     ENTITY_ID_FIELD_NAME,
     ENTITY_ID_FIELD_LENGTH,
@@ -31,7 +31,7 @@ export class Seed1517934720430 implements MigrationInterface {
             }
         }
 
-        logger.info('🌱 Seed migration applied');
+        info('🌱 Seed migration applied');
     }
 
     // eslint-disable-next-line no-empty-function

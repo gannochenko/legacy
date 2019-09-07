@@ -1,11 +1,11 @@
+import { Result } from '@bucket-of-bolts/express-mvc';
 import {
     DB_QUERY_FIND_MAX_PAGE_SIZE,
     // @ts-ignore
 } from 'project-minimum-core';
-import { ObjectLiteral } from 'typeorm';
 
+import { ObjectLiteral } from 'typeorm';
 import DataLoaderPool from '../database/data-loader-pool';
-import { Result } from '../result';
 import { ResultError } from '../type';
 
 export interface Context {

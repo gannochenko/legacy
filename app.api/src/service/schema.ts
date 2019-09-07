@@ -1,8 +1,8 @@
+import { Result } from '@bucket-of-bolts/express-mvc';
 // @ts-ignore
 import { Schema } from 'project-minimum-core';
 import SchemaEntity from '../model/schema';
 import ConnectionManager from '../lib/database/connection-manager';
-import { Result } from '../lib/result';
 
 export type SchemaType = 'draft' | 'actual';
 

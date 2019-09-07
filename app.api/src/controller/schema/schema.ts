@@ -8,26 +8,19 @@ import {
     BodyInput,
     ERROR_REQUEST,
     ERROR_INTERNAL,
+    Result,
 } from '@bucket-of-bolts/express-mvc';
-import { InputContext } from '@bucket-of-bolts/express-mvc/type';
 
-import { Result } from '../../lib/result';
-
+import { InputContext } from '../../lib/type';
 import SchemaService from '../../service/schema';
 import { SchemaInputDTO } from './input.dto';
-import ConnectionManager from '../../lib/database/connection-manager';
-
-export interface RuntimeParameters extends StringMap {
-    connectionManager: ConnectionManager;
-}
-type SchemaInputContext = InputContext<RuntimeParameters>;
 
 @Endpoint('/schema')
 export class SchemaController {
     @Get(':type/:entity')
     public async getEntity(
         { type, entity } = { type: '', entity: '' },
-        { runtime: { connectionManager } }: SchemaInputContext,
+        { runtime: { connectionManager } }: InputContext,
     ): Promise<Result> {
         const result = new Result();
 
@@ -64,7 +57,7 @@ export class SchemaController {
     @Get(':type')
     public async get(
         { type } = { type: '' },
-        { runtime: { connectionManager } }: SchemaInputContext,
+        { runtime: { connectionManager } }: InputContext,
     ): Promise<Result> {
         const result = new Result();
 
@@ -94,7 +87,7 @@ export class SchemaController {
     @Put()
     public async commit(
         params: StringMap,
-        { runtime: { connectionManager } }: SchemaInputContext,
+        { runtime: { connectionManager } }: InputContext,
     ): Promise<Result> {
         const result = new Result();
 
@@ -123,7 +116,7 @@ export class SchemaController {
     @BodyInput(SchemaInputDTO)
     public async patch(
         params: StringMap,
-        { body, runtime: { connectionManager } }: SchemaInputContext,
+        { body, runtime: { connectionManager } }: InputContext,
     ): Promise<Result> {
         if (!connectionManager) {
             const result = new Result();
