@@ -1,4 +1,6 @@
 import { Result } from '@bucket-of-bolts/express-mvc';
+import _ from '@bucket-of-bolts/microdash';
+import { logError } from '@bucket-of-bolts/util';
 // @ts-ignore
 import { Schema } from 'project-minimum-core';
 import SchemaEntity from '../model/schema';
@@ -56,7 +58,7 @@ class SchemaService {
                 // store
                 await repo.save(current);
             } catch (error) {
-                logger.error('Unable to save schema to the database', error);
+                logError('Unable to save schema to the database', error);
                 errors.push({
                     message: __DEV__
                         ? error.message

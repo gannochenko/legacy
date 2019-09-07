@@ -1,5 +1,5 @@
 import '@babel/polyfill';
-import { Settings } from '@bucket-of-bolts/util';
+import { Settings, logInfo } from '@bucket-of-bolts/util';
 import { useControllers } from '@bucket-of-bolts/express-mvc';
 import path from 'path';
 import helmet from 'helmet';
@@ -60,9 +60,6 @@ import controllers from './controller';
     });
 
     app.listen({ port }, () => {
-        logger.info(
-            `🚀 API server is ready at http://${host}:${port}`,
-            !__TEST__,
-        );
+        logInfo(`🚀 API server is ready at http://${host}:${port}`, !__TEST__);
     });
 })();
