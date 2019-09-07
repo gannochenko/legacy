@@ -27,7 +27,7 @@ interface ServerParams {
 let server: Nullable<ApolloServer> = null;
 
 const getServer = async ({ cache, connectionManager }: ServerParams) => {
-    if (!server || !(await cache.get('apollo.server.ready'))) {
+    if (!server || !(await cache.get('apollo.index.ts.js.ready'))) {
         if (server) {
             await server.stop();
             await connectionManager.close();
@@ -64,7 +64,7 @@ const getServer = async ({ cache, connectionManager }: ServerParams) => {
             debug: __DEV__,
         });
 
-        await cache.set('apollo.server.ready', true, ['apollo']);
+        await cache.set('apollo.index.ts.js.ready', true, ['apollo']);
     }
 
     return server;

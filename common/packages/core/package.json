@@ -1,0 +1,49 @@
+{
+    "name": "@project-minimum/core",
+    "version": "0.0.0",
+    "main": "index.js",
+    "scripts": {
+        "prepare": "install-self-peers -- --ignore-scripts",
+        "build": "./script/build-tsc.sh",
+        "test": "jest -c ./jest/config.js --passWithNoTests",
+        "test:dev": "jest -c ./jest/config.js --watch",
+        "lint": "eslint ./src",
+        "lint:fix": "eslint ./src --fix"
+    },
+    "keywords": [],
+    "author": "gannochenko.sv@gmail.com",
+    "license": "MIT",
+    "devDependencies": {
+        "@babel/cli": "^7.5.5",
+        "@babel/core": "^7.3.4",
+        "@babel/plugin-proposal-class-properties": "^7.5.5",
+        "@babel/plugin-proposal-decorators": "^7.4.4",
+        "@babel/plugin-proposal-object-rest-spread": "^7.3.4",
+        "@babel/preset-env": "^7.3.4",
+        "@babel/preset-react": "^7.0.0",
+        "@babel/preset-typescript": "^7.3.3",
+        "@team-griffin/install-self-peers": "^1.1.1",
+        "@typescript-eslint/eslint-plugin": "^2.0.0",
+        "@typescript-eslint/parser": "^2.0.0",
+        "babel-eslint": "^10.0.2",
+        "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+        "eslint": "^6.3.0",
+        "eslint-config-airbnb-base": "^13.1.0",
+        "eslint-config-prettier": "^6.0.0",
+        "eslint-plugin-import": "^2.18.0",
+        "eslint-plugin-jsx-a11y": "^6.2.1",
+        "eslint-plugin-prettier": "^3.1.0",
+        "eslint-plugin-react": "^7.13.0",
+        "eslint-plugin-react-hooks": "^1.6.0",
+        "jest": "^24.3.1",
+        "peer-deps-externals-webpack-plugin": "^1.0.4",
+        "typescript": "^3.6.2"
+    },
+    "dependencies": {
+        "@bucket-of-bolts/util": "^1.0.4",
+        "yup": "^0.27.0"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}
