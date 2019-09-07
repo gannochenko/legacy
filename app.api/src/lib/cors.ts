@@ -1,6 +1,7 @@
 import cors from 'cors';
 import { Express } from 'express';
-import { Settings } from '@bucket-of-bolts/util';
+import { Settings, logError } from '@bucket-of-bolts/util';
+import _ from '@bucket-of-bolts/microdash';
 
 const useCORS = (app: Express, settings: Settings) => {
     app.use(
@@ -37,10 +38,7 @@ const useCORS = (app: Express, settings: Settings) => {
                         return cb(new Error('CORS mismatch'), false); // todo: throw 403
                     })
                     .catch((error: Error) => {
-                        logger.error(
-                            'Error occurred when checking CORS',
-                            error,
-                        );
+                        logError('Error occurred when checking CORS', error);
                         return cb(new Error('CORS error'), false); // todo: throw 500
                     });
             },

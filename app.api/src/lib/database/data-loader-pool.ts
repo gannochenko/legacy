@@ -1,4 +1,5 @@
 import DataLoader, { BatchLoadFn } from 'dataloader';
+import _ from '@bucket-of-bolts/microdash';
 
 export default class DataLoaderPool {
     private readonly pool: StringMap<DataLoader<number, unknown>> = {};

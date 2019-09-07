@@ -4,7 +4,8 @@
 
 import { Connection, In, Like, ObjectLiteral } from 'typeorm';
 import { Result } from '@bucket-of-bolts/express-mvc';
-import { getASTAt, getSelectionAt } from '@bucket-of-bolts/util';
+import { getASTAt, getSelectionAt, logError } from '@bucket-of-bolts/util';
+import _ from '@bucket-of-bolts/microdash';
 // @ts-ignore
 import uuid from 'uuid/v4';
 
@@ -203,10 +204,10 @@ export default class ResolverGenerator {
             data = entity.castData(data);
             const errors = await entity.validateData(data);
             if (errors) {
-                result.errors = errors.map(error => ({
-                    message: error.message,
+                result.errors = errors.map(resultError => ({
+                    message: resultError.message,
                     code: 'validation',
-                    reference: error.fieldName,
+                    reference: resultError.fieldName,
                 }));
 
                 return result;
@@ -593,7 +594,7 @@ export default class ResolverGenerator {
                         code: 'internal',
                         message: __DEV__ ? e.message : 'Internal error',
                     });
-                    logger.error('Unable to fetch some items', e);
+                    logError('Unable to fetch some items', e);
                 }
 
                 // maintain the right order
@@ -699,7 +700,7 @@ export default class ResolverGenerator {
                     code: 'internal',
                     message: __DEV__ ? e.message : 'Internal error',
                 });
-                logger.error('Internal error', e);
+                logError('Internal error', e);
             }
 
             if (errors.length) {
@@ -718,7 +719,7 @@ export default class ResolverGenerator {
                 code: 'internal',
                 message: __DEV__ ? e.message : 'Internal error',
             });
-            logger.error('Internal error', e);
+            logError('Internal error', e);
         }
     }
 

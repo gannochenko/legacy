@@ -9,6 +9,7 @@ import {
     // @ts-ignore
 } from 'project-minimum-core';
 import { SelectQueryBuilder } from 'typeorm';
+import _ from '@bucket-of-bolts/microdash';
 import { Entity } from '../project-minimum-core';
 import { FindQueryArguments, FindQuerySort } from '../type';
 

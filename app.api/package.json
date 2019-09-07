@@ -63,6 +63,7 @@
         "@babel/polyfill": "^7.2.5",
         "@babel/preset-typescript": "^7.3.3",
         "@bucket-of-bolts/express-mvc": "^1.0.4",
+        "@bucket-of-bolts/microdash": "^1.0.4",
         "@bucket-of-bolts/util": "^1.0.4",
         "@types/helmet": "^0.0.44",
         "@types/node": "^11.10.4",

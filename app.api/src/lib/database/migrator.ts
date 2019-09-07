@@ -5,6 +5,7 @@
 import { Connection, Table, TableColumn } from 'typeorm';
 import { TableOptions } from 'typeorm/schema-builder/options/TableOptions';
 import { TableColumnOptions } from 'typeorm/schema-builder/options/TableColumnOptions';
+import _ from '@bucket-of-bolts/microdash';
 
 import {
     DB_TABLE_PREFIX,

@@ -1,4 +1,5 @@
 import cloneDeep from 'clone-deep';
+import _ from '@bucket-of-bolts/microdash';
 
 import mockData from './data.mock';
 // @ts-ignore

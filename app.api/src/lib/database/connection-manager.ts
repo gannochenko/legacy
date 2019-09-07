@@ -83,6 +83,10 @@ export default class ConnectionManager {
         const password = (await settings.get('db.password', null)) as Nullable<
             string
         >;
+        if (!url) {
+            throw new Error('db.url not defined');
+        }
+
         const sUrl = injectPassword(url, password);
 
         return createConnection({

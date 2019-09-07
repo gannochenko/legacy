@@ -794,10 +794,15 @@
   resolved "https://registry.yarnpkg.com/@bucket-of-bolts/express-mvc/-/express-mvc-1.0.4.tgz#ca5bd5f9df60313a84fe98de65a7a7fc6b2378f5"
   integrity sha512-tzewd/MgrF8Z9w2jKsRPsIvurbxqvQRxrhuxE3OHKDeemOlo64fmTRlWouDDBO49hhtFK8b9Kzo5Hb1hrU/Ldg==
 
+"@bucket-of-bolts/microdash@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@bucket-of-bolts/microdash/-/microdash-1.0.4.tgz#88b0063597d42593ba55a9530e7c1df0b1c7f232"
+  integrity sha512-N45CDhGR7XgLxgm6UNbW4tDVgLgqHJsI+7Nngi0dK4tFQnj2Dpe3y4ZVZXMoN1vlYLCADfT/vj+QWcHCNMhiVg==
+
 "@bucket-of-bolts/util@^1.0.4":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@bucket-of-bolts/util/-/util-1.0.5.tgz#2b64f39ca6287afb279246f3f10982d1ad133cb7"
-  integrity sha512-i0pO+sNiRs8yFqVV+5FzEjdG8fzbr5a4MYcnSvz5b8n/JWAaa2np1rs01VMmGSaawmBntD/jBm0KeFzIpOZA6w==
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@bucket-of-bolts/util/-/util-1.0.6.tgz#27da52f4960d4e592b281d2463dd43ed65c676c6"
+  integrity sha512-hWSGuVjtZ+YRKwJQ/zcajqtg1QPCnIvXF1Vk5+E+3xweQ+mYU0NdIxwM7kVJ/Og1XtBdiPrO/atKBXiHGkWmFQ==
 
 "@m59/qs@^2.0.3":
   version "2.0.3"
