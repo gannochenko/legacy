@@ -4,6 +4,7 @@
 
 import { Connection, In, Like, ObjectLiteral } from 'typeorm';
 import { Result } from '@bucket-of-bolts/express-mvc';
+import { getASTAt, getSelectionAt } from '@bucket-of-bolts/util';
 // @ts-ignore
 import uuid from 'uuid/v4';
 
@@ -14,9 +15,7 @@ import {
     ENTITY_PK_FIELD_NAME,
     // @ts-ignore
 } from 'project-minimum-core';
-
 import { Schema, Entity, Field } from '../project-minimum-core';
-import { getASTAt, getSelectionAt } from './ast';
 import { IdMapper } from '../database/id-mapper';
 import { Query } from '../database/query';
 import DatabaseEntityManager from '../database/entity-manager';
