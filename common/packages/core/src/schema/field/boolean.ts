@@ -1,3 +1,4 @@
+// @ts-ignore
 import * as yup from 'yup';
 import { BaseField } from './base';
 

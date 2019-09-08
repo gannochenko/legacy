@@ -4,6 +4,7 @@ import {
     FIELD_TYPE_DATETIME,
     FIELD_TYPE_INTEGER,
     FIELD_TYPE_STRING,
+    FieldDeclaration,
 } from './type';
 import { ENTITY_ID_FIELD_NAME } from '../../constants.both';
 import { StringField } from './string';
@@ -13,7 +14,7 @@ import { DateTimeField } from './datetime';
 import { ReferenceField } from './reference';
 import { IdStringField } from './id-string';
 
-export const makeField = declaration => {
+export const makeField = (declaration: FieldDeclaration) => {
     let { type } = declaration;
     const { name } = declaration;
     if (!type) {

@@ -1,18 +1,22 @@
+// @ts-ignore
 import * as yup from 'yup';
 import { BaseField } from './base';
 import { DB_VARCHAR_DEF_LENGTH } from '../../constants.server';
 
 export class StringField extends BaseField {
-    getLength() {
-        const length = parseInt(this.declaration.length, 10);
-        if (Number.isNaN(length)) {
-            return DB_VARCHAR_DEF_LENGTH;
+    public getLength() {
+        let { length } = this.declaration;
+        if (length !== undefined) {
+            length = parseInt(length, 10);
+            if (Number.isNaN(length)) {
+                return DB_VARCHAR_DEF_LENGTH;
+            }
         }
 
         return length;
     }
 
-    castValueItem(value) {
+    protected castValueItem(value: any) {
         if (value === undefined || value === null) {
             return null;
         }
@@ -20,7 +24,7 @@ export class StringField extends BaseField {
         return value.toString();
     }
 
-    createValueItemValidator() {
+    protected createValueItemValidator() {
         return yup.string().typeError(this.getTypeErrorMessage('a string'));
     }
 }

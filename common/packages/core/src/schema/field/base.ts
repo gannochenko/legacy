@@ -2,14 +2,20 @@ import { uCFirst } from '@bucket-of-bolts/util';
 import * as yup from 'yup';
 import _ from '@bucket-of-bolts/microdash';
 import { ENTITY_PK_FIELD_NAME } from '../../constants.both';
+import { FieldDeclaration, FieldError, Nullable } from './type';
 
 export class BaseField {
-    public constructor(declaration = {}) {
+    protected declarationInternal: FieldDeclaration = {};
+    protected fieldValidator: Nullable<
+        yup.ObjectSchema<FieldDeclaration>
+    > = null;
+
+    public constructor(declaration: FieldDeclaration = {}) {
         this.declaration = declaration;
     }
 
     public async getHealth() {
-        const errors = [];
+        const errors: FieldError[] = [];
 
         const name = this.getName();
         const type = this.getType();
@@ -53,7 +59,7 @@ export class BaseField {
         return errors;
     }
 
-    public set declaration(declaration) {
+    public set declaration(declaration: FieldDeclaration) {
         this.declarationInternal = this.getSanitizedDeclaration(declaration);
     }
 
@@ -61,9 +67,9 @@ export class BaseField {
         return this.declarationInternal;
     }
 
-    protected getSanitizedDeclaration(declaration) {
+    protected getSanitizedDeclaration(declaration: FieldDeclaration) {
         const legal = [
-            'type.ts',
+            'type',
             'name',
             'label',
             'length',
@@ -73,9 +79,10 @@ export class BaseField {
             'system',
         ];
 
-        const safeDeclaration = {};
+        const safeDeclaration: FieldDeclaration = {};
         Object.keys(declaration).forEach(key => {
             if (legal.includes(key)) {
+                // @ts-ignore
                 safeDeclaration[key] = declaration[key];
             }
         });
@@ -89,6 +96,7 @@ export class BaseField {
         } catch (validationErrors) {
             if (validationErrors instanceof yup.ValidationError) {
                 validationErrors.inner.forEach(errorItem => {
+                    // @ts-ignore
                     delete safeDeclaration[errorItem.path];
                 });
             } else {
@@ -164,7 +172,7 @@ export class BaseField {
         return this.isMultiple() ? type[0] : type;
     }
 
-    public getLength() {
+    public getLength(): number | null {
         return null;
     }
 
@@ -181,7 +189,7 @@ export class BaseField {
     public getDisplayName() {
         return _.isStringNotEmpty(this.declaration.label)
             ? this.declaration.label
-            : uCFirst(this.getName()).replace(/_/g, ' ');
+            : uCFirst(this.getName() || '').replace(/_/g, ' ');
     }
 
     public getDeclaration() {
@@ -216,7 +224,7 @@ export class BaseField {
         return this.declaration;
     }
 
-    public castValue(value) {
+    public castValue(value: any) {
         if (this.isMultiple()) {
             if (_.isArray(value)) {
                 // cast & remove all nulls, does not make sense to keep them
@@ -231,7 +239,7 @@ export class BaseField {
         return this.castValueItem(value);
     }
 
-    protected castValueItem(value) {
+    protected castValueItem(value: any) {
         return value;
     }
 
@@ -253,7 +261,7 @@ export class BaseField {
         return rule;
     }
 
-    protected createValueItemValidator() {
+    protected createValueItemValidator(): any {
         throw new Error('Not implemented');
     }
 
@@ -265,7 +273,7 @@ export class BaseField {
         return false;
     }
 
-    protected getTypeErrorMessage(what) {
+    protected getTypeErrorMessage(what: string) {
         return `The value of '${this.getDisplayName()}' is not ${what}`;
     }
 }

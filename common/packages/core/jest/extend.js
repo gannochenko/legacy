@@ -21,7 +21,7 @@ expect.extend({
             pass = false;
         } else {
             let found = false;
-            for (let i = 0; i < received.length; i++) {
+            for (let i = 0; i < received.length; i += 1) {
                 try {
                     expect(received[i]).toMatchObject(argument);
                     found = true;
