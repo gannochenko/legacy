@@ -1,8 +1,3 @@
-export const FIELD_TYPE_STRING = 'string';
-export const FIELD_TYPE_INTEGER = 'integer';
-export const FIELD_TYPE_BOOLEAN = 'boolean';
-export const FIELD_TYPE_DATETIME = 'datetime';
-
 export interface FieldError {
     message?: string;
     code: string;
@@ -13,7 +8,7 @@ export interface FieldDeclaration {
     type?: string;
     name?: string;
     label?: string;
-    length?: number;
+    length?: number | string;
     required?: boolean;
     unique?: boolean;
     preview?: boolean;

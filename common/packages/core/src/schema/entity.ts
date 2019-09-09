@@ -1,14 +1,12 @@
-/* eslint import/no-unresolved: 0 */
-
 import { convertToCamel, uCFirst } from '@bucket-of-bolts/util';
 import * as yup from 'yup';
 import _ from '@bucket-of-bolts/microdash';
-import { FIELD_TYPE_STRING } from './field/type';
+import { FIELD_TYPE_STRING } from './field/field-type';
 import { ENTITY_ID_FIELD_NAME } from '../constants.both';
 import { makeField } from './field/make-field';
 
 export class Entity {
-    constructor(declaration) {
+    public constructor(declaration) {
         this.declaration = declaration;
     }
 
@@ -35,7 +33,7 @@ export class Entity {
         };
     }
 
-    async getHealth() {
+    public async getHealth() {
         const errors = [];
         const { declaration } = this;
 
@@ -120,41 +118,40 @@ export class Entity {
 
     /**
      * Returns entity name in Readable format with spaces
-     * @returns {*}
      */
-    getDisplayName() {
+    public getDisplayName() {
         return uCFirst(this.getName()).replace(/_/g, ' ');
     }
 
-    getFields() {
+    public getFields() {
         return this.declaration.schema;
     }
 
-    getReferences() {
+    public getReferences() {
         return this.getFields().filter(field => field.isReference());
     }
 
-    getSingleReferences() {
+    public getSingleReferences() {
         return this.getFields().filter(
             field => field.isReference() && !field.isMultiple(),
         );
     }
 
-    getMultipleReferences() {
+    public getMultipleReferences() {
         return this.getFields().filter(
             field => field.isReference() && field.isMultiple(),
         );
     }
 
-    getField(name) {
+    public getField(name: string) {
         return this.declaration.schema[name];
     }
 
-    toJSON() {
+    public toJSON() {
         return this.declaration;
     }
 
-    getPreviewField() {
+    public getPreviewField() {
         const preview = this.declaration.schema.find(
             field =>
                 field.getType() === FIELD_TYPE_STRING &&
@@ -174,7 +171,7 @@ export class Entity {
         );
     }
 
-    getValidator() {
+    public getValidator() {
         const shape = {};
         this.declaration.schema.forEach(field => {
             shape[field.getName()] = field.getValidator();

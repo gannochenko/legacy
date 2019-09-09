@@ -786,9 +786,9 @@
     to-fast-properties "^2.0.0"
 
 "@bucket-of-bolts/microdash@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@bucket-of-bolts/microdash/-/microdash-1.0.4.tgz#88b0063597d42593ba55a9530e7c1df0b1c7f232"
-  integrity sha512-N45CDhGR7XgLxgm6UNbW4tDVgLgqHJsI+7Nngi0dK4tFQnj2Dpe3y4ZVZXMoN1vlYLCADfT/vj+QWcHCNMhiVg==
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@bucket-of-bolts/microdash/-/microdash-1.0.7.tgz#9572b1de71fbf101b5e187dba1905b9476e321bd"
+  integrity sha512-XG7xI1sIZ9pGWeiIV/GUX/Kea+96a0M20+oek++KTnXBFRAxybgrqN61pffaq8GgCzlL9+Ic0dlLztLIIXV20Q==
 
 "@bucket-of-bolts/util@^1.0.4":
   version "1.0.6"

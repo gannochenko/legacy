@@ -1,17 +1,18 @@
+// @ts-ignore
 import * as yup from 'yup';
 import { StringField } from './string';
 import {
     ENTITY_ID_FIELD_NAME,
     ENTITY_ID_FIELD_LENGTH,
 } from '../../constants.both';
-import { FIELD_TYPE_STRING } from './type';
+import { FIELD_TYPE_STRING } from './field-type';
 
 export class IdStringField extends StringField {
     /**
      * In this function we assume that the name of the field is equal to ENTITY_ID_FIELD_NAME constant value
      * @returns {Promise<Array>}
      */
-    async getHealth() {
+    public async getHealth() {
         const errors = await super.getHealth();
 
         const name = this.getName();
@@ -55,8 +56,7 @@ export class IdStringField extends StringField {
         }
 
         // check that it has length
-        const len = parseInt(length, 10);
-        if (Number.isNaN(len) || len !== ENTITY_ID_FIELD_LENGTH) {
+        if (length !== null && length !== ENTITY_ID_FIELD_LENGTH) {
             errors.push({
                 message: `System field "${ENTITY_ID_FIELD_NAME}" should have length of ${ENTITY_ID_FIELD_LENGTH}`,
                 code: 'field_id_illegal_length',
@@ -67,7 +67,7 @@ export class IdStringField extends StringField {
         return errors;
     }
 
-    createValueItemValidator() {
+    protected createValueItemValidator() {
         // todo: check for uuid
         return yup
             .string()

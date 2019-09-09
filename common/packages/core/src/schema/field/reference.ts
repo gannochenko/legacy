@@ -1,9 +1,10 @@
+// @ts-ignore
 import * as yup from 'yup';
 import _ from '@bucket-of-bolts/microdash';
 import { BaseField } from './base';
 
 export class ReferenceField extends BaseField {
-    async getHealth() {
+    public async getHealth() {
         const errors = await super.getHealth();
 
         const name = this.getName();
@@ -30,20 +31,20 @@ export class ReferenceField extends BaseField {
         return errors;
     }
 
-    isReference() {
+    public isReference() {
         return true;
     }
 
-    getReferencedEntityName() {
+    public getReferencedEntityName() {
         return this.getActualType();
     }
 
-    createValueItemValidator() {
+    protected createValueItemValidator() {
         // todo: it should be uuid actually, so the corresponding check is needed
         return yup.string().typeError(this.getTypeErrorMessage('a string'));
     }
 
-    castValueItem(value) {
+    protected castValueItem(value: any) {
         if (value !== undefined && value !== null) {
             return value.toString();
         }
@@ -51,12 +52,12 @@ export class ReferenceField extends BaseField {
         return null;
     }
 
-    castValue(value) {
+    public castValue(value: any) {
         if (this.isMultiple()) {
             if (_.isArray(value)) {
                 return _.unique(
                     value.map(subValue => this.castValueItem(subValue)),
-                ).filter(x => !!x);
+                ).filter((x: any) => !!x);
             }
 
             return [];

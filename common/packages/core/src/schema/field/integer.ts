@@ -1,8 +1,9 @@
+// @ts-ignore
 import * as yup from 'yup';
 import { BaseField } from './base';
 
 export class IntegerField extends BaseField {
-    castValueItem(value) {
+    protected castValueItem(value: any) {
         if (value === undefined || value === null) {
             return null;
         }
@@ -15,7 +16,7 @@ export class IntegerField extends BaseField {
         return value; // unable to cast
     }
 
-    createValueItemValidator() {
+    protected createValueItemValidator() {
         return yup
             .number()
             .integer()

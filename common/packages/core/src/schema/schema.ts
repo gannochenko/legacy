@@ -6,7 +6,7 @@ export class Schema {
         this.declaration = declaration;
     }
 
-    async getHealth() {
+    public async getHealth() {
         const errors = [];
         const schema = this.getSchema();
 
@@ -88,22 +88,6 @@ export class Schema {
         return this.declarationInternal;
     }
 
-    /**
-     * @deprecated
-     * @returns {{schema: Entity[], version: number}|*}
-     */
-    getDeclaration() {
-        return this.declarationInternal;
-    }
-
-    /**
-     * @deprecated
-     * @returns {{schema: Entity[], version: number}|*}
-     */
-    get() {
-        return this.declarationInternal;
-    }
-
     getSchema() {
         return this.declaration.schema;
     }
@@ -133,7 +117,7 @@ export class Schema {
         return refs;
     }
 
-    isEmpty() {
+    public isEmpty() {
         return !this.declaration.schema.length;
     }
 }

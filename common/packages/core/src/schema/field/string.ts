@@ -7,13 +7,17 @@ export class StringField extends BaseField {
     public getLength() {
         let { length } = this.declaration;
         if (length !== undefined) {
-            length = parseInt(length, 10);
-            if (Number.isNaN(length)) {
-                return DB_VARCHAR_DEF_LENGTH;
+            if (typeof length !== 'number') {
+                length = parseInt(length, 10);
+                if (Number.isNaN(length)) {
+                    return DB_VARCHAR_DEF_LENGTH;
+                }
+            } else {
+                return length;
             }
         }
 
-        return length;
+        return null;
     }
 
     protected castValueItem(value: any) {

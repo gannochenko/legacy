@@ -4,8 +4,8 @@ import {
     FIELD_TYPE_DATETIME,
     FIELD_TYPE_INTEGER,
     FIELD_TYPE_STRING,
-    FieldDeclaration,
-} from './type';
+} from './field-type';
+import { FieldDeclaration } from './type';
 import { ENTITY_ID_FIELD_NAME } from '../../constants.both';
 import { StringField } from './string';
 import { BooleanField } from './boolean';

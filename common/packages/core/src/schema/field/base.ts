@@ -67,6 +67,94 @@ export class BaseField {
         return this.declarationInternal;
     }
 
+    public getType() {
+        return this.declaration.type || null;
+    }
+
+    public getActualType() {
+        const type = this.getType();
+        if (!type) {
+            return null;
+        }
+
+        return this.isMultiple() ? type[0] : type;
+    }
+
+    public getLength(): number | null {
+        return null;
+    }
+
+    /**
+     * Returns field name, in snake_case
+     */
+    public getName() {
+        return this.declaration.name;
+    }
+
+    /**
+     * Returns field name in Readable format with spaces
+     */
+    public getDisplayName() {
+        return _.isStringNotEmpty(this.declaration.label)
+            ? this.declaration.label
+            : uCFirst(this.getName() || '').replace(/_/g, ' ');
+    }
+
+    public getDeclaration() {
+        return this.declaration;
+    }
+
+    public isMultiple() {
+        return _.isArray(this.declaration.type);
+    }
+
+    public isSortable() {
+        return !(this.isMultiple() || this.isReference());
+    }
+
+    public isRequired() {
+        return this.declaration.required === true;
+    }
+
+    public isPreview() {
+        return this.declaration.preview === true;
+    }
+
+    public isUnique() {
+        return this.declaration.unique === true;
+    }
+
+    public isSystem() {
+        return this.declaration.system === true;
+    }
+
+    public toJSON() {
+        return this.declaration;
+    }
+
+    public castValue(value: any) {
+        if (this.isMultiple()) {
+            if (_.isArray(value)) {
+                // cast & remove all nulls, does not make sense to keep them
+                return value
+                    .map(subValue => this.castValueItem(subValue))
+                    .filter(x => x !== null && x !== undefined);
+            }
+
+            return value;
+        }
+
+        return this.castValueItem(value);
+    }
+
+    public getReferencedEntityName(): string | null {
+        return null;
+    }
+
+    public isReference() {
+        return false;
+    }
+
     protected getSanitizedDeclaration(declaration: FieldDeclaration) {
         const legal = [
             'type',
@@ -159,86 +247,6 @@ export class BaseField {
         return this.fieldValidator;
     }
 
-    public getType() {
-        return this.declaration.type || null;
-    }
-
-    public getActualType() {
-        const type = this.getType();
-        if (!type) {
-            return null;
-        }
-
-        return this.isMultiple() ? type[0] : type;
-    }
-
-    public getLength(): number | null {
-        return null;
-    }
-
-    /**
-     * Returns field name, in snake_case
-     */
-    public getName() {
-        return this.declaration.name;
-    }
-
-    /**
-     * Returns field name in Readable format with spaces
-     */
-    public getDisplayName() {
-        return _.isStringNotEmpty(this.declaration.label)
-            ? this.declaration.label
-            : uCFirst(this.getName() || '').replace(/_/g, ' ');
-    }
-
-    public getDeclaration() {
-        return this.declaration;
-    }
-
-    public isMultiple() {
-        return _.isArray(this.declaration.type);
-    }
-
-    public isSortable() {
-        return !(this.isMultiple() || this.isReference());
-    }
-
-    public isRequired() {
-        return this.declaration.required === true;
-    }
-
-    public isPreview() {
-        return this.declaration.preview === true;
-    }
-
-    public isUnique() {
-        return this.declaration.unique === true;
-    }
-
-    public isSystem() {
-        return this.declaration.system === true;
-    }
-
-    public toJSON() {
-        return this.declaration;
-    }
-
-    public castValue(value: any) {
-        if (this.isMultiple()) {
-            if (_.isArray(value)) {
-                // cast & remove all nulls, does not make sense to keep them
-                return value
-                    .map(subValue => this.castValueItem(subValue))
-                    .filter(x => x !== null && x !== undefined);
-            }
-
-            return value;
-        }
-
-        return this.castValueItem(value);
-    }
-
     protected castValueItem(value: any) {
         return value;
     }
@@ -263,14 +271,6 @@ export class BaseField {
 
     protected createValueItemValidator(): any {
         throw new Error('Not implemented');
-    }
-
-    protected getReferencedEntityName() {
-        return null;
-    }
-
-    public isReference() {
-        return false;
     }
 
     protected getTypeErrorMessage(what: string) {
