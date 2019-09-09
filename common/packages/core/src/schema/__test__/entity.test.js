@@ -6,7 +6,7 @@ import {
 import { BooleanField, ReferenceField, StringField } from '../field';
 
 describe('Entity', () => {
-    describe('getSanitizedDeclaration()', () => {
+    describe('getSafeDeclaration()', () => {
         it('should normalize declaration', async () => {
             const entity = new Entity();
 

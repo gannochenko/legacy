@@ -47,7 +47,7 @@ describe('Home.ts', () => {
         });
     });
 
-    describe('getSanitizedDeclaration()', () => {
+    describe('getSafeDeclaration()', () => {
         it('should return skeleton declaration', async () => {
             const schema = new Schema();
             const declaration = schema.declaration;

@@ -16,7 +16,7 @@ describe('BaseField', () => {
     // afterEach(async () => {
     // });
 
-    describe('getSanitizedDeclaration()', () => {
+    describe('getSafeDeclaration()', () => {
         it('should remove all attributes with incorrect values', async () => {
             const field = new BooleanField({
                 type: 100,

@@ -4,33 +4,40 @@ import _ from '@bucket-of-bolts/microdash';
 import { FIELD_TYPE_STRING } from './field/field-type';
 import { ENTITY_ID_FIELD_NAME } from '../constants.both';
 import { makeField } from './field/make-field';
+import { EntityDeclarationUnsafe, EntityDeclaration, Field } from './type';
+import { FieldError } from './field/type';
 
 export class Entity {
-    public constructor(declaration) {
-        this.declaration = declaration;
+    protected declarationInternal: EntityDeclaration;
+
+    public constructor(declaration: EntityDeclarationUnsafe) {
+        this.declarationInternal = this.getSafeDeclaration(declaration);
     }
 
-    set declaration(declaration) {
-        this.declarationInternal = this.getSanitizedDeclaration(declaration);
+    public set declaration(structure: EntityDeclaration) {
+        this.declarationInternal = structure;
     }
 
-    get declaration() {
+    public get declaration(): EntityDeclaration {
         return this.declarationInternal;
     }
 
-    getSanitizedDeclaration(declaration) {
-        let safeDeclaration = declaration;
-        if (!_.isObjectNotEmpty(safeDeclaration)) {
-            safeDeclaration = {};
-        }
-        if (!_.isArrayNotEmpty(safeDeclaration.schema)) {
-            safeDeclaration.schema = [];
+    protected getSafeDeclaration(
+        declaration: EntityDeclarationUnsafe,
+    ): EntityDeclaration {
+        const safeDeclaration: EntityDeclaration = { name: '', schema: [] };
+
+        if (typeof declaration.name === 'string') {
+            safeDeclaration.name = declaration.name;
         }
 
-        return {
-            name: safeDeclaration.name || '',
-            schema: safeDeclaration.schema.map(field => makeField(field)),
-        };
+        if (declaration.schema && _.isArrayNotEmpty(declaration.schema)) {
+            safeDeclaration.schema = declaration.schema.map(field =>
+                makeField(field),
+            );
+        }
+
+        return safeDeclaration;
     }
 
     public async getHealth() {
@@ -102,17 +109,15 @@ export class Entity {
 
     /**
      * Returns entity name, in snake_case
-     * @returns {*|string.ts}
      */
-    getName() {
+    public getName() {
         return this.declaration.name;
     }
 
     /**
      * Returns entity name in CamelCase
-     * @returns {*}
      */
-    getCamelName() {
+    public getCamelName() {
         return convertToCamel(this.getName().toLowerCase());
     }
 
@@ -143,8 +148,8 @@ export class Entity {
         );
     }
 
-    public getField(name: string) {
-        return this.declaration.schema[name];
+    public getField(name: string): Field | undefined {
+        return this.declaration.schema.find(field => field.getName() === name);
     }
 
     public toJSON() {
@@ -183,10 +188,8 @@ export class Entity {
     /**
      * Before saving any data tries to cast every value that is possible to cast,
      * to make the API more tolerant and friendly
-     * @param data
-     * todo: better to name it "castData"
      */
-    castData(data) {
+    public castData(data: any[]) {
         const processed = {};
 
         if (!_.isObjectNotEmpty(data)) {
@@ -206,8 +209,8 @@ export class Entity {
         return processed;
     }
 
-    async validateData(sourceData) {
-        let errors = null;
+    public async validateData(sourceData: any[]) {
+        let errors: FieldError[] = [];
         try {
             await this.getValidator().validate(sourceData, {
                 abortEarly: false,
@@ -215,14 +218,16 @@ export class Entity {
             });
         } catch (validationErrors) {
             if (_.isArray(validationErrors.inner)) {
-                errors = validationErrors.inner.map(error => ({
+                errors = validationErrors.inner.map((error: Error) => ({
                     message: error.message,
+                    code: 'validation',
                     fieldName: error.path,
                 }));
             } else {
                 errors = [
                     {
                         message: 'Internal error',
+                        code: 'internal',
                         fieldName: '',
                     },
                 ];
