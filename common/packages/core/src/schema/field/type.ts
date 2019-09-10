@@ -1,12 +1,17 @@
-export interface FieldError {
-    message?: string;
-    code: string;
-    fieldName?: string;
+export interface FieldDeclarationUnsafe {
+    type?: string;
+    name?: string;
+    label?: string;
+    length?: number | string;
+    required?: boolean;
+    unique?: boolean;
+    preview?: boolean;
+    system?: boolean;
 }
 
 export interface FieldDeclaration {
-    type?: string;
-    name?: string;
+    type: string;
+    name: string;
     label?: string;
     length?: number | string;
     required?: boolean;

@@ -6,7 +6,7 @@ import {
     ReferenceField,
     StringField,
 } from './field';
-import { FieldDeclaration } from './field/type';
+import { FieldDeclarationUnsafe } from './field/type';
 
 export type Field =
     | BooleanField
@@ -18,10 +18,25 @@ export type Field =
 
 export interface EntityDeclarationUnsafe {
     name?: string;
-    schema?: FieldDeclaration[];
+    schema?: FieldDeclarationUnsafe[];
 }
 
 export interface EntityDeclaration {
     name: string;
     schema: Field[];
+}
+
+export interface ObjectMap<P = any> {
+    [key: string]: P;
+}
+
+export interface SchemaError {
+    message?: string;
+    code: string;
+    fieldName?: string;
+    entityName?: string;
+}
+
+export interface ObjectLiteral {
+    [key: string]: any;
 }

@@ -2,20 +2,34 @@ import { uCFirst } from '@bucket-of-bolts/util';
 import * as yup from 'yup';
 import _ from '@bucket-of-bolts/microdash';
 import { ENTITY_PK_FIELD_NAME } from '../../constants.both';
-import { FieldDeclaration, FieldError, Nullable } from './type';
+import { FieldDeclaration, FieldDeclarationUnsafe, Nullable } from './type';
+import { FIELD_TYPE_STRING } from './field-type';
+import { SchemaError } from '../type';
 
 export class BaseField {
-    protected declarationInternal: FieldDeclaration = {};
+    protected declarationInternal: FieldDeclaration;
     protected fieldValidator: Nullable<
-        yup.ObjectSchema<FieldDeclaration>
+        yup.ObjectSchema<FieldDeclarationUnsafe>
     > = null;
 
-    public constructor(declaration: FieldDeclaration = {}) {
-        this.declaration = declaration;
+    public constructor(declaration: FieldDeclarationUnsafe) {
+        this.declarationInternal = this.getSafeDeclaration(declaration);
+    }
+
+    public set declaration(declaration: FieldDeclaration) {
+        this.declarationInternal = declaration;
+    }
+
+    public get declaration() {
+        return this.declarationInternal;
+    }
+
+    public getType() {
+        return this.declaration.type || null;
     }
 
     public async getHealth() {
-        const errors: FieldError[] = [];
+        const errors: SchemaError[] = [];
 
         const name = this.getName();
         const type = this.getType();
@@ -57,18 +71,6 @@ export class BaseField {
         }
 
         return errors;
-    }
-
-    public set declaration(declaration: FieldDeclaration) {
-        this.declarationInternal = this.getSanitizedDeclaration(declaration);
-    }
-
-    public get declaration() {
-        return this.declarationInternal;
-    }
-
-    public getType() {
-        return this.declaration.type || null;
     }
 
     public getActualType() {
@@ -155,7 +157,7 @@ export class BaseField {
         return false;
     }
 
-    protected getSanitizedDeclaration(declaration: FieldDeclaration) {
+    protected getSafeDeclaration(declaration: FieldDeclarationUnsafe) {
         const legal = [
             'type',
             'name',
@@ -167,7 +169,10 @@ export class BaseField {
             'system',
         ];
 
-        const safeDeclaration: FieldDeclaration = {};
+        const safeDeclaration: FieldDeclaration = {
+            name: '',
+            type: FIELD_TYPE_STRING,
+        };
         Object.keys(declaration).forEach(key => {
             if (legal.includes(key)) {
                 // @ts-ignore
@@ -251,7 +256,7 @@ export class BaseField {
         return value;
     }
 
-    protected getValidator() {
+    public getValidator() {
         let rule = this.createValueItemValidator();
 
         // multiple
@@ -269,7 +274,7 @@ export class BaseField {
         return rule;
     }
 
-    protected createValueItemValidator(): any {
+    protected createValueItemValidator(): yup.MixedSchema<unknown> {
         throw new Error('Not implemented');
     }
 

@@ -1,11 +1,19 @@
+/* eslint-disable import/no-duplicates */
 import { convertToCamel, uCFirst } from '@bucket-of-bolts/util';
 import * as yup from 'yup';
+import { ValidationError } from 'yup';
 import _ from '@bucket-of-bolts/microdash';
 import { FIELD_TYPE_STRING } from './field/field-type';
 import { ENTITY_ID_FIELD_NAME } from '../constants.both';
 import { makeField } from './field/make-field';
-import { EntityDeclarationUnsafe, EntityDeclaration, Field } from './type';
-import { FieldError } from './field/type';
+import {
+    EntityDeclarationUnsafe,
+    EntityDeclaration,
+    Field,
+    ObjectMap,
+    SchemaError,
+    ObjectLiteral,
+} from './type';
 
 export class Entity {
     protected declarationInternal: EntityDeclaration;
@@ -41,7 +49,7 @@ export class Entity {
     }
 
     public async getHealth() {
-        const errors = [];
+        const errors: SchemaError[] = [];
         const { declaration } = this;
 
         // check that entity has a name
@@ -64,7 +72,7 @@ export class Entity {
             return errors; // no point on further checking
         }
 
-        const times = {};
+        const times: ObjectMap<number> = {};
         declaration.schema.forEach(field => {
             times[field.getName()] =
                 field.getName() in times ? times[field.getName()] + 1 : 1;
@@ -177,7 +185,7 @@ export class Entity {
     }
 
     public getValidator() {
-        const shape = {};
+        const shape: ObjectMap<yup.MixedSchema<unknown>> = {};
         this.declaration.schema.forEach(field => {
             shape[field.getName()] = field.getValidator();
         });
@@ -189,8 +197,8 @@ export class Entity {
      * Before saving any data tries to cast every value that is possible to cast,
      * to make the API more tolerant and friendly
      */
-    public castData(data: any[]) {
-        const processed = {};
+    public castData(data: ObjectLiteral) {
+        const processed: ObjectLiteral = {};
 
         if (!_.isObjectNotEmpty(data)) {
             return processed;
@@ -210,7 +218,7 @@ export class Entity {
     }
 
     public async validateData(sourceData: any[]) {
-        let errors: FieldError[] = [];
+        let errors: SchemaError[] = [];
         try {
             await this.getValidator().validate(sourceData, {
                 abortEarly: false,
@@ -218,11 +226,13 @@ export class Entity {
             });
         } catch (validationErrors) {
             if (_.isArray(validationErrors.inner)) {
-                errors = validationErrors.inner.map((error: Error) => ({
-                    message: error.message,
-                    code: 'validation',
-                    fieldName: error.path,
-                }));
+                errors = validationErrors.inner.map(
+                    (error: ValidationError) => ({
+                        message: error.message,
+                        code: 'validation',
+                        fieldName: error.path,
+                    }),
+                );
             } else {
                 errors = [
                     {
