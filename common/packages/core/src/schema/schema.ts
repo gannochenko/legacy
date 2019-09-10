@@ -1,13 +1,30 @@
 import _ from '@bucket-of-bolts/microdash';
 import { Entity } from './entity';
+import {
+    SchemaDeclarationUnsafe,
+    SchemaDeclaration,
+    ObjectMap,
+    SchemaError,
+} from './type';
+import { ReferenceField } from './field';
 
 export class Schema {
-    public constructor(declaration = {}) {
-        this.declaration = declaration;
+    protected declarationInternal: SchemaDeclaration;
+
+    public constructor(declaration: SchemaDeclarationUnsafe) {
+        this.declarationInternal = this.getSafeDeclaration(declaration);
+    }
+
+    public set declaration(declaration: SchemaDeclaration) {
+        this.declarationInternal = declaration;
+    }
+
+    public get declaration() {
+        return this.declarationInternal;
     }
 
     public async getHealth() {
-        const errors = [];
+        const errors: SchemaError[] = [];
         const schema = this.getSchema();
 
         if (!schema.length) {
@@ -16,7 +33,7 @@ export class Schema {
         }
 
         // check health of each entity
-        const times = {};
+        const times: ObjectMap<number> = {};
         schema.forEach(entity => {
             times[entity.getName()] =
                 entity.getName() in times ? times[entity.getName()] + 1 : 1;
@@ -25,9 +42,9 @@ export class Schema {
         Object.keys(times).forEach(key => {
             if (times[key] > 1) {
                 errors.push({
-                    message: `Entity "${times[key]}" met several times`,
+                    message: `Entity "${key}" met several times`,
                     code: 'entity_duplicate',
-                    entityName: times[key],
+                    entityName: key,
                 });
             }
         });
@@ -44,12 +61,15 @@ export class Schema {
 
         // check that all referenced fields are there
         this.getReferences().forEach(field => {
-            const rName = field.getReferenceFieldName();
-            if (!this.getEntity(rName)) {
+            const referenceName = field.getReferencedEntityName();
+            if (
+                !(typeof referenceName === 'string') ||
+                !this.getEntity(referenceName)
+            ) {
                 errors.push({
-                    message: `Entity "${rName}" is referenced, but not created`,
+                    message: `Entity "${referenceName}" is referenced, but not created`,
                     code: 'field_broken_reference',
-                    fieldName: rName,
+                    fieldName: referenceName || '',
                 });
             }
         });
@@ -57,59 +77,54 @@ export class Schema {
         return errors;
     }
 
-    getSanitizedDeclaration(declaration) {
-        if (!_.isObjectNotEmpty(declaration)) {
-            declaration = {};
-        }
-        if (!_.isArrayNotEmpty(declaration.schema)) {
-            declaration.schema = [];
-        }
-
-        let version = parseInt(declaration.version, 10);
-        if (Number.isNaN(version)) {
-            version = 0;
-        }
-
-        return {
-            schema: declaration.schema.map(entity => new Entity(entity)),
-            version,
+    public getSafeDeclaration(declaration: SchemaDeclarationUnsafe) {
+        const safeDeclaration: SchemaDeclaration = {
+            version: 0,
+            schema: [],
         };
+
+        if (typeof declaration.version === 'string') {
+            const safeVersion = parseInt(declaration.version, 10);
+            if (!Number.isNaN(safeVersion)) {
+                safeDeclaration.version = safeVersion;
+            }
+        } else if (typeof declaration.version === 'number') {
+            safeDeclaration.version = declaration.version;
+        }
+
+        if (declaration.schema) {
+            safeDeclaration.schema = declaration.schema.map(
+                entity => new Entity(entity),
+            );
+        }
+
+        return safeDeclaration;
     }
 
-    toJSON() {
+    public toJSON() {
         return this.declarationInternal;
     }
 
-    set declaration(declaration) {
-        this.declarationInternal = this.getSanitizedDeclaration(declaration);
-    }
-
-    get declaration() {
-        return this.declarationInternal;
-    }
-
-    getSchema() {
+    public getSchema() {
         return this.declaration.schema;
     }
 
-    getVersion() {
+    public getVersion() {
         return this.declaration.version;
     }
 
     /**
      * Returns entity by it's name
-     * @param name
-     * @returns {T | undefined}
      */
-    getEntity(name) {
+    public getEntity(name: string) {
         // todo: make an index here
         return this.declaration.schema.find(
             entity => entity.getName() === name,
         );
     }
 
-    getReferences() {
-        let refs = [];
+    public getReferences() {
+        let refs: ReferenceField[] = [];
         this.declaration.schema.forEach(entity => {
             refs = _.union(refs, entity.getReferences());
         });
