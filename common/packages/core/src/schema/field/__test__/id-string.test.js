@@ -10,7 +10,8 @@ describe('IdStringField', () => {
         it(`should report invalid ${ENTITY_ID_FIELD_NAME} field health check`, async () => {
             const field = new IdStringField({
                 name: ENTITY_ID_FIELD_NAME,
-                type: 'boolean.ts',
+                type: 'boolean',
+                length: 10,
             });
 
             const errors = await field.getHealth();

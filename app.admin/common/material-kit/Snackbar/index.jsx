@@ -36,7 +36,7 @@ class SnackbarContent extends React.Component {
             case 'function':
                 snackIcon = <props.icon className={classes.icon} />;
                 break;
-            case 'string.ts':
+            case 'string':
                 snackIcon = <Icon className={classes.icon}>{props.icon}</Icon>;
                 break;
             default:

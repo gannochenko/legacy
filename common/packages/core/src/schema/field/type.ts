@@ -10,7 +10,7 @@ export interface FieldDeclarationUnsafe {
 }
 
 export interface FieldDeclaration {
-    type: string;
+    type: Nullable<string>;
     name: string;
     label?: string;
     length?: number | string;

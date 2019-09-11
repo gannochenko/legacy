@@ -8,7 +8,7 @@ describe('BooleanField', () => {
     describe('castValue()', () => {
         it('should cast values to legal', async () => {
             const field = new BooleanField({
-                type: 'boolean.ts',
+                type: 'boolean',
                 name: 'foo',
             });
 
@@ -29,7 +29,7 @@ describe('BooleanField', () => {
     describe('getValidator()', () => {
         it('should report illegal data', async () => {
             const field = new BooleanField({
-                type: 'boolean.ts',
+                type: 'boolean',
                 name: 'foo',
             });
 
@@ -54,7 +54,7 @@ describe('BooleanField', () => {
         });
         it('should not report legal data', async () => {
             const field = new BooleanField({
-                type: 'boolean.ts',
+                type: 'boolean',
                 name: 'foo',
             });
 

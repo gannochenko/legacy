@@ -25,7 +25,7 @@ module.exports = (env, argv) => {
         output: {
             libraryTarget: 'commonjs',
             path: destinationFolder,
-            filename: 'Home.ts.ts.js',
+            filename: 'index.js',
         },
         resolve: {
             extensions: ['.js', '.ts'],

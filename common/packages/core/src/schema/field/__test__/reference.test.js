@@ -8,8 +8,8 @@ describe('ReferenceField', () => {
     describe('getHealth()', () => {
         it('should report invalid reference field health check', async () => {
             const field = new ReferenceField({
-                name: 'reference.ts',
-                type: 'reference.ts',
+                name: 'reference',
+                type: 'reference',
                 unique: true,
                 preview: true,
             });
@@ -18,11 +18,11 @@ describe('ReferenceField', () => {
 
             expect(errors).toMatchObjectInArray({
                 code: 'field_reference_unique_conflict',
-                fieldName: 'reference.ts',
+                fieldName: 'reference',
             });
             expect(errors).toMatchObjectInArray({
                 code: 'field_reference_preview_conflict',
-                fieldName: 'reference.ts',
+                fieldName: 'reference',
             });
         });
     });
@@ -30,7 +30,7 @@ describe('ReferenceField', () => {
     describe('isReference()', () => {
         it('should return true for a reference field', async () => {
             const field = new ReferenceField({
-                type: ['reference.ts'],
+                type: ['reference'],
                 name: 'foo',
                 preview: true,
             });
@@ -42,8 +42,8 @@ describe('ReferenceField', () => {
     describe('isSortable()', () => {
         it('should not return true for reference fields', async () => {
             const field = new ReferenceField({
-                name: 'reference.ts',
-                type: 'reference.ts',
+                name: 'reference',
+                type: 'reference',
             });
 
             expect(field.isSortable()).toBeFalsy();

@@ -34,7 +34,7 @@ describe('BaseField', () => {
 
         it('should remove all redundant attributes', () => {
             const field = new BooleanField({
-                type: 'boolean.ts',
+                type: 'boolean',
                 name: 'foo',
                 length: 100,
                 label: 'la',
@@ -47,7 +47,7 @@ describe('BaseField', () => {
             });
 
             expect(Object.keys(field.declaration)).toEqualArray([
-                'type.ts',
+                'type',
                 'name',
                 'length',
                 'label',
@@ -61,7 +61,7 @@ describe('BaseField', () => {
 
     describe('getHealth()', () => {
         it('should report if there is neither name nor type defined', async () => {
-            const field = new BaseField();
+            const field = new BaseField({});
             const errors = await field.getHealth();
 
             expect(errors).toMatchObjectInArray({
@@ -77,7 +77,7 @@ describe('BaseField', () => {
         it(`should report if field name is equal to ${ENTITY_PK_FIELD_NAME} (which is system-reserved)`, async () => {
             const field = new BaseField({
                 name: ENTITY_PK_FIELD_NAME,
-                type: 'string.ts',
+                type: 'string',
             });
             const errors = await field.getHealth();
 
@@ -90,7 +90,7 @@ describe('BaseField', () => {
         it('should report multipe-unique conflict', async () => {
             const field = new BaseField({
                 name: 'blah',
-                type: ['string.ts'],
+                type: ['string'],
                 unique: true,
             });
             const errors = await field.getHealth();
@@ -104,47 +104,47 @@ describe('BaseField', () => {
     describe('getType()', () => {
         it('should return correct type for single field', async () => {
             const field = new BooleanField({
-                type: 'boolean.ts',
+                type: 'boolean',
                 name: 'foo',
             });
 
-            expect(field.getType()).toEqual('boolean.ts');
+            expect(field.getType()).toEqual('boolean');
         });
 
         it('should return correct type for multiple field', async () => {
             const field = new BooleanField({
-                type: ['boolean.ts'],
+                type: ['boolean'],
                 name: 'foo',
             });
 
-            expect(field.getType()).toEqual(['boolean.ts']);
+            expect(field.getType()).toEqual(['boolean']);
         });
     });
 
     describe('getActualType()', () => {
         it('should return correct actual type for single field', async () => {
             const field = new BooleanField({
-                type: 'boolean.ts',
+                type: 'boolean',
                 name: 'foo',
             });
 
-            expect(field.getActualType()).toEqual('boolean.ts');
+            expect(field.getActualType()).toEqual('boolean');
         });
 
         it('should return correct actual type for multiple field', async () => {
             const field = new BooleanField({
-                type: ['boolean.ts'],
+                type: ['boolean'],
                 name: 'foo',
             });
 
-            expect(field.getActualType()).toEqual('boolean.ts');
+            expect(field.getActualType()).toEqual('boolean');
         });
     });
 
     describe('getLength()', () => {
         it('should return correct length', async () => {
             const field = new StringField({
-                type: 'string.ts',
+                type: 'string',
                 name: 'foo',
                 length: 50,
             });
@@ -156,7 +156,7 @@ describe('BaseField', () => {
     describe('getName()', () => {
         it('should return correct name', async () => {
             const field = new StringField({
-                type: 'string.ts',
+                type: 'string',
                 name: 'foo',
             });
 
@@ -167,7 +167,7 @@ describe('BaseField', () => {
     describe('getDisplayName()', () => {
         it('should return correct display name', async () => {
             const field = new StringField({
-                type: 'string.ts',
+                type: 'string',
                 name: 'foo_bar_bazz',
             });
 
@@ -178,7 +178,7 @@ describe('BaseField', () => {
     describe('isMultiple()', () => {
         it('should return false for a single field', async () => {
             const field = new StringField({
-                type: 'string.ts',
+                type: 'string',
                 name: 'foo_bar_bazz',
             });
 
@@ -186,7 +186,7 @@ describe('BaseField', () => {
         });
         it('should return true for a multiple field', async () => {
             const field = new StringField({
-                type: ['string.ts'],
+                type: ['string'],
                 name: 'foo_bar_bazz',
             });
 
@@ -197,7 +197,7 @@ describe('BaseField', () => {
     describe('isSortable()', () => {
         it('should return false for a multiple field', async () => {
             const field = new BaseField({
-                type: ['string.ts'],
+                type: ['string'],
                 name: 'foo_bar_bazz',
             });
 
@@ -205,7 +205,7 @@ describe('BaseField', () => {
         });
         it('should return false for a single non-reference field', async () => {
             const field = new BaseField({
-                type: 'string.ts',
+                type: 'string',
                 name: 'foo_bar_bazz',
             });
 
@@ -216,7 +216,7 @@ describe('BaseField', () => {
     describe('isRequired()', () => {
         it('should return correct required flag', async () => {
             const field = new BaseField({
-                type: ['string.ts'],
+                type: ['string'],
                 name: 'foo',
                 required: true,
             });
@@ -228,7 +228,7 @@ describe('BaseField', () => {
     describe('isPreview()', () => {
         it('should return correct preview flag', async () => {
             const field = new BaseField({
-                type: ['string.ts'],
+                type: ['string'],
                 name: 'foo',
                 preview: true,
             });
@@ -240,7 +240,7 @@ describe('BaseField', () => {
     describe('isUnique()', () => {
         it('should return true for non-reference single field', async () => {
             const field = new BaseField({
-                type: 'string.ts',
+                type: 'string',
                 name: 'foo',
                 unique: true,
             });
@@ -252,7 +252,7 @@ describe('BaseField', () => {
     describe('isSystem()', () => {
         it('should return true if the field is maked as system', async () => {
             const field = new BaseField({
-                type: 'string.ts',
+                type: 'string',
                 name: 'foo',
                 system: true,
             });
@@ -264,14 +264,14 @@ describe('BaseField', () => {
     describe('toJSON()', () => {
         it('should return return JSON declaration', async () => {
             const field = new BaseField({
-                type: 'string.ts',
+                type: 'string',
                 name: 'foo',
                 system: true,
             });
 
             expect(JSON.stringify(field)).toEqual(
                 JSON.stringify({
-                    type: 'string.ts',
+                    type: 'string',
                     name: 'foo',
                     system: true,
                 }),
@@ -282,7 +282,7 @@ describe('BaseField', () => {
     describe('castValue()', () => {
         it('should cast single value', async () => {
             const field = new BaseField({
-                type: 'string.ts',
+                type: 'string',
                 name: 'foo',
             });
 
@@ -291,7 +291,7 @@ describe('BaseField', () => {
 
         it('should cast multiple values throwing out nulls and undefineds', async () => {
             const field = new BaseField({
-                type: ['string.ts'],
+                type: ['string'],
                 name: 'foo',
             });
 
@@ -303,7 +303,7 @@ describe('BaseField', () => {
 
         it('should not cast multiple to single and back', async () => {
             const fieldSingle = new BaseField({
-                type: 'string.ts',
+                type: 'string',
                 name: 'foo',
             });
 
@@ -313,7 +313,7 @@ describe('BaseField', () => {
             ]);
 
             const fieldMultiple = new BaseField({
-                type: ['string.ts'],
+                type: ['string'],
                 name: 'foo',
             });
 
@@ -324,7 +324,7 @@ describe('BaseField', () => {
     describe('isReference()', () => {
         it('should return false for a non-reference field', async () => {
             const field = new BaseField({
-                type: ['string.ts'],
+                type: ['string'],
                 name: 'foo',
                 preview: true,
             });

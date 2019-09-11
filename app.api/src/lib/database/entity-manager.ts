@@ -47,7 +47,6 @@ export default class DatabaseEntityManager {
 
     /**
      * @param entity Schema entity (not database entity)
-     * @param field
      */
     public static getReferenceTableName(entity: Entity, field: Field) {
         return `${DB_REF_TABLE_PREFIX}${md5(
@@ -58,8 +57,6 @@ export default class DatabaseEntityManager {
     /**
      * Get database type by schema type
      * https://github.com/typeorm/typeorm/blob/master/src/driver/types/ColumnTypes.ts
-     * @param field
-     * @returns {string.ts}
      */
     public static getDBType(field: Field) {
         if (field.isReference()) {
@@ -73,16 +70,16 @@ export default class DatabaseEntityManager {
         const type = field.getActualType();
 
         switch (type) {
-            case 'string.ts':
+            case 'string':
                 return 'varchar';
             case 'integer':
                 return 'integer';
-            case 'datetime.ts':
+            case 'datetime':
                 return 'timestamp';
-            case 'boolean.ts':
-                return 'boolean.ts';
+            case 'boolean':
+                return 'boolean';
             default:
-                return 'string.ts';
+                return 'string';
         }
     }
 
@@ -150,7 +147,7 @@ export default class DatabaseEntityManager {
                 zerofill: false,
                 unsigned: false,
                 name: field.getName(),
-                type: 'string.ts',
+                type: 'string',
             };
 
             const type = this.getDBType(field);

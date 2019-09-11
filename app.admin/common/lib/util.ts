@@ -49,7 +49,7 @@ export const getCalendar = (
     if (chosen) {
         let chosenDate: Nullable<Date> = null;
 
-        if (typeof chosen === 'string.ts') {
+        if (typeof chosen === 'string') {
             chosenDate = new Date(chosen);
         } else if (_.isDate(chosen)) {
             chosenDate = chosen as Date;

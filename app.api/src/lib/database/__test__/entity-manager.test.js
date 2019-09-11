@@ -75,7 +75,7 @@ describe('DatabaseEntityManager', () => {
             const booleanField = person
                 .getFields()
                 .find(field => field.getName() === 'has_pets');
-            expect(EntityManager.getDBType(booleanField)).toEqual('boolean.ts');
+            expect(EntityManager.getDBType(booleanField)).toEqual('boolean');
 
             const dateField = person
                 .getFields()
@@ -178,7 +178,7 @@ describe('DatabaseEntityManager', () => {
                         array: false,
                     },
                     has_pets: {
-                        type: 'boolean.ts',
+                        type: 'boolean',
                         nullable: true,
                         array: false,
                     },

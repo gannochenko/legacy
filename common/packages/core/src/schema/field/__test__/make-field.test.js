@@ -15,7 +15,7 @@ describe('MakeField', () => {
     describe('should create string field', () => {
         it('after single declaration', async () => {
             const field = makeField({
-                type: 'string.ts',
+                type: 'string',
                 name: 'foo',
             });
 
@@ -24,7 +24,7 @@ describe('MakeField', () => {
 
         it('after multiple declaration', async () => {
             const field = makeField({
-                type: ['string.ts'],
+                type: ['string'],
                 name: 'foo',
             });
 
@@ -35,7 +35,7 @@ describe('MakeField', () => {
     describe('should create boolean field', () => {
         it('after single declaration', async () => {
             const field = makeField({
-                type: 'boolean.ts',
+                type: 'boolean',
                 name: 'foo',
             });
 
@@ -44,7 +44,7 @@ describe('MakeField', () => {
 
         it('after multiple declaration', async () => {
             const field = makeField({
-                type: ['boolean.ts'],
+                type: ['boolean'],
                 name: 'foo',
             });
 
@@ -115,7 +115,7 @@ describe('MakeField', () => {
     describe(`should create ${ENTITY_ID_FIELD_NAME} field`, () => {
         it('after single declaration', async () => {
             const field = makeField({
-                type: 'string.ts',
+                type: 'string',
                 name: ENTITY_ID_FIELD_NAME,
             });
 

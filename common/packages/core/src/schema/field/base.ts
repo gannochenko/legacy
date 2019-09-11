@@ -171,7 +171,7 @@ export class BaseField {
 
         const safeDeclaration: FieldDeclaration = {
             name: '',
-            type: FIELD_TYPE_STRING,
+            type: null,
         };
         Object.keys(declaration).forEach(key => {
             if (legal.includes(key)) {

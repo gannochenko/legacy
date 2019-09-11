@@ -19,11 +19,11 @@ describe('Entity', () => {
                 schema: [
                     {
                         name: 'i_have_a_name',
-                        type: 'boolean.ts',
+                        type: 'boolean',
                     },
                     {
                         name: 'i_have_a_name',
-                        type: 'string.ts',
+                        type: 'string',
                     },
                 ],
             });
@@ -41,7 +41,7 @@ describe('Entity', () => {
                 schema: [
                     {
                         name: 'i_have_a_name',
-                        type: 'boolean.ts',
+                        type: 'boolean',
                     },
                 ],
             });
@@ -69,18 +69,18 @@ describe('Entity', () => {
                 schema: [
                     {
                         name: ENTITY_ID_FIELD_NAME,
-                        type: 'string.ts',
+                        type: 'string',
                         system: true,
                         unique: true,
                         length: ENTITY_ID_FIELD_LENGTH,
                     },
                     {
                         name: 'i_have_a_name',
-                        type: 'boolean.ts',
+                        type: 'boolean',
                     },
                     {
                         name: 'i_have_a_name',
-                        type: 'string.ts',
+                        type: 'string',
                     },
                 ],
             });
@@ -99,7 +99,7 @@ describe('Entity', () => {
                 schema: [
                     {
                         name: 'i_have_a_name',
-                        type: 'boolean.ts',
+                        type: 'boolean',
                     },
                 ],
             });
@@ -118,15 +118,15 @@ describe('Entity', () => {
                 schema: [
                     {
                         name: 'i_have_a_name',
-                        type: 'boolean.ts',
+                        type: 'boolean',
                     },
                     {
                         name: ENTITY_ID_FIELD_NAME,
-                        type: 'boolean.ts',
+                        type: 'boolean',
                     },
                     {
                         name: '',
-                        type: 'string.ts',
+                        type: 'string',
                     },
                 ],
             });
@@ -151,7 +151,7 @@ describe('Entity', () => {
                 schema: [
                     {
                         name: 'bool_field',
-                        type: 'boolean.ts',
+                        type: 'boolean',
                     },
                     {
                         name: 'integer_field',
@@ -176,7 +176,7 @@ describe('Entity', () => {
                 schema: [
                     {
                         name: 'bool_field',
-                        type: 'boolean.ts',
+                        type: 'boolean',
                     },
                     {
                         name: 'integer_field',
@@ -239,7 +239,7 @@ describe('Entity', () => {
                 schema: [
                     {
                         name: 'i_have_a_name',
-                        type: 'boolean.ts',
+                        type: 'boolean',
                     },
                     {
                         name: 'single_ref',
@@ -270,7 +270,7 @@ describe('Entity', () => {
                 schema: [
                     {
                         name: 'i_have_a_name',
-                        type: 'boolean.ts',
+                        type: 'boolean',
                     },
                     {
                         name: 'single_ref',
@@ -298,7 +298,7 @@ describe('Entity', () => {
                 schema: [
                     {
                         name: 'i_have_a_name',
-                        type: 'boolean.ts',
+                        type: 'boolean',
                     },
                     {
                         name: 'single_ref',
@@ -326,7 +326,7 @@ describe('Entity', () => {
                 schema: [
                     {
                         name: 'i_have_a_name',
-                        type: 'boolean.ts',
+                        type: 'boolean',
                     },
                     {
                         name: 'single_ref',
@@ -334,7 +334,7 @@ describe('Entity', () => {
                     },
                     {
                         name: 'i_am_presentational',
-                        type: 'string.ts',
+                        type: 'string',
                     },
                 ],
             });
@@ -351,7 +351,7 @@ describe('Entity', () => {
                 schema: [
                     {
                         name: 'i_have_a_name',
-                        type: 'boolean.ts',
+                        type: 'boolean',
                     },
                     {
                         name: 'single_ref',
@@ -359,11 +359,11 @@ describe('Entity', () => {
                     },
                     {
                         name: 'i_am_not_presentational',
-                        type: 'string.ts',
+                        type: 'string',
                     },
                     {
                         name: 'i_am_presentational',
-                        type: 'string.ts',
+                        type: 'string',
                         preview: true,
                     },
                 ],
