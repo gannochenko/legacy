@@ -3,7 +3,7 @@ import { ENTITY_ID_FIELD_NAME } from '../../constants.both';
 import { Entity } from '../entity';
 import { ReferenceField } from '../field';
 
-describe('Home.ts', () => {
+describe('Schema', () => {
     describe('getHealth()', () => {
         it('should report invalid health check', async () => {
             const schema = new Schema({

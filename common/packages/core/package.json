@@ -36,14 +36,14 @@
         "eslint-plugin-react": "^7.13.0",
         "eslint-plugin-react-hooks": "^1.6.0",
         "jest": "^24.3.1",
-        "peer-deps-externals-webpack-plugin": "^1.0.4",
         "ts-jest": "^24.0.2",
         "typescript": "^3.6.2"
     },
     "dependencies": {
         "@bucket-of-bolts/microdash": "^1.0.4",
-        "@bucket-of-bolts/util": "^1.0.4",
+        "@bucket-of-bolts/util": "^1.0.6",
         "@types/yup": "^0.26.23",
+        "moment": "^2.24.0",
         "yup": "^0.27.0"
     },
     "publishConfig": {
