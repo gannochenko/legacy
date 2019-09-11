@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "module": "CommonJS",
+        "target": "es5",
+        "allowJs": true,
+        "skipLibCheck": false,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "isolatedModules": false,
+        "experimentalDecorators": true,
+        "lib": ["esnext.asynciterable", "esnext", "es2017", "dom"],
+        "removeComments": true,
+        "emitDecoratorMetadata": true,
+        "baseUrl": "./src/",
+        "declaration": false,
+        "types": []
+    },
+    "exclude": ["node_modules", "build"],
+    "include": ["src/**/*", "src/global.d.ts"]
+}
