@@ -1,5 +1,5 @@
-'use strict';
-Object.defineProperty(exports, '__esModule', { value: true });
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.FIELD_TYPE_STRING = 'string';
 exports.FIELD_TYPE_INTEGER = 'integer';
 exports.FIELD_TYPE_BOOLEAN = 'boolean';

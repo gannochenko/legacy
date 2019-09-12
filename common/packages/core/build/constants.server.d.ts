@@ -1,4 +1,4 @@
-export declare const DB_TABLE_PREFIX = 'eq_';
+export declare const DB_TABLE_PREFIX = "eq_";
 export declare const DB_REF_TABLE_PREFIX: string;
 export declare const DB_ENTITY_TABLE_PREFIX: string;
 export declare const DB_MIGRATION_TABLE_NAME: string;

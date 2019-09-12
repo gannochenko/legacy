@@ -1,20 +1,7 @@
-import {
-    BooleanField,
-    DateTimeField,
-    IdStringField,
-    IntegerField,
-    ReferenceField,
-    StringField,
-} from './field';
+import { BooleanField, DateTimeField, IdStringField, IntegerField, ReferenceField, StringField } from './field';
 import { FieldDeclarationUnsafe, Nullable } from './field/type';
 import { Entity } from './entity';
-export declare type Field =
-    | BooleanField
-    | DateTimeField
-    | IdStringField
-    | IntegerField
-    | ReferenceField
-    | StringField;
+export declare type Field = BooleanField | DateTimeField | IdStringField | IntegerField | ReferenceField | StringField;
 export interface EntityDeclarationUnsafe {
     name?: string;
     schema?: FieldDeclarationUnsafe[];
