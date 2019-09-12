@@ -75,7 +75,7 @@ describe('MakeField', () => {
     describe('should create datetime field', () => {
         it('after single declaration', async () => {
             const field = makeField({
-                type: 'datetime.ts',
+                type: 'datetime',
                 name: 'foo',
             });
 
@@ -84,7 +84,7 @@ describe('MakeField', () => {
 
         it('after multiple declaration', async () => {
             const field = makeField({
-                type: ['datetime.ts'],
+                type: ['datetime'],
                 name: 'foo',
             });
 

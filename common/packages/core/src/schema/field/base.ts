@@ -3,7 +3,6 @@ import * as yup from 'yup';
 import _ from '@bucket-of-bolts/microdash';
 import { ENTITY_PK_FIELD_NAME } from '../../constants.both';
 import { FieldDeclaration, FieldDeclarationUnsafe, Nullable } from './type';
-import { FIELD_TYPE_STRING } from './field-type';
 import { SchemaError } from '../type';
 
 export class BaseField {
@@ -12,7 +11,7 @@ export class BaseField {
         yup.ObjectSchema<FieldDeclarationUnsafe>
     > = null;
 
-    public constructor(declaration: FieldDeclarationUnsafe) {
+    public constructor(declaration: FieldDeclarationUnsafe = {}) {
         this.declarationInternal = this.getSafeDeclaration(declaration);
     }
 
@@ -157,7 +156,7 @@ export class BaseField {
         return false;
     }
 
-    protected getSafeDeclaration(declaration: FieldDeclarationUnsafe) {
+    protected getSafeDeclaration(declaration: FieldDeclarationUnsafe = {}) {
         const legal = [
             'type',
             'name',

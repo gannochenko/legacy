@@ -11,7 +11,7 @@ import { ReferenceField } from './field';
 export class Schema {
     protected declarationInternal: SchemaDeclaration;
 
-    public constructor(declaration: SchemaDeclarationUnsafe) {
+    public constructor(declaration: SchemaDeclarationUnsafe = {}) {
         this.declarationInternal = this.getSafeDeclaration(declaration);
     }
 
@@ -77,7 +77,7 @@ export class Schema {
         return errors;
     }
 
-    public getSafeDeclaration(declaration: SchemaDeclarationUnsafe) {
+    public getSafeDeclaration(declaration: SchemaDeclarationUnsafe = {}) {
         const safeDeclaration: SchemaDeclaration = {
             version: 0,
             schema: [],
@@ -92,7 +92,7 @@ export class Schema {
             safeDeclaration.version = declaration.version;
         }
 
-        if (declaration.schema) {
+        if (declaration.schema && _.isArray(declaration.schema)) {
             safeDeclaration.schema = declaration.schema.map(
                 entity => new Entity(entity),
             );

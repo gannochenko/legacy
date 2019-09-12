@@ -18,7 +18,7 @@ import {
 export class Entity {
     protected declarationInternal: EntityDeclaration;
 
-    public constructor(declaration: EntityDeclarationUnsafe) {
+    public constructor(declaration: EntityDeclarationUnsafe = {}) {
         this.declarationInternal = this.getSafeDeclaration(declaration);
     }
 
@@ -31,7 +31,7 @@ export class Entity {
     }
 
     protected getSafeDeclaration(
-        declaration: EntityDeclarationUnsafe,
+        declaration: EntityDeclarationUnsafe = {},
     ): EntityDeclaration {
         const safeDeclaration: EntityDeclaration = { name: '', schema: [] };
 

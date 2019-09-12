@@ -271,8 +271,8 @@ describe('BaseField', () => {
 
             expect(JSON.stringify(field)).toEqual(
                 JSON.stringify({
-                    type: 'string',
                     name: 'foo',
+                    type: 'string',
                     system: true,
                 }),
             );
