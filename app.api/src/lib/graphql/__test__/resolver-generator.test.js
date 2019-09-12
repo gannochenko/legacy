@@ -4,14 +4,14 @@
  */
 
 import uuid from 'uuid/v4';
-import ResolverGenerator from '../resolver-generator';
-import DatabaseEntityManager from '../../database/entity-manager';
 import {
     ENTITY_ID_FIELD_NAME,
     ENTITY_PK_FIELD_NAME,
     ENTITY_ID_FIELD_LENGTH,
     Schema,
-} from 'project-minimum-core';
+} from '@project-minimum/core';
+import ResolverGenerator from '../resolver-generator';
+import DatabaseEntityManager from '../../database/entity-manager';
 import schemaJSON from '../../../__test__/schema';
 import { makeConnection } from '../../../__test__/repository.mock';
 import { makeAST } from '../../../__test__/apollo.mock';

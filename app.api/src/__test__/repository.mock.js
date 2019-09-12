@@ -1,13 +1,13 @@
 import cloneDeep from 'clone-deep';
 import _ from '@bucket-of-bolts/microdash';
-
-import mockData from './data.mock';
-// @ts-ignore
 import {
     ENTITY_ID_FIELD_NAME,
     ENTITY_PK_FIELD_NAME,
     DB_ENTITY_TABLE_PREFIX,
-} from 'project-minimum-core';
+} from '@project-minimum/core';
+
+import mockData from './data.mock';
+// @ts-ignore
 
 const filterKeys = (result, select) => {
     return result.map(item => {

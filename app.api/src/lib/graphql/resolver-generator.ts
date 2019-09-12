@@ -8,14 +8,13 @@ import { getASTAt, getSelectionAt, logError } from '@bucket-of-bolts/util';
 import _ from '@bucket-of-bolts/microdash';
 // @ts-ignore
 import uuid from 'uuid/v4';
-
 import {
     FIELD_TYPE_DATETIME,
     DB_QUERY_FIND_MAX_PAGE_SIZE,
     ENTITY_ID_FIELD_NAME,
     ENTITY_PK_FIELD_NAME,
-    // @ts-ignore
-} from 'project-minimum-core';
+} from '@project-minimum/core';
+
 import { Schema, Entity, Field } from '../project-minimum-core';
 import { IdMapper } from '../database/id-mapper';
 import { Query } from '../database/query';
