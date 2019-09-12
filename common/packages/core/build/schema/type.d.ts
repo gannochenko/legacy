@@ -6,7 +6,7 @@ import {
     ReferenceField,
     StringField,
 } from './field';
-import { FieldDeclarationUnsafe } from './field/type';
+import { FieldDeclarationUnsafe, Nullable } from './field/type';
 import { Entity } from './entity';
 export declare type Field =
     | BooleanField
@@ -35,10 +35,10 @@ export interface ObjectMap<P = any> {
     [key: string]: P;
 }
 export interface SchemaError {
-    message?: string;
+    message?: Nullable<string>;
     code: string;
-    fieldName?: string;
-    entityName?: string;
+    fieldName?: Nullable<string>;
+    entityName?: Nullable<string>;
 }
 export interface ObjectLiteral {
     [key: string]: any;

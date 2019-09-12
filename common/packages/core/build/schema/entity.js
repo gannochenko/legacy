@@ -164,6 +164,9 @@ var constants_both_1 = require('../constants.both');
 var make_field_1 = require('./field/make-field');
 var Entity = (function() {
     function Entity(declaration) {
+        if (declaration === void 0) {
+            declaration = {};
+        }
         this.declarationInternal = this.getSafeDeclaration(declaration);
     }
     Object.defineProperty(Entity.prototype, 'declaration', {
@@ -177,6 +180,9 @@ var Entity = (function() {
         configurable: true,
     });
     Entity.prototype.getSafeDeclaration = function(declaration) {
+        if (declaration === void 0) {
+            declaration = {};
+        }
         var safeDeclaration = { name: '', schema: [] };
         if (typeof declaration.name === 'string') {
             safeDeclaration.name = declaration.name;

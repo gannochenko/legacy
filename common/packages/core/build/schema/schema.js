@@ -149,6 +149,9 @@ var microdash_1 = __importDefault(require('@bucket-of-bolts/microdash'));
 var entity_1 = require('./entity');
 var Schema = (function() {
     function Schema(declaration) {
+        if (declaration === void 0) {
+            declaration = {};
+        }
         this.declarationInternal = this.getSafeDeclaration(declaration);
     }
     Object.defineProperty(Schema.prototype, 'declaration', {
@@ -237,6 +240,9 @@ var Schema = (function() {
         });
     };
     Schema.prototype.getSafeDeclaration = function(declaration) {
+        if (declaration === void 0) {
+            declaration = {};
+        }
         var safeDeclaration = {
             version: 0,
             schema: [],
@@ -249,7 +255,10 @@ var Schema = (function() {
         } else if (typeof declaration.version === 'number') {
             safeDeclaration.version = declaration.version;
         }
-        if (declaration.schema) {
+        if (
+            declaration.schema &&
+            microdash_1.default.isArray(declaration.schema)
+        ) {
             safeDeclaration.schema = declaration.schema.map(function(entity) {
                 return new entity_1.Entity(entity);
             });

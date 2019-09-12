@@ -6,7 +6,7 @@ export declare class BaseField {
     protected fieldValidator: Nullable<
         yup.ObjectSchema<FieldDeclarationUnsafe>
     >;
-    constructor(declaration: FieldDeclarationUnsafe);
+    constructor(declaration?: FieldDeclarationUnsafe);
     declaration: FieldDeclaration;
     getType(): string | null;
     getHealth(): Promise<SchemaError[]>;
@@ -26,7 +26,7 @@ export declare class BaseField {
     getReferencedEntityName(): string | null;
     isReference(): boolean;
     protected getSafeDeclaration(
-        declaration: FieldDeclarationUnsafe,
+        declaration?: FieldDeclarationUnsafe,
     ): FieldDeclaration;
     protected getDeclarationValidator(): yup.ObjectSchema<
         FieldDeclarationUnsafe

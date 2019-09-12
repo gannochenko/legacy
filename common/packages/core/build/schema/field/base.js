@@ -160,9 +160,11 @@ var util_1 = require('@bucket-of-bolts/util');
 var yup = __importStar(require('yup'));
 var microdash_1 = __importDefault(require('@bucket-of-bolts/microdash'));
 var constants_both_1 = require('../../constants.both');
-var field_type_1 = require('./field-type');
 var BaseField = (function() {
     function BaseField(declaration) {
+        if (declaration === void 0) {
+            declaration = {};
+        }
         this.fieldValidator = null;
         this.declarationInternal = this.getSafeDeclaration(declaration);
     }
@@ -287,6 +289,9 @@ var BaseField = (function() {
         return false;
     };
     BaseField.prototype.getSafeDeclaration = function(declaration) {
+        if (declaration === void 0) {
+            declaration = {};
+        }
         var legal = [
             'type',
             'name',
@@ -299,7 +304,7 @@ var BaseField = (function() {
         ];
         var safeDeclaration = {
             name: '',
-            type: field_type_1.FIELD_TYPE_STRING,
+            type: null,
         };
         Object.keys(declaration).forEach(function(key) {
             if (legal.includes(key)) {

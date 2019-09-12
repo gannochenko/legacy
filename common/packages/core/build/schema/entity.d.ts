@@ -8,10 +8,10 @@ import {
 } from './type';
 export declare class Entity {
     protected declarationInternal: EntityDeclaration;
-    constructor(declaration: EntityDeclarationUnsafe);
+    constructor(declaration?: EntityDeclarationUnsafe);
     declaration: EntityDeclaration;
     protected getSafeDeclaration(
-        declaration: EntityDeclarationUnsafe,
+        declaration?: EntityDeclarationUnsafe,
     ): EntityDeclaration;
     getHealth(): Promise<SchemaError[]>;
     getName(): string;
