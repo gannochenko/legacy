@@ -1,7 +1,7 @@
 import {
     ENTITY_ID_FIELD_NAME,
     ENTITY_PK_FIELD_NAME,
-} from 'project-minimum-core';
+} from '@project-minimum/core';
 
 export default {
     important_person: [

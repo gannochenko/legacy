@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
+import { Schema, Entity, EntityItemData } from '@project-minimum/core';
 import { PageProperties, PageState } from '../../store/type';
-import { Schema, Entity, EntityItemData } from 'project-minimum-core';
 import { Route } from '../../lib/type';
 import { Client } from '../../lib/client';
 

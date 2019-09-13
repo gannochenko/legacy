@@ -799,7 +799,7 @@
   resolved "https://registry.yarnpkg.com/@bucket-of-bolts/microdash/-/microdash-1.0.4.tgz#88b0063597d42593ba55a9530e7c1df0b1c7f232"
   integrity sha512-N45CDhGR7XgLxgm6UNbW4tDVgLgqHJsI+7Nngi0dK4tFQnj2Dpe3y4ZVZXMoN1vlYLCADfT/vj+QWcHCNMhiVg==
 
-"@bucket-of-bolts/util@^1.0.4", "@bucket-of-bolts/util@^1.0.6":
+"@bucket-of-bolts/util@^1.0.4":
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/@bucket-of-bolts/util/-/util-1.0.6.tgz#27da52f4960d4e592b281d2463dd43ed65c676c6"
   integrity sha512-hWSGuVjtZ+YRKwJQ/zcajqtg1QPCnIvXF1Vk5+E+3xweQ+mYU0NdIxwM7kVJ/Og1XtBdiPrO/atKBXiHGkWmFQ==
@@ -1070,11 +1070,6 @@
   version "0.26.22"
   resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.26.22.tgz#66da181bfddaf797192f5fc2795583e033568407"
   integrity sha512-AhUPifCc7j2BEfp+wye3Mj7v3mMhbtu5BbO7n0zpwC/NVSETc8+MHENRmoxjE8wLC8AmFr5+uEhg5cvqusaRFQ==
-
-"@types/yup@^0.26.23":
-  version "0.26.23"
-  resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.26.23.tgz#00721a3b675e7609e5bcccb94234e86b754bcd04"
-  integrity sha512-+tipAL6prdInS/avA6QityIFBDvHnqk1Tv9L5JMEws5IZC6agymBGAoDsrPyYp42wGcktyQtYKv9kvGPEKd4Qg==
 
 "@typescript-eslint/eslint-plugin@^1.12.0":
   version "1.12.0"
