@@ -818,9 +818,9 @@
   integrity sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
 
 "@project-minimum/core@^1.0.0":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@project-minimum/core/-/core-1.0.2.tgz#d5ea38c5a461a3dd956bfc998b90fc0e52cf5821"
-  integrity sha512-cvDlvzGCR6vA6T1xQP/hxzq4MtKdu4PfNnSpxRcwVYJ6wLK3P5Vfa8GG+Izk3VvidBRmvxpM3EnVc4trY0lTTw==
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@project-minimum/core/-/core-1.0.3.tgz#3804948fb65a98804bef509e3764ee5c6242413a"
+  integrity sha512-3Y0byJpGCVedODiC5YTLcD95u5yk1R88U1xaarCNuSoFp5NJZcIPA/eYY1exEdB9jX6rNS8MDwUcGzZH8qxxqw==
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
