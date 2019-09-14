@@ -20,5 +20,5 @@ export declare class Entity {
         [x: string]: any;
     }>>;
     castData(data: ObjectLiteral): ObjectLiteral;
-    validateData(sourceData: any[]): Promise<SchemaError[]>;
+    validateData(sourceData: ObjectLiteral): Promise<SchemaError[]>;
 }
