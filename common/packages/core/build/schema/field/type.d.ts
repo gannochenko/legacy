@@ -1,15 +1,15 @@
 export interface FieldDeclarationUnsafe {
-    type?: string;
-    name?: string;
-    label?: string;
-    length?: number | string;
-    required?: boolean;
-    unique?: boolean;
-    preview?: boolean;
-    system?: boolean;
+    type?: Nullable<string | string[]>;
+    name?: Nullable<string>;
+    label?: Nullable<string>;
+    length?: Nullable<number | string>;
+    required?: Nullable<boolean>;
+    unique?: Nullable<boolean>;
+    preview?: Nullable<boolean>;
+    system?: Nullable<boolean>;
 }
 export interface FieldDeclaration {
-    type: Nullable<string>;
+    type: string | string[];
     name: string;
     label?: string;
     length?: number | string;
