@@ -1,6 +1,6 @@
 {
     "name": "@project-minimum/core",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "main": "index.js",
     "scripts": {
         "install-peers": "install-self-peers -- --ignore-scripts",
