@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { ENTITY_ID_FIELD_NAME } from 'project-minimum-core';
+import { ENTITY_ID_FIELD_NAME } from '@project-minimum/core';
 import { sanitize } from '../../lib/util';
 
 export const buildQueryFind = ({

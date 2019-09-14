@@ -1,7 +1,5 @@
 import { createConnection, Connection, EntitySchema } from 'typeorm';
-
-// @ts-ignore
-import { DB_MIGRATION_TABLE_NAME } from 'project-minimum-core';
+import { DB_MIGRATION_TABLE_NAME } from '@project-minimum/core';
 import { injectPassword, Settings } from '@bucket-of-bolts/util';
 import SchemaEntity from '../../model/schema';
 import migrations from '../../migrations';

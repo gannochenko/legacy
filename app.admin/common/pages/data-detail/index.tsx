@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withNotification } from 'ew-internals-ui';
-import { Entity, ENTITY_ID_FIELD_NAME } from 'project-minimum-core';
+import { Entity, ENTITY_ID_FIELD_NAME } from '@project-minimum/core';
 import { useErrorNotification, useDispatchUnload } from '../../lib/hooks';
 import { withClient } from '../../lib/client';
 import { Form, Layout } from '../../components';

@@ -4,7 +4,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Modal, ModalContext, withNotification } from 'ew-internals-ui';
-import { ENTITY_ID_FIELD_NAME } from 'project-minimum-core';
+import { ENTITY_ID_FIELD_NAME } from '@project-minimum/core';
 import { MainProgressBar } from './style';
 import { ApplicationProperties } from './type';
 import {

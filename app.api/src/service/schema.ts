@@ -1,8 +1,7 @@
 import { Result } from '@bucket-of-bolts/express-mvc';
 import _ from '@bucket-of-bolts/microdash';
 import { logError } from '@bucket-of-bolts/util';
-// @ts-ignore
-import { Schema } from 'project-minimum-core';
+import { Schema } from '@project-minimum/core';
 import SchemaEntity from '../model/schema';
 import ConnectionManager from '../lib/database/connection-manager';
 

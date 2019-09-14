@@ -1,7 +1,7 @@
 import {
     ENTITY_ID_FIELD_NAME,
     ENTITY_ID_FIELD_LENGTH,
-} from 'project-minimum-core';
+} from '@project-minimum/core';
 
 export default [
     {

@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Schema } from 'project-minimum-core';
+import { Schema } from '@project-minimum/core';
 import {
     Endpoint,
     Get,

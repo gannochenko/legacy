@@ -1,11 +1,9 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-// @ts-ignore
-import { info } from '@bucket-of-bolts/util';
+import { logInfo } from '@bucket-of-bolts/util';
 import {
     ENTITY_ID_FIELD_NAME,
     ENTITY_ID_FIELD_LENGTH,
-    // @ts-ignore
-} from 'project-minimum-core';
+} from '@project-minimum/core';
 import SchemaEntity from '../model/schema';
 
 /**
@@ -31,7 +29,7 @@ export class Seed1517934720430 implements MigrationInterface {
             }
         }
 
-        info('🌱 Seed migration applied');
+        logInfo('🌱 Seed migration applied');
     }
 
     // eslint-disable-next-line no-empty-function

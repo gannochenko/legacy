@@ -1,5 +1,5 @@
 import React from 'react';
-import { FIELD_TYPE_INTEGER } from 'project-minimum-core';
+import { FIELD_TYPE_INTEGER } from '@project-minimum/core';
 
 import { FormField, FormFieldMultiplier, Add } from '..';
 import { Input } from './style';

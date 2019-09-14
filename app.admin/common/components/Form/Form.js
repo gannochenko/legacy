@@ -7,7 +7,7 @@ import {
     FIELD_TYPE_BOOLEAN,
     FIELD_TYPE_DATETIME,
     ENTITY_ID_FIELD_NAME,
-} from 'project-minimum-core';
+} from '@project-minimum/core';
 
 import {
     FormContainer,

@@ -4,8 +4,7 @@
  */
 
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-// @ts-ignore
-import { DB_SCHEMA_TABLE_NAME } from 'project-minimum-core';
+import { DB_SCHEMA_TABLE_NAME } from '@project-minimum/core';
 
 @Entity({ name: DB_SCHEMA_TABLE_NAME })
 class SchemaEntity {

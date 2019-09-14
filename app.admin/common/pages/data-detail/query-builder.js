@@ -1,10 +1,10 @@
 import gql from 'graphql-tag';
-import { sanitize, escapeQuote } from '../../lib/util';
 import {
     ENTITY_ID_FIELD_NAME,
     FIELD_TYPE_STRING,
     FIELD_TYPE_DATETIME,
-} from 'project-minimum-core';
+} from '@project-minimum/core';
+import { sanitize, escapeQuote } from '../../lib/util';
 
 export const buildQueryLoad = ({ entity, schema, id }) => {
     const selectedFields = entity.getFields().map(field => {

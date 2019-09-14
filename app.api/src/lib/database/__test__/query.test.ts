@@ -7,8 +7,7 @@ import {
     ENTITY_ID_FIELD_NAME,
     ENTITY_PK_FIELD_NAME,
     Schema,
-    // @ts-ignore
-} from 'project-minimum-core';
+} from '@project-minimum/core';
 import { Query } from '../query';
 import schemaJSON from '../../../__test__/schema';
 

@@ -1,5 +1,5 @@
 import { takeLatest, put, call } from 'redux-saga/effects';
-import { Schema } from 'project-minimum-core';
+import { Schema } from '@project-minimum/core';
 import { LOAD, LOAD_SUCCESS, LOAD_FAILURE } from './reducer';
 
 function* load({ payload: { client } }) {

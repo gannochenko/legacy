@@ -2,8 +2,7 @@ import { Connection, EntitySchema, In, ObjectLiteral } from 'typeorm';
 import {
     ENTITY_PK_FIELD_NAME,
     ENTITY_ID_FIELD_NAME,
-    // @ts-ignore
-} from 'project-minimum-core';
+} from '@project-minimum/core';
 
 export class IdMapper {
     private readonly connection: Connection;

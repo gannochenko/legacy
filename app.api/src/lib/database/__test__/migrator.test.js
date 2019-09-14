@@ -3,10 +3,10 @@
  */
 
 import { Table } from 'typeorm';
+import { Schema } from '@project-minimum/core';
 import Migrator from '../migrator';
 import schemaData from '../../../__test__/schema';
 import { makeConnection } from '../../../__test__/repository.mock';
-import { Schema } from 'project-minimum-core';
 
 let connection = null;
 

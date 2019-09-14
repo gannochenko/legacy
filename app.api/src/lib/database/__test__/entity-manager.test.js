@@ -9,8 +9,7 @@ import {
     Field,
     ENTITY_ID_FIELD_NAME,
     ENTITY_PK_FIELD_NAME,
-    // @ts-ignore
-} from 'project-minimum-core';
+} from '@project-minimum/core';
 import schemaJSON from '../../../__test__/schema';
 
 let schema = null;

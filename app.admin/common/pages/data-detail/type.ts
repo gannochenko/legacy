@@ -1,5 +1,5 @@
 import { PageProperties } from '../../store/type';
-import { Entity, EntityItemData, Schema } from 'project-minimum-core';
+import { Entity, EntityItemData, Schema } from '@project-minimum/core';
 import { Client } from '../../lib/client';
 import { Route } from '../../lib/type';
 
