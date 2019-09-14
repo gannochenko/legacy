@@ -3,7 +3,7 @@
  * https://github.com/typeorm/typeorm/blob/master/src/driver/types/ColumnTypes.ts
  */
 
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ObjectLiteral } from 'typeorm';
 import { DB_SCHEMA_TABLE_NAME } from '@project-minimum/core';
 
 @Entity({ name: DB_SCHEMA_TABLE_NAME })
@@ -16,10 +16,10 @@ class SchemaEntity {
 
     // todo: use types from project-minimum-core here, when ready
     @Column({ type: 'json', nullable: false })
-    public declaration: StringMap = {};
+    public declaration: ObjectLiteral[] = [];
 
     @Column({ type: 'smallint', default: 0 })
-    public version: number | undefined;
+    public version: number = 0;
 }
 
 export default SchemaEntity;

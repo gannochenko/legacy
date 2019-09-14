@@ -13,9 +13,11 @@ import {
     DB_QUERY_FIND_MAX_PAGE_SIZE,
     ENTITY_ID_FIELD_NAME,
     ENTITY_PK_FIELD_NAME,
+    Schema,
+    Entity,
+    Field,
 } from '@project-minimum/core';
 
-import { Schema, Entity, Field } from '../project-minimum-core';
 import { IdMapper } from '../database/id-mapper';
 import { Query } from '../database/query';
 import DatabaseEntityManager from '../database/entity-manager';

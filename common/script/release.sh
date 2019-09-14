@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-yarn run lint;
+yarn run install-peers;
 if ! [ $? -eq 0 ]
 then
     exit 1;
 fi
 
-yarn run install-peers;
+yarn run lint;
 if ! [ $? -eq 0 ]
 then
     exit 1;

@@ -2,6 +2,7 @@ import { Result } from '@bucket-of-bolts/express-mvc';
 import _ from '@bucket-of-bolts/microdash';
 import { logError } from '@bucket-of-bolts/util';
 import { Schema } from '@project-minimum/core';
+import { ResultError } from '@bucket-of-bolts/express-mvc/type';
 import SchemaEntity from '../model/schema';
 import ConnectionManager from '../lib/database/connection-manager';
 
@@ -28,10 +29,11 @@ class SchemaService {
     ): Promise<Result> {
         const result = new Result();
 
-        const errors = await schema.getHealth();
-        if (!_.isArrayNotEmpty(errors)) {
+        const errors: ResultError[] = [];
+        const schemaErrors = await schema.getHealth();
+        if (!_.isArrayNotEmpty(schemaErrors)) {
             const connection = await connectionManager.getSystem();
-            const repo = connection.getRepository(SchemaEntity);
+            const repository = connection.getRepository(SchemaEntity);
 
             // get current
             let current = await connection.getRepository(SchemaEntity).findOne({
@@ -40,13 +42,13 @@ class SchemaService {
             if (current) {
                 const currentSchema = new Schema(current);
                 // have current => update
-                repo.merge(current, {
+                repository.merge(current, {
                     version: currentSchema.getVersion() + 1,
-                    declaration: schema.getSchema(),
+                    declaration: schema.getSchema().map(item => item.toJSON()),
                 });
             } else {
                 // else => create
-                current = repo.create({
+                current = repository.create({
                     draft: false,
                     version: 0,
                     declaration: schema.getSchema(),
@@ -55,17 +57,23 @@ class SchemaService {
 
             try {
                 // store
-                await repo.save(current);
+                await repository.save(current as SchemaEntity);
             } catch (error) {
                 logError('Unable to save schema to the database', error);
-                errors.push({
+                schemaErrors.push({
                     message: __DEV__
                         ? error.message
                         : 'Unable to save schema to the database',
                     code: 'internal_db_error',
-                    type: 'internal',
                 });
             }
+        }
+
+        for (const error of schemaErrors) {
+            errors.push({
+                message: error.message ? error.message : '',
+                code: error.code,
+            });
         }
 
         result.setErrors(errors);

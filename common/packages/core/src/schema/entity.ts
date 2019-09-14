@@ -217,7 +217,7 @@ export class Entity {
         return processed;
     }
 
-    public async validateData(sourceData: any[]) {
+    public async validateData(sourceData: ObjectLiteral) {
         let errors: SchemaError[] = [];
         try {
             await this.getValidator().validate(sourceData, {
