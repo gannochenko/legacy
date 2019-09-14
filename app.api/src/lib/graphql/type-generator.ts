@@ -4,9 +4,10 @@ import {
     FIELD_TYPE_DATETIME,
     FIELD_TYPE_INTEGER,
     ENTITY_ID_FIELD_NAME,
+    Schema,
+    Entity,
+    Field,
 } from '@project-minimum/core';
-
-import { Schema, Entity, Field } from '../project-minimum-core';
 
 export default class TypeGenerator {
     public static make(schema: Schema) {

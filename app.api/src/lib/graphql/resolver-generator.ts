@@ -206,7 +206,7 @@ export default class ResolverGenerator {
             const errors = await entity.validateData(data);
             if (errors) {
                 result.errors = errors.map(resultError => ({
-                    message: resultError.message,
+                    message: resultError.message || '',
                     code: 'validation',
                     reference: resultError.fieldName,
                 }));

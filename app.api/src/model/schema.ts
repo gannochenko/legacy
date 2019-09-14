@@ -16,7 +16,7 @@ class SchemaEntity {
 
     // todo: use types from project-minimum-core here, when ready
     @Column({ type: 'json', nullable: false })
-    public declaration: ObjectLiteral[] = [];
+    public declaration: any;
 
     @Column({ type: 'smallint', default: 0 })
     public version: number = 0;

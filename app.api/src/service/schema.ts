@@ -71,7 +71,7 @@ class SchemaService {
 
         for (const error of schemaErrors) {
             errors.push({
-                message: error.message ? error.message : '',
+                message: error.message || '',
                 code: error.code,
             });
         }
