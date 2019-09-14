@@ -4,6 +4,7 @@
 
 import {
     DB_QUERY_FIND_MAX_PAGE_SIZE,
+    Entity,
     ENTITY_ID_FIELD_NAME,
     ENTITY_PK_FIELD_NAME,
     Schema,
@@ -27,13 +28,13 @@ describe('Query', () => {
     // });
     describe('prepareOrderBy()', () => {
         it('should disallow illegal fields', async () => {
-            const entity = schema.getEntity('important_person');
+            const entity = schema.getEntity('important_person') as Entity;
 
             const order = Query.prepareOrderBy(entity, { test: 'ASC' });
             expect(order).toEqual({});
         });
         it('should allow legal fields', async () => {
-            const entity = schema.getEntity('important_person');
+            const entity = schema.getEntity('important_person') as Entity;
 
             // eslint-disable-next-line @typescript-eslint/camelcase
             const order = Query.prepareOrderBy(entity, { full_name: 'ASC' });
@@ -41,7 +42,7 @@ describe('Query', () => {
             expect(order).toMatchObject({ full_name: 'ASC' });
         });
         it('should attach table alias', async () => {
-            const entity = schema.getEntity('important_person');
+            const entity = schema.getEntity('important_person') as Entity;
 
             // eslint-disable-next-line @typescript-eslint/camelcase
             const order = Query.prepareOrderBy(
@@ -52,7 +53,7 @@ describe('Query', () => {
             expect(order).toMatchObject({ 'foo.full_name': 'ASC' });
         });
         it('should disallow unsortable fields', async () => {
-            const entity = schema.getEntity('important_person');
+            const entity = schema.getEntity('important_person') as Entity;
 
             // eslint-disable-next-line @typescript-eslint/camelcase
             const order = Query.prepareOrderBy(entity, { pets: 'ASC' });
@@ -61,7 +62,7 @@ describe('Query', () => {
     });
     describe('prepareSelect()', () => {
         it('should return minimal select', async () => {
-            const entity = schema.getEntity('important_person');
+            const entity = schema.getEntity('important_person') as Entity;
 
             const select = Query.prepareSelect(entity, []);
             expect(select).toEqual([
@@ -70,7 +71,7 @@ describe('Query', () => {
             ]);
         });
         it('should disallow illegal fields', async () => {
-            const entity = schema.getEntity('important_person');
+            const entity = schema.getEntity('important_person') as Entity;
 
             const select = Query.prepareSelect(entity, ['test']);
             expect(select).toEqual([
@@ -79,7 +80,7 @@ describe('Query', () => {
             ]);
         });
         it('should allow legal fields', async () => {
-            const entity = schema.getEntity('important_person');
+            const entity = schema.getEntity('important_person') as Entity;
 
             const select = Query.prepareSelect(entity, ['full_name']);
             expect(select).toEqual([
@@ -89,7 +90,7 @@ describe('Query', () => {
             ]);
         });
         it('should disallow unselectable fields', async () => {
-            const entity = schema.getEntity('important_person');
+            const entity = schema.getEntity('important_person') as Entity;
 
             const select = Query.prepareSelect(entity, ['pets', 'partner']);
             expect(select).toEqual([
@@ -99,7 +100,7 @@ describe('Query', () => {
             ]);
         });
         it('should attach table alias', async () => {
-            const entity = schema.getEntity('important_person');
+            const entity = schema.getEntity('important_person') as Entity;
 
             const select = Query.prepareSelect(entity, ['full_name'], {
                 alias: 'foo',

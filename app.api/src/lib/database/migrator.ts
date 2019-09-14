@@ -16,9 +16,9 @@ import {
     REFERENCE_ENTITY_CHILD_FIELD_NAME,
     Schema,
     Entity,
+    Field,
 } from '@project-minimum/core';
 import EntityManager from './entity-manager';
-import { Field } from '../project-minimum-core';
 
 interface MigratorParameters {
     schema: Schema;
@@ -155,7 +155,7 @@ export default class Migrator {
         // find all refs in future tables
         Object.values(futureTables).forEach(table => {
             const entity = tableToEntity[table.name];
-            entity.getMultipleReferences().forEach((field: Field) => {
+            entity.getMultipleReferences().forEach(field => {
                 const referenceTableName = EntityManager.getReferenceTableName(
                     entity,
                     field,

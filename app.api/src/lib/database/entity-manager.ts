@@ -13,10 +13,12 @@ import {
     ENTITY_PK_FIELD_NAME,
     REFERENCE_ENTITY_PARENT_FIELD_NAME,
     REFERENCE_ENTITY_CHILD_FIELD_NAME,
+    Entity,
+    Field,
+    Schema,
 } from '@project-minimum/core';
 import { TableOptions } from 'typeorm/schema-builder/options/TableOptions';
 import { TableColumnOptions } from 'typeorm/schema-builder/options/TableColumnOptions';
-import { Entity, Field, Schema } from '../project-minimum-core';
 
 /**
  * This class creates database entities based on the schema

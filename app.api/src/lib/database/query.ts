@@ -6,10 +6,10 @@ import {
     DB_QUERY_FIND_MAX_PAGE_SIZE,
     ENTITY_ID_FIELD_NAME,
     ENTITY_PK_FIELD_NAME,
+    Entity,
 } from '@project-minimum/core';
 import { SelectQueryBuilder } from 'typeorm';
 import _ from '@bucket-of-bolts/microdash';
-import { Entity } from '../project-minimum-core';
 import { FindQueryArguments, FindQuerySort } from '../type';
 
 export class Query {
