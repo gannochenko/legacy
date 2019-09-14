@@ -18,7 +18,6 @@ describe('Query', () => {
     beforeAll(async () => {
         schema = new Schema({
             schema: schemaJSON,
-            draft: true,
             version: 2,
         });
     });

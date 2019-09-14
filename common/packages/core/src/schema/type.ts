@@ -18,8 +18,8 @@ export type Field =
     | StringField;
 
 export interface EntityDeclarationUnsafe {
-    name?: string;
-    schema?: FieldDeclarationUnsafe[];
+    name?: Nullable<string>;
+    schema?: Nullable<FieldDeclarationUnsafe[]>;
 }
 
 export interface EntityDeclaration {
@@ -28,8 +28,8 @@ export interface EntityDeclaration {
 }
 
 export interface SchemaDeclarationUnsafe {
-    version?: number | string;
-    schema?: EntityDeclarationUnsafe[];
+    version?: Nullable<number | string>;
+    schema?: Nullable<EntityDeclarationUnsafe[]>;
 }
 
 export interface SchemaDeclaration {

@@ -62,10 +62,7 @@ export class Schema {
         // check that all referenced fields are there
         this.getReferences().forEach(field => {
             const referenceName = field.getReferencedEntityName();
-            if (
-                !(typeof referenceName === 'string') ||
-                !this.getEntity(referenceName)
-            ) {
+            if (!this.getEntity(referenceName)) {
                 errors.push({
                     message: `Entity "${referenceName}" is referenced, but not created`,
                     code: 'field_broken_reference',

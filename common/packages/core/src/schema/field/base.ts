@@ -24,7 +24,7 @@ export class BaseField {
     }
 
     public getType() {
-        return this.declaration.type || null;
+        return this.declaration.type;
     }
 
     public async getHealth() {
@@ -74,11 +74,8 @@ export class BaseField {
 
     public getActualType() {
         const type = this.getType();
-        if (!type) {
-            return null;
-        }
 
-        return this.isMultiple() ? type[0] : type;
+        return Array.isArray(type) ? type[0] : type;
     }
 
     public getLength(): number | null {
@@ -96,9 +93,11 @@ export class BaseField {
      * Returns field name in Readable format with spaces
      */
     public getDisplayName() {
-        return _.isStringNotEmpty(this.declaration.label)
-            ? this.declaration.label
-            : uCFirst(this.getName() || '').replace(/_/g, ' ');
+        const { label } = this.declaration;
+        if (label) {
+            return label;
+        }
+        return uCFirst(this.getName() || '').replace(/_/g, ' ');
     }
 
     public getDeclaration() {
@@ -148,8 +147,8 @@ export class BaseField {
         return this.castValueItem(value);
     }
 
-    public getReferencedEntityName(): string | null {
-        return null;
+    public getReferencedEntityName(): string {
+        return '';
     }
 
     public isReference() {
@@ -170,7 +169,7 @@ export class BaseField {
 
         const safeDeclaration: FieldDeclaration = {
             name: '',
-            type: null,
+            type: '',
         };
         Object.keys(declaration).forEach(key => {
             if (legal.includes(key)) {

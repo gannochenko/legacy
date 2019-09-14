@@ -4,13 +4,13 @@ import { DTO, Attribute } from '@bucket-of-bolts/express-mvc';
 class TSDTO {}
 
 @DTO()
-class IndexDTO {
+class SchemaDTO {
     @Attribute({ type: TSDTO, required: true })
     public ts: object | undefined;
 }
 
 @DTO()
 export class SchemaInputDTO {
-    @Attribute({ type: IndexDTO, required: true })
-    public index: object | undefined;
+    @Attribute({ type: SchemaDTO, required: true })
+    public schema: object | undefined;
 }
