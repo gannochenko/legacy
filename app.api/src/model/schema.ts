@@ -3,7 +3,7 @@
  * https://github.com/typeorm/typeorm/blob/master/src/driver/types/ColumnTypes.ts
  */
 
-import { Entity, PrimaryGeneratedColumn, Column, ObjectLiteral } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { DB_SCHEMA_TABLE_NAME } from '@project-minimum/core';
 
 @Entity({ name: DB_SCHEMA_TABLE_NAME })
