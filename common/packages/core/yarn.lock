@@ -786,14 +786,17 @@
     to-fast-properties "^2.0.0"
 
 "@bucket-of-bolts/microdash@^1.0.4":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@bucket-of-bolts/microdash/-/microdash-1.0.7.tgz#9572b1de71fbf101b5e187dba1905b9476e321bd"
-  integrity sha512-XG7xI1sIZ9pGWeiIV/GUX/Kea+96a0M20+oek++KTnXBFRAxybgrqN61pffaq8GgCzlL9+Ic0dlLztLIIXV20Q==
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@bucket-of-bolts/microdash/-/microdash-1.0.12.tgz#921ac3b7387684badcd2f0740dbd7ac468ed7087"
+  integrity sha512-Q+eZwG4StyFeSt1VDjQ2Pp1HkjA77Ci1opDrBs8Jj3ZYzMjs+nRGw9JYFfaGLOKl5tunyufSXTj9cbyveS4tqA==
 
 "@bucket-of-bolts/util@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@bucket-of-bolts/util/-/util-1.0.6.tgz#27da52f4960d4e592b281d2463dd43ed65c676c6"
-  integrity sha512-hWSGuVjtZ+YRKwJQ/zcajqtg1QPCnIvXF1Vk5+E+3xweQ+mYU0NdIxwM7kVJ/Og1XtBdiPrO/atKBXiHGkWmFQ==
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@bucket-of-bolts/util/-/util-1.0.12.tgz#badb8644113f55a47077b90201df3a764a92f807"
+  integrity sha512-bmRmYJbuz3zBDk7S/sFDHSMLRyIVwSv9ySL5MLoOMnS3bs1s1XPeDU9T/UV9yEtvPQ6hCfPzgDuIBfRiW/sQzQ==
+  dependencies:
+    "@m59/qs" "^2.0.3"
+    naming-style "^1.0.0"
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
