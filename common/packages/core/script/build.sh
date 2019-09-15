@@ -6,5 +6,3 @@ BUILD_DIR=${DIR}/../build
 rm -rf ${BUILD_DIR}/*;
 touch ${BUILD_DIR}/.gitkeep;
 npx tsc --p ${DIR}/../
-cd ${BUILD_DIR};
-ln -s ../package.json ./;
