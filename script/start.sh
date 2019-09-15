@@ -2,8 +2,6 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
 
-npx npm-preinstall --monorepo --use-yarn
-
 REBUILD=""
 if [[ $1 = "-r" ]]; then
   REBUILD="--build"

@@ -5,9 +5,15 @@ const useErrorHandler = (app: Express) => {
     // catching async unhandled rejections
     process
         .on('unhandledRejection', error => {
+            if (__DEV__) {
+                console.error(error);
+            }
             logError('Unhandled rejection', error as Error);
         })
         .on('uncaughtException', error => {
+            if (__DEV__) {
+                console.error(error);
+            }
             logError('Uncaught exception', error);
         });
 

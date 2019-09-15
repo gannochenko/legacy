@@ -16,7 +16,6 @@ import {
     REFERENCE_ENTITY_CHILD_FIELD_NAME,
     Schema,
     Entity,
-    Field,
 } from '@project-minimum/core';
 import EntityManager from './entity-manager';
 

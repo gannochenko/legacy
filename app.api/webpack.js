@@ -6,12 +6,19 @@ const NodemonPlugin = require('nodemon-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin-alt');
 
 module.exports = (env, argv) => {
-    env = env || {};
+    const pEnv = process.env;
     const development =
-        argv.mode === 'development' || env.NODE_ENV === 'development';
+        argv.mode === 'development' || pEnv.NODE_ENV === 'development';
+    const useDebugger = pEnv.USE_DEBUGGER;
+    const useDebuggerBrk = pEnv.USE_DEBUGGER_BRK;
 
     const sourceFolder = path.join(__dirname, 'src');
     const destinationFolder = path.join(__dirname, 'build');
+
+    const devArgs = [];
+    if (useDebugger || useDebuggerBrk) {
+        devArgs.push(`--inspect${useDebuggerBrk && '-brk'}=0.0.0.0:4001`);
+    }
 
     return {
         entry: path.join(sourceFolder, 'application.ts'),
@@ -115,7 +122,7 @@ module.exports = (env, argv) => {
             }),
             development &&
                 new NodemonPlugin({
-                    nodeArgs: development ? ['--inspect=0.0.0.0:4001'] : [],
+                    nodeArgs: devArgs,
                     watch: destinationFolder,
                     ext: 'js,ts,graphql',
                 }),
