@@ -16,8 +16,10 @@ module.exports = (env, argv) => {
     const destinationFolder = path.join(__dirname, 'build');
 
     const devArgs = [];
+    let devtool = 'none';
     if (useDebugger || useDebuggerBrk) {
         devArgs.push(`--inspect${useDebuggerBrk ? '-brk' : ''}=0.0.0.0:4001`);
+        devtool = 'inline-source-map';
     }
 
     return {
@@ -38,7 +40,7 @@ module.exports = (env, argv) => {
             extensions: ['.js', '.ts'],
             symlinks: false,
         },
-        devtool: development ? 'inline-source-map' : 'none',
+        devtool,
         module: {
             rules: [
                 {
