@@ -15,11 +15,13 @@ class SchemaService {
     ): Promise<Schema> {
         const connection = await connectionManager.getSystem();
 
-        const schema = await connection.getRepository(SchemaEntity).findOne({
-            draft: type === 'draft',
-        });
+        const declaration = await connection
+            .getRepository(SchemaEntity)
+            .findOne({
+                draft: type === 'draft',
+            });
 
-        return new Schema(schema || {});
+        return new Schema(declaration || {});
     }
 
     public static async put(
@@ -44,14 +46,14 @@ class SchemaService {
                 // have current => update
                 repository.merge(current, {
                     version: currentSchema.getVersion() + 1,
-                    declaration: schema.getSchema().map(item => item.toJSON()),
+                    schema: schema.getSchema().map(item => item.toJSON()),
                 });
             } else {
                 // else => create
                 current = repository.create({
                     draft: false,
                     version: 0,
-                    declaration: schema.getSchema(),
+                    schema: schema.getSchema(),
                 });
             }
 

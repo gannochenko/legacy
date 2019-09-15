@@ -17,7 +17,7 @@ module.exports = (env, argv) => {
 
     const devArgs = [];
     if (useDebugger || useDebuggerBrk) {
-        devArgs.push(`--inspect${useDebuggerBrk && '-brk'}=0.0.0.0:4001`);
+        devArgs.push(`--inspect${useDebuggerBrk ? '-brk' : ''}=0.0.0.0:4001`);
     }
 
     return {
@@ -38,7 +38,7 @@ module.exports = (env, argv) => {
             extensions: ['.js', '.ts'],
             symlinks: false,
         },
-        devtool: development ? 'source-map' : 'none',
+        devtool: development ? 'inline-source-map' : 'none',
         module: {
             rules: [
                 {

@@ -27,7 +27,7 @@ export default [
                 type: ['integer'],
                 label: 'Lucky numbers',
             },
-            { name: 'birth_date', type: 'datetime.ts', label: 'Birth date' },
+            { name: 'birth_date', type: 'datetime', label: 'Birth date' },
             { name: 'has_pets', type: 'boolean', label: 'Has pets' },
             { name: 'pets', type: ['pet'], label: 'Pets' },
             { name: 'tools', type: ['tool'], label: 'Tools' },

@@ -6,12 +6,14 @@ const useErrorHandler = (app: Express) => {
     process
         .on('unhandledRejection', error => {
             if (__DEV__) {
+                // eslint-disable-next-line no-console
                 console.error(error);
             }
             logError('Unhandled rejection', error as Error);
         })
         .on('uncaughtException', error => {
             if (__DEV__) {
+                // eslint-disable-next-line no-console
                 console.error(error);
             }
             logError('Uncaught exception', error);

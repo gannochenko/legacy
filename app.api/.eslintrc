@@ -27,8 +27,7 @@
     "no-lonely-if": "off",
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    "no-restricted-syntax": "off",
-    "no-console": "off"
+    "no-restricted-syntax": "off"
   },
   "parserOptions": {
     "ecmaVersion": 6,

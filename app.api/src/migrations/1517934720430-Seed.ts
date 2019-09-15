@@ -23,7 +23,7 @@ export class Seed1517934720430 implements MigrationInterface {
                 schema.draft = false;
                 schema.version = 1;
                 // eslint-disable-next-line no-use-before-define,@typescript-eslint/no-use-before-define
-                schema.declaration = demoSchema;
+                schema.schema = demoSchema;
 
                 await repository.save(schema);
             }
@@ -60,7 +60,7 @@ const demoSchema = [
                 type: ['integer'],
                 label: 'Lucky numbers',
             },
-            { name: 'birth_date', type: 'datetime.ts', label: 'Birth date' },
+            { name: 'birth_date', type: 'datetime', label: 'Birth date' },
             { name: 'has_pets', type: 'boolean', label: 'Has pets' },
             { name: 'pets', type: ['pet'], label: 'Pets' },
             { name: 'tools', type: ['tool'], label: 'Tools' },

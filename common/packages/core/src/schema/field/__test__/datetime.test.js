@@ -7,7 +7,7 @@ describe('DateTimeField', () => {
     describe('castValue()', () => {
         it('should cast values to legal', async () => {
             const field = new DateTimeField({
-                type: 'datetime.ts',
+                type: 'datetime',
                 name: 'foo',
             });
 
@@ -33,7 +33,7 @@ describe('DateTimeField', () => {
     describe('getValidator()', () => {
         it('should report illegal data', async () => {
             const field = new DateTimeField({
-                type: 'datetime.ts',
+                type: 'datetime',
                 name: 'foo',
             });
 
@@ -58,7 +58,7 @@ describe('DateTimeField', () => {
         });
         it('should not report legal data', async () => {
             const field = new DateTimeField({
-                type: 'datetime.ts',
+                type: 'datetime',
                 name: 'foo',
             });
 

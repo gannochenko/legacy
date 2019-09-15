@@ -66,7 +66,7 @@ services:
       - NETWORK__CORS=*
       - CACHE__URL=redis://cache:6379
       - DB__URL=postgres://root:123@db:5432/legacy
-      #- USE_DEBUGGER_BRK=1
+    #      - USE_DEBUGGER_BRK=1
     labels:
       com.list.name: Backend
       com.list.sort: "1"
