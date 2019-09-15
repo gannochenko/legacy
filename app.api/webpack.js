@@ -11,7 +11,7 @@ module.exports = (env, argv) => {
         argv.mode === 'development' || env.NODE_ENV === 'development';
 
     const sourceFolder = path.join(__dirname, 'src');
-    const destinationFolder = path.join(__dirname, '.build');
+    const destinationFolder = path.join(__dirname, 'build');
 
     return {
         entry: path.join(sourceFolder, 'application.ts'),
@@ -107,7 +107,6 @@ module.exports = (env, argv) => {
                 }),
             new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
             new webpack.ProvidePlugin({
-                _: [path.join(__dirname, `src/lib/lodash.ts`), 'default'],
                 logger: ['ew-internals', 'logger'],
             }),
             new webpack.DefinePlugin({
