@@ -803,10 +803,18 @@
   resolved "https://registry.yarnpkg.com/@bucket-of-bolts/microdash/-/microdash-1.0.12.tgz#921ac3b7387684badcd2f0740dbd7ac468ed7087"
   integrity sha512-Q+eZwG4StyFeSt1VDjQ2Pp1HkjA77Ci1opDrBs8Jj3ZYzMjs+nRGw9JYFfaGLOKl5tunyufSXTj9cbyveS4tqA==
 
-"@bucket-of-bolts/util@^1.0.4", "@bucket-of-bolts/util@^1.0.6":
+"@bucket-of-bolts/util@^1.0.4":
   version "1.0.12"
   resolved "https://registry.yarnpkg.com/@bucket-of-bolts/util/-/util-1.0.12.tgz#badb8644113f55a47077b90201df3a764a92f807"
   integrity sha512-bmRmYJbuz3zBDk7S/sFDHSMLRyIVwSv9ySL5MLoOMnS3bs1s1XPeDU9T/UV9yEtvPQ6hCfPzgDuIBfRiW/sQzQ==
+  dependencies:
+    "@m59/qs" "^2.0.3"
+    naming-style "^1.0.0"
+
+"@bucket-of-bolts/util@^1.0.6":
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/@bucket-of-bolts/util/-/util-1.0.13.tgz#b6e37d7356282d4ecfc6c2644270e70503379bcf"
+  integrity sha512-gPnsYw4P9OCDJNe14g9D2fPUMRkKsJ6v49gpwoEHOtbt6ebbPx+k9vSyxHJa1FObMgC8HQLMpNZbMMC8KGh55Q==
   dependencies:
     "@m59/qs" "^2.0.3"
     naming-style "^1.0.0"
@@ -833,9 +841,9 @@
   integrity sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
 
 "@project-minimum/core@^1.0.0":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@project-minimum/core/-/core-1.0.4.tgz#bc1aa9ad26490f43c2f6b7681912821be4c54271"
-  integrity sha512-BC1yQMWDxPJjpka6LRWRztAJ7wRAWltNnhoXy82SXR5v341IZb3ZhNom054crNIEVfc3j86/dfmBXHjUsM6sXA==
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@project-minimum/core/-/core-1.0.5.tgz#4dcad6aba0a0abf1bf8e307709142d14fb52c526"
+  integrity sha512-QUFFXKX/iA++Db4NhrMXvkOEoNwaLOintkG063GclQ0+ZCvx/eYha1bBWqZJu1HShOYAgG8Po+qgwds2y7AFOw==
   dependencies:
     "@bucket-of-bolts/microdash" "^1.0.4"
     "@bucket-of-bolts/util" "^1.0.6"
