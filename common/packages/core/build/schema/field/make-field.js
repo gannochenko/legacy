@@ -1,26 +1,27 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var microdash_1 = __importDefault(require("@bucket-of-bolts/microdash"));
-var field_type_1 = require("./field-type");
-var constants_both_1 = require("../../constants.both");
-var string_1 = require("./string");
-var boolean_1 = require("./boolean");
-var integer_1 = require("./integer");
-var datetime_1 = require("./datetime");
-var reference_1 = require("./reference");
-var id_string_1 = require("./id-string");
-exports.makeField = function (declaration) {
-    var _a;
-    var type = declaration.type;
-    var name = declaration.name;
+'use strict';
+var __importDefault =
+    (this && this.__importDefault) ||
+    function(mod) {
+        return mod && mod.__esModule ? mod : { default: mod };
+    };
+Object.defineProperty(exports, '__esModule', { value: true });
+const microdash_1 = __importDefault(require('@bucket-of-bolts/microdash'));
+const field_type_1 = require('./field-type');
+const constants_both_1 = require('../../constants.both');
+const string_1 = require('./string');
+const boolean_1 = require('./boolean');
+const integer_1 = require('./integer');
+const datetime_1 = require('./datetime');
+const reference_1 = require('./reference');
+const id_string_1 = require('./id-string');
+exports.makeField = declaration => {
+    let { type } = declaration;
+    const { name } = declaration;
     if (!type) {
         return new string_1.StringField(declaration);
     }
     if (microdash_1.default.isArray(type)) {
-        _a = type, type = _a[0];
+        [type] = type;
     }
     if (!type) {
         return new string_1.StringField(declaration);
