@@ -4,3 +4,6 @@ demo
 *.tar.gz
 jest
 .eslint*
+.gitkeep
+.babelrc
+script

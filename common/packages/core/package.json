@@ -1,15 +1,17 @@
 {
     "name": "@project-minimum/core",
     "version": "1.0.4",
-    "main": "index.js",
+    "main": "build/index.js",
+    "files": [
+        "build/"
+    ],
     "scripts": {
         "install-peers": "install-self-peers -- --ignore-scripts",
         "build": "./script/build.sh",
         "test": "jest -c ./jest/config.js --passWithNoTests",
         "test:dev": "jest -c ./jest/config.js --watch",
         "lint": "eslint ./src --ext .js,.ts",
-        "lint:fix": "eslint ./src --fix --ext .js,.ts",
-        "prepublishOnly": "./script/prepublish.sh"
+        "lint:fix": "eslint ./src --fix --ext .js,.ts"
     },
     "keywords": [],
     "author": "gannochenko.sv@gmail.com",
