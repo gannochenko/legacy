@@ -1,7 +1,0 @@
-build/
-coverage/
-*.test.js
-*.utest.js
-*.e2e.js
-*.itest.js
-*.mock.js

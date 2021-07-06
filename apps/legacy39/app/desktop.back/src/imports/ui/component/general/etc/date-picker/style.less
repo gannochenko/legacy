@@ -1,0 +1,72 @@
+@import (reference) url('/client/style/index.less');
+
+.date-picker {
+}
+
+.date-picker__grid {
+	._rb-group_x() !important;
+}
+
+.date-picker__grid-row {
+	._rb-flex() !important;
+	._rb-flex-justify-content_space-between();
+}
+
+._date-picker__grid-day_hl() {
+	._rb-border(@orangeFocus, 2px);
+	._rb-f-color(@orangeFocus);
+}
+
+.date-picker__grid-day {
+	._rb-size_x(3);
+	._rb-content_v_center_h_center();
+	._rb-hand();
+	._rb-border(@rb-color_silver, 2px);
+	._rb-b-color(@blackHover);
+	._rb-transition();
+	._rb-border-rad();
+
+	&:hover {
+		._date-picker__grid-day_hl();
+	}
+}
+
+.date-picker__grid-day_other-month {
+	._rb-border(@rb-color_dusk, 2px);
+	._rb-f-color(@rb-color_dusk);
+}
+
+.date-picker__grid-day_chosen {
+	._date-picker__grid-day_hl();
+}
+
+.date-picker__selector-month {
+	._rb-no-outline();
+}
+
+.date-picker__selector-year {
+	._rb-relative();
+}
+
+.date-picker__selector-year-buttons {
+	._rb-group_x(0.25);
+	._rb-absolute(5px, 13px);
+	._rb-content_v_center_h_left();
+}
+
+.date-picker__selector-year-add,
+.date-picker__selector-year-remove {
+	._rb-f-color(@rb-color_white);
+	._rb-b-color(@rb-color_silver, darken(@rb-color_silver, 10%));
+	._rb-hand();
+	._rb-border-rad(2px);
+	._rb-transition();
+}
+
+.date-picker__selector-year-add {
+	._rb-icon('add', 20px, 3px);
+}
+
+.date-picker__selector-year-remove {
+	._rb-icon('remove', 20px, 3px);
+}

@@ -1,0 +1,36 @@
+---
+slug: 'belgorodskaya-32-38'
+published: true
+title: 'Калининград, Белгородская 32-38'
+shortTitle: 'Белгородская 32-38'
+description: ''
+keywords: kaliningrad, belgorodskaya 32-38, Калининград, Белгородская 32-38, снос, аварийный жилфонд
+location: 54.687983, 20.519399
+displayPageTitle: true
+headerImage: 0
+captureDate:
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+    - image: ./photos/01.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

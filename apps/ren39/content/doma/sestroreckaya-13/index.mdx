@@ -1,0 +1,47 @@
+---
+published: true
+slug: 'sestroreckaya-13'
+title: 'Калининград, Сестрорецкая 13'
+shortTitle: 'Сестрорецкая 13'
+description: ''
+keywords: kaliningrad, Sestroreckaya 13, Калининград, Сестрорецкая 13, снос, аварийный жилфонд
+location: 54.718915, 20.367350
+displayPageTitle: true
+headerImage: 0
+captureDate: 13/04/2021
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+    - image: ./photos/01.jpg
+    - image: ./photos/02.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+## Историческая справка
+
+Здание было возведено в качестве главной части комплекса бывшей провинциальной школы пожарных Метгетена (ныне посёлок им. А. Космодемьянского) в 1939 году.
+В здании располагались комнаты учителей, учебные помещения, столовая, лаборатория для огневых испытаний, спальни учащихся и иные помещения.
+Изначально здание имело два полных этажа и третий мансардный, что являлось классическим подходом к строительству в то время.
+
+В послевоенный период мансардный этаж был достроен до полноценного этажа. Данная перестройка исказила изначальный вид здания настолько, что его можно было теперь принять за постройку индустриального назначения.
+Не смотря на это, на сегодняшний день в интерьере по прежнему сохранилось довольно много аутентичных деталей: лестницы, деревянный паркет. Уцелел и кирпичный портал главного входа.
+Одноэтажное крыло здания сохранилось лишь частично. Полностью уцелела пожарная вышка комплекса.
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

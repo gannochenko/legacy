@@ -1,4 +1,11 @@
 node_modules
 **/node_modules
-.idea
+.idea/workspace.xml
+.idea/libraries
 .DS_Store
+.env
+
+# terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*

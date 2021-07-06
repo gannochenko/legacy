@@ -1,0 +1,10 @@
+node_modules/
+*.log
+*.tar.gz
+.idea/
+.DS_Store
+.meteor/local/
+local-script/
+pm2-meteor.json
+build/
+production.yml

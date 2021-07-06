@@ -1,0 +1,59 @@
+version: '3'
+
+services:
+
+  legacy.front:
+    image: "awesome1888/legacy.front:latest"
+    volumes:
+      - "/home/vagrant/volume/upload/:/usr/src/app/volume/upload/"
+    expose:
+      - 3000
+    depends_on:
+      - legacy.db
+      - legacy.balancer
+      - legacy.images
+    restart: on-failure
+    environment:
+      - PORT=3000
+      - ROOT_URL=http://localhost:3100
+      - VIRTUAL_HOST=localhost
+      - MONGO_URL=mongodb://legacy.db:27017/legacy
+      - NODE_ENV=production
+  legacy.images:
+    image: "awesome1888/image-server:latest"
+    ports:
+      - 3200:3200
+    volumes:
+      - "/home/vagrant/volume/upload/:/usr/src/app/volume/upload/"
+    restart: on-failure
+    environment:
+      - PORT=3200
+      - ROOT_URL=http://localhost
+      - NODE_ENV=production
+      - STORAGE_PATH=/usr/src/app/volume/upload/
+      - CACHE_PATH=/usr/src/app/.resize-cache/
+  legacy.balancer:
+      image: awesome1888/balancer-tweak:latest
+      volumes:
+        - "/var/run/docker.sock:/tmp/docker.sock:ro"
+      ports:
+        - 3100:80
+      restart: on-failure
+  legacy.db:
+      image: "mongo"
+      restart: on-failure
+      ports:
+        - 3300:27017
+  legacy.db.backuper:
+      image: "awesome1888/db-backuper:latest"
+      restart: on-failure
+      volumes:
+        - "/home/vagrant/volume/db/:/usr/src/app/volume/"
+      depends_on:
+        - legacy.db
+      environment:
+        - NODE_ENV=production
+        - STORAGE_PATH=/usr/src/app/volume/
+        - MONGO_URL=mongodb://legacy.db:27017/legacy
+        - DO_DAILY=1
+        - DO_MONTHLY=1

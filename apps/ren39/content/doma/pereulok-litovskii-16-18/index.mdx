@@ -1,0 +1,42 @@
+---
+slug: 'pereulok-litovskii-16-18'
+published: true
+title: 'Калининград, переулок Литовский 16-18'
+shortTitle: 'Переулок Литовский 16-18'
+description: ''
+keywords: kaliningrad, pereulok-litovskii 16-18, Калининград, переулок Литовский 16-18, снос, аварийный жилфонд
+location: 54.709417, 20.536004
+displayPageTitle: true
+headerImage: 0
+captureDate:
+status: demolition
+valuable: true
+images:
+    - image: ./photos/01.jpg
+    - image: ./photos/00.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+Каждый житель Калининграда знает этот дом, многие туристы его видели, проезжая на автомобиле или в автобусе по Московскому проспекту. Интересно наблюдать архитектурный контраст здания со стоящим рядом МКД советских годов постройки. Это соседство подчеркивает связь двух эпох, а когда здание снесут, останется только типовая хрущевка, которая сама по себе не особенно интересна.
+
+Двухсекционный четырехэтажный многоквартирный дом 20-х годов является частью жилой застройки исторического Литовского Вала и расположен к западу от Приютской Площади. Площадь получила своё название от Королевского Сиротского Приюта, заложенного в начале 18 века королем Пруссии Фридрихом I. Приют однажды посещал царь Петр I и, возможно, он также проходил мимо этого дома :)
+
+Дом представляет ценность как элемент видового восприятия Приютской площади с востока и северо-востока.
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

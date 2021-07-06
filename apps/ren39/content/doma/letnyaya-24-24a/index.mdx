@@ -1,0 +1,36 @@
+---
+slug: 'letnyaya-24-24а'
+published: false
+title: 'Калининград, Летняя 24-24а'
+shortTitle: 'Летняя 24-24а'
+description: ''
+keywords: kaliningrad, letnyaya 24-24а, Калининград, Летняя 24-24а, снос, аварийный жилфонд
+location: 54.675439, 20.485864
+displayPageTitle: true
+headerImage: 0
+captureDate:
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />
+~~~~

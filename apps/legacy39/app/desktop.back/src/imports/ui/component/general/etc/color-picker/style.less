@@ -1,0 +1,27 @@
+@import (reference) url('/client/style/index.less');
+
+.color-picker {
+	._rb-size_x(12.5, 11);
+	._rb-scroll-vv();
+}
+
+.color-picker__palette {
+	._rb-group_x(0.45);
+	._rb-clearfix();
+}
+
+.color-picker__sample {
+	._rb-border();
+	._rb-inline-float();
+	._rb-transition();
+	._rb-hand();
+	padding: 1px;
+
+	&:hover {
+		._rb-border(@rb-color_scarlet);
+	}
+}
+
+.color-picker__sample-inner {
+	._rb-size_x(1.5);
+}

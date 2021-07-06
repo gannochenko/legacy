@@ -1,0 +1,45 @@
+---
+slug: 'vostochnaya-3-5'
+published: true
+title: 'Калининград, Восточная 3-5'
+shortTitle: 'Восточная 3-5'
+description: ''
+keywords: kaliningrad, vostochnaya 3-5, Калининград, Восточная 3-5, снос, аварийный жилфонд
+location: 54.682160, 20.476775
+displayPageTitle: true
+headerImage: 0
+captureDate:
+status: lost
+valuable: true
+images:
+    - image: ./photos/00.jpg
+    - image: ./photos/01.jpg
+    - image: ./photos/03.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+Здание на ул. Восточной уже практически мертво. Его выпотрошили чуть менее, чем полностью: вытащили двери, рамы, водосточные трубы, оконные перемычки и даже оцинкованные козырьки. Не смотря на это, строение пока стоит, хотя дни его сочтены: оно уже обнесено забором, и вот-вот начнется демонтаж. На фасаде имеется довоенная надпись: от 3 до 4 слоев краски разного периода. Один из слоев содержит, предположительно, фразу "Lebensmittel Feinkost", то есть "Продовольственные деликатесы".
+
+Спешите посмотреть, скоро снос!
+
+<Reasons sold />
+
+## Важные новости
+
+**14.05.2021**&nbsp;&nbsp;&nbsp;На указанную дату объект разобран почти полностью, осталась лишь небольшая часть стены первого этажа. Плак.
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

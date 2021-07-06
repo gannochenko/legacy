@@ -1,0 +1,38 @@
+---
+slug: 'bryanskaya-3-5'
+published: true
+title: 'Калининград, Брянская 3-5'
+shortTitle: 'Брянская 3-5'
+description: ''
+keywords: kaliningrad, bryanskaya 3-5, Калининград, Брянская 3-5, снос, аварийный жилфонд
+location: 54.749884, 20.535273
+displayPageTitle: true
+headerImage: 0
+captureDate:
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+    - image: ./photos/01.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+Двухэтажный дом на две квартиры находится на окраине поселка Северная гора (бывший район Кведнау). Застройка Кведнау, состоящая из малоэтажных зданий, окончательно сформировалась к 30-м годам и почти не пострадала во время войны. Этот район вошел в состав Калининграда в 1949 году.
+
+Изначально, вероятно, дом был на одну семью. Наблюдаются следы перестройки кровли, переносы оконных и дверных проёмов. Сохранилась деревянная лестница на второй этаж.
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

@@ -1,0 +1,60 @@
+---
+title: Объекты, которые будут снесены
+displayPageTitle: false
+---
+
+import { Container, MainHeader } from 'components';
+import { BuildingList } from 'components/BuildingList';
+import { Categories } from 'components/Categories';
+
+<Container>
+
+<Categories location={props.location} />
+
+# Объекты, которые будут снесены
+
+<br />
+
+<BuildingList data={props.data.allMdx.edges} />
+
+<br />
+<br />
+
+</Container>
+
+export const demolitionIndexQuery = graphql`
+    query demolitionIndexQuery {
+        allMdx(
+            sort: { fields: [frontmatter___shortTitle], order: ASC }
+            filter: {
+                frontmatter: {
+                    published: { eq: true }
+                    status: { eq: "demolition" }
+                }
+            }
+        ) {
+            edges {
+                node {
+                    id
+                    frontmatter {
+                        title
+                        shortTitle
+                        slug
+                        description
+                        published
+                        headerImage
+                        images {
+                            image {
+                                childImageSharp {
+                                    fluid(maxWidth: 1240, quality: 80) {
+                                        ...GatsbyImageSharpFluid_tracedSVG
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+`;

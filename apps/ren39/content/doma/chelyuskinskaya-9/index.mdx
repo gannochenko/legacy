@@ -1,0 +1,46 @@
+---
+slug: 'chelyuskinskaya-9'
+published: true
+title: 'Калининград, Челюскинская 9'
+shortTitle: 'Челюскинская 9'
+description: ''
+keywords: kaliningrad, chelyuskinskaya 9, Калининград, Челюскинская 9, снос, аварийный жилфонд
+location: 54.727136, 20.363568
+displayPageTitle: true
+headerImage: 0
+captureDate:
+status: saved
+valuable: true
+images:
+    - image: ./photos/00.jpg
+    - image: ./photos/01.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+## Историческая справка
+
+Дом в поселке имени Космодемьянского (бывший район Метгетен) построен в стиле модерн. Нижняя терраса, вероятно, некогда была полностью остекленной. Сохранились два широких окна с арочными сводами. Можно обнаружить уцелевший декор, как снаружи, так и в подъездах:
+кованные решетки верхней террасы, пол украшен минималистичным тераццо, деревянные двери с резными узорами. Отлично сохранились широкие деревянные лестницы, без украшений, но с добротным металлическим клепаным каркасом.
+По словам местных жителей, до войны здесь жил аптекарь и здесь же располагалась аптека.
+
+<Reasons resettlement />
+
+## Важные новости
+
+**15.03.2021**&nbsp;&nbsp;&nbsp;[Здание признано выявленным объектом культурного наследия](https://yandex.ru/turbo/klops.ru/s/news/2021-03-15/229843-v-kaliningrade-priznali-pamyatnikom-dom-popavshiy-pod-renovatsiyu). Пока оставляем здание в списке, однако новость конечно весьма позитивная.
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

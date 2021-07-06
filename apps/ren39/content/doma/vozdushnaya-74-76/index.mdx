@@ -1,0 +1,37 @@
+---
+slug: 'vozdushnaya-74-76'
+published: true
+title: 'Калининград, Воздушная, 74-76'
+shortTitle: 'Воздушная, 74-76'
+description: ''
+keywords: kaliningrad, Vozdushnaya, 74-76, Калининград, Воздушная, 74-76, снос, аварийный жилфонд
+location: 54.717626, 20.449510
+displayPageTitle: true
+headerImage: 0
+captureDate: 28/03/2021
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+    - image: ./photos/01.jpg
+    - image: ./photos/02.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

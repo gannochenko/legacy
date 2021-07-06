@@ -1,0 +1,35 @@
+---
+slug: 'tambovskaya-34-36'
+published: true
+title: 'Калининград, Тамбовская 34-36'
+shortTitle: 'Тамбовская 34-36'
+description: ''
+keywords: kaliningrad, tambovskaya 34-36, Калининград, Тамбовская 34-36, снос, аварийный жилфонд
+location: 54.705153, 20.566722
+displayPageTitle: true
+headerImage: 0
+captureDate:
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

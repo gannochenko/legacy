@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+
+  legacy.landing.ambar:
+    image: "awesome1888/legacy.landing.ambar:latest"
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+    restart: on-failure
+    environment:
+      - ROOT_URL=http://localhost:3000/
+      - PORT=3000
+      - ROOT_FOLDER=/usr/src/app

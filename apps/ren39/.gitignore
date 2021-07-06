@@ -1,0 +1,21 @@
+.DS_Store
+.yarn-integrity
+yarn-debug.log
+yarn-error.log
+node_modules/
+.cache/
+public
+.idea/workspace.xml
+.idea/libraries
+raw/
+.env
+.env.*
+!.env.js
+/api/sendContactFormEmail/build/
+
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+*.zip

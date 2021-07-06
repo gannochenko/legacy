@@ -1,0 +1,37 @@
+---
+slug: 'basseynaya-27-29'
+published: true
+title: 'Калининград, Бассейная 27-29'
+shortTitle: 'Бассейная 27-29'
+description: ''
+keywords: kaliningrad, Basseynaya 27-29, Калининград, Бассейная 27/29, снос, аварийный жилфонд
+location: 54.717615, 20.452681
+displayPageTitle: true
+headerImage: 0
+captureDate: 23/03/2021
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+    - image: ./photos/01.jpg
+    - image: ./photos/02.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

@@ -1,0 +1,37 @@
+---
+published: true
+slug: 'solnechnogorskaya-19'
+title: 'Калининград, Солнечногорская 19'
+shortTitle: 'Солнечногорская 19'
+description: ''
+keywords: kaliningrad, Solnechnogorskaya 19, Калининград, Солнечногорская 19, снос, аварийный жилфонд
+location: 54.676490, 20.528759
+displayPageTitle: true
+headerImage: 0
+captureDate: 17/03/2021
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+    - image: ./photos/01.jpg
+    - image: ./photos/02.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

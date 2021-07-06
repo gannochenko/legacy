@@ -1,0 +1,34 @@
+@import (reference) url('/client/style/index.less');
+
+.registry-map {
+	width: 100%;
+	._rb-relative();
+}
+
+.registry-map__placeholder {
+	._rb-absolute-cover();
+	._rb-content_v_center_h_center();
+}
+
+.registry-map__placeholder-text {
+	._rb-font_roboto();
+	._rb-f-color(@rb-color_citroen-c3);
+}
+
+.registry-map__hint {
+	max-width: 100px;
+}
+
+.registry-map__item-image {
+	height: 10 * @rb-offset;
+	width: 15 * @rb-offset;
+	._rb-image();
+	._rb-no-overflow();
+	._rb-block();
+}
+
+.registry-map__item-name-original {
+	._rb-margin-t_x(0.25);
+	._rb-f-size_x(0.8);
+	._rb-f-color(@rb-color_harbor-rat);
+}

@@ -1,0 +1,19 @@
+@import (reference) url('/client/style/index.less');
+
+@header__loading-bar-height: 5px;
+
+.load-indicator {
+	background-color: lightgray;
+	height: @header__loading-bar-height;
+	position: relative;
+}
+
+.load-indicator__progress {
+	background-color: @rb-color-ash;
+	height: @header__loading-bar-height;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 0;
+	// transition: all 250ms;
+}

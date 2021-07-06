@@ -1,0 +1,62 @@
+---
+title: Объекты, которые могут быть спасены
+displayPageTitle: false
+---
+
+import { Container, MainHeader } from 'components';
+import { BuildingList } from 'components/BuildingList';
+import { Categories } from 'components/Categories';
+
+<Container>
+
+<Categories location={props.location} />
+
+# Объекты, которые могут быть спасены
+
+Можно с осторожностью утверждать, что здания в данном списке имеют шансы на сохранение: им либо был присвоен статус выявленного объекта культурного наследия, либо планы по сносу изменились. В любом случае, о каком-то &laquo;спасении&raquo; есть смысл говорить тогда, когда здания будут отремонтированы и заново введены в эксплуатацию. Пока этого не произошло, со стороны общественности должны быть проявлены сдержанный оптимзм и бдительность.
+
+<br />
+
+<BuildingList data={props.data.allMdx.edges} />
+
+<br />
+<br />
+
+</Container>
+
+export const savedIndexQuery = graphql`
+    query savedIndexQuery {
+        allMdx(
+            sort: { fields: [frontmatter___shortTitle], order: ASC }
+            filter: {
+                frontmatter: {
+                    published: { eq: true }
+                    status: { eq: "saved" }
+                }
+            }
+        ) {
+            edges {
+                node {
+                    id
+                    frontmatter {
+                        title
+                        shortTitle
+                        slug
+                        description
+                        published
+                        headerImage
+                        images {
+                            image {
+                                childImageSharp {
+                                    fluid(maxWidth: 1240, quality: 80) {
+                                        ...GatsbyImageSharpFluid_tracedSVG
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+`;

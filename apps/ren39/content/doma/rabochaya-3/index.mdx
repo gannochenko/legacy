@@ -1,0 +1,43 @@
+---
+published: true
+slug: 'rabochaya-3'
+title: 'Калининград, Рабочая 3'
+shortTitle: 'Рабочая 3'
+description: ''
+keywords: kaliningrad, Rabochaya 3, Калининград, Рабочая 3, снос, аварийный жилфонд
+location: 54.649828, 20.348683
+displayPageTitle: true
+headerImage: 0
+captureDate: 19/04/2021
+status: lost
+valuable: false
+images:
+    - image: ./photos/00.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+Выработанный кирпичный карьер по адресу пгт. Прибрежный, ул. Рабочая, д. 3.
+
+## Историческая справка
+
+Двухэтажный типовой барак на несколько квартир постройки послевоенного периода. Дома данного типа были сделаны из дерева, снаружи обшиты рейками и оштукатурены. Отопление - печное.
+
+До недавнего времени множество подобных бараков сохранялось в посёлке Прибрежный (бывший немецкий Пальмбург) на улицах Рабочая и Заводская. В настоящее время они расселены и демонтируются.
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

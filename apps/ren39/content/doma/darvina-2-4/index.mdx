@@ -1,0 +1,39 @@
+---
+slug: 'darvina-2-4'
+published: true
+title: 'Калининград, Дарвина 2-4'
+shortTitle: 'Дарвина 2-4'
+description: ''
+keywords: kaliningrad, darvina 2-4, Калининград, Дарвина 2-4, снос, аварийный жилфонд
+location: 54.683454, 20.487493
+displayPageTitle: true
+headerImage: 0
+captureDate:
+status: demolition
+valuable: true
+images:
+    - image: ./photos/00.jpg
+    - image: ./photos/01.jpg
+    - image: ./photos/03.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+Строго говоря, на сайте Администрации указано, что к расселению предназначен только дом по адресу Дарвина 4. Однако, почему будет расселена и снесена половина дома, а вторая половина оставлена как есть - неясно. Скорее всего, в документе ошибка, и будут снесены обе части.
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

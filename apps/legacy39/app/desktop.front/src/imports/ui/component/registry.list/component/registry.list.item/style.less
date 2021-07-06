@@ -1,0 +1,91 @@
+@import (reference) url('/client/style/index.less');
+
+.registry-list-item {
+	._rb-flex();
+}
+
+.registry-list-item__left {
+	// ._rb-margin-r_x(2);
+}
+
+.registry-list-item__right {
+}
+
+.registry-list-item__image {
+	height: 10 * @rb-offset;
+	width: 100%;
+	._rb-image();
+	._rb-b-color(@rb-color-donkey);
+	._rb-relative();
+	._rb-no-overflow();
+	._rb-content_v_center_h_center();
+	._rb-padding_x();
+	._rb-no-decoration() !important;
+}
+
+.registry-list-item__image-dumb {
+	._rb-f-color(@rb-color_citroen-c3);
+	._rb-font_roboto();
+	._rb-no-user-select();
+	text-align: center;
+	text-transform: uppercase;
+}
+
+.registry-list-item__name {
+	._rb-f-size_x(1.5);
+	a {
+		._rb-no-underline();
+	}
+}
+
+.registry-list-item__name-original {
+	._rb-margin-t_x(0.5);
+	._rb-f-size_x(1.2);
+	._rb-f-color(@rb-color_harbor-rat);
+}
+
+.registry-list-item__data {
+	._rb-f-size_x();
+}
+
+.registry-list-item__code {
+	._rb-f-bold();
+}
+
+.registry-list-item__area {
+	._rb-f-color(@rb-color_cascade);
+}
+
+.registry-list-item__status {
+	overflow-x: hidden;
+	._rb-f-bold();
+}
+
+.registry-list-item__attribute {
+	._rb-inline-block();
+	._rb-no-overflow();
+}
+
+@media (max-width: 640px) {
+	.registry-list-item__left {
+		._rb-margin-b_x();
+	}
+	//.registry-list-item {
+	//	._rb-flex-wrap_wrap();
+	//}
+
+	//.registry-list-item__right,
+	//.registry-list-item__left {
+	//	._rb-wide();
+	//}
+    //
+	//.registry-list-item__left {
+	//	._rb-margin-r_x(0);
+	//	._rb-margin-b_x();
+	//}
+    //
+	//.registry-list-item__image {
+	//	width: 100%;
+	//	height: 20 * @rb-offset;
+	//}
+}

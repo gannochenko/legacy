@@ -1,0 +1,35 @@
+---
+published: true
+slug: 'rybnikov-41-43'
+title: 'Калининград, Рыбников 41-43'
+shortTitle: 'Рыбников 41-43'
+description: ''
+keywords: kaliningrad, Rybnikov 41-43, Калининград, Рыбников 41-43, снос, аварийный жилфонд
+location: 54.748577, 20.476127
+displayPageTitle: true
+headerImage: 0
+captureDate: 05/04/2021
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

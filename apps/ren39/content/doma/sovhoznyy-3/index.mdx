@@ -1,0 +1,37 @@
+---
+published: true
+slug: 'sovhoznyy-3'
+title: 'Калининград, Совхозный 3'
+shortTitle: 'Совхозный 3'
+description: ''
+keywords: kaliningrad, Sovhoznyy 3, Калининград, Совхозный 3, снос, аварийный жилфонд
+location: 54.727916, 20.398728
+displayPageTitle: true
+headerImage: 0
+captureDate: 13/04/2021
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+    - image: ./photos/01.jpg
+    - image: ./photos/02.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

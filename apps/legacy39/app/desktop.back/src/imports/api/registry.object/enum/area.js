@@ -1,0 +1,28 @@
+import Enum from './base.js';
+
+export default new Enum([
+    {key: 'BGR', value: 'Багратионовский городской округ', iKey: 'BAGRATIONOVSKII GORODSKOI OKRUG'},
+    {key: 'BAL', value: 'Балтийский муниципальный район', iKey: 'BALTIISKII MUNITSIPALNII RAION'},
+    {key: 'GVR', value: 'Гвардейский городской округ', iKey: 'GVARDEISKII GORODSKOI OKRUG'},
+    {key: 'KLG', value: 'Городской округ "Город Калининград"', iKey: 'GORODSKOI OKRUG GOROD KALININGRAD'},
+    {key: 'GUR', value: 'Гурьевский городской округ', iKey: 'GUREVSKII GORODSKOI OKRUG'},
+    {key: 'GUS', value: 'Гусевский городской округ', iKey: 'GUSEVSKII GORODSKOI OKRUG'},
+    {key: 'ZEL', value: 'Зеленоградский городской округ', iKey: 'ZELENOGRADSKII GORODSKOI OKRUG'},
+    {key: 'KRS', value: 'Краснознаменский городской округ', iKey: 'KRASNOZNAMENSKII GORODSKOI OKRUG'},
+    {key: 'LAD', value: 'Ладушкинский городской округ', iKey: 'LADUSHKINSKII GORODSKOI OKRUG'},
+    {key: 'MAM', value: 'Мамоновский городской округ', iKey: 'MAMONOVSKII GORODSKOI OKRUG'},
+    {key: 'NEM', value: 'Неманский городской округ', iKey: 'NEMANSKII GORODSKOI OKRUG'},
+    {key: 'NER', value: 'Неманский муниципальный район', iKey: 'NEMANSKII MUNITSIPALNII RAION'},
+    {key: 'NES', value: 'Нестеровский район', iKey: 'NESTEROVSKII RAION'},
+    {key: 'OZR', value: 'Озёрский городской округ', iKey: 'OZERSKII GORODSKOI OKRUG'},
+    {key: 'PIO', value: 'Пионерский городской округ', iKey: 'PIONERSKII GORODSKOI OKRUG'},
+    {key: 'POL', value: 'Полесский городской округ', iKey: 'POLESSKII GORODSKOI OKRUG'},
+    {key: 'PRV', value: 'Правдинский городской округ', iKey: 'PRAVDINSKII GORODSKOI OKRUG'},
+    {key: 'STL', value: 'Светловский городской округ', iKey: 'SVETLOVSKII GORODSKOI OKRUG'},
+    {key: 'SVL', value: 'Светлогорский район', iKey: 'SVETLOGORSKII RAION'},
+    {key: 'SLA', value: 'Славский городской округ', iKey: 'SLAVSKII GORODSKOI OKRUG'},
+    {key: 'SOV', value: 'Советский городской округ', iKey: 'SOVETSKII GORODSKOI OKRUG'},
+    {key: 'CHE', value: 'Черняховский городской округ', iKey: 'CHERNYAHOVSKII GORODSKOI OKRUG'},
+    {key: 'CHR', value: 'Черняховский район', iKey: 'CHERNYAHOVSKII RAION'},
+    {key: 'YAN', value: 'Янтарный городской округ', iKey: 'YANTARNII GORODSKOI OKRUG'},
+]);

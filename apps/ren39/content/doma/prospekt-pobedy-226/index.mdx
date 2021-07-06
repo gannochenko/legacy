@@ -1,0 +1,37 @@
+---
+published: true
+slug: 'prospekt-pobedy-226'
+title: 'Калининград, Проспект Победы 226'
+shortTitle: 'Проспект Победы 226'
+description: ''
+keywords: kaliningrad, Prospekt Pobedy 226, Калининград, Проспект Победы 226, снос, аварийный жилфонд
+location: 54.714911, 20.411143
+displayPageTitle: true
+headerImage: 0
+captureDate: 16/02/2021
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+    - image: ./photos/01.jpg
+    - image: ./photos/02.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

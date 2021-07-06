@@ -1,0 +1,41 @@
+---
+slug: 'tulskaya-23'
+published: true
+title: 'Калининград, Тульская 23'
+shortTitle: 'Тульская 23'
+description: ''
+keywords: kaliningrad, tulskaya 23, Калининград, Тульская 23, снос, аварийный жилфонд
+location: 54.706797, 20.566129
+displayPageTitle: true
+headerImage: 0
+captureDate:
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+    - image: ./photos/01.jpg
+    - image: ./photos/02.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+Дом типовой, одноэтажный, расположен в бывшем пролетарском районе Лип. В состав города район вошел в 1927 году.
+Почти вся застройка района - это бюджетное жилье для рабочих. Планировка улиц отличается повышенной комфортностью, лаконичностью и низкоэтажностью.
+Сохранность исторических домов довольно высокая и при должном ремонте район мог бы стать небольшим историческим парком, иллюстрирующим архитектурные особенности периода середины 20-х годов (периода Веймарской республики).
+
+<Reasons resettlement text="г. Калининград, ул. Тульская, д. 23" />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

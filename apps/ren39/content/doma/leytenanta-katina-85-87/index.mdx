@@ -1,0 +1,37 @@
+---
+published: true
+slug: 'leytenanta-katina-85-87'
+title: 'Калининград, Лейтенанта Катина 85-87'
+shortTitle: 'Лейтенанта Катина 85-87'
+description: ''
+keywords: kaliningrad, Leytenanta Katina 85-87, Калининград, Лейтенанта Катина 85-87, снос, аварийный жилфонд
+location: 54.732319, 20.435020
+displayPageTitle: true
+headerImage: 0
+captureDate: 26/03/2021
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+    - image: ./photos/01.jpg
+    - image: ./photos/02.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

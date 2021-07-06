@@ -1,6 +1,0 @@
-demo
-.idea
-*.log
-*.tar.gz
-jest
-.eslint*

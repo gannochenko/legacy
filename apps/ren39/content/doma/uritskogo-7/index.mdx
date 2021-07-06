@@ -1,0 +1,40 @@
+---
+slug: 'uritskogo-7'
+published: true
+title: 'Калининград, Урицкого 7'
+shortTitle: 'Урицкого 7'
+description: ''
+keywords: kaliningrad, uritskogo 7, Калининград, Урицкого 7, снос, аварийный жилфонд
+location: 54.726829, 20.367592
+displayPageTitle: true
+headerImage: 0
+captureDate:
+status: demolition
+valuable: true
+images:
+    - image: ./photos/02.jpg
+    - image: ./photos/00.jpg
+    - image: ./photos/01.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+Прекрасный дом в духе кирпичного функционализма в поселке имени Космодемьянского (бывший Метгетен). Красный кирпич контрастно подчеркнут белой штукатуркой. В комплекте идёт в аналогичном стиле симпатичный сарай с арочными окнами.
+Находясь в центре Калининграда, подобный дом считался бы элитным особняком и украшением любой улицы.
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

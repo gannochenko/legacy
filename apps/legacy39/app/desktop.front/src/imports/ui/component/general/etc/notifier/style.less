@@ -1,0 +1,98 @@
+@import (reference) url('/client/style/index.less');
+
+.notifier {
+	._rb-fixed(5 * @rb-offset, 0);
+	._rb-moon();
+}
+
+.notifier__message {
+}
+
+.notifier__message-padding {
+	._rb-padding-b_x();
+}
+
+.notifier__message-layout {
+	._rb-relative();
+	background-color: @rb-color_white;
+	._rb-padding_x();
+	._rb-width_btw_x(1, 25);
+	border-left: @rb-offset / 3 solid @rb-color_ultramarine-color;
+
+	animation: notifier__message_appear 0.25s ease;
+	._rb-transition(all);
+}
+
+.notifier__message-text {
+	._rb-icon-label2('help', 28px, -3px, 2.5, @rb-color_ultramarine-color);
+	._rb-icon-code('info_outline');
+}
+
+.notifier__message_closeable {
+	._rb-padding-r_x(3);
+}
+
+.notifier__message-close {
+	._rb-absolute(0px, 0px);
+	._rb-icon('close', 20px, 0.25);
+	._rb-f-color(@rb-color_white);
+	border-bottom-left-radius: 50%;
+	._rb-b-color_hover-darken(@rb-color_ultramarine-color);
+	._rb-hand();
+}
+
+.notifier__message_closing {
+	animation: notifier__message_disappear 0.5s ease;
+	animation-fill-mode: forwards;
+
+	._rb-no-overflow();
+}
+
+#notifier__message-type(@icon-code, @color) {
+	border-color: @color;
+	.notifier__message-text {
+		._rb-icon-code(@icon-code);
+		&:before {
+			color: @color;
+		}
+	}
+
+	.notifier__message-close {
+		._rb-b-color_hover-darken(@color);
+	}
+}
+
+.notifier__message_success {
+	#notifier__message-type('check_circle', @rb-color_patina);
+}
+
+.notifier__message_error {
+	#notifier__message-type('new_releases', @rb-color_pure-crimson);
+}
+
+.notifier__message_network-problem {
+	#notifier__message-type('sync_disabled', @rb-color_pure-crimson);
+}
+
+@keyframes notifier__message_appear {
+	from {
+		transform: translate(100%);
+	}
+
+	to {
+		transform: translate(0);
+	}
+}
+
+@keyframes notifier__message_disappear {
+	from {
+		opacity: 1;
+		transform: translate(0, 0);
+	}
+
+	to {
+		opacity: 0;
+		height: 0;
+		transform: translate(0, -20px);
+	}
+}

@@ -1,0 +1,55 @@
+@import (reference) url('/client/style/index.less');
+
+.object-card-list__title {
+	._rb-icon-label-flex('help', 20px);
+}
+
+.object-card-list__item {
+	._rb-f-color(@rb-color_black, @rb-color_thousand-herb, 200ms);
+	height: 12 * @rb-offset;
+	._rb-block();
+	._rb-no-decoration() !important;
+}
+
+.object-card-list__item-image {
+	height: 100%;
+	._rb-image();
+	._rb-b-color(@rb-color-donkey);
+	._rb-relative();
+	._rb-no-overflow();
+	._rb-b-radius(2px);
+}
+
+.object-card-list__item-title {
+	._rb-absolute(auto, auto, 5px, 0);
+	._rb-padding-tb-lr_x(0.2, 1);
+	._rb-b-color(@rb-color_white);
+	max-width: 95%;
+
+	._rb-no-overflow_ellipsis();
+	border-radius: 0 2px 2px 0;
+}
+
+.object-card-list__item-image-dumb {
+	._rb-margin-t_x(4);
+	._rb-margin-lr_x(1);
+	._rb-absolute-cover();
+	._rb-f-color(@rb-color_citroen-c3);
+	._rb-font_roboto();
+	text-align: center;
+	text-transform: uppercase;
+}
+
+.object-card-list__item-add {
+	height: 100%;
+	._rb-border2(2px, @rb-color-donkey, @rb-color_citroen-c3);
+	._rb-f-color(@rb-color_citroen-c3, darken(@rb-color_citroen-c3, 10%));
+	._rb-relative();
+	._rb-transition(all, 200ms);
+	._rb-content_v_center_h_center();
+}
+
+.object-card-list__item-add-dumb {
+	._rb-font_roboto();
+	._rb-icon-label('add', 18px, 3px);
+}

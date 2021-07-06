@@ -1,0 +1,35 @@
+---
+slug: 'krasnaya-272-274'
+published: true
+title: 'Калининград, Красная 272-274'
+shortTitle: 'Красная 272-274'
+description: ''
+keywords: kaliningrad, krasnaya 272-274, Калининград, Красная 272-274, снос, аварийный жилфонд
+location: 54.747179, 20.473019
+displayPageTitle: true
+headerImage: 0
+captureDate:
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

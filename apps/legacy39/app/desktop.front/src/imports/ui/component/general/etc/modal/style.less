@@ -1,0 +1,84 @@
+@import (reference) url('/client/style/index.less');
+
+.modal {
+	._rb-fixed-cover();
+	._rb-orbit();
+}
+
+.modal__overlay {
+	._rb-absolute-cover();
+	._rb-b-color(fade(@rb-color_black, 70%));
+}
+
+.modal__content {
+	._rb-absolute-cover();
+	._rb-content_v_center_h_center();
+}
+
+@modal_safe-margin: 2;
+
+.modal__window {
+	._rb-b-color(@rb-color_white);
+	._rb-orbit();
+	._rb-relative();
+	._rb-margin-lr_x(@modal_safe-margin);
+	._rb-soften-corners();
+	min-width: 20 * @rb-offset;
+	// max-height: ~"calc(100vh - @{modal_safe-margin} * @{rb-offset} * 2)";
+	max-height: ~"calc(100% - @{modal_safe-margin} * @{rb-offset} * 2)";
+	//max-height: 100%;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.modal__window_maximize-height {
+	height: 100%;
+}
+
+.modal__window-inner {
+	height: 100%;
+}
+
+.modal__window-inner_padded {
+	._rb-padding_x(2);
+}
+
+.modal__window_sm {
+	width: 30 * @rb-offset;
+}
+
+.modal__window_md {
+	width: 50 * @rb-offset;
+}
+
+.modal__window_lg {
+	width: 70 * @rb-offset;
+}
+
+.modal__close {
+	._rb-icon('clear', 20px, 0.5);
+	._rb-absolute-tr(0);
+	._rb-hand();
+	._rb-f-color(inherit, @rb-color_thousand-herb, 200ms);
+}
+
+.modal__close_locked {
+	._rb-f-color(@rb-color_silver-sand, @rb-color_silver-sand);
+}
+
+@media (max-width: @rb-size_mobile-max) {
+	.modal__window {
+		._rb-no-margin();
+		height: 100%;
+		max-height: none;
+	}
+	.modal__window-inner_padded {
+		// ._rb-padding_x(1);
+	}
+}
+
+@media (min-width: @rb-size_tablet-min) {
+	.modal__window {
+		._rb-slide-in_t(0.2s);
+	}
+}

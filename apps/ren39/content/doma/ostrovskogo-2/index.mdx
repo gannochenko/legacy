@@ -1,0 +1,34 @@
+---
+slug: 'ostrovskogo-2'
+published: false
+title: 'Калининград, Островского 2'
+shortTitle: 'Островского 2'
+description: ''
+keywords: kaliningrad, ostrovskogo 2, Калининград, Островского 2, снос, аварийный жилфонд
+location: 54.742684, 20.515680
+displayPageTitle: true
+headerImage: 1
+captureDate:
+status: demolition
+valuable: false
+images:
+    - image: ./photos/01.jpg
+    - image: ./photos/00.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

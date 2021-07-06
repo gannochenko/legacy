@@ -1,0 +1,41 @@
+@import (reference) url('/client/style/index.less');
+
+.login__option {
+	._rb-flex();
+	._rb-flex-align-items_center();
+	._rb-hand();
+	._rb-b-radius(3px);
+	._rb-button-shadow();
+	height: 50px;
+	._rb-no-wrap();
+}
+
+.login__option-logo {
+	._rb-image();
+	._rb-margin-r_x();
+	width: 50px;
+	height: 50px;
+}
+
+.login__option_google {
+	color: #444;
+	.login__option-text {
+		._rb-font_roboto();
+	}
+	.login__option-logo {
+		width: 30px;
+		height: 30px;
+		margin-left: 20px;
+		background-image: url(/img/social/google.png);
+	}
+}
+
+.login__option_facebook {
+	._rb-b-color(#3B579D);
+	._rb-f-color(@rb-color_white);
+	.login__option-logo {
+		width: 50px;
+		height: 50px;
+		background-image: url(/img/social/facebook_50.png);
+	}
+}

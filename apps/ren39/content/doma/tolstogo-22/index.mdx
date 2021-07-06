@@ -1,0 +1,37 @@
+---
+published: true
+slug: 'tolstogo-22'
+title: 'Калининград, Толстого 22'
+shortTitle: 'Толстого 22'
+description: ''
+keywords: kaliningrad, Tolstogo 22, Калининград, Толстого 22, снос, аварийный жилфонд
+location: 54.732985, 20.353731
+displayPageTitle: true
+headerImage: 0
+captureDate: 13/04/2021
+status: lost
+valuable: false
+images:
+    - image: ./photos/00.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+Выработанный кирпичный карьер по адресу ул. Алексея Толстого, дом 22.
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

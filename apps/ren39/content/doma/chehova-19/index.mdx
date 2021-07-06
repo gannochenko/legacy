@@ -1,0 +1,37 @@
+---
+slug: 'chehova-19'
+published: true
+title: 'Калининград, Чехова 19'
+shortTitle: 'Чехова 19'
+description: ''
+keywords: kaliningrad, chehova 19, Калининград, Чехова 19, снос, аварийный жилфонд
+location: 54.740023, 20.526109
+displayPageTitle: true
+headerImage: 0
+captureDate:
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+    - image: ./photos/01.jpg
+    - image: ./photos/02.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

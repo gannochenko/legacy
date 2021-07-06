@@ -1,0 +1,35 @@
+---
+slug: 'gagarina-119-129'
+published: false
+title: 'Калининград, Гагарина 119-129'
+shortTitle: 'Гагарина 119-129'
+description: ''
+keywords: kaliningrad, gagarina 119-129, Калининград, Гагарина 119-129, снос, аварийный жилфонд
+location: 54.726684, 20.553678
+displayPageTitle: true
+headerImage: 0
+captureDate:
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

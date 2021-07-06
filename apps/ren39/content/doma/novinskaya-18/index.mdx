@@ -1,0 +1,35 @@
+---
+published: true
+slug: 'novinskaya-18'
+title: 'Калининград, Новинская 18'
+shortTitle: 'Новинская 18'
+description: ''
+keywords: kaliningrad, Novinskaya 18, Калининград, Новинская 18, снос, аварийный жилфонд
+location: 54.676974, 20.544264
+displayPageTitle: true
+headerImage: 0
+captureDate: 17/03/2021
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

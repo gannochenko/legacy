@@ -1,0 +1,103 @@
+@import (reference) url('/client/style/index.less');
+
+@file-picker__item-existing-border-radius: 3px;
+
+.file-picker__header {
+	._rb-f-size_x(0.9);
+}
+
+.file-picker__add-files-button {
+	._rb-relative();
+	._rb-no-overflow();
+}
+
+.file-picker__add-files-button-real {
+	._rb-none();
+}
+
+.file-picker__item-existing {
+	._rb-file-picker__item();
+}
+
+.file-picker__item-existing-delete {
+	._rb-file-picker__item-existing-button();
+	._rb-icon('clear');
+	._rb-absolute(auto, 3px, 3px);
+	._rb-f-color();
+}
+
+.file-picker__item-new {
+	._rb-file-picker__item();
+	._rb-no-decoration();
+	._rb-f-color(darken(@file-picker_dark, 20%), true) !important;
+}
+
+.file-picker__item-new-inner {
+	._rb-wide();
+	._rb-tall();
+	._rb-content_v_center_h_center();
+}
+
+.file-picker__item-new-progress {
+	._rb-size_x(5);
+	._rb-round();
+	._rb-b-color(lighten(@rb-color_porcelain, 10%));
+	._rb-relative();
+	._rb-no-overflow();
+	._rb-no-select();
+	// ._rb-content_v_center_h_center();
+}
+
+@p-size: 5rem;
+@h: 1.2rem;
+@w: 42px;
+
+.file-picker__item-new-progress-bar-text {
+	._rb-absolute();
+	._rb-f-size_x(1.2);
+	line-height: 100%;
+	._rb-absolute-center(@h, @w, @p-size);
+	._rb-t-center();
+	width: @w;
+}
+.file-picker__item-new-progress-bar-text_inner {
+	._rb-f-color(@rb-color_white);
+}
+
+.file-picker__item-new-progress-bar_h {
+	._rb-file-picker__item-new-progress-bar();
+	._rb-absolute-place-left();
+	._rb-narrow();
+}
+
+.file-picker__item-new-progress-bar_v {
+	._rb-file-picker__item-new-progress-bar();
+	._rb-absolute-place-top();
+	._rb-short();
+}
+
+@file-picker_bright: @rb-color_porcelain;
+@file-picker_dark: darken(@rb-color_porcelain, 10%);
+
+._rb-file-picker__item() {
+	._rb-image();
+	._rb-b-color(@file-picker_bright);
+	._rb-size_x(8);
+	._rb-border-rad(@file-picker__item-existing-border-radius);
+	._rb-no-overflow();
+	._rb-relative();
+	._rb-block();
+	._rb-inline-block();
+}
+
+._rb-file-picker__item-existing-button() {
+	._rb-b-color(@rb-color_white);
+	._rb-border-rad(@file-picker__item-existing-border-radius);
+	._rb-hand();
+	._rb-hover-fade();
+}
+
+._rb-file-picker__item-new-progress-bar() {
+	._rb-b-color(@file-picker_dark);
+	._rb-no-overflow();
+}

@@ -1,0 +1,39 @@
+---
+slug: 'kartasheva-7'
+published: true
+title: 'Калининград, Карташева 7'
+shortTitle: 'Карташева 7'
+description: ''
+keywords: kaliningrad, kartasheva 7, Калининград, Карташева 7, снос, аварийный жилфонд
+location: 54.716775, 20.370233
+displayPageTitle: true
+headerImage: 0
+captureDate:
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+    - image: ./photos/01.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+Небольшой типовой одноэтажный дом на одну семью в посёлке имени Космодемьянского (бывший район Метгетен).
+Традиционная деревянная веранда, печное отопление, черепичная крыша. Жизнь в таком не назвать комфортной, но такие дома создают уютные, аутентичные и комфортные для прогулок городские кварталы.
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

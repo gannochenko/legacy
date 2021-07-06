@@ -1,17 +1,21 @@
 {
-  "name": "composition",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "./script/start.sh",
-    "pull-images": "./script/pull-images.sh"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "MIT",
-  "devDependencies": {},
-  "dependencies": {
-    "npm-preinstall": "^2.0.0"
-  }
+    "name": "legacy",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+    },
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "husky": "^7.0.1",
+        "prettier": "^2.3.2",
+        "pretty-quick": "^3.1.1"
+    },
+    "dependencies": {},
+    "husky": {
+        "hooks": {
+            "pre-commit": "pretty-quick --staged"
+        }
+    }
 }

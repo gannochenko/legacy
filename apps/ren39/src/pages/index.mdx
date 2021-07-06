@@ -1,0 +1,67 @@
+---
+---
+
+import { Link } from 'gatsby';
+import { Link as MUILink } from '@material-ui/core';
+import { Container, MainHeader } from 'components';
+import { BuildingList } from 'components/BuildingList';
+import { BUILDING_LIST } from 'pathTemplates';
+
+<MainHeader />
+
+<Container>
+
+## Им угрожает снос 😬
+
+Мы составили список выдающихся объектов, которые могут быть совсем скоро утрачены навсегда. Кроме этих зданий, под снос также пойдут и вполне рядовые дома. Представляем вашему вниманию [полный список домов под снос](/spisok-objektov).
+
+<br />
+
+<BuildingList data={props.data.allMdx.edges} />
+
+<br />
+
+<center>
+    <Link to={BUILDING_LIST}>
+        <MUILink>Смотреть все дома, которым угрожает снос</MUILink>
+    </Link>
+</center>
+
+<br />
+<br />
+
+</Container>
+
+export const indexQuery = graphql`
+    query indexQuery {
+        allMdx(
+            sort: { fields: [frontmatter___shortTitle], order: ASC }
+            filter: {
+                frontmatter: { published: { eq: true }, valuable: { eq: true } }
+            }
+        ) {
+            edges {
+                node {
+                    id
+                    frontmatter {
+                        title
+                        shortTitle
+                        slug
+                        description
+                        published
+                        headerImage
+                        images {
+                            image {
+                                childImageSharp {
+                                    fluid(maxWidth: 1240, quality: 80) {
+                                        ...GatsbyImageSharpFluid_tracedSVG
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+`;

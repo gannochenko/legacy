@@ -1,0 +1,45 @@
+@import (reference) url('/client/style/index.less');
+
+@balloon_border-radius: 2px;
+@balloon_corner-size: 20px;
+
+@balloon_margin: (@balloon_corner-size / 2) + 2px;
+
+.balloon {
+	._rb-absolute(auto, auto, auto, 0); // by default its bottom-left
+	._rb-border-rad(@balloon_border-radius);
+	._rb-border();
+	cursor: default;
+	margin-top: @balloon_margin;
+
+	._elbrus();
+	&:after {
+		content: '';
+		._rb-absolute(-8px, auto, auto, 20px);
+		._rb-size(@balloon_corner-size);
+		._rb-b-color(@rb-color_white);
+		._rb-border();
+		._rb-rotate(45deg);
+	}
+}
+
+.balloon_top {
+	bottom: 100%; // top-left
+	margin-top: 0;
+	margin-bottom: @balloon_margin;
+
+	&:after {
+		._rb-absolute(auto, auto, -8px, 20px);
+	}
+}
+
+.balloon__inner {
+	z-index: @z_elbrus + 10;
+	._rb-relative();
+	._rb-border-rad(@balloon_border-radius);
+	._rb-b-color(@rb-color_white);
+}
+
+.balloon__content {
+	._rb-padding_x();
+}

@@ -1,0 +1,37 @@
+---
+slug: 'borzova-27-37'
+published: true
+title: 'Калининград, Борзова 27-37'
+shortTitle: 'Борзова 27-37'
+description: ''
+keywords: borzova
+location: 54.735997, 20.479058
+displayPageTitle: true
+headerImage: 0
+captureDate:
+status: demolition
+valuable: false
+images:
+    - image: ./photos/cover.jpg
+    - image: ./photos/IMG_0881.JPG
+    - image: ./photos/IMG_0890.JPG
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

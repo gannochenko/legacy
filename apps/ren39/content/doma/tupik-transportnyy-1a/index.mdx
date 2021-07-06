@@ -1,0 +1,44 @@
+---
+published: true
+slug: 'tupik-transportnyy-1a'
+title: 'Калининград, Тупик Транспортный 1а'
+shortTitle: 'Тупик Транспортный 1а'
+description: ''
+keywords: kaliningrad, Tupik Transportnyy 1a, Калининград, Тупик Транспортный 1а, снос, аварийный жилфонд
+location: 54.693993, 20.447246
+displayPageTitle: true
+headerImage: 0
+captureDate: 14/04/2021
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+    - image: ./photos/01.jpg
+    - image: ./photos/02.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+## Историческая справка
+
+Двухэтажный барак 1954-го года постройки. В качестве строительного материала при возведении был использован немецкий кирпич.
+В последний раз шиферное покрытие кровли обновлялось в 1980-х.
+
+На сегодняшний день в здании существуют проблемы с отоплением. В последнее время также сильно обветшал и обвалился потолок в одном из подъездов.
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

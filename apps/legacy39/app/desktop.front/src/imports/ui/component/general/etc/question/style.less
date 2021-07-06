@@ -1,0 +1,22 @@
+@import (reference) url('/client/style/index.less');
+
+.question {
+}
+
+.question__header {
+	._rb-icon-label('contact_support', 1rem, 0, 1.7);
+	._rb-margin-b_x();
+	&:before {
+		._rb-f-size_x(1.3rem);
+		line-height: 100%;
+		._rb-f-color(@rb-color_harbor-rat);
+	}
+}
+
+.question__body {
+	._rb-margin-b_x();
+}
+
+.question__answers {
+	._rb-group_x();
+}

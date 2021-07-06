@@ -1,0 +1,35 @@
+---
+slug: 'gagarina-153-155'
+published: false
+title: 'Калининград, Гагарина 153-155'
+shortTitle: 'Гагарина 153-155'
+description: ''
+keywords: kaliningrad, gagarina 153-155, Калининград, Гагарина 153-155, снос, аварийный жилфонд
+location: 54.727864, 20.556607
+displayPageTitle: true
+headerImage: 0
+captureDate:
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

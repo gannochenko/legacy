@@ -1,0 +1,49 @@
+.pl-button {
+	._rb-padding-tb_x(0.5);
+	._rb-padding-lr_x();
+	._rb-b-color(@color-a, @color-a_hover, 300ms);
+	._rb-f-color(@rb-color_white, @rb-color_white);
+	._rb-hand();
+	._rb-inline-block();
+	._rb-no-user-select();
+	._rb-no-decoration();
+	._rb-b-radius(2px);
+}
+
+#pl-button_color(@b-color, @f-color, @f-color_h: @f-color) {
+	._rb-b-color(@b-color, darken(@b-color, 5%), 200ms);
+	._rb-f-color(@f-color, @f-color_h);
+}
+
+.pl-button_inactive {
+	._rb-b-color(@rb-color_b5, darken(@rb-color_b5, 10%), 200ms);
+}
+
+.pl-button_red {
+	._rb-b-color(@rb-color_pure-crimson, darken(@rb-color_pure-crimson, 10%), 200ms);
+}
+
+.pl-button_pale {
+	._rb-b-color(@rb-color_porcelain, darken(@rb-color_porcelain, 5%), 200ms);
+	._rb-f-color(@rb-color_black, @rb-color_black);
+}
+
+.pl-button_patina {
+	#pl-button_color(@rb-color_patina, @rb-color_white);
+}
+
+.pl-button-group {
+	& > * {
+		._rb-b-radius(0);
+	}
+
+	& > *:last-child {
+		border-top-right-radius: 2px;
+		border-bottom-right-radius: 2px;
+	}
+
+	& > *:first-child {
+		border-top-left-radius: 2px;
+		border-bottom-left-radius: 2px;
+	}
+}

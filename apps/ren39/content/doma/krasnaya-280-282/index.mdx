@@ -1,0 +1,35 @@
+---
+slug: 'krasnaya-280-282'
+published: false
+title: 'Калининград, Красная 280-282'
+shortTitle: 'Красная 280-282'
+description: ''
+keywords: kaliningrad, krasnaya 280-282, Калининград, Красная 280-282, снос, аварийный жилфонд
+location: 54.748104, 20.472201
+displayPageTitle: true
+headerImage: 0
+captureDate:
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

@@ -1,0 +1,36 @@
+---
+title: 'Дома на карте'
+---
+
+import { Container } from 'components';
+import { Map } from 'components/Map';
+
+<Map marginTop="3rem" height="30rem" edges={props.data.allMdx.edges} />
+
+<br />
+
+export const naKarteQuery = graphql`
+    query naKarteQuery {
+        allMdx(filter: { frontmatter: { published: { eq: true } } }) {
+            edges {
+                node {
+                    id
+                    frontmatter {
+                        title
+                        slug
+                        location
+                        images {
+                            image {
+                                childImageSharp {
+                                    fluid(maxWidth: 800, quality: 60) {
+                                        ...GatsbyImageSharpFluid_tracedSVG
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+`;

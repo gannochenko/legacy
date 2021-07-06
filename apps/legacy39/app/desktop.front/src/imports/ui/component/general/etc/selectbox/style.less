@@ -1,0 +1,114 @@
+@import (reference) url('/client/style/index.less');
+
+.selectbox {
+}
+
+.selectbox__container {
+	._rb-border-rad();
+	._rb-border();
+	._rb-transition();
+	._rb-no-margin();
+	._rb-no-outline();
+	._rb-no-appearance();
+	._rb-b-color();
+	._rb-relative();
+	._rb-padding_x(0.4);
+}
+
+// sounds crazy
+._selectbox__relative-stratosphere() {
+	._rb-stratosphere();
+	._rb-relative();
+}
+
+.selectbox__container-inner {
+	._rb-group_x(0.4) !important;
+	._rb-content_v_center_h_left(true);
+	._rb-height_btw_x(2.9);
+
+	._selectbox__relative-stratosphere();
+}
+
+.selectbox__input-container {
+	._rb-relative();
+	&:first-child {
+		._rb-padding-l_x(0.5) !important;
+	}
+
+	._selectbox__relative-stratosphere();
+}
+
+.selectbox__input {
+	// fighting with semantic ui nesting, setting !important everywhere
+	._rb-padding_x(0.5, 0.5, 0.5, 0.5) !important;
+	._rb-no-border() !important;
+	._rb-width_btw_x(1, 10);
+	._rb-no-bg() !important;
+	._rb-f-color() !important;
+}
+
+.selectbox__item-selected {
+	._rb-padding-tb-lr_x(0.4, 1);
+	._rb-border-rad(3px);
+	._rb-width_btw_x(3, 15);
+	._rb-b-color(@rb-color_blue);
+}
+
+.selectbox__item-selected-inner {
+	._rb-f-color(@rb-color_white);
+	._rb-f-size_x(1.2);
+}
+
+.selectbox__item-selected-text {
+	._rb-no-wrap();
+	._rb-no-overflow();
+}
+
+.selectbox__item-selected_removable {
+	._rb-padding-r_x(2.5);
+	._rb-relative();
+}
+
+.selectbox__item-selected-remove {
+	._rb-absolute(0, 0);
+	._rb-padding_x(0.6);
+	._rb-hand();
+}
+
+.selectbox__item-selected-remove-icon {
+	._rb-icon('clear');
+}
+
+.selectbox__dropdown {
+	._rb-absolute(100%, -1px, auto, -1px);
+	._rb-border();
+	._rb-everest();
+	._rb-b-color(@rb-color_white);
+	._rb-scroll-v_x(21);
+}
+
+.selectbox__dropdown_up {
+	._rb-absolute-stick-top() !important;
+}
+
+.selectbox__dropdown-item {
+	._rb-block();
+	._rb-padding_x(0.7);
+	._rb-hand();
+	._rb-transition();
+
+	&:hover {
+		._rb-b-color(@rb-color_edward);
+	}
+}
+
+.selectbox__dropdown-item-checkbox {
+	._rb-absolute();
+	._rb-block();
+	._rb-size(17px);
+	._rb-no-margin();
+}
+
+.selectbox__dropdown-item-text {
+	._rb-no-select();
+}

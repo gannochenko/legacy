@@ -1,0 +1,39 @@
+---
+published: true
+slug: 'litovskiy-val-66'
+title: 'Калининград, Литовский Вал 66'
+shortTitle: 'Литовский Вал 66'
+description: ''
+keywords: kaliningrad, Litovskiy Val 66, Калининград, Литовский Вал 66, снос, аварийный жилфонд
+location: 54.707249, 20.537293
+displayPageTitle: true
+headerImage: 0
+captureDate: 12/04/2021
+status: saved
+valuable: true
+images:
+    - image: ./photos/00.jpg
+    - image: ./photos/01.jpg
+    - image: ./photos/02.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+МКД по адресу Литовский Вал 66 является объектом культурного наследия, поэтому в стопочки кирпичей на поддонах дом не превратится. Здание [будет изъято в собственность администрации](https://www.youtube.com/watch?v=QQyFd5CjfVE) и, возможно, выставлено на торги с обременением. А дальше... как получится. Если желающих взять в аренду ОКН за рубль на аукционе не появится, дом скорее всего будет отремонтирован за бюджетные деньги и приспособлен под какие-нибудь нужды.
+
+Тем не менее, если ремонта достаточно долгое время не будет, здание начнет ветшать. В таком случае может встать вопрос о снятии охранного статуса, или может быть выбран более радикальный проект реконструкции, как было с известной Кройц-Аптекой.
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

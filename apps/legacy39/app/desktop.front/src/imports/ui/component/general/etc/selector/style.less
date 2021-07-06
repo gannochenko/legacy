@@ -1,0 +1,18 @@
+@import (reference) url('/client/style/index.less');
+
+.selector {
+}
+
+.selector__item {
+	._rb-padding-tb_x(0.5);
+	._rb-padding-lr_x();
+	._rb-b-color(@rb-color_sky-color, darken(@rb-color_sky-color, 10%), 200ms);
+	._rb-f-color(@rb-color_white);
+	._rb-hand();
+	._rb-inline-block();
+	._rb-no-user-select();
+}
+
+.selector__item_selected {
+	._rb-b-color(@rb-color_young-green-onion, darken(@rb-color_young-green-onion, 10%), 200ms);
+}

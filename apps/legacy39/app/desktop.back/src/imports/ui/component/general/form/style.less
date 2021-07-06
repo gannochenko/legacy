@@ -1,0 +1,84 @@
+@import (reference) url('/client/style/index.less');
+
+.form {
+}
+
+.form__body {
+}
+
+.form__body_fragment {
+	._rb-border-l(@borderColor, 4px);
+	._rb-padding-l_x(2);
+	._rb-padding-tb_x(0.5);
+}
+
+#make_form__body_fragment_color(@color) {
+	._rb-border-l(fade(@color, 30%), 4px);
+	&:hover,
+	&.form__body_fragment_hover {
+		._rb-border-l(@color, 4px);
+	}
+	._rb-transition();
+}
+
+.form__body_fragment_color_blue {
+	#make_form__body_fragment_color(#2185d0);
+}
+
+.form__body_fragment_color_green {
+	#make_form__body_fragment_color(#60b044);
+}
+
+.form__body_fragment_color_yellow {
+	#make_form__body_fragment_color(#fbbd08);
+}
+
+.form__body_fragment_color_orange {
+	#make_form__body_fragment_color(#f2711c);
+}
+
+.form__body_fragment_color_olive {
+	#make_form__body_fragment_color(#b5cc18);
+}
+
+.form__container_error {
+	//input[type="text"],
+	//input[type="password"],
+	//textarea {
+	//	._rb-border(@rb-color_blood-red) !important;
+	//	._rb-b-color(lighten(@rb-color_blood-red, 58%)) !important;
+	//}
+}
+
+.form__error-message {
+	._rb-padding_x(0.5);
+	._rb-f-size_x(1.2);
+	background-color: @rb-color_blood-red;
+	color: @rb-color_grey !important;
+	._rb-block();
+}
+
+.form__error {
+	.form__error-message;
+}
+
+.form__row {
+}
+
+.form__footer {
+	._rb-margin-t_x(2);
+}
+
+.form__footer-bar {
+	._rb-padding-t_x();
+	._rb-padding-b_x();
+	._rb-b-color(@rb-color_white);
+	._rb-border-t();
+}
+
+.form__footer-back {
+	._rb-no-decoration();
+	._rb-padding-lr_x(2);
+	._rb-padding-tb_x(0.75);
+	font-size: 14px;
+}

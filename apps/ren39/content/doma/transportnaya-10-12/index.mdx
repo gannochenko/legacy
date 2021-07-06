@@ -1,0 +1,50 @@
+---
+published: true
+slug: 'transportnaya-10-12'
+title: 'Калининград, Транспортная 10-12'
+shortTitle: 'Транспортная 10-12'
+description: ''
+keywords: kaliningrad, Transportnaya 10-12, Калининград, Транспортная 10-12, снос, аварийный жилфонд
+location: 54.692859, 20.447030
+displayPageTitle: true
+headerImage: 0
+captureDate: 14/04/2021
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+    - image: ./photos/01.jpg
+    - image: ./photos/02.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+## Историческая справка
+
+Здание по адресу г. Калининград, ул. Транспортная 10-12 было возведено в 20-х годах XX века как типовое жилье для рабочих судостроительного завода, действующего в этом районе и поныне.
+После войны в здании была размещена военная комендатура Кёнигсберга №6, о чем информирует изрядно выцветшая информационная табличка на фасаде.
+Всего в городе комендатур было 8, а по всей Восточной Пруссии на 5 июля 1945 года – 28.
+Изначально в сферу деятельности комендатур входило обустройство быта нового советского региона, организация мирной жизни на новых территориях. Начиная с весны 1946 года комендатуры превратились в органы временного гражданского управления, а затем в управления по гражданским делам.
+
+В послевоенный период дом подвергался реконструкции: был надстроен третий этаж, состояние которого в последние годы ухудшилось. Подъезды дома, напротив, имеют хорошую сохранность: присутствуют аутентичные деревянные лестницы, трещин и иных признаков аварийности не наблюдаются.
+
+<Reasons resettlement />
+
+## Важные новости
+
+**09.05.2021**&nbsp;&nbsp;&nbsp;[Здание начали разбирать на кирпич](https://www.facebook.com/starmancer/posts/1177739742666847)
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />

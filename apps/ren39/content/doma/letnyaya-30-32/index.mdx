@@ -1,0 +1,35 @@
+---
+slug: 'letnyaya-30-32'
+published: false
+title: 'Калининград, Летняя 30-32'
+shortTitle: 'Летняя 30-32'
+description: ''
+keywords: kaliningrad, letnyaya 30-32, Калининград, Летняя 30-32, снос, аварийный жилфонд
+location: 54.674720, 20.486251
+displayPageTitle: true
+headerImage: 0
+captureDate:
+status: demolition
+valuable: false
+images:
+    - image: ./photos/00.jpg
+---
+
+import { Container } from 'components/Container';
+import { Reasons } from 'components/Reasons';
+import { ImageGallery } from 'components/ImageGallery';
+import { Map } from 'components/Map';
+
+<Container>
+
+<ImageGallery
+    images={props.pageContext.frontmatter.images}
+    marginTop="3rem"
+    marginBottom="3rem"
+/>
+
+<Reasons resettlement />
+
+</Container>
+
+<Map location={props.pageContext.frontmatter.location} marginTop="3rem" />
