@@ -1,0 +1,44 @@
+---
+title: "Blog"
+---
+
+import { graphql } from 'gatsby';
+import { Container, PageOffset, BlogList } from 'components';
+
+<Container>
+
+<BlogList data={props.data.allMdx.edges} />
+
+</Container>
+
+<PageOffset />
+
+export const BlogIndexQuery = graphql`
+    query BlogIndexQuery {
+        allMdx(
+            sort: { fields: [frontmatter___date], order: DESC }
+            filter: { frontmatter: { published: { eq: true }, kind: { eq: "Blog" } } }
+        ) {
+            edges {
+                node {
+                    id
+                    frontmatter {
+                        title
+                        date
+                        slug
+                        published
+                        images {
+                            image {
+                                childImageSharp {
+                                    fluid(maxWidth: 1240, quality: 80) {
+                                        ...GatsbyImageSharpFluid_tracedSVG
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+`;
