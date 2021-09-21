@@ -5,6 +5,7 @@
     "author": "Sergei Gannochenko",
     "dependencies": {
         "@auth0/auth0-react": "^1.8.0",
+        "@emotion/react": "^11.4.1",
         "@gannochenko/etc": "^1.0.7",
         "@gannochenko/ui": "^1.1.2",
         "@gannochenko/ui.styled-components": "^1.1.0",
