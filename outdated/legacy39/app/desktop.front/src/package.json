@@ -37,7 +37,7 @@
     "underscore-mixin": "^1.1.0",
     "uniforms": "^1.24.1",
     "uniforms-unstyled": "^1.24.1",
-    "url-parse": "^1.2.0"
+    "url-parse": "^1.5.2"
   },
   "devDependencies": {
     "babel-plugin-transform-class-properties": "^6.24.1"
