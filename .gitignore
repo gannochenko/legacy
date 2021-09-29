@@ -4,6 +4,8 @@ node_modules
 .idea/libraries
 .DS_Store
 .env
+**/.data/**
+!**/.data/.gitkeep
 
 # terraform
 **/.terraform/*
