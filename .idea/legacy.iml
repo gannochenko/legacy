@@ -7,6 +7,9 @@
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/outdated/legacy39/app/desktop.back/src/.meteor/local" />
       <excludeFolder url="file://$MODULE_DIR$/outdated/legacy39/app/desktop.front/src/.meteor/local" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/prussiascan.api/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/prussiascan/.cache" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/prussiascan/public" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
