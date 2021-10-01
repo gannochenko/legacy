@@ -32,7 +32,6 @@ export class ObjectsController {
     async create(
         @Body() data: CreateObjectDto,
     ): AsyncRESTResponse<null> {
-        console.log('CREATE100');
         return createResponse(await this.objectsService.create(data));
     }
 

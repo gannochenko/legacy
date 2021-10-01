@@ -22,6 +22,7 @@ export const bootstrapServer = async (): Promise<Server> => {
     if (!cachedServer) {
         const expressApp = express();
         const app = await NestFactory.create(ApplicationModule, new ExpressAdapter(expressApp));
+        app.setGlobalPrefix('api');
 
         if (!isDev()) {
             app.use(helmet());

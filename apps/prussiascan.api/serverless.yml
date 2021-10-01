@@ -4,7 +4,6 @@ service: prussiascans-api
 plugins:
     - serverless-webpack
     - serverless-offline
-    - ./plugins/offlineInvalidate
 
 # serverless supports different cloud environments to run at.
 # we will be deploying and running this project at AWS cloud with Node v8.10 environment
@@ -22,16 +21,16 @@ functions:
         # in order to do so, we create a REST endpoint
         events:
             - http:
-                  path: /sendmessage # path for the endpoint
-                  method: any # HTTP method for the endpoint
+                  path: /message
+                  method: post
     runAPI: # function name
         handler: src/lambdas/runAPI/handler.handler # where the actual code is located
         # to call our function from outside, we need to expose it to the outer world
         # in order to do so, we create a REST endpoint
         events:
             - http:
-                  path: /{any+} # path for the endpoint
-                  method: any # HTTP method for the endpoint
+                  path: /api/{any+}
+                  method: any
 
 custom:
     webpack:
