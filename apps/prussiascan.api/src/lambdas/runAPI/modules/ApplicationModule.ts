@@ -1,7 +1,7 @@
 import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 
-import { ObjectsController } from '../rest/controllers/ObjectsController';
+import { ObjectsController } from '../rest/ObjectsController/ObjectsController';
 import { RolesGuard } from '../guards/RolesGuard';
 import { ObjectsService } from '../services/ObjectsService';
 

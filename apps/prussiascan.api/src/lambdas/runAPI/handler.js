@@ -1,5 +1,5 @@
 import { proxy } from 'aws-serverless-express';
-import { bootstrapServer } from './nest/main';
+import { bootstrapServer } from './main';
 
 export const handler = async (event, context) => {
     const cachedServer = await bootstrapServer();

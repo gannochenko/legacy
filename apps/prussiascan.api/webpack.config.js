@@ -6,7 +6,7 @@ const slsw = require('serverless-webpack');
 const { allowedEnvVariables } = require('./.env.js');
 
 const getEnv = () => {
-    const result = [];
+    const result = {};
 
     allowedEnvVariables.forEach((variableName) => {
         if (
@@ -49,6 +49,9 @@ module.exports = {
         new Dotenv({
             systemvars: false,
         }),
-        new DefinePlugin(getEnv()),
+        new DefinePlugin({
+            ...getEnv(),
+            __DEV__: true,
+        }),
     ],
 };

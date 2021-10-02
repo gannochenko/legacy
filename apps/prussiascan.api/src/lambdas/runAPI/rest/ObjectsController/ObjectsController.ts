@@ -8,30 +8,33 @@ import {
     // HttpCode,
     Body,
     Query,
-    Delete, HttpException, HttpStatus,
+    Delete,
+    HttpException,
+    HttpStatus,
 } from '@nestjs/common';
 import { ObjectsService } from '../../services/ObjectsService';
 import {
     CreateObjectDto,
     // FindAuthorDto,
     // UpdateAuthorDto,
-} from '../dto/ObjectsDTO';
+} from './ObjectsDTO';
 import { Roles } from '../../utils/Roles';
-import { AsyncRESTResponse, AsyncRESTResponseList, IDType } from '../../type';
+import { AsyncRESTResponse, AsyncRESTResponseList } from '../../type';
 import { createResponse } from '../../utils/createResponse';
+import { ObjectEntity } from '../../entities/ObjectEntity';
 
 @Controller('objects')
 export class ObjectsController {
     constructor(private readonly objectsService: ObjectsService) {}
 
     // todo: filter outgoing data
-    @Get()
+    @Post()
     // @Header('Cache-Control', 'none')
     // @HttpCode(204)
     // @Roles('admin')
     async create(
         @Body() data: CreateObjectDto,
-    ): AsyncRESTResponse<null> {
+    ): AsyncRESTResponse<ObjectEntity> {
         return createResponse(await this.objectsService.create(data));
     }
 

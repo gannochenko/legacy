@@ -8,7 +8,6 @@ import { ExpressAdapter } from '@nestjs/platform-express';
 import express from 'express';
 
 import { ApplicationModule } from './modules/ApplicationModule';
-import { isDev } from './utils/isDev';
 
 // NOTE: If you get ERR_CONTENT_DECODING_FAILED in your browser, this is likely
 // due to a compressed response (e.g. gzip) which has not been handled correctly
@@ -21,10 +20,13 @@ let cachedServer: Server;
 export const bootstrapServer = async (): Promise<Server> => {
     if (!cachedServer) {
         const expressApp = express();
-        const app = await NestFactory.create(ApplicationModule, new ExpressAdapter(expressApp));
+        const app = await NestFactory.create(
+            ApplicationModule,
+            new ExpressAdapter(expressApp),
+        );
         app.setGlobalPrefix('api');
 
-        if (!isDev()) {
+        if (!__DEV__) {
             app.use(helmet());
         }
         app.useGlobalPipes(
