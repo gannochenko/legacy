@@ -3,6 +3,7 @@ export enum ObjectKindEnum {
     bunker = 'bunker',
     hospital = 'hospital',
     factory = 'factory',
+    church = 'church',
 }
 
 export enum ObjectMaterialEnum {

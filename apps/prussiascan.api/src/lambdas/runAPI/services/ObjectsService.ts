@@ -3,11 +3,18 @@ import { v4 } from 'uuid';
 import latinize from 'latinize';
 import { DynamoDB } from 'aws-sdk';
 import { ObjectEntity } from '../entities/ObjectEntity';
-import { CreateObjectDto } from '../rest/ObjectsController/ObjectsDTO';
+import {
+    CreateObjectDto,
+    UpdateObjectDto,
+} from '../rest/ObjectsController/ObjectsDTO';
 import { awsOptions } from '../utils/awsOptions';
 
 const dynamoDB = new DynamoDB.DocumentClient(awsOptions);
 const TABLE_NAME = 'ObjectCollection';
+
+type FindAllPropertiesType = {
+    limit?: number;
+};
 
 @Injectable()
 export class ObjectsService {
@@ -15,7 +22,10 @@ export class ObjectsService {
         const { name } = item;
 
         const id = v4();
-        const slug = latinize(name).toLowerCase().replace(/(\s)+/g, '-');
+        const slug = latinize(name)
+            .toLowerCase()
+            .replace(/(\s)+/g, '-')
+            .replace(/[^a-zA-Z0-9-]/g, '');
 
         const dynamodbItem = {
             ...item,
@@ -42,23 +52,22 @@ export class ObjectsService {
 
     // // todo: get only the requested fields, don't use *
     // async update(
-    //     id: IDType,
-    //     data: AuthorUpdateInputType,
+    //     id: string,
+    //     data: UpdateObjectDto,
     // ): Promise<ObjectEntity> {
-    //     return await this.usersRepository.findOne(id);
+    //     return null;
     // }
 
     // // todo: get only the requested fields, don't use *
-    // async delete(id: IDType): Promise<ObjectEntity> {
-    //
-    //     return element;
+    // async delete(id: string): Promise<ObjectEntity> {
+    //     return null;
     // }
-    //
-    // async findAll({ filter, limit }: ObjectLiteralType = {}): Promise<
-    //     ObjectEntity[]
-    // > {
-    //     return this.usersRepository.find(filter);
-    // }
+
+    async findAll({ limit }: FindAllPropertiesType = {}): Promise<
+        ObjectEntity[]
+    > {
+        return [];
+    }
 
     // todo: get only the requested fields, don't use *
     async findOneById(id: string): Promise<ObjectEntity | null> {

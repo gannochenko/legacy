@@ -64,18 +64,10 @@ export class CreateObjectDto {
     kind: ObjectKindEnum[];
 }
 
-// export class UpdateAuthorDto {
-//     @IsString()
-//     @IsOptional()
-//     firstName: string;
-//
-//     @IsString()
-//     @IsOptional()
-//     lastName: string;
-// }
-//
-// export class FindAuthorDto {
-//     @IsString()
-//     @IsOptional()
-//     limit: number;
-// }
+export class UpdateObjectDto {}
+
+export class FindObjectDto {
+    @IsNumber()
+    @IsOptional()
+    limit: number;
+}

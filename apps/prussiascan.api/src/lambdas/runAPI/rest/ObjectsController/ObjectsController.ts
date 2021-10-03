@@ -15,8 +15,8 @@ import {
 import { ObjectsService } from '../../services/ObjectsService';
 import {
     CreateObjectDto,
-    // FindAuthorDto,
-    // UpdateAuthorDto,
+    FindObjectDto,
+    // UpdateObjectDto,
 } from './ObjectsDTO';
 import { Roles } from '../../utils/Roles';
 import { AsyncRESTResponse, AsyncRESTResponseList } from '../../type';
@@ -41,7 +41,7 @@ export class ObjectsController {
     // @Roles('admin')
     // async update(
     //     @Param('id') id: IDType,
-    //     @Body() data: UpdateAuthorDto,
+    //     @Body() data: UpdateObjectDto,
     // ): AsyncRESTResponse<AuthorEntity> {
     //     if (!(await this.authorsService.isElementExists(id))) {
     //         // https://docs.nestjs.com/exception-filters
@@ -62,17 +62,16 @@ export class ObjectsController {
     //     return createResponse(await this.authorsService.delete(id));
     // }
 
-    // @Get()
-    // async findAll(
-    //     @Query() query: FindAuthorDto,
-    // ): AsyncRESTResponseList<AuthorEntity> {
-    //     return createResponse(
-    //         await this.authorsService.findAll({
-    //             filter: {},
-    //             limit: query.limit,
-    //         }),
-    //     );
-    // }
+    @Get()
+    async findAll(
+        @Query() query: FindObjectDto,
+    ): AsyncRESTResponseList<ObjectEntity> {
+        return createResponse(
+            await this.objectsService.findAll({
+                limit: query.limit,
+            }),
+        );
+    }
 
     @Get(':id')
     async findOne(@Param('id') id: string): AsyncRESTResponse<ObjectEntity> {
