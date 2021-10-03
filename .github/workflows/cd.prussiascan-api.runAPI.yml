@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - 'apps/prussiascan.api/src/lambdas/sendMessage**'
+      - 'apps/prussiascan.api/src/lambdas/runAPI**'
 
 jobs:
   deploy:
@@ -24,7 +24,5 @@ jobs:
         working-directory: ./apps/prussiascan.api/
 
       - name: Build and Deploy
-        run: ./script/deploy.sh sendMessage
+        run: ./script/deploy.sh runAPI
         working-directory: ./apps/prussiascan.api/
-        env:
-          SENDIN_BLUE_API_KEY: ${{ secrets.SENDIN_BLUE_API_KEY }}
