@@ -5,7 +5,7 @@ import { DynamoDB } from 'aws-sdk';
 import { ObjectEntity } from '../entities/ObjectEntity';
 import {
     CreateObjectDto,
-    UpdateObjectDto,
+    // UpdateObjectDto,
 } from '../rest/ObjectsController/ObjectsDTO';
 import { awsOptions } from '../utils/awsOptions';
 
@@ -14,11 +14,19 @@ const TABLE_NAME = 'ObjectCollection';
 
 type FindAllPropertiesType = {
     limit?: number;
+    lastId?: string;
+};
+
+type ObjectServiceResponseType<D, A = Record<string, unknown>> = {
+    data: D;
+    aux: A;
 };
 
 @Injectable()
 export class ObjectsService {
-    async create(item: CreateObjectDto): Promise<ObjectEntity> {
+    async create(
+        item: CreateObjectDto,
+    ): Promise<ObjectServiceResponseType<ObjectEntity>> {
         const { name } = item;
 
         const id = v4();
@@ -34,20 +42,18 @@ export class ObjectsService {
         };
 
         try {
-            const result = await dynamoDB
+            await dynamoDB
                 .put({
                     TableName: TABLE_NAME,
                     Item: dynamodbItem,
                     ReturnConsumedCapacity: 'TOTAL',
                 })
                 .promise();
-
-            console.log(result);
         } catch (error) {
             throw new InternalServerErrorException(error);
         }
 
-        return dynamodbItem;
+        return { data: dynamodbItem, aux: {} };
     }
 
     // // todo: get only the requested fields, don't use *
@@ -63,14 +69,37 @@ export class ObjectsService {
     //     return null;
     // }
 
-    async findAll({ limit }: FindAllPropertiesType = {}): Promise<
-        ObjectEntity[]
+    async findAll({ limit, lastId }: FindAllPropertiesType = {}): Promise<
+        ObjectServiceResponseType<ObjectEntity[], { lastId: string | null }>
     > {
-        return [];
+        try {
+            const result = await dynamoDB
+                .scan({
+                    TableName: TABLE_NAME,
+                    Limit: limit,
+                    ExclusiveStartKey: lastId
+                        ? {
+                              id: lastId,
+                          }
+                        : undefined,
+                })
+                .promise();
+
+            return {
+                data: (result?.Items as ObjectEntity[]) ?? [],
+                aux: {
+                    lastId: (result?.LastEvaluatedKey?.id as string) ?? null,
+                },
+            };
+        } catch (error) {
+            throw new InternalServerErrorException(error);
+        }
     }
 
     // todo: get only the requested fields, don't use *
-    async findOneById(id: string): Promise<ObjectEntity | null> {
+    async findOneById(
+        id: string,
+    ): Promise<ObjectServiceResponseType<ObjectEntity>> {
         try {
             const result = await dynamoDB
                 .get({
@@ -81,7 +110,10 @@ export class ObjectsService {
                 })
                 .promise();
 
-            return (result?.Item as ObjectEntity) ?? null;
+            return {
+                data: (result?.Item as ObjectEntity) ?? null,
+                aux: {},
+            };
         } catch (error) {
             throw new InternalServerErrorException(error);
         }

@@ -67,7 +67,11 @@ export class CreateObjectDto {
 export class UpdateObjectDto {}
 
 export class FindObjectDto {
-    @IsNumber()
+    @IsString()
     @IsOptional()
     limit: number;
+
+    @IsString()
+    @IsOptional()
+    lastId: string;
 }

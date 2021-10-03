@@ -20,7 +20,6 @@ import {
 } from './ObjectsDTO';
 import { Roles } from '../../utils/Roles';
 import { AsyncRESTResponse, AsyncRESTResponseList } from '../../type';
-import { createResponse } from '../../utils/createResponse';
 import { ObjectEntity } from '../../entities/ObjectEntity';
 
 @Controller('objects')
@@ -34,7 +33,7 @@ export class ObjectsController {
     async create(
         @Body() data: CreateObjectDto,
     ): AsyncRESTResponse<ObjectEntity> {
-        return createResponse(await this.objectsService.create(data));
+        return this.objectsService.create(data);
     }
 
     // @Patch(':id')
@@ -64,13 +63,12 @@ export class ObjectsController {
 
     @Get()
     async findAll(
-        @Query() query: FindObjectDto,
+        @Query() { limit, lastId }: FindObjectDto,
     ): AsyncRESTResponseList<ObjectEntity> {
-        return createResponse(
-            await this.objectsService.findAll({
-                limit: query.limit,
-            }),
-        );
+        return this.objectsService.findAll({
+            limit,
+            lastId,
+        });
     }
 
     @Get(':id')
@@ -81,6 +79,6 @@ export class ObjectsController {
             throw new HttpException('Not found', HttpStatus.NOT_FOUND);
         }
 
-        return createResponse(element);
+        return element;
     }
 }
