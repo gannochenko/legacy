@@ -47,7 +47,7 @@ export class ObjectsService {
     // ): Promise<ObjectEntity> {
     //     return await this.usersRepository.findOne(id);
     // }
-    //
+
     // // todo: get only the requested fields, don't use *
     // async delete(id: IDType): Promise<ObjectEntity> {
     //
@@ -59,17 +59,25 @@ export class ObjectsService {
     // > {
     //     return this.usersRepository.find(filter);
     // }
-    //
-    // // todo: get only the requested fields, don't use *
-    // async findOneById(
-    //     id: IDType,
-    //     { select }: FindOneOptions<ObjectEntity> = {},
-    // ): Promise<ObjectEntity> {
-    //     return this.usersRepository.findOne(id, {
-    //         select,
-    //     });
-    // }
-    //
+
+    // todo: get only the requested fields, don't use *
+    async findOneById(id: string): Promise<ObjectEntity | null> {
+        try {
+            const result = await dynamoDB
+                .get({
+                    TableName: TABLE_NAME,
+                    Key: {
+                        id,
+                    },
+                })
+                .promise();
+
+            return (result?.Item as ObjectEntity) ?? null;
+        } catch (error) {
+            throw new InternalServerErrorException(error);
+        }
+    }
+
     // async isElementExists(id: IDType): Promise<boolean> {
     //     const element = await this.usersRepository.findOne(id, {
     //         select: ['id'],

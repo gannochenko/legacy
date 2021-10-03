@@ -27,7 +27,6 @@ import { ObjectEntity } from '../../entities/ObjectEntity';
 export class ObjectsController {
     constructor(private readonly objectsService: ObjectsService) {}
 
-    // todo: filter outgoing data
     @Post()
     // @Header('Cache-Control', 'none')
     // @HttpCode(204)
@@ -38,7 +37,6 @@ export class ObjectsController {
         return createResponse(await this.objectsService.create(data));
     }
 
-    // // todo: filter outgoing data
     // @Patch(':id')
     // @Roles('admin')
     // async update(
@@ -52,8 +50,7 @@ export class ObjectsController {
     //
     //     return createResponse(await this.authorsService.update(id, data));
     // }
-    //
-    // // todo: filter outgoing data
+
     // @Delete(':id')
     // @Roles('admin')
     // async delete(@Param('id') id: IDType): AsyncRESTResponse<AuthorEntity> {
@@ -64,8 +61,7 @@ export class ObjectsController {
     //
     //     return createResponse(await this.authorsService.delete(id));
     // }
-    //
-    // // todo: filter outgoing data
+
     // @Get()
     // async findAll(
     //     @Query() query: FindAuthorDto,
@@ -77,16 +73,15 @@ export class ObjectsController {
     //         }),
     //     );
     // }
-    //
-    // // todo: filter outgoing data
-    // @Get(':id')
-    // async findOne(@Param('id') id: IDType): AsyncRESTResponse<AuthorEntity> {
-    //     const element = await this.authorsService.findOneById(id);
-    //     if (!element) {
-    //         // https://docs.nestjs.com/exception-filters
-    //         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
-    //     }
-    //
-    //     return createResponse(element);
-    // }
+
+    @Get(':id')
+    async findOne(@Param('id') id: string): AsyncRESTResponse<ObjectEntity> {
+        const element = await this.objectsService.findOneById(id);
+        if (!element) {
+            // https://docs.nestjs.com/exception-filters
+            throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+        }
+
+        return createResponse(element);
+    }
 }
