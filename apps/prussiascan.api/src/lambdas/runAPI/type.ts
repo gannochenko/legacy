@@ -7,3 +7,8 @@ export type RESTResponse<D> = {
 
 export type AsyncRESTResponse<E> = Promise<RESTResponse<E | null>>;
 export type AsyncRESTResponseList<E> = Promise<RESTResponse<E[]>>;
+
+export type ServiceResponseType<D, A = Record<string, unknown>> = {
+    data: D;
+    aux: A;
+};

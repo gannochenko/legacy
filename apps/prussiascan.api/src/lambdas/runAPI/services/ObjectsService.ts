@@ -8,6 +8,7 @@ import {
     // UpdateObjectDto,
 } from '../rest/ObjectsController/ObjectsDTO';
 import { awsOptions } from '../utils/awsOptions';
+import { ServiceResponseType } from '../type';
 
 const dynamoDB = new DynamoDB.DocumentClient(awsOptions);
 const TABLE_NAME = 'ObjectCollection';
@@ -17,16 +18,11 @@ type FindAllPropertiesType = {
     lastId?: string;
 };
 
-type ObjectServiceResponseType<D, A = Record<string, unknown>> = {
-    data: D;
-    aux: A;
-};
-
 @Injectable()
 export class ObjectsService {
     async create(
         item: CreateObjectDto,
-    ): Promise<ObjectServiceResponseType<ObjectEntity>> {
+    ): Promise<ServiceResponseType<ObjectEntity>> {
         const { name } = item;
 
         const id = v4();
@@ -70,7 +66,7 @@ export class ObjectsService {
     // }
 
     async findAll({ limit, lastId }: FindAllPropertiesType = {}): Promise<
-        ObjectServiceResponseType<ObjectEntity[], { lastId: string | null }>
+        ServiceResponseType<ObjectEntity[], { lastId: string | null }>
     > {
         try {
             const result = await dynamoDB
@@ -97,9 +93,7 @@ export class ObjectsService {
     }
 
     // todo: get only the requested fields, don't use *
-    async findOneById(
-        id: string,
-    ): Promise<ObjectServiceResponseType<ObjectEntity>> {
+    async findOneById(id: string): Promise<ServiceResponseType<ObjectEntity>> {
         try {
             const result = await dynamoDB
                 .get({

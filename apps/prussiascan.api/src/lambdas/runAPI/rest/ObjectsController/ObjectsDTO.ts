@@ -6,6 +6,7 @@ import {
     Min,
     MinLength,
     IsIn,
+    Max,
 } from 'class-validator';
 import {
     ObjectConditionEnum,
@@ -69,6 +70,7 @@ export class UpdateObjectDto {}
 export class FindObjectDto {
     @IsString()
     @IsOptional()
+    @Max(50)
     limit: number;
 
     @IsString()
