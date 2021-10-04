@@ -5,6 +5,7 @@
     "license": "MIT",
     "scripts": {
         "dev": "serverless offline start -r eu-central-1 --noTimeout --host 0.0.0.0",
+        "dev:runapi:standalone": "yarn nodemon --exec \"dotenv ts-node ./src/lambdas/runAPI/main.standalone.ts\" --watch \"./src/**\" --ext \"ts,json\"",
         "deploy": "./script/deploy.sh"
     },
     "devDependencies": {
@@ -16,6 +17,7 @@
         "@types/latinize": "^0.2.15",
         "@types/multer": "^1.4.7",
         "@types/pug": "^2.0.5",
+        "@types/sharp": "^0.29.2",
         "@types/uuid": "^8.3.1",
         "@typescript-eslint/eslint-plugin": "^4.32.0",
         "@typescript-eslint/parser": "^4.32.0",
@@ -65,6 +67,7 @@
         "reflect-metadata": "^0.1.13",
         "rxjs": "^7",
         "serverless-offline": "^8.2.0",
+        "sharp": "^0.29.1",
         "utf-8-validate": "^5.0.6",
         "uuid": "^8.3.2"
     }

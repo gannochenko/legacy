@@ -6,6 +6,7 @@ import { ObjectPhotosController } from '../rest/ObjectPhotosController';
 
 import { RolesGuard } from '../guards/RolesGuard';
 import { ObjectsService } from '../services/ObjectsService';
+import { ObjectPhotosService } from '../services/ObjectPhotosService';
 
 @Module({
     imports: [],
@@ -16,6 +17,7 @@ import { ObjectsService } from '../services/ObjectsService';
             useClass: RolesGuard,
         },
         ObjectsService,
+        ObjectPhotosService,
     ],
 })
 export class ApplicationModule {}

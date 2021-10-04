@@ -1,18 +1,16 @@
-import {
-    IsString,
-    IsNumber,
-    IsOptional,
-    IsBoolean,
-    Min,
-    MinLength,
-    IsIn,
-} from 'class-validator';
-import {
-    ObjectConditionEnum,
-    ObjectKindEnum,
-    ObjectMaterialEnum,
-} from '../../entities/ObjectEntity/enums';
+import { IsString, IsOptional, IsUUID } from 'class-validator';
 
 // https://github.com/typestack/class-validator
 
-export class CreateObjectPhotoDto {}
+export class CreateObjectPhotoDto {
+    @IsUUID()
+    objectId: string;
+
+    @IsString()
+    @IsOptional()
+    year: number;
+
+    @IsString()
+    @IsOptional()
+    period: string;
+}
