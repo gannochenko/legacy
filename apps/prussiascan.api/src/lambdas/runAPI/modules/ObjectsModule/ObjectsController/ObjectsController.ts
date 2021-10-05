@@ -19,8 +19,6 @@ import {
     // UpdateObjectDto,
 } from './ObjectsDTO';
 import { Roles } from '../../../utils/Roles';
-import { AsyncRESTResponse, AsyncRESTResponseList } from '../../../type';
-import { ObjectEntity } from '../../../entities/ObjectEntity';
 
 @Controller('objects')
 export class ObjectsController {
@@ -30,9 +28,7 @@ export class ObjectsController {
     // @Header('Cache-Control', 'none')
     // @HttpCode(204)
     // @Roles('admin')
-    async create(
-        @Body() data: CreateObjectDto,
-    ): AsyncRESTResponse<ObjectEntity> {
+    async create(@Body() data: CreateObjectDto) {
         return this.objectsService.create(data);
     }
 
@@ -62,9 +58,7 @@ export class ObjectsController {
     // }
 
     @Get()
-    async findAll(
-        @Query() { limit, lastId }: FindObjectDto,
-    ): AsyncRESTResponseList<ObjectEntity> {
+    async findAll(@Query() { limit, lastId }: FindObjectDto) {
         return this.objectsService.findAll({
             limit,
             lastId,
@@ -72,8 +66,8 @@ export class ObjectsController {
     }
 
     @Get(':id')
-    async findOne(@Param('id') id: string): AsyncRESTResponse<ObjectEntity> {
-        const element = await this.objectsService.findOneById(id);
+    async findOne(@Param('id') id: string) {
+        const element = await this.objectsService.getById(id);
         if (!element) {
             // https://docs.nestjs.com/exception-filters
             throw new HttpException('Not found', HttpStatus.NOT_FOUND);

@@ -3,6 +3,7 @@ import {
     ObjectKindEnum,
     ObjectMaterialEnum,
 } from './enums';
+import { ObjectPhotoEntity } from '../ObjectPhotoEntity';
 
 export class ObjectEntity {
     id: string;
@@ -18,4 +19,5 @@ export class ObjectEntity {
     locationLong: number;
     materials: ObjectMaterialEnum[];
     kind: ObjectKindEnum[];
+    photos: ObjectPhotoEntity[];
 }

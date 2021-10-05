@@ -1,5 +1,5 @@
 export class ObjectPhotoEntity {
-    objectId: string;
+    path: string;
     year?: number;
     period?: string;
 }

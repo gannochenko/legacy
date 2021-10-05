@@ -3,9 +3,8 @@ import { v4 } from 'uuid';
 import sharp from 'sharp';
 import { S3 } from 'aws-sdk';
 import { awsOptions } from '../../utils/awsOptions';
-import { ServiceResponseType } from '../../type';
-import { ObjectPhotoEntity } from '../../entities/ObjectPhotoEntity';
 import { ObjectsService } from '../ObjectsModule/ObjectsService';
+import { StoreObjectPhotoInputType, StoreObjectPhotoOutputType } from './type';
 
 const s3 = new S3(awsOptions);
 
@@ -17,10 +16,10 @@ export class ObjectPhotosService {
     constructor(private readonly objectsService: ObjectsService) {}
 
     async store(
-        data: ObjectPhotoEntity,
+        data: StoreObjectPhotoInputType,
         file: Express.Multer.File,
-    ): Promise<void> {
-        const { objectId } = data;
+    ): Promise<StoreObjectPhotoOutputType> {
+        const { objectId, period, year } = data;
 
         if (!BUCKET_URL) {
             throw new InternalServerErrorException();
@@ -45,28 +44,13 @@ export class ObjectPhotosService {
             throw new InternalServerErrorException(error);
         }
 
-        // and then update the database record
-        console.log(this.objectsService);
+        const result = await this.objectsService.addPhoto(objectId, {
+            period,
+            year,
+            path: fileKey,
+        });
 
-        // const dynamodbItem = {
-        //     ...item,
-        //     id,
-        //     slug,
-        // };
-        //
-        // try {
-        //     await dynamoDB
-        //         .put({
-        //             TableName: TABLE_NAME,
-        //             Item: dynamodbItem,
-        //             ReturnConsumedCapacity: 'TOTAL',
-        //         })
-        //         .promise();
-        // } catch (error) {
-        //     throw new InternalServerErrorException(error);
-        // }
-        //
-        // return { data: dynamodbItem, aux: {} };
+        return { data: {}, aux: {} };
     }
 
     private async prepareImage(file: Express.Multer.File) {

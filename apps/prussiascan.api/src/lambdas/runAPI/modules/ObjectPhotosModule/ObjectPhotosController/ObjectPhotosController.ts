@@ -7,9 +7,8 @@ import {
     BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CreateObjectPhotoDto } from './ObjectPhotosDTO';
+import { UploadObjectPhotoDto } from './ObjectPhotosDTO';
 import { Roles } from '../../../utils/Roles';
-import { AsyncRESTResponse } from '../../../type';
 import { ObjectPhotosService } from '../ObjectPhotosService';
 
 @Controller('object-photos')
@@ -19,10 +18,10 @@ export class ObjectPhotosController {
     @Post()
     @UseInterceptors(FileInterceptor('file'))
     // @Roles('admin')
-    async create(
-        @Body() data: CreateObjectPhotoDto,
+    async upload(
+        @Body() data: UploadObjectPhotoDto,
         @UploadedFile() file: Express.Multer.File,
-    ): AsyncRESTResponse<any> {
+    ) {
         if (!file) {
             throw new BadRequestException('File not sent');
         }

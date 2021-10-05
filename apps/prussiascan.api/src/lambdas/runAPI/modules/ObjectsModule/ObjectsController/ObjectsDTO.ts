@@ -45,9 +45,11 @@ export class CreateObjectDto {
     periodDemolished: string;
 
     @IsBoolean()
+    @IsOptional()
     demolished: boolean;
 
     @IsIn(Object.values(ObjectConditionEnum))
+    @IsOptional()
     condition: ObjectConditionEnum;
 
     @IsNumber()
@@ -59,9 +61,11 @@ export class CreateObjectDto {
     locationLong: number;
 
     @IsIn(Object.values(ObjectMaterialEnum), { each: true })
+    @IsOptional()
     materials: ObjectMaterialEnum[];
 
     @IsIn(Object.values(ObjectKindEnum), { each: true })
+    @IsOptional()
     kind: ObjectKindEnum[];
 }
 

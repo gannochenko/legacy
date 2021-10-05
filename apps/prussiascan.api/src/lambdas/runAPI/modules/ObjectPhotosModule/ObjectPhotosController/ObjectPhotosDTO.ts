@@ -2,7 +2,7 @@ import { IsString, IsOptional, IsUUID } from 'class-validator';
 
 // https://github.com/typestack/class-validator
 
-export class CreateObjectPhotoDto {
+export class UploadObjectPhotoDto {
     @IsUUID()
     objectId: string;
 
