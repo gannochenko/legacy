@@ -8,9 +8,9 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateObjectPhotoDto } from './ObjectPhotosDTO';
-import { Roles } from '../../utils/Roles';
-import { AsyncRESTResponse } from '../../type';
-import { ObjectPhotosService } from '../../services/ObjectPhotosService';
+import { Roles } from '../../../utils/Roles';
+import { AsyncRESTResponse } from '../../../type';
+import { ObjectPhotosService } from '../ObjectPhotosService';
 
 @Controller('object-photos')
 export class ObjectPhotosController {

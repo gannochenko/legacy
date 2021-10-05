@@ -12,15 +12,15 @@ import {
     HttpException,
     HttpStatus,
 } from '@nestjs/common';
-import { ObjectsService } from '../../services/ObjectsService';
+import { ObjectsService } from '../ObjectsService';
 import {
     CreateObjectDto,
     FindObjectDto,
     // UpdateObjectDto,
 } from './ObjectsDTO';
-import { Roles } from '../../utils/Roles';
-import { AsyncRESTResponse, AsyncRESTResponseList } from '../../type';
-import { ObjectEntity } from '../../entities/ObjectEntity';
+import { Roles } from '../../../utils/Roles';
+import { AsyncRESTResponse, AsyncRESTResponseList } from '../../../type';
+import { ObjectEntity } from '../../../entities/ObjectEntity';
 
 @Controller('objects')
 export class ObjectsController {

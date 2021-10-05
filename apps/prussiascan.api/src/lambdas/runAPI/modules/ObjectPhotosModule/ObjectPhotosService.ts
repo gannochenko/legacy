@@ -1,16 +1,11 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { v4 } from 'uuid';
-import latinize from 'latinize';
 import sharp from 'sharp';
 import { S3 } from 'aws-sdk';
-import { ObjectEntity } from '../entities/ObjectEntity';
-import {
-    CreateObjectDto,
-    // UpdateObjectDto,
-} from '../rest/ObjectsController/ObjectsDTO';
-import { awsOptions } from '../utils/awsOptions';
-import { ServiceResponseType } from '../type';
-import { ObjectPhotoEntity } from '../entities/ObjectPhotoEntity';
+import { awsOptions } from '../../utils/awsOptions';
+import { ServiceResponseType } from '../../type';
+import { ObjectPhotoEntity } from '../../entities/ObjectPhotoEntity';
+import { ObjectsService } from '../ObjectsModule/ObjectsService';
 
 const s3 = new S3(awsOptions);
 
@@ -19,6 +14,8 @@ const IMAGE_SIZE_CONSTRAINT = 1500;
 
 @Injectable()
 export class ObjectPhotosService {
+    constructor(private readonly objectsService: ObjectsService) {}
+
     async store(
         data: ObjectPhotoEntity,
         file: Express.Multer.File,
@@ -49,6 +46,7 @@ export class ObjectPhotosService {
         }
 
         // and then update the database record
+        console.log(this.objectsService);
 
         // const dynamodbItem = {
         //     ...item,

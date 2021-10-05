@@ -2,13 +2,13 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { v4 } from 'uuid';
 import latinize from 'latinize';
 import { DynamoDB } from 'aws-sdk';
-import { ObjectEntity } from '../entities/ObjectEntity';
+import { ObjectEntity } from '../../entities/ObjectEntity';
 import {
     CreateObjectDto,
     // UpdateObjectDto,
-} from '../rest/ObjectsController/ObjectsDTO';
-import { awsOptions } from '../utils/awsOptions';
-import { ServiceResponseType } from '../type';
+} from './ObjectsController/ObjectsDTO';
+import { awsOptions } from '../../utils/awsOptions';
+import { ServiceResponseType } from '../../type';
 
 const dynamoDB = new DynamoDB.DocumentClient(awsOptions);
 const TABLE_NAME = 'ObjectCollection';

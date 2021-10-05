@@ -12,7 +12,7 @@ import {
     ObjectConditionEnum,
     ObjectKindEnum,
     ObjectMaterialEnum,
-} from '../../entities/ObjectEntity/enums';
+} from '../../../entities/ObjectEntity/enums';
 
 // https://github.com/typestack/class-validator
 
