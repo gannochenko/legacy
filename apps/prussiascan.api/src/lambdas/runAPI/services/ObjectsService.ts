@@ -112,12 +112,4 @@ export class ObjectsService {
             throw new InternalServerErrorException(error);
         }
     }
-
-    // async isElementExists(id: IDType): Promise<boolean> {
-    //     const element = await this.usersRepository.findOne(id, {
-    //         select: ['id'],
-    //     });
-    //
-    //     return !!element;
-    // }
 }
