@@ -89,7 +89,6 @@ export class ObjectsService {
     // todo: get only the requested fields, don't use *
     async getById(id: string): Promise<GetObjectByIdOutputType> {
         const item = await this.getItem(id);
-        console.log(item);
         return {
             data: (item as ObjectFieldsType) ?? null,
             aux: {},
