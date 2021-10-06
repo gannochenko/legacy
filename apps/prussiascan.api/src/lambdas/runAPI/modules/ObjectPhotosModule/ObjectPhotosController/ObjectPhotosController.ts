@@ -10,6 +10,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadObjectPhotoDto } from './ObjectPhotosDTO';
 import { Roles } from '../../../utils/Roles';
 import { ObjectPhotosService } from '../ObjectPhotosService';
+import { UserRoleEnum } from '../../../entities/UserEntity/enums';
 
 @Controller('object-photos')
 export class ObjectPhotosController {
@@ -17,7 +18,7 @@ export class ObjectPhotosController {
 
     @Post()
     @UseInterceptors(FileInterceptor('file'))
-    // @Roles('admin')
+    @Roles(UserRoleEnum.contributor)
     async upload(
         @Body() data: UploadObjectPhotoDto,
         @UploadedFile() file: Express.Multer.File,

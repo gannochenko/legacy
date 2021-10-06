@@ -3,12 +3,12 @@ import {
     Post,
     Get,
     // Header,
-    Patch,
+    // Patch,
     Param,
     // HttpCode,
     Body,
     Query,
-    Delete,
+    // Delete,
     HttpException,
     HttpStatus,
 } from '@nestjs/common';
@@ -19,6 +19,7 @@ import {
     // UpdateObjectDto,
 } from './ObjectsDTO';
 import { Roles } from '../../../utils/Roles';
+import { UserRoleEnum } from '../../../entities/UserEntity/enums';
 
 @Controller('objects')
 export class ObjectsController {
@@ -27,7 +28,7 @@ export class ObjectsController {
     @Post()
     // @Header('Cache-Control', 'none')
     // @HttpCode(204)
-    // @Roles('admin')
+    @Roles(UserRoleEnum.contributor)
     async create(@Body() data: CreateObjectDto) {
         return this.objectsService.create(data);
     }
