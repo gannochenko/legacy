@@ -67,12 +67,12 @@ export class ObjectsController {
 
     @Get(':id')
     async findOne(@Param('id') id: string) {
-        const element = await this.objectsService.getById(id);
-        if (!element) {
+        const result = await this.objectsService.getById(id);
+        if (!result.data) {
             // https://docs.nestjs.com/exception-filters
             throw new HttpException('Not found', HttpStatus.NOT_FOUND);
         }
 
-        return element;
+        return result;
     }
 }

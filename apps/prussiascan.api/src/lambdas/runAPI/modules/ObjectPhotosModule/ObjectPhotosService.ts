@@ -6,9 +6,9 @@ import { awsOptions } from '../../utils/awsOptions';
 import { ObjectsService } from '../ObjectsModule/ObjectsService';
 import { StoreObjectPhotoInputType, StoreObjectPhotoOutputType } from './type';
 
-const s3 = new S3(awsOptions);
+const s3 = new S3({ ...awsOptions, s3ForcePathStyle: true });
 
-const BUCKET_URL = process.env.AWS_OBJECT_PHOTOS_BUCKET_URL;
+const BUCKET_NAME = process.env.AWS_OBJECT_PHOTOS_BUCKET_NAME;
 const IMAGE_SIZE_CONSTRAINT = 1500;
 
 @Injectable()
@@ -21,33 +21,40 @@ export class ObjectPhotosService {
     ): Promise<StoreObjectPhotoOutputType> {
         const { objectId, period, year } = data;
 
-        if (!BUCKET_URL) {
+        if (!BUCKET_NAME) {
             throw new InternalServerErrorException();
         }
+
+        // todo: check if element exists
+
+        // const list = await s3
+        //     .listObjects({ Bucket: BUCKET_NAME })
+        //     .promise();
+        // console.log(list);
 
         const fileContent = await this.prepareImage(file);
         const fileId = v4();
 
         const safeObjectId = objectId.replace(/([^a-f0-9-])+/g, '');
-        const fileKey = `${safeObjectId}/${fileId}.jpg`;
+        const entryKey = `${safeObjectId}/${fileId}.jpg`;
 
         const params = {
-            Bucket: BUCKET_URL,
-            Key: fileKey,
+            Bucket: BUCKET_NAME,
+            Key: entryKey,
             ACL: 'public-read',
             Body: fileContent,
         };
 
         try {
-            await s3.upload(params);
+            await s3.upload(params).promise();
         } catch (error) {
             throw new InternalServerErrorException(error);
         }
 
-        const result = await this.objectsService.addPhoto(objectId, {
+        await this.objectsService.addPhoto(objectId, {
             period,
             year,
-            path: fileKey,
+            path: entryKey,
         });
 
         return { data: {}, aux: {} };

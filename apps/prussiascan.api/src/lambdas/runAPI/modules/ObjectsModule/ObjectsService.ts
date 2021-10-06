@@ -36,7 +36,7 @@ export class ObjectsService {
             ...item, // todo: specify explicitly here!
             id,
             slug,
-            photos: '',
+            photos: [],
         };
 
         try {
@@ -103,18 +103,9 @@ export class ObjectsService {
 
         const { photos } = item;
 
-        let photoStructure: ObjectPhotoEntity[] = [];
-        if (photos) {
-            try {
-                photoStructure = JSON.parse(photos) as ObjectPhotoEntity[];
-            } catch (error) {
-                photoStructure = [];
-            }
-        }
-
         const { path, year, period } = input;
-        const newPhotosStructure = [
-            ...photoStructure,
+        const newPhotos = [
+            ...(photos ?? {}),
             {
                 path,
                 year,
@@ -123,25 +114,17 @@ export class ObjectsService {
         ];
 
         try {
-            const result = await dynamoDB
+            await dynamoDB
                 .update({
                     TableName: TABLE_NAME,
                     Key: { id },
-                    // AttributeUpdates: {
-                    //     photos: {
-                    //         Action: 'ADD',
-                    //         Value: JSON.stringify(newPhotosStructure),
-                    //     },
-                    // },
                     UpdateExpression: 'set photos = :x',
                     ExpressionAttributeValues: {
-                        ':x': JSON.stringify(newPhotosStructure),
+                        ':x': newPhotos,
                     },
                     ReturnValues: 'UPDATED_NEW',
                 })
                 .promise();
-
-            console.log(result);
         } catch (error) {
             throw new InternalServerErrorException(error);
         }

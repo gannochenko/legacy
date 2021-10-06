@@ -6,14 +6,14 @@
 
 # aws configure --profile legacy
 
-ENDPOINT="--endpoint-url http://localhost:4566 --profile legacy"
+export AWS_PAGER=""
+AWS="aws --endpoint-url http://localhost:4566 --profile legacy"
 
 ################################################################################################
-## DynamoDB Tables
+## DynamoDB
 ################################################################################################
 
-aws dynamodb ${ENDPOINT} list-tables
-aws dynamodb ${ENDPOINT} \
+${AWS} dynamodb \
     create-table \
     --table-name ObjectCollection \
     --attribute-definitions \
@@ -22,8 +22,13 @@ aws dynamodb ${ENDPOINT} \
         AttributeName=id,KeyType=HASH \
     --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
 
-aws s3api ${ENDPOINT} \
-    create-bucket \
-    --bucket=prussiascans-object-photos \
-    --region=eu-central-1 \
-    --create-bucket-configuration LocationConstraint=eu-central-1
+${AWS} dynamodb list-tables
+
+################################################################################################
+## S3
+################################################################################################
+
+${AWS} s3 mb s3://prussiascans-object-photos
+${AWS} s3api put-bucket-acl --bucket prussiascans-object-photos --acl public-read
+
+${AWS} s3api list-buckets --query "Buckets[].Name"

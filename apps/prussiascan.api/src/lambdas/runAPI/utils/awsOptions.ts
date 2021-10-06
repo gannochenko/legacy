@@ -1,7 +1,7 @@
 export const awsOptions = true
     ? {
           endpoint: 'http://localhost:4566',
-          region: 'us-east-1',
+          region: 'eu-central-1',
           accessKeyId: 'local',
           secretAccessKey: 'local',
       }
