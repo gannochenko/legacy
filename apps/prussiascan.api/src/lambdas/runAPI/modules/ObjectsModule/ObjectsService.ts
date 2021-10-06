@@ -13,7 +13,11 @@ import {
     ObjectFieldsType,
     GetObjectByIdOutputType,
 } from './type';
+import { ObjectEntity } from '../../entities/ObjectEntity';
+import { ObjectPhotoEntity } from '../../entities/ObjectPhotoEntity';
 
+// https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html
+// https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html
 const dynamoDB = new DynamoDB.DocumentClient(awsOptions);
 const TABLE_NAME = 'ObjectCollection';
 
@@ -29,9 +33,10 @@ export class ObjectsService {
             .replace(/[^a-zA-Z0-9-]/g, '');
 
         const dynamodbItem = {
-            ...item,
+            ...item, // todo: specify explicitly here!
             id,
             slug,
+            photos: '',
         };
 
         try {
@@ -79,6 +84,75 @@ export class ObjectsService {
 
     // todo: get only the requested fields, don't use *
     async getById(id: string): Promise<GetObjectByIdOutputType> {
+        const item = await this.getItem(id);
+        console.log(item);
+        return {
+            data: (item as ObjectFieldsType) ?? null,
+            aux: {},
+        };
+    }
+
+    async addPhoto(
+        id: string,
+        input: AddObjectPhotoInputType,
+    ): Promise<ServiceResponseType<null>> {
+        const item = await this.getItem(id, ['id', 'photos']);
+        if (!item) {
+            throw new InternalServerErrorException('Item not found');
+        }
+
+        const { photos } = item;
+
+        let photoStructure: ObjectPhotoEntity[] = [];
+        if (photos) {
+            try {
+                photoStructure = JSON.parse(photos) as ObjectPhotoEntity[];
+            } catch (error) {
+                photoStructure = [];
+            }
+        }
+
+        const { path, year, period } = input;
+        const newPhotosStructure = [
+            ...photoStructure,
+            {
+                path,
+                year,
+                period,
+            },
+        ];
+
+        try {
+            const result = await dynamoDB
+                .update({
+                    TableName: TABLE_NAME,
+                    Key: { id },
+                    // AttributeUpdates: {
+                    //     photos: {
+                    //         Action: 'ADD',
+                    //         Value: JSON.stringify(newPhotosStructure),
+                    //     },
+                    // },
+                    UpdateExpression: 'set photos = :x',
+                    ExpressionAttributeValues: {
+                        ':x': JSON.stringify(newPhotosStructure),
+                    },
+                    ReturnValues: 'UPDATED_NEW',
+                })
+                .promise();
+
+            console.log(result);
+        } catch (error) {
+            throw new InternalServerErrorException(error);
+        }
+
+        return {
+            data: null,
+            aux: {},
+        };
+    }
+
+    private async getItem(id: string, fields?: string[]) {
         try {
             const result = await dynamoDB
                 .get({
@@ -86,25 +160,13 @@ export class ObjectsService {
                     Key: {
                         id,
                     },
+                    ...(fields ? { AttributesToGet: fields } : {}),
                 })
                 .promise();
 
-            return {
-                data: (result?.Item as ObjectFieldsType) ?? null,
-                aux: {},
-            };
+            return (result?.Item as ObjectEntity) ?? null;
         } catch (error) {
             throw new InternalServerErrorException(error);
         }
-    }
-
-    async addPhoto(
-        id: string,
-        input: AddObjectPhotoInputType,
-    ): Promise<ServiceResponseType<null>> {
-        return {
-            data: null,
-            aux: {},
-        };
     }
 }

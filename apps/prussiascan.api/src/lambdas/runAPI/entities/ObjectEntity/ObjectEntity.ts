@@ -3,12 +3,12 @@ import {
     ObjectKindEnum,
     ObjectMaterialEnum,
 } from './enums';
-import { ObjectPhotoEntity } from '../ObjectPhotoEntity';
 
 export class ObjectEntity {
     id: string;
     slug: string;
     name: string;
+    content: string;
     yearBuilt: number;
     periodBuilt: string;
     yearDemolished: number;
@@ -19,5 +19,5 @@ export class ObjectEntity {
     locationLong: number;
     materials: ObjectMaterialEnum[];
     kind: ObjectKindEnum[];
-    photos: ObjectPhotoEntity[];
+    photos: string;
 }
