@@ -25,6 +25,11 @@ type CommonFieldsType = {
     kind?: ObjectKindEnum[];
 };
 
+type DateFieldsType = {
+    createdAt: string;
+    updatedAt?: string | null;
+};
+
 ////////
 
 export type ObjectFieldsType = IdFieldsType & CommonFieldsType;
@@ -32,7 +37,7 @@ export type ObjectFieldsType = IdFieldsType & CommonFieldsType;
 export type CreateObjectInputType = CommonFieldsType;
 
 export type CreateObjectOutputType = ServiceResponseType<
-    IdFieldsType & CommonFieldsType
+    IdFieldsType & CommonFieldsType & DateFieldsType
 >;
 
 export type FindAllObjectsInputType = {
