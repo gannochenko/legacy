@@ -21,4 +21,6 @@ export class ObjectEntity {
     materials: ObjectMaterialEnum[];
     kind: ObjectKindEnum[];
     photos: ObjectPhotoEntity[];
+    createdAt: string;
+    updatedAt: string | null;
 }

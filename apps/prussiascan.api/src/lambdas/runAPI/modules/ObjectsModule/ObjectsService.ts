@@ -24,7 +24,20 @@ const TABLE_NAME = 'ObjectCollection';
 @Injectable()
 export class ObjectsService {
     async create(item: CreateObjectInputType): Promise<CreateObjectOutputType> {
-        const { name } = item;
+        const {
+            name,
+            content,
+            yearBuilt,
+            periodBuilt,
+            yearDemolished,
+            periodDemolished,
+            demolished,
+            condition,
+            locationLat,
+            locationLong,
+            kind,
+            materials,
+        } = item;
 
         const id = v4();
         const slug = latinize(name)
@@ -33,10 +46,22 @@ export class ObjectsService {
             .replace(/[^a-zA-Z0-9-]/g, '');
 
         const dynamodbItem = {
-            ...item, // todo: specify explicitly here!
             id,
             slug,
+            name,
+            content,
+            yearBuilt,
+            periodBuilt,
+            yearDemolished,
+            periodDemolished,
+            demolished,
+            condition,
+            locationLat,
+            locationLong,
+            kind,
+            materials,
             photos: [],
+            createdAt: new Date().toISOString(),
         };
 
         try {

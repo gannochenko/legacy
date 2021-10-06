@@ -59,6 +59,7 @@ export class ObjectsController {
     // }
 
     @Get()
+    @Roles(UserRoleEnum.contributor, UserRoleEnum.cicd)
     async findAll(@Query() { limit, lastId }: FindObjectDto) {
         return this.objectsService.findAll({
             limit,
@@ -67,6 +68,7 @@ export class ObjectsController {
     }
 
     @Get(':id')
+    @Roles(UserRoleEnum.contributor, UserRoleEnum.cicd)
     async findOne(@Param('id') id: string) {
         const result = await this.objectsService.getById(id);
         if (!result.data) {
