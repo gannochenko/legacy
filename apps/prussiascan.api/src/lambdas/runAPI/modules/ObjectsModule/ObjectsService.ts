@@ -12,9 +12,9 @@ import {
     FindAllObjectsOutputType,
     ObjectFieldsType,
     GetObjectByIdOutputType,
+    AddObjectPhotoOutputType,
 } from './type';
 import { ObjectEntity } from '../../entities/ObjectEntity';
-import { ObjectPhotoEntity } from '../../entities/ObjectPhotoEntity';
 
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html
@@ -48,7 +48,10 @@ export class ObjectsService {
                 })
                 .promise();
         } catch (error) {
-            throw new InternalServerErrorException(error);
+            console.error(error);
+            throw new InternalServerErrorException(
+                'Could not create an object',
+            );
         }
 
         return { data: dynamodbItem, aux: {} };
@@ -78,7 +81,8 @@ export class ObjectsService {
                 },
             };
         } catch (error) {
-            throw new InternalServerErrorException(error);
+            console.error(error);
+            throw new InternalServerErrorException('Could not query objects');
         }
     }
 
@@ -95,7 +99,7 @@ export class ObjectsService {
     async addPhoto(
         id: string,
         input: AddObjectPhotoInputType,
-    ): Promise<ServiceResponseType<null>> {
+    ): Promise<AddObjectPhotoOutputType> {
         const item = await this.getItem(id, ['id', 'photos']);
         if (!item) {
             throw new InternalServerErrorException('Item not found');
@@ -126,13 +130,20 @@ export class ObjectsService {
                 })
                 .promise();
         } catch (error) {
-            throw new InternalServerErrorException(error);
+            console.error(error);
+            throw new InternalServerErrorException('Could not add photo');
         }
 
         return {
             data: null,
             aux: {},
         };
+    }
+
+    async isExists(id: string): Promise<boolean> {
+        const item = await this.getItem(id, ['id']);
+
+        return !!item;
     }
 
     private async getItem(id: string, fields?: string[]) {
@@ -149,7 +160,8 @@ export class ObjectsService {
 
             return (result?.Item as ObjectEntity) ?? null;
         } catch (error) {
-            throw new InternalServerErrorException(error);
+            console.error(error);
+            throw new InternalServerErrorException('Could not get an element');
         }
     }
 }

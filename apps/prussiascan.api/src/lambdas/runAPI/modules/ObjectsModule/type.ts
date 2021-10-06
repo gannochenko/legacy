@@ -53,3 +53,5 @@ export type AddObjectPhotoInputType = {
     year?: number;
     period?: string;
 };
+
+export type AddObjectPhotoOutputType = ServiceResponseType<null>;

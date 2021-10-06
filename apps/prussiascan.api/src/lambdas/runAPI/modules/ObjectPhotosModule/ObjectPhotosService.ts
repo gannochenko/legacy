@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+    Injectable,
+    InternalServerErrorException,
+    NotFoundException,
+} from '@nestjs/common';
 import { v4 } from 'uuid';
 import sharp from 'sharp';
 import { S3 } from 'aws-sdk';
@@ -26,6 +30,9 @@ export class ObjectPhotosService {
         }
 
         // todo: check if element exists
+        if (!(await this.objectsService.isExists(objectId))) {
+            throw new NotFoundException('Object not found');
+        }
 
         // const list = await s3
         //     .listObjects({ Bucket: BUCKET_NAME })
@@ -48,7 +55,8 @@ export class ObjectPhotosService {
         try {
             await s3.upload(params).promise();
         } catch (error) {
-            throw new InternalServerErrorException(error);
+            console.error(error);
+            throw new InternalServerErrorException('Could not upload');
         }
 
         await this.objectsService.addPhoto(objectId, {
