@@ -3,7 +3,6 @@ import { v4 } from 'uuid';
 import latinize from 'latinize';
 import { DynamoDB } from 'aws-sdk';
 import { awsOptions } from '../../utils/awsOptions';
-import { ServiceResponseType } from '../../type';
 import {
     CreateObjectInputType,
     CreateObjectOutputType,
@@ -27,10 +26,10 @@ export class ObjectsService {
         const {
             name,
             content,
-            yearBuilt,
-            periodBuilt,
-            yearDemolished,
-            periodDemolished,
+            yearBuiltStart,
+            yearBuiltEnd,
+            yearDemolishedStart,
+            yearDemolishedEnd,
             demolished,
             condition,
             locationLat,
@@ -50,10 +49,10 @@ export class ObjectsService {
             slug,
             name,
             content,
-            yearBuilt,
-            periodBuilt,
-            yearDemolished,
-            periodDemolished,
+            yearBuiltStart,
+            yearBuiltEnd,
+            yearDemolishedStart,
+            yearDemolishedEnd,
             demolished,
             condition,
             locationLat,
@@ -131,13 +130,25 @@ export class ObjectsService {
 
         const { photos } = item;
 
-        const { path, year, period } = input;
+        const {
+            path,
+            author,
+            capturedAt,
+            capturedYearEnd,
+            capturedYearStart,
+            source,
+        } = input;
+
         const newPhotos = [
             ...(photos ?? {}),
             {
                 path,
-                year,
-                period,
+                author,
+                source,
+                capturedAt,
+                capturedYearEnd,
+                capturedYearStart,
+                uploadedAt: new Date().toISOString(),
             },
         ];
 

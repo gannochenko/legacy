@@ -1,5 +1,9 @@
 export class ObjectPhotoEntity {
     path: string;
-    year?: number;
-    period?: string;
+    author?: string;
+    source?: string;
+    uploadedAt: string;
+    capturedAt?: string;
+    capturedYearStart?: number;
+    capturedYearEnd?: number;
 }

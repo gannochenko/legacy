@@ -23,7 +23,14 @@ export class ObjectPhotosService {
         data: StoreObjectPhotoInputType,
         file: Express.Multer.File,
     ): Promise<StoreObjectPhotoOutputType> {
-        const { objectId, period, year } = data;
+        const {
+            objectId,
+            author,
+            source,
+            capturedAt,
+            capturedYearStart,
+            capturedYearEnd,
+        } = data;
 
         if (!BUCKET_NAME) {
             throw new InternalServerErrorException();
@@ -60,8 +67,11 @@ export class ObjectPhotosService {
         }
 
         await this.objectsService.addPhoto(objectId, {
-            period,
-            year,
+            author,
+            source,
+            capturedAt,
+            capturedYearStart,
+            capturedYearEnd,
             path: entryKey,
         });
 

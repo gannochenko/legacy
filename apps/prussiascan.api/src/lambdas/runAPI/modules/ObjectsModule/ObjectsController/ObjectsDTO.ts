@@ -29,20 +29,22 @@ export class CreateObjectDto {
     @IsNumber()
     @IsOptional()
     @Min(0)
-    yearBuilt: number;
-
-    @IsString()
-    @IsOptional()
-    periodBuilt: string;
+    yearBuiltStart: number;
 
     @IsNumber()
     @IsOptional()
     @Min(0)
-    yearDemolished: number;
+    yearBuiltEnd: number;
 
-    @IsString()
+    @IsNumber()
     @IsOptional()
-    periodDemolished: string;
+    @Min(0)
+    yearDemolishedStart: number;
+
+    @IsNumber()
+    @IsOptional()
+    @Min(0)
+    yearDemolishedEnd: number;
 
     @IsBoolean()
     @IsOptional()

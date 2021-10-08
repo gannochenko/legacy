@@ -2,8 +2,11 @@ import { ServiceResponseType } from '../../type';
 
 export type StoreObjectPhotoInputType = {
     objectId: string;
-    year?: number;
-    period?: string;
+    author?: string;
+    source?: string;
+    capturedAt?: string;
+    capturedYearStart?: number;
+    capturedYearEnd?: number;
 };
 
 export type StoreObjectPhotoOutputType = ServiceResponseType<

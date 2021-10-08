@@ -13,4 +13,24 @@ export class UploadObjectPhotoDto {
     @IsString()
     @IsOptional()
     period: string;
+
+    @IsOptional()
+    @IsString()
+    author: string;
+
+    @IsOptional()
+    @IsString()
+    source: string;
+
+    @IsOptional()
+    @IsString()
+    capturedAt: string;
+
+    @IsOptional()
+    @IsString()
+    capturedYearStart: number;
+
+    @IsOptional()
+    @IsString()
+    capturedYearEnd: number;
 }

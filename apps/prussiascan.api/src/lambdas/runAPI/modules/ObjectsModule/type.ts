@@ -13,10 +13,10 @@ type IdFieldsType = {
 type CommonFieldsType = {
     name: string;
     content: string;
-    yearBuilt?: number;
-    periodBuilt?: string;
-    yearDemolished?: number;
-    periodDemolished?: string;
+    yearBuiltStart?: number;
+    yearBuiltEnd?: number;
+    yearDemolishedStart?: number;
+    yearDemolishedEnd?: number;
     demolished?: boolean;
     condition?: ObjectConditionEnum;
     locationLat: number;
@@ -55,8 +55,11 @@ export type GetObjectByIdOutputType =
 
 export type AddObjectPhotoInputType = {
     path: string;
-    year?: number;
-    period?: string;
+    author?: string;
+    source?: string;
+    capturedAt?: string;
+    capturedYearStart?: number;
+    capturedYearEnd?: number;
 };
 
 export type AddObjectPhotoOutputType = ServiceResponseType<null>;

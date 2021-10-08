@@ -15,7 +15,7 @@ AWS="aws --endpoint-url http://localhost:4566 --profile legacy"
 
 ${AWS} dynamodb \
     create-table \
-    --table-name ObjectCollection \
+    --table-name `ObjectCollection` \
     --attribute-definitions \
         AttributeName=id,AttributeType=S \
     --key-schema \

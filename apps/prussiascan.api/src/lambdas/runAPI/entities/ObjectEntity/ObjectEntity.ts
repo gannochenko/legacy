@@ -10,10 +10,10 @@ export class ObjectEntity {
     slug: string;
     name: string;
     content: string;
-    yearBuilt: number;
-    periodBuilt: string;
-    yearDemolished: number;
-    periodDemolished: string;
+    yearBuiltStart: number;
+    yearBuiltEnd: number;
+    yearDemolishedStart: number;
+    yearDemolishedEnd: number;
     demolished: boolean;
     condition: ObjectConditionEnum;
     locationLat: number;
@@ -22,5 +22,5 @@ export class ObjectEntity {
     kind: ObjectKindEnum[];
     photos: ObjectPhotoEntity[];
     createdAt: string;
-    updatedAt: string | null;
+    updatedAt?: string;
 }
