@@ -17,7 +17,10 @@ import { ObjectEntity } from '../../entities/ObjectEntity';
 
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html
-const dynamoDB = new DynamoDB.DocumentClient(awsOptions);
+const dynamoDB = new DynamoDB.DocumentClient({
+    ...awsOptions,
+    apiVersion: '2012-08-10',
+});
 const TABLE_NAME = process.env.AWS_OBJECT_TABLE_NAME ?? '';
 
 @Injectable()
