@@ -1,0 +1,31 @@
+name: CD.prussiascan-api.sendMessage
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'apps/prussiascan.api/src/lambdas/sendMessage**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: aws-actions/configure-aws-awsOptions@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+
+      - name: Install node_modules
+        run: yarn
+        working-directory: ./apps/prussiascan.api/
+
+      - name: Build and Deploy
+        run: ./script/deploy.sh sendMessage
+        working-directory: ./apps/prussiascan.api/
+        env:
+          SENDIN_BLUE_API_KEY: ${{ secrets.SENDIN_BLUE_API_KEY }}

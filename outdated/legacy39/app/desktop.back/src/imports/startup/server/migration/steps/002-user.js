@@ -71,7 +71,7 @@ export default new (class extends Migration {
 			}
 		}
 
-		// add google demo credentials
+		// add google demo awsOptions
 		ServiceConfiguration.configurations.upsert(
 			{ service: "google" },
 			{ $set: { clientId: "client-id-here", secret: "secret-here" } }
