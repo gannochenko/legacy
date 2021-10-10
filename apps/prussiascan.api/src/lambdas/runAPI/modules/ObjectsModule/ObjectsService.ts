@@ -18,7 +18,7 @@ import { ObjectEntity } from '../../entities/ObjectEntity';
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html
 const dynamoDB = new DynamoDB.DocumentClient(awsOptions);
-const TABLE_NAME = 'ObjectCollection';
+const TABLE_NAME = process.env.AWS_OBJECT_TABLE_NAME ?? '';
 
 @Injectable()
 export class ObjectsService {
