@@ -1,0 +1,87 @@
+// due to some strange problems, we need to link the following files manually :/
+@import (reference) "palette.import.less";
+@import (reference) "{}/node_modules/rem-bem/less/index.less";
+@import (reference) "missing.import.less";
+
+// tmp
+@color-text-dark: @rb-color-darkness;
+
+@color-a: @rb-color_thousand-herb;
+@color-a_hover: darken(@rb-color_thousand-herb, 10%);
+
+@rb-size_desktop-min: 992px;
+@rb-size_tablet-max: 991px;
+@rb-size_tablet-min: 768px;
+@rb-size_mobile-max: 767px;
+@rb-size_mobile-pre-small: 639px;
+@rb-size_mobile-xsmall: 400px;
+
+html {
+	font-size: 16px; // do not touch this
+}
+
+body {
+	._rb-no-padding() !important;
+	._rb-no-margin() !important;
+	._rb-f-weight();
+	._rb-f-size_x();
+	._rb-f-color();
+	font-family: 'Open Sans', 'Arial', sans-serif;
+}
+
+html, body, #react-root, .application {
+	height: 100%;
+}
+
+* {
+	._rb-box-sizing(border-box);
+}
+*:before,
+*:after {
+	._rb-box-sizing(border-box);
+}
+
+input,
+button,
+select,
+textarea {
+	font-family: inherit;
+	font-size: inherit;
+	line-height: inherit;
+	._rb-no-outline();
+}
+
+textarea {
+	resize: vertical;
+}
+
+a {
+	._rb-f-color(@color-a, @color-a_hover, 300ms);
+	._rb-no-outline();
+	._rb-underline_over();
+}
+
+[contenteditable]:focus {
+	outline: 0 solid transparent;
+}
+
+.application {
+	._rb-relative();
+	min-width: 320px;
+}
+
+.application,
+.application__layout,
+#react-root {
+	._rb-tall();
+}
+
+.page__content {
+	ul, ol {
+		._rb-group_x(0.5);
+	}
+
+	h2 {
+		._rb-margin-b_x(1);
+	}
+}
