@@ -10,7 +10,11 @@ import { awsOptions } from '../../utils/awsOptions';
 import { ObjectsService } from '../ObjectsModule/ObjectsService';
 import { StoreObjectPhotoInputType, StoreObjectPhotoOutputType } from './type';
 
-const s3 = new S3({ ...awsOptions, s3ForcePathStyle: true });
+const s3 = new S3({
+    ...awsOptions,
+    s3ForcePathStyle: true,
+    apiVersion: 'latest',
+});
 
 const BUCKET_NAME = process.env.AWS_OBJECT_PHOTOS_BUCKET_NAME;
 const IMAGE_SIZE_CONSTRAINT = 1500;

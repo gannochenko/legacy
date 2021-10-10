@@ -9,4 +9,5 @@ module.exports.allowedEnvVariables = [
     'AWS_OBJECT_PHOTOS_BUCKET_NAME',
     'CONTRIBUTOR_API_KEY',
     'CICD_API_KEY',
+    'AWS_REGION',
 ];
