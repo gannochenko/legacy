@@ -4,7 +4,6 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { v4 } from 'uuid';
-import sharp from 'sharp';
 import { S3 } from 'aws-sdk';
 import { awsOptions } from '../../utils/awsOptions';
 import { ObjectsService } from '../ObjectsModule/ObjectsService';
@@ -84,6 +83,9 @@ export class ObjectPhotosService {
 
     private async prepareImage(file: Express.Multer.File) {
         const { buffer } = file;
+
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const sharp = require(__DEV__ ? 'sharp' : '/opt/node_modules/sharp');
 
         let sharpFile = sharp(buffer);
         const { width, height } = await sharpFile.metadata();
