@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-S3_BUCKET=gannochenko---users-sergei-proj-prussiascan.api-lambda-src
+S3_BUCKET=gannochenko--legacy--prussiascan.api--lambda-src
 FN_NAME=${1}
-FN_NAME_GLOBAL=--users-sergei-proj_"${FN_NAME}"
+FN_NAME_GLOBAL=prussiascan-api_"${FN_NAME}"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ZIP=latest.zip
 S3_KEY="${FN_NAME}"/"${ZIP}"

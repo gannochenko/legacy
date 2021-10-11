@@ -87,6 +87,8 @@ export class ObjectPhotosService {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         const sharp = require('sharp');
 
+        console.log('Cool!');
+
         let sharpFile = sharp(buffer);
         const { width, height } = await sharpFile.metadata();
 
