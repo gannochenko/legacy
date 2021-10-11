@@ -49,8 +49,8 @@ module.exports = {
         new Dotenv({
             systemvars: false,
         }),
+        new DefinePlugin(getEnv()),
         new DefinePlugin({
-            ...getEnv(),
             __DEV__: true,
         }),
     ],
