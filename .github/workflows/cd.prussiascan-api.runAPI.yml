@@ -1,4 +1,4 @@
-name: CD.prussiascan-api.sendMessage
+name: CD.prussiascan-api.runAPI
 
 on:
   push:
