@@ -16,7 +16,7 @@ import { UserRoleEnum } from '../../../entities/UserEntity/enums';
 export class ObjectPhotosController {
     constructor(private readonly objectPhotosService: ObjectPhotosService) {}
 
-    @Post()
+    @Post('upload')
     @UseInterceptors(FileInterceptor('file'))
     @Roles(UserRoleEnum.contributor)
     async upload(

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export AWS_PAGER=""
+
 S3_BUCKET=gannochenko--legacy--prussiascan.api--lambda-src
 FN_NAME=${1}
 FN_NAME_GLOBAL=prussiascan-api_"${FN_NAME}"

@@ -1,14 +1,9 @@
 import {
     Controller,
     Post,
-    Get,
-    // Header,
-    // Patch,
     Param,
-    // HttpCode,
     Body,
     Query,
-    // Delete,
     HttpException,
     HttpStatus,
 } from '@nestjs/common';
@@ -25,40 +20,13 @@ import { UserRoleEnum } from '../../../entities/UserEntity/enums';
 export class ObjectsController {
     constructor(private readonly objectsService: ObjectsService) {}
 
-    @Post()
-    // @Header('Cache-Control', 'none')
-    // @HttpCode(204)
+    @Post('create')
     @Roles(UserRoleEnum.contributor)
     async create(@Body() data: CreateObjectDto) {
         return this.objectsService.create(data);
     }
 
-    // @Patch(':id')
-    // @Roles('admin')
-    // async update(
-    //     @Param('id') id: IDType,
-    //     @Body() data: UpdateObjectDto,
-    // ): AsyncRESTResponse<AuthorEntity> {
-    //     if (!(await this.authorsService.isElementExists(id))) {
-    //         // https://docs.nestjs.com/exception-filters
-    //         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
-    //     }
-    //
-    //     return createResponse(await this.authorsService.update(id, data));
-    // }
-
-    // @Delete(':id')
-    // @Roles('admin')
-    // async delete(@Param('id') id: IDType): AsyncRESTResponse<AuthorEntity> {
-    //     if (!(await this.authorsService.isElementExists(id))) {
-    //         // https://docs.nestjs.com/exception-filters
-    //         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
-    //     }
-    //
-    //     return createResponse(await this.authorsService.delete(id));
-    // }
-
-    @Get()
+    @Post('findall')
     @Roles(UserRoleEnum.contributor, UserRoleEnum.cicd)
     async findAll(@Query() { limit, lastId }: FindObjectDto) {
         return this.objectsService.findAll({
@@ -67,7 +35,7 @@ export class ObjectsController {
         });
     }
 
-    @Get(':id')
+    @Post('find/:id')
     @Roles(UserRoleEnum.contributor, UserRoleEnum.cicd)
     async findOne(@Param('id') id: string) {
         const result = await this.objectsService.getById(id);

@@ -24,7 +24,7 @@ export const bootstrapServer = async (): Promise<Server> => {
             ApplicationModule,
             new ExpressAdapter(expressApp),
         );
-        app.setGlobalPrefix('api');
+        app.setGlobalPrefix('data');
 
         if (!__DEV__) {
             app.use(helmet());

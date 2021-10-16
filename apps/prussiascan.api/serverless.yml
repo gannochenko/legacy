@@ -29,7 +29,7 @@ functions:
         # in order to do so, we create a REST endpoint
         events:
             - http:
-                  path: /api/{any+}
+                  path: /data/{any+}
                   method: any
 
 custom:

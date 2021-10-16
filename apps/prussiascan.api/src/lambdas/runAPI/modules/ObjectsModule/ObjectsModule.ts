@@ -1,4 +1,4 @@
-import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ObjectsController } from './ObjectsController';
 import { ObjectsService } from './ObjectsService';
 
