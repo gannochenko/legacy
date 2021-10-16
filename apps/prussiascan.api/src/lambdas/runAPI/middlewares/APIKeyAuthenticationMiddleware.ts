@@ -10,6 +10,7 @@ export class APIKeyAuthenticationMiddleware implements NestMiddleware {
         if (key === process.env.CONTRIBUTOR_API_KEY) {
             roles = [UserRoleEnum.contributor];
         }
+
         if (key === process.env.CICD_API_KEY) {
             roles = [UserRoleEnum.cicd];
         }
