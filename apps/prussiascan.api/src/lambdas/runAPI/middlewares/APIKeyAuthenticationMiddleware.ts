@@ -1,8 +1,13 @@
 import { NestMiddleware } from '@nestjs/common';
+import { Request, Response, NextFunction } from 'express';
 import { UserRoleEnum } from '../entities/UserEntity/enums';
 
 export class APIKeyAuthenticationMiddleware implements NestMiddleware {
-    use(req: any, res: any, next: () => void) {
+    use(
+        req: Request & { user?: { roles: string[] } },
+        res: Response,
+        next: NextFunction,
+    ) {
         const key = req.headers['x-api-key'] || '';
 
         let roles: string[] = [];

@@ -24,7 +24,7 @@ export class ObjectPhotosService {
 
     async store(
         data: StoreObjectPhotoInputType,
-        file: Express.Multer.File,
+        file: Buffer,
     ): Promise<StoreObjectPhotoOutputType> {
         const {
             objectId,
@@ -36,21 +36,18 @@ export class ObjectPhotosService {
         } = data;
 
         if (!BUCKET_NAME) {
-            throw new InternalServerErrorException();
+            throw new InternalServerErrorException('No bucket name specified');
         }
 
         // todo: check if element exists
-        if (!(await this.objectsService.isExists(objectId))) {
+        if (!objectId || !(await this.objectsService.isExists(objectId))) {
             throw new NotFoundException('Object not found');
         }
 
-        // const list = await s3
-        //     .listObjects({ Bucket: BUCKET_NAME })
-        //     .promise();
-        // console.log(list);
-
         const fileContent = await this.prepareImage(file);
         const fileId = v4();
+
+        console.log('Image converted');
 
         const safeObjectId = objectId.replace(/([^a-f0-9-])+/g, '');
         const entryKey = `${safeObjectId}/${fileId}.jpg`;
@@ -69,6 +66,8 @@ export class ObjectPhotosService {
             throw new InternalServerErrorException('Could not upload');
         }
 
+        console.log('Saving');
+
         await this.objectsService.addPhoto(objectId, {
             author,
             source,
@@ -81,14 +80,16 @@ export class ObjectPhotosService {
         return { data: {}, aux: {} };
     }
 
-    private async prepareImage(file: Express.Multer.File) {
-        const { buffer } = file;
-
+    private async prepareImage(file: Buffer) {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const sharp = require(__DEV__ ? 'sharp' : '/opt/node_modules/sharp');
+        const sharp = require(true ? 'sharp' : '/opt/node_modules/sharp');
+        // const sharp = require(__DEV__ ? 'sharp' : '/opt/node_modules/sharp');
 
-        let sharpFile = sharp(buffer);
+        let sharpFile = sharp(file);
         const { width, height } = await sharpFile.metadata();
+
+        console.log(width);
+        console.log(height);
 
         if (width === undefined || height === undefined) {
             throw new InternalServerErrorException(

@@ -13,7 +13,11 @@ import { ApplicationModule } from './modules/ApplicationModule';
 // due to a compressed response (e.g. gzip) which has not been handled correctly
 // by aws-serverless-express and/or API Gateway. Add the necessary MIME types to
 // binaryMimeTypes below
-const binaryMimeTypes: string[] = [];
+const binaryMimeTypes: string[] = [
+    'multipart/form-data',
+    'image/png',
+    'image/jpeg',
+];
 
 let cachedServer: Server;
 
@@ -23,6 +27,7 @@ export const bootstrapServer = async (): Promise<Server> => {
         const app = await NestFactory.create(
             ApplicationModule,
             new ExpressAdapter(expressApp),
+            { bodyParser: false },
         );
         app.setGlobalPrefix('data');
 
