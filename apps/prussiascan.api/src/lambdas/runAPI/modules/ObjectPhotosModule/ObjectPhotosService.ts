@@ -82,8 +82,8 @@ export class ObjectPhotosService {
 
     private async prepareImage(file: Buffer) {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const sharp = require(true ? 'sharp' : '/opt/node_modules/sharp');
-        // const sharp = require(__DEV__ ? 'sharp' : '/opt/node_modules/sharp');
+        const sharp = require(__DEV__ ? 'sharp' : '/opt/node_modules/sharp');
+        // const sharp = require(true ? 'sharp' : '/opt/node_modules/sharp');
 
         let sharpFile = sharp(file);
         const { width, height } = await sharpFile.metadata();
