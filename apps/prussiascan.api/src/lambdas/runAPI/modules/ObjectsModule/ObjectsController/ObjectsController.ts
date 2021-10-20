@@ -15,10 +15,14 @@ import {
 } from './ObjectsDTO';
 import { Roles } from '../../../utils/Roles';
 import { UserRoleEnum } from '../../../entities/UserEntity/enums';
+import { ObjectUploadsService } from '../ObjectUploadsService';
 
 @Controller('objects')
 export class ObjectsController {
-    constructor(private readonly objectsService: ObjectsService) {}
+    constructor(
+        private readonly objectsService: ObjectsService,
+        private readonly objectUploadsService: ObjectUploadsService,
+    ) {}
 
     @Post('create')
     @Roles(UserRoleEnum.contributor)
@@ -45,5 +49,11 @@ export class ObjectsController {
         }
 
         return result;
+    }
+
+    @Post('getuploadurl')
+    @Roles(UserRoleEnum.contributor)
+    async getSignedUploadURL(@Param('id') id: string) {
+        return this.objectUploadsService.getSignedUploadURL();
     }
 }

@@ -63,3 +63,7 @@ export type AddObjectPhotoInputType = {
 };
 
 export type AddObjectPhotoOutputType = ServiceResponseType<null>;
+
+////////
+
+export type GetSignedUploadURLOutputType = ServiceResponseType<string>;
