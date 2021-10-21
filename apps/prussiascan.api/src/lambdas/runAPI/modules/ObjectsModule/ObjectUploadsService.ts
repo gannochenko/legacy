@@ -1,10 +1,13 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { S3 } from 'aws-sdk';
-// import latinize from 'latinize';
+import { v4 } from 'uuid';
 
 import { awsOptions } from '../../utils/awsOptions';
-import { GetSignedUploadURLOutputType } from './type';
-// import { ObjectEntity } from '../../entities/ObjectEntity';
+import {
+    GetSignedUploadURLInputType,
+    GetSignedUploadURLOutputType,
+    MimeType,
+} from './type';
 
 const s3 = new S3({
     ...awsOptions,
@@ -17,23 +20,26 @@ const URL_EXPIRATION_SECONDS = 300;
 
 @Injectable()
 export class ObjectUploadsService {
-    async getSignedUploadURL(): Promise<GetSignedUploadURLOutputType> {
-        const randomID = Math.random() * 10000000;
-        const Key = `${randomID}.jpg`;
+    async getSignedUploadURL({
+        objectId,
+        type,
+    }: GetSignedUploadURLInputType): Promise<GetSignedUploadURLOutputType> {
+        const fileId = v4();
+
+        const safeObjectId = objectId.replace(/([^a-f0-9-])+/g, '');
+        const key = `${safeObjectId}/${fileId}.${
+            type === MimeType.png ? 'png' : 'jpg'
+        }`;
 
         // Get signed URL from S3
         const s3Params = {
             Bucket: BUCKET_NAME,
-            Key,
+            Key: key,
             Expires: URL_EXPIRATION_SECONDS,
-            ContentType: 'image/jpeg',
+            ContentType: MimeType.png ? 'image/png' : 'image/jpeg',
         };
-        const uploadURL = await s3.getSignedUrlPromise('putObject', s3Params);
-        // return JSON.stringify({
-        //     uploadURL: uploadURL,
-        //     Key,
-        // });
+        const url = await s3.getSignedUrlPromise('putObject', s3Params);
 
-        return { data: uploadURL, aux: {} };
+        return { data: { url, key }, aux: {} };
     }
 }

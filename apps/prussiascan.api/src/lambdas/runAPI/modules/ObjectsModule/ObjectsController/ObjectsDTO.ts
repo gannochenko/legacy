@@ -7,12 +7,14 @@ import {
     MinLength,
     IsIn,
     Max,
+    IsUUID,
 } from 'class-validator';
 import {
     ObjectConditionEnum,
     ObjectKindEnum,
     ObjectMaterialEnum,
 } from '../../../entities/ObjectEntity/enums';
+import { MimeType } from '../type';
 
 // https://github.com/typestack/class-validator
 
@@ -82,4 +84,12 @@ export class FindObjectDto {
     @IsString()
     @IsOptional()
     lastId: string;
+}
+
+export class GetUploadURLDto {
+    @IsUUID()
+    objectId: string;
+
+    @IsIn([MimeType.jpeg, MimeType.png])
+    type: MimeType;
 }

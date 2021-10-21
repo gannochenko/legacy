@@ -66,4 +66,17 @@ export type AddObjectPhotoOutputType = ServiceResponseType<null>;
 
 ////////
 
-export type GetSignedUploadURLOutputType = ServiceResponseType<string>;
+export enum MimeType {
+    jpeg = 'jpeg',
+    png = 'png',
+}
+
+export type GetSignedUploadURLInputType = {
+    objectId: string;
+    type: MimeType;
+};
+
+export type GetSignedUploadURLOutputType = ServiceResponseType<{
+    key: string;
+    url: string;
+}>;

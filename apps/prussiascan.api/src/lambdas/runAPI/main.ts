@@ -27,7 +27,6 @@ export const bootstrapServer = async (): Promise<Server> => {
         const app = await NestFactory.create(
             ApplicationModule,
             new ExpressAdapter(expressApp),
-            { bodyParser: false },
         );
         app.setGlobalPrefix('data');
 

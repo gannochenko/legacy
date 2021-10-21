@@ -12,6 +12,7 @@ import {
     CreateObjectDto,
     FindObjectDto,
     // UpdateObjectDto,
+    GetUploadURLDto,
 } from './ObjectsDTO';
 import { Roles } from '../../../utils/Roles';
 import { UserRoleEnum } from '../../../entities/UserEntity/enums';
@@ -53,7 +54,7 @@ export class ObjectsController {
 
     @Post('getuploadurl')
     @Roles(UserRoleEnum.contributor)
-    async getSignedUploadURL(@Param('id') id: string) {
-        return this.objectUploadsService.getSignedUploadURL();
+    async getSignedUploadURL(@Body() data: GetUploadURLDto) {
+        return this.objectUploadsService.getSignedUploadURL(data);
     }
 }

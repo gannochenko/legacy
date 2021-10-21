@@ -184,14 +184,6 @@ export class ObjectsService {
 
     private async getItem(id: string, fields?: string[]) {
         try {
-            console.log('Getting an element');
-            console.log({
-                TableName: TABLE_NAME,
-                Key: {
-                    id,
-                },
-                ...(fields ? { AttributesToGet: fields } : {}),
-            });
             const result = await dynamoDB
                 .get({
                     TableName: TABLE_NAME,
@@ -202,13 +194,8 @@ export class ObjectsService {
                 })
                 .promise();
 
-            console.log('got an element');
-
             return (result?.Item as ObjectEntity) ?? null;
         } catch (error) {
-            console.log('NOT ABLE TO GET AN ELEMENT');
-            // @ts-ignore
-            console.log(error.message);
             console.error(error);
             throw new InternalServerErrorException('Could not get an element');
         }
