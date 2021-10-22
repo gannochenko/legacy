@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { ObjectsService } from '../ObjectsService';
 import {
+    AttachFileDto,
     CreateObjectDto,
     FindObjectDto,
     // UpdateObjectDto,
@@ -56,5 +57,11 @@ export class ObjectsController {
     @Roles(UserRoleEnum.contributor)
     async getSignedUploadURL(@Body() data: GetUploadURLDto) {
         return this.objectUploadsService.getSignedUploadURL(data);
+    }
+
+    @Post('attachfile')
+    @Roles(UserRoleEnum.contributor)
+    async attachFile(@Body() data: AttachFileDto) {
+        return this.objectUploadsService.attachFile(data);
     }
 }

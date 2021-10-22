@@ -54,7 +54,8 @@ export type GetObjectByIdOutputType =
     ServiceResponseType<ObjectFieldsType | null>;
 
 export type AddObjectPhotoInputType = {
-    path: string;
+    variants: Record<string, string>;
+    code: string;
     author?: string;
     source?: string;
     capturedAt?: string;
@@ -67,16 +68,23 @@ export type AddObjectPhotoOutputType = ServiceResponseType<null>;
 ////////
 
 export enum MimeType {
-    jpeg = 'jpeg',
+    jpg = 'jpg',
     png = 'png',
 }
 
 export type GetSignedUploadURLInputType = {
     objectId: string;
-    type: MimeType;
+    fileMime: MimeType;
 };
 
-export type GetSignedUploadURLOutputType = ServiceResponseType<{
-    key: string;
-    url: string;
-}>;
+export type AttachFileInputType = {
+    objectId: string;
+    fileId: string;
+    code: string;
+    fileMime: MimeType;
+    author?: string;
+    source?: string;
+    capturedAt?: string;
+    capturedYearStart?: number;
+    capturedYearEnd?: number;
+};

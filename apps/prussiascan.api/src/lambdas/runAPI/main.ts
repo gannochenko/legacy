@@ -16,7 +16,7 @@ import { ApplicationModule } from './modules/ApplicationModule';
 const binaryMimeTypes: string[] = [
     'multipart/form-data',
     'image/png',
-    'image/jpeg',
+    'image/jpg',
 ];
 
 let cachedServer: Server;

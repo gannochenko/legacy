@@ -122,55 +122,57 @@ export class ObjectsService {
         };
     }
 
-    async addPhoto(
+    async addPhotos(
         id: string,
         input: AddObjectPhotoInputType,
     ): Promise<AddObjectPhotoOutputType> {
-        // const item = await this.getItem(id, ['id', 'photos']);
-        // if (!item) {
-        //     throw new InternalServerErrorException('Item not found');
-        // }
-        //
-        // const { photos } = item;
-        //
-        // const {
-        //     path,
-        //     author,
-        //     capturedAt,
-        //     capturedYearEnd,
-        //     capturedYearStart,
-        //     source,
-        // } = input;
-        //
-        // const newPhotos = [
-        //     ...(photos ?? {}),
-        //     {
-        //         path,
-        //         author,
-        //         source,
-        //         capturedAt,
-        //         capturedYearEnd,
-        //         capturedYearStart,
-        //         uploadedAt: new Date().toISOString(),
-        //     },
-        // ];
-        //
-        // try {
-        //     await dynamoDB
-        //         .update({
-        //             TableName: TABLE_NAME,
-        //             Key: { id },
-        //             UpdateExpression: 'set photos = :x',
-        //             ExpressionAttributeValues: {
-        //                 ':x': newPhotos,
-        //             },
-        //             ReturnValues: 'UPDATED_NEW',
-        //         })
-        //         .promise();
-        // } catch (error) {
-        //     console.error(error);
-        //     throw new InternalServerErrorException('Could not add photo');
-        // }
+        const item = await this.getItem(id, ['id', 'photos']);
+        if (!item) {
+            throw new InternalServerErrorException('Item not found');
+        }
+
+        const { photos } = item;
+
+        const {
+            variants,
+            author,
+            capturedAt,
+            capturedYearEnd,
+            capturedYearStart,
+            source,
+            code,
+        } = input;
+
+        const newPhotos = [
+            ...(photos ?? {}),
+            {
+                code,
+                variants,
+                author,
+                source,
+                capturedAt,
+                capturedYearEnd,
+                capturedYearStart,
+                uploadedAt: new Date().toISOString(),
+            },
+        ];
+
+        try {
+            await dynamoDB
+                .update({
+                    TableName: TABLE_NAME,
+                    Key: { id },
+                    UpdateExpression: 'set photos = :x',
+                    ExpressionAttributeValues: {
+                        ':x': newPhotos,
+                    },
+                    ReturnValues: 'UPDATED_NEW',
+                })
+                .promise();
+        } catch (error) {
+            console.error(error);
+            throw new InternalServerErrorException('Could not add photo');
+        }
 
         return {
             data: null,

@@ -90,6 +90,48 @@ export class GetUploadURLDto {
     @IsUUID()
     objectId: string;
 
-    @IsIn([MimeType.jpeg, MimeType.png])
-    type: MimeType;
+    @IsIn([MimeType.jpg, MimeType.png])
+    fileMime: MimeType;
+}
+
+export class AttachFileDto {
+    @IsUUID()
+    objectId: string;
+
+    @IsUUID()
+    fileId: string;
+
+    @IsString()
+    code: string;
+
+    @IsIn([MimeType.jpg, MimeType.png])
+    fileMime: MimeType;
+
+    @IsString()
+    @IsOptional()
+    year: number;
+
+    @IsString()
+    @IsOptional()
+    period: string;
+
+    @IsOptional()
+    @IsString()
+    author: string;
+
+    @IsOptional()
+    @IsString()
+    source: string;
+
+    @IsOptional()
+    @IsString()
+    capturedAt: string;
+
+    @IsOptional()
+    @IsString()
+    capturedYearStart: number;
+
+    @IsOptional()
+    @IsString()
+    capturedYearEnd: number;
 }
