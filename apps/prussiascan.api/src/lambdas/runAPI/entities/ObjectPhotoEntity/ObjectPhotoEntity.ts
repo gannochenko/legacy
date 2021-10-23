@@ -1,5 +1,6 @@
 export class ObjectPhotoEntity {
     variants: Record<string, string>;
+    code: string;
     author?: string;
     source?: string;
     uploadedAt: string;

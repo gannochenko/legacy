@@ -14,6 +14,7 @@ import {
     MimeType,
 } from './type';
 import { ObjectsService } from './ObjectsService';
+import { ObjectPhotoEntity } from '../../entities/ObjectPhotoEntity';
 
 const s3 = new S3({
     ...awsOptions,
@@ -24,7 +25,7 @@ const s3 = new S3({
 const BUCKET_NAME = process.env.AWS_OBJECT_PHOTOS_BUCKET_NAME;
 const URL_EXPIRATION_SECONDS = 300;
 const IMAGE_SIZE_CONSTRAINT = 1500;
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5m
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10m
 
 @Injectable()
 export class ObjectUploadsService {
@@ -76,6 +77,14 @@ export class ObjectUploadsService {
     }: AttachFileInputType) {
         this.ensureBasketDefined();
         await this.ensureObjectExists(objectId);
+        const item = await this.objectsService.getItem(objectId, [
+            'id',
+            'photos',
+        ]);
+
+        if (await this.isImageAlreadyAttached(item.photos, fileId, code)) {
+            throw new BadRequestException('File was already attached');
+        }
 
         const safeObjectId = this.sanitizeObjectId(objectId);
         const key = this.makeFileKey(safeObjectId, fileId, fileMime);
@@ -83,7 +92,7 @@ export class ObjectUploadsService {
 
         if (fileSize && fileSize > MAX_FILE_SIZE) {
             await this.deleteFile(key);
-            throw new BadRequestException('File size exceeds 5mb');
+            throw new BadRequestException('File size exceeds 10mb');
         }
 
         const file = await this.getFile(key);
@@ -114,6 +123,32 @@ export class ObjectUploadsService {
         });
 
         return { data: null, aux: {} };
+    }
+
+    private isImageAlreadyAttached(
+        photos: ObjectPhotoEntity[],
+        fileId: string,
+        code: string,
+    ) {
+        let result = false;
+        photos.forEach((photo) => {
+            if (result) {
+                return;
+            }
+
+            if (photo.code === code) {
+                result = true;
+                return;
+            }
+
+            Object.values(photo.variants).forEach((fileValue) => {
+                if (fileValue.includes(fileId)) {
+                    result = true;
+                }
+            });
+        });
+
+        return result;
     }
 
     private makeFileKey(objectId: string, fileId: string, extension: string) {

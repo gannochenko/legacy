@@ -25,7 +25,9 @@ const TABLE_NAME = process.env.AWS_OBJECT_TABLE_NAME ?? '';
 
 @Injectable()
 export class ObjectsService {
-    async create(item: CreateObjectInputType): Promise<CreateObjectOutputType> {
+    public async create(
+        item: CreateObjectInputType,
+    ): Promise<CreateObjectOutputType> {
         const {
             name,
             content,
@@ -84,7 +86,7 @@ export class ObjectsService {
         return { data: dynamodbItem, aux: {} };
     }
 
-    async findAll({
+    public async findAll({
         limit,
         lastId,
     }: FindAllObjectsInputType = {}): Promise<FindAllObjectsOutputType> {
@@ -114,7 +116,7 @@ export class ObjectsService {
     }
 
     // todo: get only the requested fields, don't use *
-    async getById(id: string): Promise<GetObjectByIdOutputType> {
+    public async getById(id: string): Promise<GetObjectByIdOutputType> {
         const item = await this.getItem(id);
         return {
             data: (item as ObjectFieldsType) ?? null,
@@ -122,7 +124,7 @@ export class ObjectsService {
         };
     }
 
-    async addPhotos(
+    public async addPhotos(
         id: string,
         input: AddObjectPhotoInputType,
     ): Promise<AddObjectPhotoOutputType> {
@@ -180,11 +182,11 @@ export class ObjectsService {
         };
     }
 
-    async isExists(id: string): Promise<boolean> {
+    public async isExists(id: string): Promise<boolean> {
         return !!(await this.getItem(id, ['id']));
     }
 
-    private async getItem(id: string, fields?: string[]) {
+    public async getItem(id: string, fields?: string[]) {
         try {
             const result = await dynamoDB
                 .get({
