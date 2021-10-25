@@ -3,9 +3,19 @@ import {
     ObjectKindEnum,
     ObjectMaterialEnum,
 } from './enums';
-import { ObjectPhotoEntity } from '../ObjectPhotoEntity';
 
-export class ObjectEntity {
+type ObjectPhotoEntityType = {
+    variants: Record<string, string>;
+    code: string;
+    author?: string;
+    source?: string;
+    uploadedAt: string;
+    capturedAt?: string;
+    capturedYearStart?: number;
+    capturedYearEnd?: number;
+};
+
+export type ObjectEntityType = {
     id: string;
     slug: string;
     name: string;
@@ -22,6 +32,6 @@ export class ObjectEntity {
     kind: ObjectKindEnum[];
     createdAt: string;
     updatedAt?: string;
-    photos: ObjectPhotoEntity[];
+    photos: ObjectPhotoEntityType[];
     version: number;
-}
+};

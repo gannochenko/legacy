@@ -1,9 +1,5 @@
-
 export * from './AuthWidget';
-
-
 export * from './Contacts';
-
 export * from './ApplicationLayout';
 export * from './Container';
 export * from './CookiePopup';
@@ -22,6 +18,5 @@ export * from './NotFound';
 export * from './PageLayout';
 export * from './PageOffset';
 export * from './Typography';
-
-export * from './BlogList';
+export * from './HeritageObjectList';
 export * from './BlogDetail';

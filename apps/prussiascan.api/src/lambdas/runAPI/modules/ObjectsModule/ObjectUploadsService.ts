@@ -15,6 +15,7 @@ import {
 } from './type';
 import { ObjectsService } from './ObjectsService';
 import { ObjectPhotoEntity } from '../../entities/ObjectPhotoEntity';
+import { tryExecute } from '../../utils/tryExecute';
 
 const s3 = new S3({
     ...awsOptions,
@@ -156,7 +157,7 @@ export class ObjectUploadsService {
     }
 
     private getFileSize(key: string) {
-        return this.try<number | undefined>(() => {
+        return tryExecute<number | undefined>(() => {
             return s3
                 .headObject({ Key: key, Bucket: BUCKET_NAME! })
                 .promise()
@@ -165,7 +166,7 @@ export class ObjectUploadsService {
     }
 
     private getFile(key: string) {
-        return this.try<Buffer | undefined>(() => {
+        return tryExecute<Buffer | undefined>(() => {
             return s3
                 .getObject({ Key: key, Bucket: BUCKET_NAME! })
                 .promise()
@@ -174,13 +175,13 @@ export class ObjectUploadsService {
     }
 
     private deleteFile(key: string) {
-        return this.try(async () => {
+        return tryExecute(async () => {
             await s3.deleteObject({ Key: key, Bucket: BUCKET_NAME! }).promise();
         }, 'Could not delete file');
     }
 
     private async uploadFile(key: string, fileContent: Buffer) {
-        return this.try(async () => {
+        return tryExecute(async () => {
             await s3
                 .upload({
                     Bucket: BUCKET_NAME!,
@@ -229,14 +230,5 @@ export class ObjectUploadsService {
 
     private sanitizeObjectId(objectId: string) {
         return objectId.replace(/([^a-f0-9-])+/g, '');
-    }
-
-    private async try<V = void>(fn: () => Promise<V>, message = '') {
-        try {
-            return await fn();
-        } catch (error) {
-            console.error(error);
-            throw new InternalServerErrorException(message);
-        }
     }
 }

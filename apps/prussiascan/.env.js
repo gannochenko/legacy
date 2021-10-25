@@ -3,4 +3,10 @@
  *  and when we dont have .env file either.
  */
 
-module.exports.allowedEnvVariables = ['API_URL', 'GA_TRACKING_ID', 'GA_LINK', 'DEPLOYMENT_LINK'];
+module.exports.allowedEnvVariables = [
+    'API_URL',
+    'GA_TRACKING_ID',
+    'GA_LINK',
+    'DEPLOYMENT_LINK',
+    'CICD_API_KEY',
+];

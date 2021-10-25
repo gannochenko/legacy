@@ -8,11 +8,11 @@ import {
 import Img from 'gatsby-image';
 import { Link } from 'gatsby';
 
-import { BlogListRootPropsType } from './type';
+import { HeritageObjectListRootPropsType } from './type';
 
-export const BlogListRoot = styled.div.withConfig(
+export const HeritageObjectListRoot = styled.div.withConfig(
     getPropsBlocker,
-)<BlogListRootPropsType>`
+)<HeritageObjectListRootPropsType>`
     ${reset};
     ${marginProps};
 `;

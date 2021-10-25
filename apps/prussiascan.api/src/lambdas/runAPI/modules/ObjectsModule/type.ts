@@ -10,6 +10,11 @@ type IdFieldsType = {
     slug: string;
 };
 
+export type DynamoDBItemUpdateExpression = {
+    UpdateExpression: string;
+    ExpressionAttributeValues: Record<string, unknown>;
+};
+
 type CommonFieldsType = {
     name: string;
     content: string;

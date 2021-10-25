@@ -12,8 +12,10 @@ import {
     ObjectFieldsType,
     GetObjectByIdOutputType,
     AddObjectPhotoOutputType,
+    DynamoDBItemUpdateExpression,
 } from './type';
 import { ObjectEntity } from '../../entities/ObjectEntity';
+import { tryExecute } from '../../utils/tryExecute';
 
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html
@@ -66,6 +68,7 @@ export class ObjectsService {
             materials,
             photos: [],
             createdAt: new Date().toISOString(),
+            version: 1,
         };
 
         try {
@@ -159,22 +162,16 @@ export class ObjectsService {
             },
         ];
 
-        try {
-            await dynamoDB
-                .update({
-                    TableName: TABLE_NAME,
-                    Key: { id },
-                    UpdateExpression: 'set photos = :x',
-                    ExpressionAttributeValues: {
-                        ':x': newPhotos,
-                    },
-                    ReturnValues: 'UPDATED_NEW',
-                })
-                .promise();
-        } catch (error) {
-            console.error(error);
-            throw new InternalServerErrorException('Could not add photo');
-        }
+        await this.updateItem(
+            id,
+            {
+                UpdateExpression: 'photos = :x',
+                ExpressionAttributeValues: {
+                    ':x': newPhotos,
+                },
+            },
+            'Could not add photo',
+        );
 
         return {
             data: null,
@@ -203,5 +200,28 @@ export class ObjectsService {
             console.error(error);
             throw new InternalServerErrorException('Could not get an element');
         }
+    }
+
+    private async updateItem(
+        id: string,
+        expression: DynamoDBItemUpdateExpression,
+        message = 'Could not update item',
+    ) {
+        return tryExecute(async () => {
+            await dynamoDB
+                .update({
+                    TableName: TABLE_NAME,
+                    Key: { id },
+                    UpdateExpression: `SET ${expression.UpdateExpression}, updatedAt = :u, version = if_not_exists(version, :vs) + :vinc`,
+                    ExpressionAttributeValues: {
+                        ...expression.ExpressionAttributeValues,
+                        ':u': new Date().toISOString(),
+                        ':vs': 1,
+                        ':vinc': 1,
+                    },
+                    ReturnValues: 'UPDATED_NEW',
+                })
+                .promise();
+        }, message);
     }
 }

@@ -1,10 +1,13 @@
 import { Ref } from 'react';
-import { BlogListPropsType } from '../type';
+import { HeritageObjectListPropsType } from '../type';
 
-export const useBlogList = (
+export const useHeritageObjectList = (
     ref: Ref<HTMLDivElement>,
-    { data, ...props }: BlogListPropsType,
+    { data, ...props }: HeritageObjectListPropsType,
 ) => {
+    console.log('data');
+    console.log(data);
+
     return {
         rootProps: {
             ...props, // rest props go to the root node, as before

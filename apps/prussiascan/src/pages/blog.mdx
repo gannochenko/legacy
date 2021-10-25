@@ -3,41 +3,51 @@ title: "Blog"
 ---
 
 import { graphql } from 'gatsby';
-import { Container, PageOffset, BlogList } from 'components';
+import { Container, PageOffset, HeritageObjectList } from 'components';
 
 <Container>
 
-<BlogList data={props.data.allMdx.edges} />
+<HeritageObjectList data={props.data.allHeritageObject.nodes} />
 
 </Container>
 
 <PageOffset />
 
-export const BlogIndexQuery = graphql`
-    query BlogIndexQuery {
-        allMdx(
-            sort: { fields: [frontmatter___date], order: DESC }
-            filter: { frontmatter: { published: { eq: true }, kind: { eq: "Blog" } } }
-        ) {
-            edges {
-                node {
-                    id
-                    frontmatter {
-                        title
-                        date
-                        slug
-                        published
-                        images {
-                            image {
-                                childImageSharp {
-                                    fluid(maxWidth: 1240, quality: 80) {
-                                        ...GatsbyImageSharpFluid_tracedSVG
-                                    }
-                                }
-                            }
-                        }
+export const HeritageObjectIndexQuery = graphql`
+    query HeritageObjectIndexQuery {
+        allHeritageObject {
+            nodes {
+                name
+                kind
+                id
+                slug
+                content
+                yearBuiltStart
+                yearBuiltEnd
+                yearDemolishedStart
+                yearDemolishedEnd
+                demolished
+                condition
+                locationLat
+                locationLong
+                materials
+                kind
+                createdAt
+                updatedAt
+                photos {
+                    variants {
+                        normalized
+                        original
                     }
+                    code
+                    author
+                    source
+                    uploadedAt
+                    capturedAt
+                    capturedYearStart
+                    capturedYearEnd
                 }
+                version
             }
         }
     }
