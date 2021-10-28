@@ -9,11 +9,13 @@ import {
     BlogCardTitle,
 } from './style';
 import { useHeritageObjectList } from './hooks/useHeritageObjectList';
-import { fillTemplate, BLOG_DETAIL } from '../../../pathTemplates';
+import { fillTemplate, HERITAGE_DETAIL } from '../../../pathTemplates';
 
 export const HeritageObjectList = forwardRef<HTMLDivElement, HeritageObjectListPropsType>(
     function HeritageObjectList(props, ref) {
         const { rootProps, data } = useHeritageObjectList(ref, props);
+
+        console.log(data);
 
         return (
             <HeritageObjectListRoot {...rootProps}>
@@ -31,7 +33,7 @@ export const HeritageObjectList = forwardRef<HTMLDivElement, HeritageObjectListP
 
                 {/*        const { slug, images, shortTitle } = itemData;*/}
 
-                {/*        const path = fillTemplate(BLOG_DETAIL, { slug });*/}
+                {/*        const path = fillTemplate(HERITAGE_DETAIL, { slug });*/}
 
                 {/*        const picture = images[headerImage].image;*/}
                 {/*        return (*/}

@@ -24,6 +24,19 @@ services:
             - './.localstack:/tmp/localstack'
             - "/var/run/docker.sock:/var/run/docker.sock"
 
+    mongodb:
+        image : mongo
+        container_name: mongodb
+        environment:
+            - PUID=1000
+            - PGID=1000
+        volumes:
+            - './.mongo:/data/db'
+            - './backup:/data/backups'
+        ports:
+            - 27017:27017
+        restart: unless-stopped
+
 #    db.gui:
 #        image: adminer
 #        expose:

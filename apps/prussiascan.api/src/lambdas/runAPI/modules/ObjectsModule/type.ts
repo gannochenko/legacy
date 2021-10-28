@@ -28,6 +28,8 @@ type CommonFieldsType = {
     locationLong: number;
     materials?: ObjectMaterialEnum[];
     kind?: ObjectKindEnum[];
+    oknId?: string;
+    coverPhotoURL?: string;
 };
 
 type DateFieldsType = {

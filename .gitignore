@@ -5,8 +5,10 @@ node_modules
 .DS_Store
 .env
 .localstack
+.mongo
 
 # terraform
 **/.terraform/*
 *.tfstate
 *.tfstate.*
+/backup/legacy/

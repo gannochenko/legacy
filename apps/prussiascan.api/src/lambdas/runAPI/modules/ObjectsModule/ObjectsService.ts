@@ -43,6 +43,7 @@ export class ObjectsService {
             locationLong,
             kind,
             materials,
+            oknId,
         } = item;
 
         const id = v4();
@@ -69,6 +70,7 @@ export class ObjectsService {
             photos: [],
             createdAt: new Date().toISOString(),
             version: 1,
+            oknId,
         };
 
         try {

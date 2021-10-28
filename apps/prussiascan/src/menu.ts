@@ -1,9 +1,7 @@
 import {
-    BLOG_LIST,
+    HERITAGE_LIST,
     ABOUT,
-    
     CONTACTS,
-    
 } from './pathTemplates';
 
 type MenuItemsType = {
@@ -12,9 +10,7 @@ type MenuItemsType = {
 }[];
 
 export const menu: MenuItemsType = [
-    { text: 'blog', link: BLOG_LIST },
-    { text: 'About', link: ABOUT },
-
-    { text: 'Contacts', link: CONTACTS },
-
+    { text: 'Объекты', link: HERITAGE_LIST },
+    { text: 'О проекте', link: ABOUT },
+    { text: 'Контакты', link: CONTACTS },
 ];

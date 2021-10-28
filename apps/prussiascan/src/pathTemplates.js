@@ -1,6 +1,6 @@
 module.exports = {
-    BLOG_LIST: '/blog',
-    BLOG_DETAIL: '/blog/#SLUG#/',
+    HERITAGE_LIST: '/heritage',
+    HERITAGE_DETAIL: '/heritage/#SLUG#/',
     CONTACTS: '/contacts',
     PERSONAL_DATA_POLICY: '/personal-data-policy',
     COOKIE_POLICY: '/cookie-policy',

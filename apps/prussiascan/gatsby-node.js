@@ -13,7 +13,7 @@ const path = require('path');
 const fillTemplate = require('./src/pathTemplates').fillTemplate;
 const allowedEnvVariables = require('./.env.js').allowedEnvVariables;
 
-const BLOG_DETAIL = require('./src/pathTemplates').BLOG_DETAIL;
+const BLOG_DETAIL = require('./src/pathTemplates').HERITAGE_DETAIL;
 
 /**
  * Generate GraphQL schema.json file to be read by tslint
@@ -69,9 +69,35 @@ const createObjectsPages = async ({ graphql }) => {
         query MyHeritageObjectQuery {
           allHeritageObject {
             nodes {
-              name
-              kind
-              id
+                name
+                id
+                slug
+                content
+                yearBuiltStart
+                yearBuiltEnd
+                yearDemolishedStart
+                yearDemolishedEnd
+                demolished
+                condition
+                locationLat
+                locationLong
+                materials
+                kind
+                createdAt
+                updatedAt
+                photos {
+                    variants {
+                        normalized
+                    }
+                    code
+                    author
+                    source
+                    uploadedAt
+                    capturedAt
+                    capturedYearStart
+                    capturedYearEnd
+                }
+                version
             }
           }
         }

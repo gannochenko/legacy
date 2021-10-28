@@ -1,5 +1,5 @@
 ---
-title: "Blog"
+title: "Object list"
 ---
 
 import { graphql } from 'gatsby';
@@ -18,36 +18,16 @@ export const HeritageObjectIndexQuery = graphql`
         allHeritageObject {
             nodes {
                 name
-                kind
                 id
                 slug
-                content
-                yearBuiltStart
-                yearBuiltEnd
-                yearDemolishedStart
-                yearDemolishedEnd
-                demolished
-                condition
-                locationLat
-                locationLong
-                materials
-                kind
-                createdAt
-                updatedAt
                 photos {
                     variants {
                         normalized
-                        original
                     }
                     code
                     author
                     source
-                    uploadedAt
-                    capturedAt
-                    capturedYearStart
-                    capturedYearEnd
                 }
-                version
             }
         }
     }

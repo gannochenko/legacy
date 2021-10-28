@@ -71,6 +71,10 @@ export class CreateObjectDto {
     @IsIn(Object.values(ObjectKindEnum), { each: true })
     @IsOptional()
     kind: ObjectKindEnum[];
+
+    @IsString()
+    @IsOptional()
+    oknId: string;
 }
 
 export class UpdateObjectDto {}

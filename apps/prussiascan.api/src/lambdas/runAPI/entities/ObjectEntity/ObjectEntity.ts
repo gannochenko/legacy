@@ -6,6 +6,7 @@ import {
 import { ObjectPhotoEntity } from '../ObjectPhotoEntity';
 
 export class ObjectEntity {
+    version: number;
     id: string;
     slug: string;
     name: string;
@@ -23,5 +24,6 @@ export class ObjectEntity {
     createdAt: string;
     updatedAt?: string;
     photos: ObjectPhotoEntity[];
-    version: number;
+    oknId?: string;
+    coverPhotoURL?: string;
 }

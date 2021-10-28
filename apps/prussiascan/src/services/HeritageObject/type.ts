@@ -5,7 +5,9 @@ import {
 } from './enums';
 
 type ObjectPhotoEntityType = {
-    variants: Record<string, string>;
+    variants: {
+        normalized: string;
+    };
     code: string;
     author?: string;
     source?: string;
