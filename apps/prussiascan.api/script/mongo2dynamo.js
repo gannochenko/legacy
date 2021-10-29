@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 
 const DynamoDB = require('aws-sdk').DynamoDB;
-const MongoClient = require('mongodb').MongoClient;
+const mongo = require('mongodb');
+
+const MongoClient = mongo.MongoClient;
+
+const Server = mongo.Server;
 
 const awsOptions = {
     endpoint: 'http://localhost:4566',
@@ -16,37 +20,30 @@ const dynamoDB = new DynamoDB.DocumentClient({
 });
 const TABLE_NAME = 'prussiascan.api_ObjectCollection';
 
-// Set up the connection to the local db
-const mongoclient = new MongoClient(new Server('localhost', 27017), {
-    native_parser: true,
-});
+const MONGO_URI = 'mongodb://localhost:27017/?maxPoolSize=20&w=majority';
 
-// Open the connection to the server
-mongoclient.open((err, mongoclient) => {
-    // Get the first db and do an update document on it
-    var db = mongoclient.db('integration_tests');
-    db.collection('mongoclient_test').update(
-        { a: 1 },
-        { b: 1 },
-        { upsert: true },
-        function (err, result) {
-            assert.equal(null, err);
-            assert.equal(1, result);
+const client = new MongoClient(MONGO_URI);
 
-            // Get another db and do an update document on it
-            var db2 = mongoclient.db('integration_tests2');
-            db2.collection('mongoclient_test').update(
-                { a: 1 },
-                { b: 1 },
-                { upsert: true },
-                function (err, result) {
-                    assert.equal(null, err);
-                    assert.equal(1, result);
+async function run() {
+    try {
+        const db = await client.connect();
+        const dbo = db.db('legacy');
+        const registry = dbo.collection('registry');
 
-                    // Close the connection
-                    mongoclient.close();
-                },
-            );
-        },
-    );
-});
+        const findResult = await registry
+            .find({
+                // name: 'Lemony Snicket',
+                // date: {
+                //     $gte: new Date(new Date().setHours(00, 00, 00)),
+                //     $lt: new Date(new Date().setHours(23, 59, 59)),
+                // },
+            })
+            .toArray();
+
+        console.log(findResult);
+    } finally {
+        // Ensures that the client will close when you finish/error
+        await client.close();
+    }
+}
+run().catch(console.dir);
