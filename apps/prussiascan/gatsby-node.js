@@ -102,15 +102,14 @@ exports.onCreateNode = async ({
         });
 
         if (fileNode) {
-            console.log('File node created for '+photoURL);
             createNodeField({ node, name: 'localFile', value: fileNode.id });
-        } else {
-            console.log('File node NOT created');
         }
     }
 };
 
-const createObjectsPages = async ({ graphql }) => {
+const createObjectsPages = async ({ graphql, actions, reporter }) => {
+    const { createPage } = actions;
+
     const result = await graphql(`
         query MyHeritageObjectQuery {
           allHeritageObject {
@@ -136,6 +135,27 @@ const createObjectsPages = async ({ graphql }) => {
           }
         }
     `);
+
+    if (result.errors) {
+        reporter.panicOnBuild(`Error while running GraphQL query.`)
+        return;
+    }
+
+    const posts = result.data.allMarkdownRemark.edges
+    const postsPerPage = 6
+    const numPages = Math.ceil(posts.length / postsPerPage);
+    Array.from({ length: numPages }).forEach((_, i) => {
+        createPage({
+            path: i === 0 ? `/blog` : `/blog/${i + 1}`,
+            component: path.resolve("./src/templates/blog-list-template.js"),
+            context: {
+                limit: postsPerPage,
+                skip: i * postsPerPage,
+                numPages,
+                currentPage: i + 1,
+            },
+        });
+    });
 
     // photos {
     //     variants {
