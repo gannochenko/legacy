@@ -18,5 +18,5 @@ export * from './NotFound';
 export * from './PageLayout';
 export * from './PageOffset';
 export * from './Typography';
-export * from './HeritageObjectList';
-export * from './BlogDetail';
+export * from '../../templates/HeritageObjectList';
+

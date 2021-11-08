@@ -6,9 +6,15 @@ import {
 
 export type HeritageObjectListPropsType = HTMLAttributes<HTMLDivElement> &
     Partial<{
-        data: Record<string, any>[];
+        data: {
+            allHeritageObject: {
+                nodes: Record<string, any>[];
+            };
+        };
+        path: string;
         // put your custom props here
     }> &
     MarginPropsType;
 
-export type HeritageObjectListRootPropsType = StylePropsType & HeritageObjectListPropsType;
+export type HeritageObjectListRootPropsType = StylePropsType &
+    HeritageObjectListPropsType;

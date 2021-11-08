@@ -1,21 +1,11 @@
 import styled from 'styled-components';
 import {
-    marginProps,
-    reset,
-    getPropsBlocker,
     muiSpacing,
 } from '@gannochenko/ui.styled-components';
 import { GatsbyImage } from 'gatsby-plugin-image';
 import { Link } from 'gatsby';
 
-import { HeritageObjectListRootPropsType } from './type';
-
-export const HeritageObjectListRoot = styled.div.withConfig(
-    getPropsBlocker,
-)<HeritageObjectListRootPropsType>`
-    ${reset};
-    ${marginProps};
-`;
+export const HeritageObjectListRoot = styled.div``;
 
 export const BlogCard = styled(Link)`
     box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.1);

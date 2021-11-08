@@ -1,18 +1,20 @@
-import { Ref } from 'react';
+import { Ref, useMemo } from 'react';
 import { HeritageObjectListPropsType } from '../type';
 
 export const useHeritageObjectList = (
     ref: Ref<HTMLDivElement>,
-    { data, ...props }: HeritageObjectListPropsType,
+    { data, path, ...props }: HeritageObjectListPropsType,
 ) => {
-    console.log('data');
-    console.log(data);
+    const location = useMemo(() => ({ pathname: path ?? '' }), [path]);
 
     return {
         rootProps: {
             ...props, // rest props go to the root node, as before
             ref, // same for the ref
         },
-        data: data || [],
+        pageLayoutProps: {
+            location,
+        },
+        data: data?.allHeritageObject?.nodes ?? [],
     };
 };

@@ -39,13 +39,13 @@ exports.onPostBootstrap = async ({ store }) => {
     }
 };
 
-const contentPageLayouts = {
-    'blog': './src/components/default/BlogDetail/BlogDetail.tsx',
-};
-
-const contentTypeToPath = {
-    'blog': BLOG_DETAIL,
-};
+// const contentPageLayouts = {
+//     'blog': './src/components/default/BlogDetail/BlogDetail.tsx',
+// };
+//
+// const contentTypeToPath = {
+//     'blog': BLOG_DETAIL,
+// };
 
 const makePublicPath = (fileKey) => `http://localhost:4566/${process.env.AWS_OBJECT_PHOTOS_BUCKET_NAME}/${fileKey}`;
 
@@ -107,30 +107,14 @@ exports.onCreateNode = async ({
     }
 };
 
-const createObjectsPages = async ({ graphql, actions, reporter }) => {
+const createHeritageObjectPages = async ({ graphql, actions, reporter }) => {
     const { createPage } = actions;
 
     const result = await graphql(`
         query MyHeritageObjectQuery {
           allHeritageObject {
             nodes {
-                name
                 id
-                slug
-                content
-                yearBuiltStart
-                yearBuiltEnd
-                yearDemolishedStart
-                yearDemolishedEnd
-                demolished
-                condition
-                locationLat
-                locationLong
-                materials
-                kind
-                createdAt
-                updatedAt
-                version
             }
           }
         }
@@ -141,13 +125,17 @@ const createObjectsPages = async ({ graphql, actions, reporter }) => {
         return;
     }
 
-    const posts = result.data.allMarkdownRemark.edges
-    const postsPerPage = 6
-    const numPages = Math.ceil(posts.length / postsPerPage);
+    const objects = result.data.allHeritageObject.nodes;
+    const postsPerPage = 6;
+    const numPages = Math.ceil(objects.length / postsPerPage);
+
+    console.log('numPages', numPages);
+
     Array.from({ length: numPages }).forEach((_, i) => {
+        console.log('create page!');
         createPage({
-            path: i === 0 ? `/blog` : `/blog/${i + 1}`,
-            component: path.resolve("./src/templates/blog-list-template.js"),
+            path: i === 0 ? '/heritage' : `/heritage/${i + 1}`,
+            component: path.resolve('./src/templates/HeritageObjectList/HeritageObjectList.tsx'),
             context: {
                 limit: postsPerPage,
                 skip: i * postsPerPage,
@@ -156,110 +144,97 @@ const createObjectsPages = async ({ graphql, actions, reporter }) => {
             },
         });
     });
-
-    // photos {
-    //     variants {
-    //         normalized
-    //     }
-    //     code
-    //     author
-    //     source
-    //     uploadedAt
-    //     capturedAt
-    //     capturedYearStart
-    //     capturedYearEnd
-    // }
 };
 
-const createMDXPages = async ({ graphql, actions }) => {
-    const result = await graphql(`
-        query CreatePagesQuery {
-            allMdx {
-                edges {
-                    node {
-                        id
-                        fileAbsolutePath
-                        frontmatter {
-                            published
-                            slug
-                        }
-                    }
-                }
-            }
-        }
-    `);
-
-    if (result.errors) {
-        console.error(result.errors);
-        throw new Error(result.errors);
-    }
-
-    if (!result.data || !result.data.allMdx) {
-        return;
-    }
-
-    const edges = result.data.allMdx.edges;
-    if (!edges) {
-        return;
-    }
-
-    edges.forEach(({ node }) => {
-        const {
-            fileAbsolutePath,
-            frontmatter: { slug, published } = {},
-        } = node;
-
-        const match = fileAbsolutePath.match(
-            /\/content\/([^\/]+)\/([^\/]+)\//,
-        );
-        if (!match) {
-            console.warn(
-                'Was not able to parse file path structure. Skipping.',
-            );
-            return;
-        }
-
-        const [, contentType, fileSlug] = match;
-        const realSlug = slug || fileSlug;
-
-        if (!realSlug) {
-            console.warn('Entry without slug detected. Skipping.');
-            return;
-        }
-
-        const component = contentPageLayouts[contentType];
-        let realPath = contentTypeToPath[contentType].replace(
-            '#SLUG#',
-            realSlug,
-        );
-        if (!published) {
-            realPath = `/drafts${realPath}`;
-        }
-
-        if (!component) {
-            console.error(
-                `There is an entry, but I cant create a page for it. Skipping.`,
-            );
-            return;
-        }
-
-        actions.createPage({
-            // Encode the route
-            path: realPath,
-            // Layout for the page
-            component: path.resolve(component),
-            // Values defined here are injected into the page as props and can
-            // be passed to a GraphQL query as arguments
-            context: {
-                id: node.id,
-            },
-        });
-    });
-};
+// const createMDXPages = async ({ graphql, actions }) => {
+//     const result = await graphql(`
+//         query CreatePagesQuery {
+//             allMdx {
+//                 edges {
+//                     node {
+//                         id
+//                         fileAbsolutePath
+//                         frontmatter {
+//                             published
+//                             slug
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//     `);
+//
+//     if (result.errors) {
+//         console.error(result.errors);
+//         throw new Error(result.errors);
+//     }
+//
+//     if (!result.data || !result.data.allMdx) {
+//         return;
+//     }
+//
+//     const edges = result.data.allMdx.edges;
+//     if (!edges) {
+//         return;
+//     }
+//
+//     edges.forEach(({ node }) => {
+//         const {
+//             fileAbsolutePath,
+//             frontmatter: { slug, published } = {},
+//         } = node;
+//
+//         const match = fileAbsolutePath.match(
+//             /\/content\/([^\/]+)\/([^\/]+)\//,
+//         );
+//         if (!match) {
+//             console.warn(
+//                 'Was not able to parse file path structure. Skipping.',
+//             );
+//             return;
+//         }
+//
+//         const [, contentType, fileSlug] = match;
+//         const realSlug = slug || fileSlug;
+//
+//         if (!realSlug) {
+//             console.warn('Entry without slug detected. Skipping.');
+//             return;
+//         }
+//
+//         const component = contentPageLayouts[contentType];
+//         let realPath = contentTypeToPath[contentType].replace(
+//             '#SLUG#',
+//             realSlug,
+//         );
+//         if (!published) {
+//             realPath = `/drafts${realPath}`;
+//         }
+//
+//         if (!component) {
+//             console.error(
+//                 `There is an entry, but I cant create a page for it. Skipping.`,
+//             );
+//             return;
+//         }
+//
+//         actions.createPage({
+//             // Encode the route
+//             path: realPath,
+//             // Layout for the page
+//             component: path.resolve(component),
+//             // Values defined here are injected into the page as props and can
+//             // be passed to a GraphQL query as arguments
+//             context: {
+//                 id: node.id,
+//             },
+//         });
+//     });
+// };
 
 exports.createPages = async ({ graphql, actions }) => {
-    await createObjectsPages({ graphql, actions });
-    await createMDXPages({ graphql, actions });
+    await createHeritageObjectPages({ graphql, actions });
+    // await createMDXPages({ graphql, actions });
 };
 
 const getEnv = () => {
