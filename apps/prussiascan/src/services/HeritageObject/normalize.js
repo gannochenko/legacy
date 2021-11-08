@@ -41,6 +41,7 @@ module.exports = {
             createdAt: element.createdAt ?? '',
             updatedAt: element.updatedAt ?? '',
             photos: normalizePhotos(element.photos ?? []),
+            previewPhoto: element.previewPhoto ?? '',
             version: element.version ?? 1,
             internal: element.internal,
         };

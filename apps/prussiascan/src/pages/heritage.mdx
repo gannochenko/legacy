@@ -18,17 +18,23 @@ export const HeritageObjectIndexQuery = graphql`
         allHeritageObject {
             nodes {
                 name
-                id
                 slug
-                photos {
-                    variants {
-                        normalized
+                previewPhoto
+                previewPhotoImg {
+                    childImageSharp {
+                        gatsbyImageData(width: 300, layout: FIXED)
                     }
-                    code
-                    author
-                    source
                 }
             }
         }
     }
 `;
+
+<!--                 photos { -->
+<!--                     variants { -->
+<!--                         normalized -->
+<!--                     } -->
+<!--                     code -->
+<!--                     author -->
+<!--                     source -->
+<!--                 } -->

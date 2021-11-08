@@ -6,6 +6,7 @@
 const { normalizeHeritageObject } = require('./src/services/HeritageObject/normalize');
 
 const { introspectionQuery, graphql, printSchema } = require('gatsby/graphql');
+const { createRemoteFileNode } = require('gatsby-source-filesystem');
 const write = require('write');
 const axios = require('axios');
 // const { fmImagesToRelative } = require('gatsby-remark-relative-images');
@@ -46,6 +47,8 @@ const contentTypeToPath = {
     'blog': BLOG_DETAIL,
 };
 
+const makePublicPath = (fileKey) => `http://localhost:4566/${process.env.AWS_OBJECT_PHOTOS_BUCKET_NAME}/${fileKey}`;
+
 exports.sourceNodes = async ({ actions }) => {
     const result = await axios.request({
         url: `${process.env.API_URL}/dev/data/objects/findall`,
@@ -53,7 +56,9 @@ exports.sourceNodes = async ({ actions }) => {
         headers: {'x-api-key': process.env.CICD_API_KEY},
     });
 
-    result.data.data.forEach(object => {
+    const data = result.data.data;
+
+    for (let object of data) {
         actions.createNode(normalizeHeritageObject({
             ...object,
             internal: {
@@ -61,8 +66,49 @@ exports.sourceNodes = async ({ actions }) => {
                 contentDigest: (object.version ?? '1').toString(),
             },
         }));
-    });
+    }
 }
+
+exports.createSchemaCustomization = ({ actions }) => {
+    const { createTypes } = actions;
+    createTypes(`
+        type HeritageObject implements Node {
+            previewPhotoImg: File @link(from: "fields.localFile")
+        }
+    `);
+};
+
+exports.onCreateNode = async ({
+    node,
+    actions: { createNode, createNodeField },
+    store,
+    cache,
+    createNodeId,
+}) => {
+    const { previewPhoto, internal } = node;
+
+    if (
+        internal.type === 'HeritageObject'
+        && previewPhoto !== ''
+    ) {
+        const photoURL = makePublicPath(previewPhoto);
+        const fileNode = await createRemoteFileNode({
+            url: photoURL, // string that points to the URL of the image
+            parentNodeId: node.id, // id of the parent node of the fileNode you are going to create
+            createNode, // helper function in gatsby-node to generate the node
+            createNodeId, // helper function in gatsby-node to generate the node id
+            cache, // Gatsby's cache
+            store, // Gatsby's Redux store
+        });
+
+        if (fileNode) {
+            console.log('File node created for '+photoURL);
+            createNodeField({ node, name: 'localFile', value: fileNode.id });
+        } else {
+            console.log('File node NOT created');
+        }
+    }
+};
 
 const createObjectsPages = async ({ graphql }) => {
     const result = await graphql(`
@@ -85,25 +131,24 @@ const createObjectsPages = async ({ graphql }) => {
                 kind
                 createdAt
                 updatedAt
-                photos {
-                    variants {
-                        normalized
-                    }
-                    code
-                    author
-                    source
-                    uploadedAt
-                    capturedAt
-                    capturedYearStart
-                    capturedYearEnd
-                }
                 version
             }
           }
         }
     `);
 
-    // console.log(require('util').inspect(result, { depth: 10 }));
+    // photos {
+    //     variants {
+    //         normalized
+    //     }
+    //     code
+    //     author
+    //     source
+    //     uploadedAt
+    //     capturedAt
+    //     capturedYearStart
+    //     capturedYearEnd
+    // }
 };
 
 const createMDXPages = async ({ graphql, actions }) => {

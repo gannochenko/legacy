@@ -5,7 +5,7 @@ import {
     getPropsBlocker,
     muiSpacing,
 } from '@gannochenko/ui.styled-components';
-import Img from 'gatsby-image';
+import { GatsbyImage } from 'gatsby-plugin-image';
 import { Link } from 'gatsby';
 
 import { HeritageObjectListRootPropsType } from './type';
@@ -24,9 +24,10 @@ export const BlogCard = styled(Link)`
     cursor: pointer;
     position: relative;
     display: block;
+    min-height: ${muiSpacing(20)};
 `;
 
-export const BlogCardImage = styled(Img)`
+export const BlogCardImage = styled(GatsbyImage)`
     background-color: #c4c4c4;
     height: 15rem;
 `;

@@ -18,10 +18,12 @@ then
 ## DynamoDB
 ################################################################################################
 
+echo "Delete tables"
 ${AWS} dynamodb \
     delete-table \
     --table-name "prussiascan.api_ObjectCollection"
 
+echo "Re-create tables"
 ${AWS} dynamodb \
     create-table \
     --table-name "prussiascan.api_ObjectCollection" \

@@ -15,47 +15,57 @@ export const HeritageObjectList = forwardRef<HTMLDivElement, HeritageObjectListP
     function HeritageObjectList(props, ref) {
         const { rootProps, data } = useHeritageObjectList(ref, props);
 
-        console.log(data);
-
+        data.forEach(item => {
+            if (item.previewPhoto !== '') {
+                console.log(item);
+            }
+        });
+        
         return (
             <HeritageObjectListRoot {...rootProps}>
-                {/*<Grid container spacing={3}>*/}
-                {/*    {data.map((item) => {*/}
-                {/*        const itemData = item.node.frontmatter;*/}
-                {/*        let headerImage =*/}
-                {/*            itemData.headerImage === undefined ||*/}
-                {/*            itemData.headerImage === ''*/}
-                {/*                ? 0*/}
-                {/*                : parseInt(itemData.headerImage, 10);*/}
-                {/*        if (Number.isNaN(headerImage)) {*/}
-                {/*            headerImage = 0;*/}
-                {/*        }*/}
+                <Grid container spacing={3}>
+                    {data.map((item) => {
+                        // const itemData = item.node.frontmatter;
+                        // let headerImage =
+                        //     itemData.headerImage === undefined ||
+                        //     itemData.headerImage === ''
+                        //         ? 0
+                        //         : parseInt(itemData.headerImage, 10);
+                        // if (Number.isNaN(headerImage)) {
+                        //     headerImage = 0;
+                        // }
 
-                {/*        const { slug, images, shortTitle } = itemData;*/}
+                        const { slug, name, previewPhotoImg } = item;
 
-                {/*        const path = fillTemplate(HERITAGE_DETAIL, { slug });*/}
+                        const path = fillTemplate(HERITAGE_DETAIL, { slug });
 
-                {/*        const picture = images[headerImage].image;*/}
-                {/*        return (*/}
-                {/*            <Grid*/}
-                {/*                item*/}
-                {/*                md={4}*/}
-                {/*                sm={6}*/}
-                {/*                xs={12}*/}
-                {/*                key={slug}*/}
-                {/*            >*/}
-                {/*                <BlogCard to={path}>*/}
-                {/*                    <BlogCardImage*/}
-                {/*                        sizes={picture.childImageSharp.fluid}*/}
-                {/*                    />*/}
-                {/*                    <BlogCardTitle>*/}
-                {/*                        {shortTitle}*/}
-                {/*                    </BlogCardTitle>*/}
-                {/*                </BlogCard>*/}
-                {/*            </Grid>*/}
-                {/*        );*/}
-                {/*    })}*/}
-                {/*</Grid>*/}
+                        return (
+                            <Grid
+                                item
+                                md={4}
+                                sm={6}
+                                xs={12}
+                                key={slug}
+                            >
+                                <BlogCard to={path}>
+                                    {
+                                        !!previewPhotoImg
+                                        &&
+                                        <BlogCardImage
+                                            image={
+                                                previewPhotoImg.childImageSharp.gatsbyImageData
+                                            }
+                                            alt={name}
+                                        />
+                                    }
+                                    <BlogCardTitle>
+                                        {name}
+                                    </BlogCardTitle>
+                                </BlogCard>
+                            </Grid>
+                        );
+                    })}
+                </Grid>
             </HeritageObjectListRoot>
         );
     },

@@ -2,28 +2,53 @@ import {
     ObjectConditionEnum,
     ObjectKindEnum,
     ObjectMaterialEnum,
+    ObjectHeritageStatusEnum,
+    ObjectHeritageLevelEnum,
+    ObjectLocationAreaEnum,
 } from './enums';
 import { ObjectPhotoEntity } from '../ObjectPhotoEntity';
 
 export class ObjectEntity {
-    version: number;
+    // id
     id: string;
     slug: string;
     name: string;
+    nameDe: string;
+
+    // content
     content: string;
+
+    // historical dates
     yearBuiltStart: number;
     yearBuiltEnd: number;
     yearDemolishedStart: number;
     yearDemolishedEnd: number;
-    demolished: boolean;
-    condition: ObjectConditionEnum;
-    locationLat: number;
-    locationLong: number;
+
+    // properties
     materials: ObjectMaterialEnum[];
     kind: ObjectKindEnum[];
+
+    // status
+    condition: ObjectConditionEnum;
+    demolished: boolean;
+    altered: boolean;
+
+    // location
+    location: [number, number][];
+    locationDescription?: string;
+    locationArea?: ObjectLocationAreaEnum;
+
+    // heritage
+    heritageId?: string;
+    heritageStatus?: ObjectHeritageStatusEnum;
+    heritageLevel?: ObjectHeritageLevelEnum;
+
+    // photos
+    photos: ObjectPhotoEntity[];
+    previewPhoto?: string; // system
+
+    // aux
     createdAt: string;
     updatedAt?: string;
-    photos: ObjectPhotoEntity[];
-    oknId?: string;
-    coverPhotoURL?: string;
+    version: number;
 }

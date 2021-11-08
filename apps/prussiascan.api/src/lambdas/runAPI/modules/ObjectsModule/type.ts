@@ -1,6 +1,9 @@
 import {
     ObjectConditionEnum,
+    ObjectHeritageLevelEnum,
+    ObjectHeritageStatusEnum,
     ObjectKindEnum,
+    ObjectLocationAreaEnum,
     ObjectMaterialEnum,
 } from '../../entities/ObjectEntity/enums';
 import { ServiceResponseType } from '../../type';
@@ -17,19 +20,23 @@ export type DynamoDBItemUpdateExpression = {
 
 type CommonFieldsType = {
     name: string;
+    nameDe: string;
     content: string;
     yearBuiltStart?: number;
     yearBuiltEnd?: number;
     yearDemolishedStart?: number;
     yearDemolishedEnd?: number;
     demolished?: boolean;
+    altered?: boolean;
     condition?: ObjectConditionEnum;
-    locationLat: number;
-    locationLong: number;
+    location: [number, number][];
+    locationDescription?: string;
+    locationArea?: ObjectLocationAreaEnum;
     materials?: ObjectMaterialEnum[];
     kind?: ObjectKindEnum[];
-    oknId?: string;
-    coverPhotoURL?: string;
+    heritageId?: string;
+    heritageStatus?: ObjectHeritageStatusEnum;
+    heritageLevel?: ObjectHeritageLevelEnum;
 };
 
 type DateFieldsType = {
@@ -39,7 +46,10 @@ type DateFieldsType = {
 
 ////////
 
-export type ObjectFieldsType = IdFieldsType & CommonFieldsType;
+export type ObjectFieldsType = IdFieldsType &
+    CommonFieldsType & {
+        previewPhoto?: string;
+    };
 
 export type CreateObjectInputType = CommonFieldsType;
 
@@ -53,7 +63,7 @@ export type FindAllObjectsInputType = {
 };
 
 export type FindAllObjectsOutputType = ServiceResponseType<
-    (IdFieldsType & CommonFieldsType)[],
+    ObjectFieldsType[],
     { lastId: string | null }
 >;
 
