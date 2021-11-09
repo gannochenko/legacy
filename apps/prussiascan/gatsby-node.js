@@ -125,7 +125,7 @@ const createHeritageObjectPages = async ({ graphql, actions, reporter }) => {
 
     Array.from({ length: numPages }).forEach((_, i) => {
         createPage({
-            path: i === 0 ? '/heritage' : `/heritage/page:${i + 1}`,
+            path: i === 0 ? '/heritage' : `/heritage/${i + 1}`,
             component: path.resolve(
                 './src/templates/HeritageObjectList/HeritageObjectList.tsx',
             ),
