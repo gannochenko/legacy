@@ -13,10 +13,13 @@ const write = require('write');
 const axios = require('axios');
 // const { fmImagesToRelative } = require('gatsby-remark-relative-images');
 const path = require('path');
-const fillTemplate = require('./src/pathTemplates').fillTemplate;
 const allowedEnvVariables = require('./.env.js').allowedEnvVariables;
 
-const BLOG_DETAIL = require('./src/pathTemplates').HERITAGE_DETAIL;
+const {
+    fillTemplate,
+    HERITAGE_LIST,
+    HERITAGE_DETAIL,
+} = require('./src/pathTemplates');
 
 /**
  * Generate GraphQL schema.json file to be read by tslint
@@ -109,6 +112,7 @@ const createHeritageObjectPages = async ({ graphql, actions, reporter }) => {
             allHeritageObject {
                 nodes {
                     id
+                    slug
                 }
             }
         }
@@ -120,12 +124,13 @@ const createHeritageObjectPages = async ({ graphql, actions, reporter }) => {
     }
 
     const objects = result.data.allHeritageObject.nodes;
-    const postsPerPage = 6;
-    const numPages = Math.ceil(objects.length / postsPerPage);
 
+    // list page with pagination
+    const postsPerPage = 20;
+    const numPages = Math.ceil(objects.length / postsPerPage);
     Array.from({ length: numPages }).forEach((_, i) => {
         createPage({
-            path: i === 0 ? '/heritage' : `/heritage/${i + 1}`,
+            path: i === 0 ? HERITAGE_LIST : `${HERITAGE_LIST}/${i + 1}`,
             component: path.resolve(
                 './src/templates/HeritageObjectList/HeritageObjectList.tsx',
             ),
@@ -134,6 +139,19 @@ const createHeritageObjectPages = async ({ graphql, actions, reporter }) => {
                 skip: i * postsPerPage,
                 numPages,
                 currentPage: i + 1,
+            },
+        });
+    });
+
+    // detail page
+    objects.forEach(({ id, slug }) => {
+        actions.createPage({
+            path: fillTemplate(HERITAGE_DETAIL, { SLUG: slug }),
+            component: path.resolve(
+                './src/templates/HeritageObjectDetail/HeritageObjectDetail.tsx',
+            ),
+            context: {
+                id,
             },
         });
     });

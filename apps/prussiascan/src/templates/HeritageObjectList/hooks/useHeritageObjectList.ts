@@ -3,7 +3,7 @@ import { HeritageObjectListPropsType } from '../type';
 
 export const useHeritageObjectList = (
     ref: Ref<HTMLDivElement>,
-    { data, path, ...props }: HeritageObjectListPropsType,
+    { data, path, pageContext, ...props }: HeritageObjectListPropsType,
 ) => {
     const location = useMemo(() => ({ pathname: path ?? '' }), [path]);
 
@@ -14,6 +14,10 @@ export const useHeritageObjectList = (
         },
         pageLayoutProps: {
             location,
+        },
+        paginationProps: {
+            count: pageContext?.numPages ?? 0,
+            page: pageContext?.currentPage ?? 1,
         },
         data: data?.allHeritageObject?.nodes ?? [],
     };

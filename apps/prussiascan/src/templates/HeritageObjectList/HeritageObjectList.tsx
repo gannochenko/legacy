@@ -1,13 +1,14 @@
 import React, { forwardRef } from 'react';
 import { Grid } from '@material-ui/core';
 import { graphql } from 'gatsby';
+import { Pagination } from '@material-ui/lab';
 
 import { HeritageObjectListPropsType } from './type';
 import {
     HeritageObjectListRoot,
-    BlogCardImage,
-    BlogCard,
-    BlogCardTitle,
+    HeritageObjectListItemImage,
+    HeritageObjectListItem,
+    HeritageObjectListItemName,
 } from './style';
 import { useHeritageObjectList } from './hooks/useHeritageObjectList';
 import { fillTemplate, HERITAGE_DETAIL } from '../../pathTemplates';
@@ -17,10 +18,8 @@ export const HeritageObjectList = forwardRef<
     HTMLDivElement,
     HeritageObjectListPropsType
 >(function HeritageObjectList(props, ref) {
-    const { rootProps, data, pageLayoutProps } = useHeritageObjectList(
-        ref,
-        props,
-    );
+    const { rootProps, data, pageLayoutProps, paginationProps } =
+        useHeritageObjectList(ref, props);
 
     return (
         <PageLayout {...pageLayoutProps}>
@@ -36,9 +35,9 @@ export const HeritageObjectList = forwardRef<
 
                             return (
                                 <Grid item md={4} sm={6} xs={12} key={slug}>
-                                    <BlogCard to={path}>
+                                    <HeritageObjectListItem to={path}>
                                         {!!previewPhotoImg && (
-                                            <BlogCardImage
+                                            <HeritageObjectListItemImage
                                                 image={
                                                     previewPhotoImg
                                                         .childImageSharp
@@ -47,12 +46,16 @@ export const HeritageObjectList = forwardRef<
                                                 alt={name}
                                             />
                                         )}
-                                        <BlogCardTitle>{name}</BlogCardTitle>
-                                    </BlogCard>
+                                        <HeritageObjectListItemName>
+                                            {name}
+                                        </HeritageObjectListItemName>
+                                    </HeritageObjectListItem>
                                 </Grid>
                             );
                         })}
                     </Grid>
+                    <br />
+                    <Pagination {...paginationProps} />
                 </HeritageObjectListRoot>
             </Container>
             <PageOffset />

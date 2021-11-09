@@ -1,13 +1,11 @@
 import styled from 'styled-components';
-import {
-    muiSpacing,
-} from '@gannochenko/ui.styled-components';
+import { muiSpacing } from '@gannochenko/ui.styled-components';
 import { GatsbyImage } from 'gatsby-plugin-image';
 import { Link } from 'gatsby';
 
 export const HeritageObjectListRoot = styled.div``;
 
-export const BlogCard = styled(Link)`
+export const HeritageObjectListItem = styled(Link)`
     box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.1);
     border-radius: 2px;
     overflow: hidden;
@@ -17,12 +15,12 @@ export const BlogCard = styled(Link)`
     min-height: ${muiSpacing(20)};
 `;
 
-export const BlogCardImage = styled(GatsbyImage)`
+export const HeritageObjectListItemImage = styled(GatsbyImage)`
     background-color: #c4c4c4;
     height: 15rem;
 `;
 
-export const BlogCardTitle = styled.div`
+export const HeritageObjectListItemName = styled.div`
     background-color: #fff;
     padding: ${muiSpacing(1)} ${muiSpacing(2)};
     position: absolute;

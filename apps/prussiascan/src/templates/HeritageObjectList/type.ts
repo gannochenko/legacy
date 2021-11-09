@@ -12,6 +12,10 @@ export type HeritageObjectListPropsType = HTMLAttributes<HTMLDivElement> &
             };
         };
         path: string;
+        pageContext: {
+            numPages: number;
+            currentPage: number;
+        };
         // put your custom props here
     }> &
     MarginPropsType;
