@@ -3,7 +3,9 @@
  *
  * See: https://www.gatsbyjs.org/docs/node-apis/
  */
-const { normalizeHeritageObject } = require('./src/services/HeritageObject/normalize');
+const {
+    normalizeHeritageObject,
+} = require('./src/services/HeritageObject/normalize');
 
 const { introspectionQuery, graphql, printSchema } = require('gatsby/graphql');
 const { createRemoteFileNode } = require('gatsby-source-filesystem');
@@ -39,35 +41,30 @@ exports.onPostBootstrap = async ({ store }) => {
     }
 };
 
-// const contentPageLayouts = {
-//     'blog': './src/components/default/BlogDetail/BlogDetail.tsx',
-// };
-//
-// const contentTypeToPath = {
-//     'blog': BLOG_DETAIL,
-// };
-
-const makePublicPath = (fileKey) => `http://localhost:4566/${process.env.AWS_OBJECT_PHOTOS_BUCKET_NAME}/${fileKey}`;
+const makePublicPath = (fileKey) =>
+    `http://localhost:4566/${process.env.AWS_OBJECT_PHOTOS_BUCKET_NAME}/${fileKey}`;
 
 exports.sourceNodes = async ({ actions }) => {
     const result = await axios.request({
         url: `${process.env.API_URL}/dev/data/objects/findall`,
         method: 'post',
-        headers: {'x-api-key': process.env.CICD_API_KEY},
+        headers: { 'x-api-key': process.env.CICD_API_KEY },
     });
 
     const data = result.data.data;
 
     for (let object of data) {
-        actions.createNode(normalizeHeritageObject({
-            ...object,
-            internal: {
-                type: "HeritageObject",
-                contentDigest: (object.version ?? '1').toString(),
-            },
-        }));
+        actions.createNode(
+            normalizeHeritageObject({
+                ...object,
+                internal: {
+                    type: 'HeritageObject',
+                    contentDigest: (object.version ?? '1').toString(),
+                },
+            }),
+        );
     }
-}
+};
 
 exports.createSchemaCustomization = ({ actions }) => {
     const { createTypes } = actions;
@@ -87,10 +84,7 @@ exports.onCreateNode = async ({
 }) => {
     const { previewPhoto, internal } = node;
 
-    if (
-        internal.type === 'HeritageObject'
-        && previewPhoto !== ''
-    ) {
+    if (internal.type === 'HeritageObject' && previewPhoto !== '') {
         const photoURL = makePublicPath(previewPhoto);
         const fileNode = await createRemoteFileNode({
             url: photoURL, // string that points to the URL of the image
@@ -112,16 +106,16 @@ const createHeritageObjectPages = async ({ graphql, actions, reporter }) => {
 
     const result = await graphql(`
         query MyHeritageObjectQuery {
-          allHeritageObject {
-            nodes {
-                id
+            allHeritageObject {
+                nodes {
+                    id
+                }
             }
-          }
         }
     `);
 
     if (result.errors) {
-        reporter.panicOnBuild(`Error while running GraphQL query.`)
+        reporter.panicOnBuild(`Error while running GraphQL query.`);
         return;
     }
 
@@ -129,13 +123,12 @@ const createHeritageObjectPages = async ({ graphql, actions, reporter }) => {
     const postsPerPage = 6;
     const numPages = Math.ceil(objects.length / postsPerPage);
 
-    console.log('numPages', numPages);
-
     Array.from({ length: numPages }).forEach((_, i) => {
-        console.log('create page!');
         createPage({
-            path: i === 0 ? '/heritage' : `/heritage/${i + 1}`,
-            component: path.resolve('./src/templates/HeritageObjectList/HeritageObjectList.tsx'),
+            path: i === 0 ? '/heritage' : `/heritage/page:${i + 1}`,
+            component: path.resolve(
+                './src/templates/HeritageObjectList/HeritageObjectList.tsx',
+            ),
             context: {
                 limit: postsPerPage,
                 skip: i * postsPerPage,
