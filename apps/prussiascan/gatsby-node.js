@@ -6,7 +6,7 @@
 const {
     normalizeHeritageObject,
 } = require('./src/services/HeritageObject/normalize');
-
+const { makePublicPath } = require('./src/util/makePublicPath');
 const { introspectionQuery, graphql, printSchema } = require('gatsby/graphql');
 const { createRemoteFileNode } = require('gatsby-source-filesystem');
 const write = require('write');
@@ -43,9 +43,6 @@ exports.onPostBootstrap = async ({ store }) => {
         );
     }
 };
-
-const makePublicPath = (fileKey) =>
-    `http://localhost:4566/${process.env.AWS_OBJECT_PHOTOS_BUCKET_NAME}/${fileKey}`;
 
 exports.sourceNodes = async ({ actions }) => {
     const result = await axios.request({

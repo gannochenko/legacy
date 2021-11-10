@@ -7,7 +7,11 @@ import { HeritageObjectDetailPropsType } from './type';
 import { PageLayout, Container } from '../../components/default';
 import { lightBoxOptions } from '../../util/lightBoxOptions';
 import { useHeritageObjectDetail } from './hooks/useHeritageObjectDetail';
-import { HeritageObjectDetailRoot, HeritageObjectDetailImage } from './style';
+import {
+    HeritageObjectDetailRoot,
+    HeritageObjectDetailImage,
+    HeritageObjectDetailImageLink,
+} from './style';
 
 /**
  * This component is for wrapping up pages that lay in the content/ folder.
@@ -16,15 +20,25 @@ import { HeritageObjectDetailRoot, HeritageObjectDetailImage } from './style';
 export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
     props,
 ) => {
-    const { rootProps, data, content, pageLayoutProps, imageProps } =
-        useHeritageObjectDetail(props);
+    const {
+        rootProps,
+        showPhoto,
+        content,
+        pageLayoutProps,
+        imageProps,
+        imageLinkProps,
+    } = useHeritageObjectDetail(props);
 
     return (
         <PageLayout {...pageLayoutProps}>
             <Container>
                 <SRLWrapper options={lightBoxOptions}>
                     <HeritageObjectDetailRoot {...rootProps}>
-                        <HeritageObjectDetailImage {...imageProps} />
+                        {showPhoto && (
+                            <HeritageObjectDetailImageLink {...imageLinkProps}>
+                                <HeritageObjectDetailImage {...imageProps} />
+                            </HeritageObjectDetailImageLink>
+                        )}
                         <ReactMarkdown>{content}</ReactMarkdown>
                     </HeritageObjectDetailRoot>
                 </SRLWrapper>
@@ -43,7 +57,7 @@ export const HeritageObjectDetailQuery = graphql`
                 previewPhoto
                 previewPhotoImg {
                     childImageSharp {
-                        gatsbyImageData(width: 600, layout: FIXED)
+                        gatsbyImageData(width: 300, layout: FIXED)
                     }
                 }
             }

@@ -1,4 +1,11 @@
-import { Ref, useMemo } from 'react';
+import { ChangeEvent, Ref, useMemo } from 'react';
+import { navigate } from 'gatsby';
+import {
+    fillTemplate,
+    HERITAGE_LIST,
+    HERITAGE_LIST_PAGE,
+} from '../../../pathTemplates';
+
 import { HeritageObjectListPropsType } from '../type';
 
 export const useHeritageObjectList = (
@@ -18,6 +25,17 @@ export const useHeritageObjectList = (
         paginationProps: {
             count: pageContext?.numPages ?? 0,
             page: pageContext?.currentPage ?? 1,
+            onChange: (event: ChangeEvent<unknown>, newPage: number) => {
+                navigate(
+                    fillTemplate(
+                        newPage === 1 ? HERITAGE_LIST : HERITAGE_LIST_PAGE,
+                        { page: newPage },
+                    ),
+                    {
+                        replace: true,
+                    },
+                );
+            },
         },
         data: data?.allHeritageObject?.nodes ?? [],
     };

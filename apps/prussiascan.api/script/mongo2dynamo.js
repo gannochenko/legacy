@@ -422,7 +422,7 @@ async function run() {
                                 ];
                                 previewPhoto = normalizedFileKey;
 
-                                console.log(itemPhotos);
+                                // console.log(itemPhotos);
                             }
                         }
                     }
@@ -430,7 +430,9 @@ async function run() {
             }
 
             const slug = `${latinize(
-                `${oldItem.name} ${oldItem.locationDescription}`,
+                [oldItem.name, oldItem.locationDescription]
+                    .filter((x) => !!x)
+                    .join(' '),
             )
                 .toLowerCase()
                 .replace(/(\s)+/g, '-')
