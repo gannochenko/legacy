@@ -9,6 +9,7 @@ import {
     HeritageObjectListItemImage,
     HeritageObjectListItem,
     HeritageObjectListItemName,
+    HeritageObjectListNext,
 } from './style';
 import { useHeritageObjectList } from './hooks/useHeritageObjectList';
 import { fillTemplate, HERITAGE_DETAIL } from '../../pathTemplates';
@@ -18,7 +19,7 @@ export const HeritageObjectList = forwardRef<
     HTMLDivElement,
     HeritageObjectListPropsType
 >(function HeritageObjectList(props, ref) {
-    const { rootProps, data, pageLayoutProps, paginationProps } =
+    const { rootProps, data, pageLayoutProps, paginationProps, nextPageProps } =
         useHeritageObjectList(ref, props);
 
     return (
@@ -53,6 +54,9 @@ export const HeritageObjectList = forwardRef<
                                 </Grid>
                             );
                         })}
+                        <Grid item md={4} sm={6} xs={12}>
+                            <HeritageObjectListNext {...nextPageProps} />
+                        </Grid>
                     </Grid>
                     <br />
                     <Pagination {...paginationProps} />
@@ -76,7 +80,7 @@ export const heritageObjectListQuery = graphql`
                 previewPhoto
                 previewPhotoImg {
                     childImageSharp {
-                        gatsbyImageData(width: 300, layout: FIXED)
+                        gatsbyImageData(width: 500, layout: FIXED)
                     }
                 }
             }

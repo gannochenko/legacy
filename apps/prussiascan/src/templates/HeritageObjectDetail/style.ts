@@ -6,8 +6,8 @@ export const HeritageObjectDetailRoot = styled.div``;
 
 export const HeritageObjectDetailImageLink = styled.a`
     display: block;
-    height: 300px;
-    width: 300px;
+    max-height: 300px;
+    max-width: 300px;
 `;
 
 export const HeritageObjectDetailImage = styled(GatsbyImage)`

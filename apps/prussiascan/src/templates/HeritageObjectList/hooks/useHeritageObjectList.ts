@@ -14,6 +14,8 @@ export const useHeritageObjectList = (
 ) => {
     const location = useMemo(() => ({ pathname: path ?? '' }), [path]);
 
+    const currentPage = pageContext?.currentPage ?? 1;
+
     return {
         rootProps: {
             ...props, // rest props go to the root node, as before
@@ -24,7 +26,7 @@ export const useHeritageObjectList = (
         },
         paginationProps: {
             count: pageContext?.numPages ?? 0,
-            page: pageContext?.currentPage ?? 1,
+            page: currentPage,
             onChange: (event: ChangeEvent<unknown>, newPage: number) => {
                 navigate(
                     fillTemplate(
@@ -36,6 +38,9 @@ export const useHeritageObjectList = (
                     },
                 );
             },
+        },
+        nextPageProps: {
+            to: fillTemplate(HERITAGE_LIST_PAGE, { page: currentPage + 1 }),
         },
         data: data?.allHeritageObject?.nodes ?? [],
     };

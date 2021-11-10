@@ -1,5 +1,8 @@
 import styled from 'styled-components';
-import { muiSpacing } from '@gannochenko/ui.styled-components';
+import {
+    muiSpacing,
+    muiBreakpointDown,
+} from '@gannochenko/ui.styled-components';
 import { GatsbyImage } from 'gatsby-plugin-image';
 import { Link } from 'gatsby';
 
@@ -12,12 +15,25 @@ export const HeritageObjectListItem = styled(Link)`
     cursor: pointer;
     position: relative;
     display: block;
-    min-height: ${muiSpacing(20)};
+    height: ${muiSpacing(100)};
+`;
+
+export const HeritageObjectListNext = styled(HeritageObjectListItem)`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:before {
+        content: 'Далее >';
+    }
+    ${muiBreakpointDown('sm')} {
+        display: none;
+    }
 `;
 
 export const HeritageObjectListItemImage = styled(GatsbyImage)`
-    background-color: #c4c4c4;
-    height: 15rem;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
 `;
 
 export const HeritageObjectListItemName = styled.div`
