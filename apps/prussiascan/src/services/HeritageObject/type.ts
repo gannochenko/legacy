@@ -3,8 +3,9 @@ import {
     ObjectKindEnum,
     ObjectMaterialEnum,
 } from './enums';
+import { IGatsbyImageData } from 'gatsby-plugin-image';
 
-type ObjectPhotoEntityType = {
+type HeritageObjectPhotoType = {
     variants: {
         normalized: string;
     };
@@ -17,7 +18,7 @@ type ObjectPhotoEntityType = {
     capturedYearEnd?: number;
 };
 
-export type ObjectEntityType = {
+export type HeritageObjectType = {
     id: string;
     slug: string;
     name: string;
@@ -34,6 +35,13 @@ export type ObjectEntityType = {
     kind: ObjectKindEnum[];
     createdAt: string;
     updatedAt?: string;
-    photos: ObjectPhotoEntityType[];
+    photos: HeritageObjectPhotoType[];
+    previewPhoto?: string;
+    previewPhotoImg?: {
+        childImageSharp?: {
+            gatsbyImageData?: IGatsbyImageData;
+        };
+    };
+
     version: number;
 };

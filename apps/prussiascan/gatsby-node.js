@@ -145,7 +145,7 @@ const createHeritageObjectPages = async ({ graphql, actions, reporter }) => {
         actions.createPage({
             path: fillTemplate(HERITAGE_DETAIL, { SLUG: slug }),
             component: path.resolve(
-                './src/templates/HeritageObjectDetail/HeritageObjectDetail.tsx',
+                './src/templates/HeritageObjectDetailTemplate/HeritageObjectDetailTemplate.tsx',
             ),
             context: {
                 id,
