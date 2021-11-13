@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-const latinize = require('latinize');
 const join = require('path').join;
 const fs = require('fs').promises;
 
@@ -12,6 +11,9 @@ const MongoClient = mongo.MongoClient;
 const v4 = require('uuid').v4;
 
 const sharp = require('sharp');
+const {
+    makeSlug,
+} = require('../src/lambdas/runAPI/entities/ObjectEntity/utils');
 
 const awsOptions = {
     endpoint: 'http://localhost:4566',
@@ -429,16 +431,7 @@ async function run() {
                 }
             }
 
-            const slug = `${latinize(
-                [oldItem.name, oldItem.locationDescription]
-                    .filter((x) => !!x)
-                    .join(' '),
-            )
-                .toLowerCase()
-                .replace(/(\s)+/g, '-')
-                .replace(/[^a-zA-Z0-9-]/g, '')}-${Math.round(
-                Math.random() * 100000,
-            )}-`;
+            const slug = makeSlug(oldItem.name, oldItem.locationDescription);
 
             const dynamodbItem = {
                 id: itemId,
