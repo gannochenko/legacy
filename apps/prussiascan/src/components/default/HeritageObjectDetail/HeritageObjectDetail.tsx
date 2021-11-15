@@ -24,6 +24,7 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
                 <Container>
                     {showPhoto && (
                         <HeritageObjectDetailImageLink {...imageLinkProps}>
+                            {/* @ts-ignore */}
                             <HeritageObjectDetailImage {...imageProps} />
                         </HeritageObjectDetailImageLink>
                     )}

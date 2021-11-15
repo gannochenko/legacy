@@ -19,10 +19,10 @@ export class ObjectEntity {
     content: string;
 
     // historical dates
-    yearBuiltStart: number;
-    yearBuiltEnd: number;
-    yearDemolishedStart: number;
-    yearDemolishedEnd: number;
+    constructionYearStart: number;
+    constructionYearEnd: number;
+    lossYearStart: number;
+    lossYearEnd: number;
 
     // properties
     materials: ObjectMaterialEnum[];
@@ -30,7 +30,7 @@ export class ObjectEntity {
 
     // status
     condition: ObjectConditionEnum;
-    demolished: boolean;
+    lost: boolean;
     altered: boolean;
 
     // location

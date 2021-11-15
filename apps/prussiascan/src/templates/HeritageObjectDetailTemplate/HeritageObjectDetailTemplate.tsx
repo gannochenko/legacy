@@ -30,12 +30,37 @@ export const HeritageObjectDetailTemplateQuery = graphql`
                 name
                 slug
                 content
+                constructionYearStart
+                constructionYearEnd
+                lossYearStart
+                lossYearEnd
+                lost
+                altered
+                condition
+                location
+                locationArea
+                locationDescription
+                materials
+                kind
+                photos {
+                    variants {
+                        normalized
+                    }
+                    code
+                    author
+                    source
+                    capturedYearStart
+                    capturedYearEnd
+                }
                 previewPhoto
                 previewPhotoImg {
                     childImageSharp {
                         gatsbyImageData(width: 300, layout: FIXED)
                     }
                 }
+                heritageStatus
+                heritageLevel
+                heritageId
             }
         }
     }

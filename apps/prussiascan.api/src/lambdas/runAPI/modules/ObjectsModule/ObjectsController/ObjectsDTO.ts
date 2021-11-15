@@ -76,26 +76,26 @@ export class CreateObjectDto {
     @IsNumber()
     @IsOptional()
     @Min(0)
-    yearBuiltStart: number;
+    constructionYearStart: number;
 
     @IsNumber()
     @IsOptional()
     @Min(0)
-    yearBuiltEnd: number;
+    constructionYearEnd: number;
 
     @IsNumber()
     @IsOptional()
     @Min(0)
-    yearDemolishedStart: number;
+    lossYearStart: number;
 
     @IsNumber()
     @IsOptional()
     @Min(0)
-    yearDemolishedEnd: number;
+    lossYearEnd: number;
 
     @IsBoolean()
     @IsOptional()
-    demolished: boolean;
+    lost: boolean;
 
     @IsBoolean()
     @IsOptional()

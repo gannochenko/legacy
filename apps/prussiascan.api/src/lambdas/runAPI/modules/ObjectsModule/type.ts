@@ -22,11 +22,11 @@ type CommonFieldsType = {
     name: string;
     nameDe: string;
     content: string;
-    yearBuiltStart?: number;
-    yearBuiltEnd?: number;
-    yearDemolishedStart?: number;
-    yearDemolishedEnd?: number;
-    demolished?: boolean;
+    constructionYearStart?: number;
+    constructionYearEnd?: number;
+    lossYearStart?: number;
+    lossYearEnd?: number;
+    lost?: boolean;
     altered?: boolean;
     condition?: ObjectConditionEnum;
     location: [number, number][];

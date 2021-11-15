@@ -10,12 +10,15 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
     const previewPhoto = data?.previewPhoto ?? '';
 
     const previewPhotoURL = makePublicPath(previewPhoto);
+    const image = data?.previewPhotoImg?.childImageSharp?.gatsbyImageData;
+
+    console.log(data);
 
     return {
         rootProps: props,
         showPhoto: !!previewPhoto,
         imageProps: {
-            image: data?.previewPhotoImg?.childImageSharp?.gatsbyImageData,
+            image,
             alt: name,
         },
         imageLinkProps: {

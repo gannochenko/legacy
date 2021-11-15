@@ -3,7 +3,7 @@ const normalizePhotos = (photos) => {
         return [];
     }
 
-    return photos.map(photo => {
+    return photos.map((photo) => {
         return {
             variants: {
                 normalized: '',
@@ -23,27 +23,31 @@ const normalizePhotos = (photos) => {
 
 module.exports = {
     normalizeHeritageObject: (element) => {
+        console.log(element.location);
         return {
             id: element.id ?? '',
             slug: element.slug ?? '',
             name: element.name ?? '',
             content: element.content ?? '',
-            yearBuiltStart: element.yearBuiltStart ?? 0,
-            yearBuiltEnd: element.yearBuiltEnd ?? 0,
-            yearDemolishedStart: element.yearDemolishedStart ?? 0,
-            yearDemolishedEnd: element.yearDemolishedEnd ?? 0,
-            demolished: element.demolished ?? false,
+            constructionYearStart: element.constructionYearStart ?? 0,
+            constructionYearEnd: element.constructionYearEnd ?? 0,
+            lossYearStart: element.lossYearStart ?? 0,
+            lossYearEnd: element.lossYearEnd ?? 0,
+            lost: element.lost ?? false,
+            altered: element.altered ?? false,
             condition: element.condition ?? '',
-            locationLat: element.locationLat ?? 0,
-            locationLong: element.locationLong ?? 0,
+            location: element.location ?? [],
             materials: element.materials ?? [],
             kind: element.kind ?? [],
             createdAt: element.createdAt ?? '',
             updatedAt: element.updatedAt ?? '',
             photos: normalizePhotos(element.photos ?? []),
             previewPhoto: element.previewPhoto ?? '',
+            heritageId: element.heritageId ?? '',
+            heritageLevel: element.heritageLevel ?? '',
+            heritageStatus: element.heritageStatus ?? '',
             version: element.version ?? 1,
             internal: element.internal,
         };
-    }
+    },
 };

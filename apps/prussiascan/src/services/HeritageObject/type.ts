@@ -29,8 +29,7 @@ export type HeritageObjectType = {
     yearDemolishedEnd: number;
     demolished: boolean;
     condition: ObjectConditionEnum;
-    locationLat: number;
-    locationLong: number;
+    location: [number, number][];
     materials: ObjectMaterialEnum[];
     kind: ObjectKindEnum[];
     createdAt: string;
@@ -38,8 +37,8 @@ export type HeritageObjectType = {
     photos: HeritageObjectPhotoType[];
     previewPhoto?: string;
     previewPhotoImg?: {
-        childImageSharp?: {
-            gatsbyImageData?: IGatsbyImageData;
+        childImageSharp: {
+            gatsbyImageData: IGatsbyImageData;
         };
     };
 
