@@ -7,6 +7,7 @@ import {
     ObjectMaterialEnum,
 } from '../../entities/ObjectEntity/enums';
 import { ServiceResponseType } from '../../type';
+import { HeritageObjectLocationType } from '../../entities/ObjectEntity/type';
 
 type IdFieldsType = {
     id: string;
@@ -29,7 +30,7 @@ type CommonFieldsType = {
     lost?: boolean;
     altered?: boolean;
     condition?: ObjectConditionEnum;
-    location: [number, number][];
+    location: HeritageObjectLocationType[];
     locationDescription?: string;
     locationArea?: ObjectLocationAreaEnum;
     materials?: ObjectMaterialEnum[];

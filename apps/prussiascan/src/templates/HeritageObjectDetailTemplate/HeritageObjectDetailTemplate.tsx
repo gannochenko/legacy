@@ -37,7 +37,10 @@ export const HeritageObjectDetailTemplateQuery = graphql`
                 lost
                 altered
                 condition
-                location
+                location {
+                    lat
+                    lng
+                }
                 locationArea
                 locationDescription
                 materials

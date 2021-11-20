@@ -10,13 +10,11 @@ export const useHeritageObjectDetailTemplate = ({
     const location = useMemo(() => ({ pathname: path ?? '' }), [path]);
 
     const itemData = data?.allHeritageObject?.nodes?.[0];
-    const name = itemData?.name ?? '';
 
     return {
         rootProps: props,
         pageLayoutProps: {
             location,
-            title: name ?? '',
         },
         detailPageProps: {
             data: itemData,

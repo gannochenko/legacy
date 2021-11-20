@@ -54,15 +54,13 @@ exports.sourceNodes = async ({ actions }) => {
     const data = result.data.data;
 
     for (let object of data) {
-        actions.createNode(
-            normalizeHeritageObject({
-                ...object,
-                internal: {
-                    type: 'HeritageObject',
-                    contentDigest: (object.version ?? '1').toString(),
-                },
-            }),
-        );
+        actions.createNode({
+            ...normalizeHeritageObject(object),
+            internal: {
+                type: 'HeritageObject',
+                contentDigest: (object.version ?? '1').toString(),
+            },
+        });
     }
 };
 

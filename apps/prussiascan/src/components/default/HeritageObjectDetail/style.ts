@@ -1,5 +1,9 @@
 import styled, { css } from 'styled-components';
-import { marginProps, reset } from '@gannochenko/ui.styled-components';
+import {
+    absoluteCover,
+    marginProps,
+    reset,
+} from '@gannochenko/ui.styled-components';
 import { propsBlocker } from '../../../util';
 
 import { HeritageObjectDetailRootPropsType } from './type';
@@ -35,4 +39,10 @@ export const HeritageObjectDetailImageLink = styled.a`
 
 export const HeritageObjectDetailImage = styled(GatsbyImage)`
     border-radius: 2px;
+`;
+
+export const HeritageObjectDetailHeaderBackgroundImage = styled(GatsbyImage)`
+    ${absoluteCover()};
+    user-select: none;
+    position: absolute !important;
 `;

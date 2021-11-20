@@ -29,7 +29,7 @@ export type HeritageObjectType = {
     yearDemolishedEnd: number;
     demolished: boolean;
     condition: ObjectConditionEnum;
-    location: [number, number][];
+    location: { lat: number; lng: number }[];
     materials: ObjectMaterialEnum[];
     kind: ObjectKindEnum[];
     createdAt: string;

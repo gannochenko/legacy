@@ -1,4 +1,4 @@
-import Collection from '../config/collection.js';
+import Collection from "../config/collection.js";
 
 // import moment from 'moment';
 
@@ -6,11 +6,10 @@ import Collection from '../config/collection.js';
  * @abstract
  * @mixin
  */
-const M = (superclass) =>  class Draft extends superclass
-{
-    static getCollectionInstance()
-    {
-        return Collection;
+const M = (superclass) =>
+  class Draft extends superclass {
+    static getCollectionInstance() {
+      return Collection;
     }
 
     // ////////////////////
@@ -21,7 +20,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return String|undefined
      */
     getUid() {
-        return this.getData().uid;
+      return this.getData().uid;
     }
 
     /**
@@ -29,7 +28,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return String
      */
     extractUid() {
-        return this.getUid() || '';
+      return this.getUid() || "";
     }
 
     /**
@@ -38,7 +37,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return void
      */
     setUid(value) {
-        this.getData().uid = value;
+      this.getData().uid = value;
     }
 
     /**
@@ -47,7 +46,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return void
      */
     putUid(value) {
-        this.getData().uid = value;
+      this.getData().uid = value;
     }
 
     /**
@@ -55,7 +54,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @returns boolean
      */
     hasUid() {
-        return _.isStringNotEmpty(this.getUid());
+      return _.isStringNotEmpty(this.getUid());
     }
 
     /**
@@ -63,8 +62,8 @@ const M = (superclass) =>  class Draft extends superclass
      * @returns void
      */
     unSetUid() {
-        const data = this.getData();
-        delete data.uid;
+      const data = this.getData();
+      delete data.uid;
     }
 
     // ////////////////////
@@ -75,7 +74,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return []|undefined
      */
     getLocation() {
-        return this.getData().location;
+      return this.getData().location;
     }
 
     /**
@@ -83,7 +82,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return []
      */
     extractLocation() {
-        return this.getLocation() || '';
+      return this.getLocation() || "";
     }
 
     /**
@@ -92,7 +91,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return void
      */
     setLocation(value) {
-        this.getData().location = value;
+      this.getData().location = value;
     }
 
     /**
@@ -101,7 +100,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return void
      */
     putLocation(value) {
-        this.getData().location = _.deepClone(value);
+      this.getData().location = _.deepClone(value);
     }
 
     /**
@@ -109,7 +108,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @returns boolean
      */
     hasLocation() {
-        return _.isArrayNotEmpty(this.getLocation());
+      return _.isArrayNotEmpty(this.getLocation());
     }
 
     /**
@@ -117,8 +116,8 @@ const M = (superclass) =>  class Draft extends superclass
      * @returns void
      */
     unSetLocation() {
-        const data = this.getData();
-        delete data.location;
+      const data = this.getData();
+      delete data.location;
     }
 
     // ////////////////////
@@ -129,7 +128,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return String|undefined
      */
     getCategory() {
-        return this.getData().category;
+      return this.getData().category;
     }
 
     /**
@@ -137,7 +136,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return String
      */
     extractCategory() {
-        return this.getCategory() || '';
+      return this.getCategory() || "";
     }
 
     /**
@@ -146,7 +145,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return void
      */
     setCategory(value) {
-        this.getData().category = value;
+      this.getData().category = value;
     }
 
     /**
@@ -155,7 +154,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return void
      */
     putCategory(value) {
-        this.getData().category = value;
+      this.getData().category = value;
     }
 
     /**
@@ -163,7 +162,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @returns boolean
      */
     hasCategory() {
-        return _.isStringNotEmpty(this.getCategory());
+      return _.isStringNotEmpty(this.getCategory());
     }
 
     /**
@@ -171,8 +170,8 @@ const M = (superclass) =>  class Draft extends superclass
      * @returns void
      */
     unSetCategory() {
-        const data = this.getData();
-        delete data.category;
+      const data = this.getData();
+      delete data.category;
     }
 
     // ////////////////////
@@ -183,7 +182,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return String|undefined
      */
     getDescription() {
-        return this.getData().description;
+      return this.getData().description;
     }
 
     /**
@@ -191,7 +190,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return String
      */
     extractDescription() {
-        return this.getDescription() || '';
+      return this.getDescription() || "";
     }
 
     /**
@@ -200,7 +199,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return void
      */
     setDescription(value) {
-        this.getData().description = value;
+      this.getData().description = value;
     }
 
     /**
@@ -209,7 +208,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return void
      */
     putDescription(value) {
-        this.getData().description = value;
+      this.getData().description = value;
     }
 
     /**
@@ -217,7 +216,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @returns boolean
      */
     hasDescription() {
-        return _.isStringNotEmpty(this.getDescription());
+      return _.isStringNotEmpty(this.getDescription());
     }
 
     /**
@@ -225,8 +224,8 @@ const M = (superclass) =>  class Draft extends superclass
      * @returns void
      */
     unSetDescription() {
-        const data = this.getData();
-        delete data.description;
+      const data = this.getData();
+      delete data.description;
     }
 
     // ////////////////////
@@ -237,7 +236,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return Boolean|undefined
      */
     getVerified() {
-        return this.getData().verified;
+      return this.getData().verified;
     }
 
     /**
@@ -245,7 +244,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return Boolean
      */
     extractVerified() {
-        return this.getVerified() || '';
+      return this.getVerified() || "";
     }
 
     /**
@@ -254,7 +253,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return void
      */
     setVerified(value) {
-        this.getData().verified = value;
+      this.getData().verified = value;
     }
 
     /**
@@ -263,7 +262,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return void
      */
     putVerified(value) {
-        this.getData().verified = value;
+      this.getData().verified = value;
     }
 
     /**
@@ -271,7 +270,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @returns boolean
      */
     hasVerified() {
-        return !!(this.getVerified());
+      return !!this.getVerified();
     }
 
     /**
@@ -279,8 +278,8 @@ const M = (superclass) =>  class Draft extends superclass
      * @returns void
      */
     unSetVerified() {
-        const data = this.getData();
-        delete data.verified;
+      const data = this.getData();
+      delete data.verified;
     }
 
     // ////////////////////
@@ -291,7 +290,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return String|undefined
      */
     getName() {
-        return this.getData().name;
+      return this.getData().name;
     }
 
     /**
@@ -299,7 +298,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return String
      */
     extractName() {
-        return this.getName() || '';
+      return this.getName() || "";
     }
 
     /**
@@ -308,7 +307,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return void
      */
     setName(value) {
-        this.getData().name = value;
+      this.getData().name = value;
     }
 
     /**
@@ -317,7 +316,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return void
      */
     putName(value) {
-        this.getData().name = value;
+      this.getData().name = value;
     }
 
     /**
@@ -325,7 +324,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @returns boolean
      */
     hasName() {
-        return _.isStringNotEmpty(this.getName());
+      return _.isStringNotEmpty(this.getName());
     }
 
     /**
@@ -333,30 +332,28 @@ const M = (superclass) =>  class Draft extends superclass
      * @returns void
      */
     unSetName() {
-        const data = this.getData();
-        delete data.name;
+      const data = this.getData();
+      delete data.name;
     }
 
-    getLocationFirst()
-    {
-        const locs = this.getLocation();
-        if (_.isObjectNotEmpty(locs[0]))
-        {
-            return locs[0];
-        }
+    getLocationFirst() {
+      const locs = this.getLocation();
+      if (_.isObjectNotEmpty(locs[0])) {
+        return locs[0];
+      }
 
-        return null;
+      return null;
     }
 
     // ////////////////////
-    // attribute Incorrect Data
+    // attribute Incorrect PageHeaderData
 
     /**
      * Get incorrectData by reference
      * @return Boolean|undefined
      */
     getIncorrectData() {
-        return this.getData().incorrectData;
+      return this.getData().incorrectData;
     }
 
     /**
@@ -364,7 +361,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return Boolean
      */
     extractIncorrectData() {
-        return this.getIncorrectData() || '';
+      return this.getIncorrectData() || "";
     }
 
     /**
@@ -373,7 +370,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return void
      */
     setIncorrectData(value) {
-        this.getData().incorrectData = value;
+      this.getData().incorrectData = value;
     }
 
     /**
@@ -382,7 +379,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @return void
      */
     putIncorrectData(value) {
-        this.getData().incorrectData = _.deepClone(value);
+      this.getData().incorrectData = _.deepClone(value);
     }
 
     /**
@@ -390,7 +387,7 @@ const M = (superclass) =>  class Draft extends superclass
      * @returns boolean
      */
     hasIncorrectData() {
-        return !!(this.getIncorrectData());
+      return !!this.getIncorrectData();
     }
 
     /**
@@ -398,14 +395,13 @@ const M = (superclass) =>  class Draft extends superclass
      * @returns void
      */
     unSetIncorrectData() {
-        const data = this.getData();
-        delete data.incorrectData;
+      const data = this.getData();
+      delete data.incorrectData;
     }
 
-    _normalize(data)
-    {
-        return data;
+    _normalize(data) {
+      return data;
     }
-};
+  };
 
 export default M;

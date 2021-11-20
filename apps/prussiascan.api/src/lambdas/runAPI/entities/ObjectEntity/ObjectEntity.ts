@@ -7,6 +7,7 @@ import {
     ObjectLocationAreaEnum,
 } from './enums';
 import { ObjectPhotoEntity } from '../ObjectPhotoEntity';
+import { HeritageObjectLocationType } from './type';
 
 export class ObjectEntity {
     // id
@@ -34,7 +35,7 @@ export class ObjectEntity {
     altered: boolean;
 
     // location
-    location: [number, number][];
+    location: HeritageObjectLocationType[];
     locationDescription?: string;
     locationArea?: ObjectLocationAreaEnum;
 

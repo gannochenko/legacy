@@ -23,6 +23,7 @@ import {
     ObjectMaterialEnum,
 } from '../../../entities/ObjectEntity/enums';
 import { MimeType } from '../type';
+import { HeritageObjectLocationType } from '../../../entities/ObjectEntity/type';
 
 // https://github.com/typestack/class-validator
 
@@ -36,15 +37,15 @@ export class LocationsValidatorConstraint
         }
 
         for (let i = 0; i < input.length; i++) {
-            const item = input[i];
+            const item = input[i] as unknown as HeritageObjectLocationType;
 
-            if (item.length !== 2) {
+            if (!item.lat || !item.lng) {
                 return false;
             }
 
             if (
-                Number.isNaN(parseFloat(item[0] as string)) ||
-                Number.isNaN(parseFloat(item[1] as string))
+                Number.isNaN(parseFloat(item.lat as unknown as string)) ||
+                Number.isNaN(parseFloat(item.lng as unknown as string))
             ) {
                 return false;
             }
@@ -113,7 +114,7 @@ export class CreateObjectDto {
         each: true,
     })
     @Validate(LocationsValidatorConstraint)
-    location: [number, number][];
+    location: { lat: number; lng: number }[];
 
     @IsString()
     @IsOptional()

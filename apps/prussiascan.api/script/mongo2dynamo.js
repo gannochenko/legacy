@@ -446,7 +446,7 @@ async function run() {
                 lost: oldItem.condition === 'L',
                 altered: oldItem.condition === 'R',
                 condition: conditionMap[oldItem.condition] ?? 0,
-                location: oldItem.location.map(({ lat, lng }) => [lat, lng]),
+                location: oldItem.location ?? [],
                 locationDescription: oldItem.locationDescription,
                 locationArea: areaMap[oldItem.area] ?? 0,
                 kind: (oldItem.kind ?? [])

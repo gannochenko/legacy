@@ -1308,9 +1308,9 @@
     inquirer "^7.3.3"
 
 "@gannochenko/ui.styled-components@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@gannochenko/ui.styled-components/-/ui.styled-components-1.1.0.tgz#472142d5f985d76473e039314203038c25f30cac"
-  integrity sha512-3xgOEZstuGC12SD29DDkTyfLuyic+dzuvJCBrAY+H9i3M+JyPcu2zMEp8Sa3IoGpMdj1uR4HinQu8DiFkGNfkQ==
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@gannochenko/ui.styled-components/-/ui.styled-components-1.2.0.tgz#f3c0ab5544b09edce341d697783719e3b2d39260"
+  integrity sha512-RdWDoZ4qMmS/cx9NCZ/ol5FZnGTFag7rgYpKwBq6c0BOJ/eLICpv+P9cQt6XEgubFkdJdnQ7c/7bFyTOlRdJJQ==
 
 "@gannochenko/ui@^1.1.2":
   version "1.1.2"

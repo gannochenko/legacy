@@ -23,8 +23,8 @@ const normalizePhotos = (photos) => {
 
 module.exports = {
     normalizeHeritageObject: (element) => {
-        console.log(element.location);
         return {
+            bitch: '1',
             id: element.id ?? '',
             slug: element.slug ?? '',
             name: element.name ?? '',
@@ -37,6 +37,8 @@ module.exports = {
             altered: element.altered ?? false,
             condition: element.condition ?? '',
             location: element.location ?? [],
+            locationDescription: element.locationDescription ?? '',
+            locationArea: element.locationArea ?? '',
             materials: element.materials ?? [],
             kind: element.kind ?? [],
             createdAt: element.createdAt ?? '',
@@ -47,7 +49,6 @@ module.exports = {
             heritageLevel: element.heritageLevel ?? '',
             heritageStatus: element.heritageStatus ?? '',
             version: element.version ?? 1,
-            internal: element.internal,
         };
     },
 };

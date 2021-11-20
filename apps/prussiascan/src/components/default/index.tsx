@@ -17,4 +17,5 @@ export * from './NetworkStatusProvider';
 export * from './NotFound';
 export * from './PageLayout';
 export * from './PageOffset';
+export * from './PageHeader';
 export * from './Typography';

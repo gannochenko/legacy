@@ -12,6 +12,7 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
     const previewPhotoURL = makePublicPath(previewPhoto);
     const image = data?.previewPhotoImg?.childImageSharp?.gatsbyImageData;
 
+    console.log(image);
     console.log(data);
 
     return {
@@ -25,5 +26,12 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
             href: previewPhotoURL,
         },
         content: content ?? '',
+        pageHeaderProps: {
+            image,
+            imageAlt: name,
+            imageOverlayOpacity: 0.7,
+            containerMaxWidth: '100%',
+        },
+        name: data?.name ?? '',
     };
 };
