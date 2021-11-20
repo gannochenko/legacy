@@ -41,6 +41,12 @@ export type HeritageObjectType = {
             gatsbyImageData: IGatsbyImageData;
         };
     };
+    headerPhoto?: string;
+    headerPhotoImg?: {
+        childImageSharp: {
+            gatsbyImageData: IGatsbyImageData;
+        };
+    };
 
     version: number;
 };

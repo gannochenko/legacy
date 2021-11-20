@@ -48,9 +48,11 @@ type DateFieldsType = {
 ////////
 
 export type ObjectFieldsType = IdFieldsType &
-    CommonFieldsType & {
-        previewPhoto?: string;
-    };
+    CommonFieldsType &
+    Partial<{
+        previewPhoto: string;
+        headerPhoto: string;
+    }>;
 
 export type CreateObjectInputType = CommonFieldsType;
 

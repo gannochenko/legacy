@@ -45,6 +45,7 @@ module.exports = {
             updatedAt: element.updatedAt ?? '',
             photos: normalizePhotos(element.photos ?? []),
             previewPhoto: element.previewPhoto ?? '',
+            headerPhoto: element.headerPhoto ?? '',
             heritageId: element.heritageId ?? '',
             heritageLevel: element.heritageLevel ?? '',
             heritageStatus: element.heritageStatus ?? '',

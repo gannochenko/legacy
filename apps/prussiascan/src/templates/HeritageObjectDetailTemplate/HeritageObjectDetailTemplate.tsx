@@ -61,6 +61,12 @@ export const HeritageObjectDetailTemplateQuery = graphql`
                         gatsbyImageData(width: 300, layout: FIXED)
                     }
                 }
+                headerPhoto
+                headerPhotoImg {
+                    childImageSharp {
+                        gatsbyImageData(width: 1000, layout: FIXED)
+                    }
+                }
                 heritageStatus
                 heritageLevel
                 heritageId

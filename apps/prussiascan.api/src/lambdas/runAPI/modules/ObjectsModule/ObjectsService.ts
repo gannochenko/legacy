@@ -76,6 +76,8 @@ export class ObjectsService {
             kind,
             materials,
             photos: [],
+            // previewPhoto // todo
+            // headerPhoto // todo
             createdAt: new Date().toISOString(),
             version: 1,
             heritageStatus,

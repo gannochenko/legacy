@@ -69,6 +69,7 @@ exports.createSchemaCustomization = ({ actions }) => {
     createTypes(`
         type HeritageObject implements Node {
             previewPhotoImg: File @link(from: "fields.localFile")
+            headerPhotoImg: File @link(from: "fields.headerLocalFile")
         }
     `);
 };
@@ -80,21 +81,46 @@ exports.onCreateNode = async ({
     cache,
     createNodeId,
 }) => {
-    const { previewPhoto, internal } = node;
+    const { previewPhoto, headerPhoto, internal } = node;
 
-    if (internal.type === 'HeritageObject' && previewPhoto !== '') {
-        const photoURL = makePublicPath(previewPhoto);
-        const fileNode = await createRemoteFileNode({
-            url: photoURL, // string that points to the URL of the image
-            parentNodeId: node.id, // id of the parent node of the fileNode you are going to create
-            createNode, // helper function in gatsby-node to generate the node
-            createNodeId, // helper function in gatsby-node to generate the node id
-            cache, // Gatsby's cache
-            store, // Gatsby's Redux store
-        });
+    if (internal.type === 'HeritageObject') {
+        if (previewPhoto !== '') {
+            const photoURL = makePublicPath(previewPhoto);
+            const fileNode = await createRemoteFileNode({
+                url: photoURL, // string that points to the URL of the image
+                parentNodeId: node.id, // id of the parent node of the fileNode you are going to create
+                createNode, // helper function in gatsby-node to generate the node
+                createNodeId, // helper function in gatsby-node to generate the node id
+                cache, // Gatsby's cache
+                store, // Gatsby's Redux store
+            });
 
-        if (fileNode) {
-            createNodeField({ node, name: 'localFile', value: fileNode.id });
+            if (fileNode) {
+                createNodeField({
+                    node,
+                    name: 'localFile',
+                    value: fileNode.id,
+                });
+            }
+        }
+        if (headerPhoto !== '') {
+            const photoURL = makePublicPath(headerPhoto);
+            const fileNode = await createRemoteFileNode({
+                url: photoURL, // string that points to the URL of the image
+                parentNodeId: node.id, // id of the parent node of the fileNode you are going to create
+                createNode, // helper function in gatsby-node to generate the node
+                createNodeId, // helper function in gatsby-node to generate the node id
+                cache, // Gatsby's cache
+                store, // Gatsby's Redux store
+            });
+
+            if (fileNode) {
+                createNodeField({
+                    node,
+                    name: 'headerLocalFile',
+                    value: fileNode.id,
+                });
+            }
         }
     }
 };

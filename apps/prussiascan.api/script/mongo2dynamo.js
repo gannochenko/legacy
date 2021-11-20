@@ -457,6 +457,7 @@ async function run() {
                     .filter((x) => !!x),
                 photos: itemPhotos,
                 previewPhoto: previewPhoto,
+                headerPhoto: previewPhoto,
                 createdAt: new Date().toISOString(),
                 version: 1,
                 heritageStatus: statusMap[oldItem.status] ?? 0,

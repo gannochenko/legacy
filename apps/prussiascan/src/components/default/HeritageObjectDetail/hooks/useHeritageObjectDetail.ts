@@ -8,18 +8,22 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
     const name = data?.name ?? '';
     const content = data?.content ?? '';
     const previewPhoto = data?.previewPhoto ?? '';
+    const headerPhoto = data?.headerPhoto ?? '';
 
     const previewPhotoURL = makePublicPath(previewPhoto);
-    const image = data?.previewPhotoImg?.childImageSharp?.gatsbyImageData;
+    const previewImage =
+        data?.previewPhotoImg?.childImageSharp?.gatsbyImageData;
 
-    console.log(image);
+    const headerPhotoURL = makePublicPath(headerPhoto);
+    const headerImage = data?.headerPhotoImg?.childImageSharp?.gatsbyImageData;
+
     console.log(data);
 
     return {
         rootProps: props,
         showPhoto: !!previewPhoto,
         imageProps: {
-            image,
+            image: previewImage,
             alt: name,
         },
         imageLinkProps: {
@@ -27,7 +31,7 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
         },
         content: content ?? '',
         pageHeaderProps: {
-            image,
+            image: headerImage,
             imageAlt: name,
             imageOverlayOpacity: 0.7,
             containerMaxWidth: '100%',
