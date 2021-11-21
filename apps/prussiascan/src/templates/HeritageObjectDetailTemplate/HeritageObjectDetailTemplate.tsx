@@ -28,6 +28,7 @@ export const HeritageObjectDetailTemplateQuery = graphql`
         allHeritageObject(filter: { id: { eq: $id } }) {
             nodes {
                 name
+                nameDe
                 slug
                 content
                 constructionYearStart

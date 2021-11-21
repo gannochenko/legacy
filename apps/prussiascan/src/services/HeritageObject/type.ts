@@ -4,6 +4,7 @@ import {
     ObjectMaterialEnum,
 } from './enums';
 import { IGatsbyImageData } from 'gatsby-plugin-image';
+import { heritageStatusMap } from '../../maps/HeritageStatus';
 
 type HeritageObjectPhotoType = {
     variants: {
@@ -22,6 +23,7 @@ export type HeritageObjectType = {
     id: string;
     slug: string;
     name: string;
+    nameDe?: string;
     content: string;
     yearBuiltStart: number;
     yearBuiltEnd: number;
@@ -30,6 +32,7 @@ export type HeritageObjectType = {
     demolished: boolean;
     condition: ObjectConditionEnum;
     location: { lat: number; lng: number }[];
+    locationDescription?: string;
     materials: ObjectMaterialEnum[];
     kind: ObjectKindEnum[];
     createdAt: string;
@@ -47,6 +50,7 @@ export type HeritageObjectType = {
             gatsbyImageData: IGatsbyImageData;
         };
     };
+    heritageStatus?: keyof typeof heritageStatusMap;
 
     version: number;
 };

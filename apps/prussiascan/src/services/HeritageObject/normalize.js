@@ -28,6 +28,7 @@ module.exports = {
             id: element.id ?? '',
             slug: element.slug ?? '',
             name: element.name ?? '',
+            nameDe: element.nameDe ?? '',
             content: element.content ?? '',
             constructionYearStart: element.constructionYearStart ?? 0,
             constructionYearEnd: element.constructionYearEnd ?? 0,

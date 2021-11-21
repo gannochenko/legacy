@@ -3,12 +3,15 @@ import {
     heightProps,
     HeightPropsType,
     muiSpacing,
+    getPropsBlocker,
 } from '@gannochenko/ui.styled-components';
 import { Container as MUIContainer } from '@material-ui/core';
 import styled from 'styled-components';
 import { ContainerPropsType } from './type';
 
-const ContainerRoot = styled(MUIContainer)<HeightPropsType>`
+const ContainerRoot = styled(MUIContainer).withConfig(
+    getPropsBlocker,
+)<HeightPropsType>`
     padding-left: ${muiSpacing(5)};
     padding-right: ${muiSpacing(5)};
     ${heightProps};

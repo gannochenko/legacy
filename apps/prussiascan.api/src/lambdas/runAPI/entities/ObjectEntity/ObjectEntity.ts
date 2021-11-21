@@ -14,7 +14,7 @@ export class ObjectEntity {
     id: string;
     slug: string;
     name: string;
-    nameDe: string;
+    nameDe?: string;
 
     // content
     content: string;

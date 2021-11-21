@@ -1,5 +1,6 @@
 import { HeritageObjectDetailPropsType } from '../type';
 import { makePublicPath } from '../../../../util/makePublicPath';
+import { heritageStatusMap } from '../../../../maps/HeritageStatus';
 
 export const useHeritageObjectDetail = <E extends HTMLDivElement>({
     data,
@@ -8,14 +9,21 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
     const name = data?.name ?? '';
     const content = data?.content ?? '';
     const previewPhoto = data?.previewPhoto ?? '';
-    const headerPhoto = data?.headerPhoto ?? '';
 
     const previewPhotoURL = makePublicPath(previewPhoto);
     const previewImage =
         data?.previewPhotoImg?.childImageSharp?.gatsbyImageData;
 
-    const headerPhotoURL = makePublicPath(headerPhoto);
     const headerImage = data?.headerPhotoImg?.childImageSharp?.gatsbyImageData;
+
+    const nameDe = data?.nameDe || '';
+    const locationDescription = data?.locationDescription || '';
+
+    const heritageStatus = data?.heritageStatus || '';
+    let heritageStatusLabel = '';
+    if (heritageStatus && heritageStatus in heritageStatusMap) {
+        heritageStatusLabel = heritageStatusMap[heritageStatus];
+    }
 
     console.log(data);
 
@@ -29,6 +37,9 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
         imageLinkProps: {
             href: previewPhotoURL,
         },
+        mapProps: {
+            locations: data?.location ?? [],
+        },
         content: content ?? '',
         pageHeaderProps: {
             image: headerImage,
@@ -37,5 +48,12 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
             containerMaxWidth: '100%',
         },
         name: data?.name ?? '',
+        nameDe: nameDe,
+        locationDescription,
+        heritageStatusLabel,
+
+        showNameDe: !!nameDe,
+        showLocationDescription: !!locationDescription,
+        showHeritageStatusLabel: !!heritageStatusLabel,
     };
 };
