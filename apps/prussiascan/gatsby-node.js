@@ -81,9 +81,14 @@ exports.onCreateNode = async ({
     cache,
     createNodeId,
 }) => {
-    const { previewPhoto, headerPhoto, internal } = node;
+    const { internal } = node;
 
     if (internal.type === 'HeritageObject') {
+        const { previewPhoto, headerPhoto, photos } = node;
+
+        if (photos) {
+        }
+
         if (previewPhoto !== '') {
             const photoURL = makePublicPath(previewPhoto);
             const fileNode = await createRemoteFileNode({

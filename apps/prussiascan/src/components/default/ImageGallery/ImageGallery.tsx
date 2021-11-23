@@ -1,4 +1,4 @@
-import React, { forwardRef, FC } from 'react';
+import React, { forwardRef } from 'react';
 import { Grid } from '@material-ui/core';
 import { SRLWrapper } from 'simple-react-lightbox';
 
