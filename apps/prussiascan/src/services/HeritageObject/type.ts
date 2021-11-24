@@ -38,17 +38,16 @@ export type HeritageObjectType = {
     createdAt: string;
     updatedAt?: string;
     photos: HeritageObjectPhotoType[];
-    previewPhoto?: string;
-    previewPhotoImg?: {
+    previewPhotoImage?: {
         childImageSharp: {
             gatsbyImageData: IGatsbyImageData;
         };
     };
-    headerPhoto?: string;
-    headerPhotoImg?: {
+    headerPhotoImage?: {
         childImageSharp: {
             gatsbyImageData: IGatsbyImageData;
         };
+        url: string;
     };
     heritageStatus?: keyof typeof heritageStatusMap;
 

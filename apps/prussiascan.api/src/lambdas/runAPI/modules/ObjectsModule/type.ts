@@ -29,6 +29,7 @@ type CommonFieldsType = {
     lossYearEnd?: number;
     lost?: boolean;
     altered?: boolean;
+    starred?: boolean;
     condition?: ObjectConditionEnum;
     location: HeritageObjectLocationType[];
     locationDescription?: string;
@@ -47,12 +48,7 @@ type DateFieldsType = {
 
 ////////
 
-export type ObjectFieldsType = IdFieldsType &
-    CommonFieldsType &
-    Partial<{
-        previewPhoto: string;
-        headerPhoto: string;
-    }>;
+export type ObjectFieldsType = IdFieldsType & CommonFieldsType;
 
 export type CreateObjectInputType = CommonFieldsType;
 
@@ -107,4 +103,6 @@ export type AttachFileInputType = {
     capturedAt?: string;
     capturedYearStart?: number;
     capturedYearEnd?: number;
+    header?: boolean;
+    preview?: boolean;
 };

@@ -50,23 +50,16 @@ export const HeritageObjectDetailTemplateQuery = graphql`
                     variants {
                         normalized
                     }
-                    code
                     author
                     source
                     capturedYearStart
                     capturedYearEnd
                 }
-                previewPhoto
-                previewPhotoImg {
-                    childImageSharp {
-                        gatsbyImageData(width: 300, layout: FIXED)
-                    }
-                }
-                headerPhoto
-                headerPhotoImg {
+                headerPhotoImage {
                     childImageSharp {
                         gatsbyImageData(width: 1000, layout: FIXED)
                     }
+                    url
                 }
                 heritageStatus
                 heritageLevel

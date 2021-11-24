@@ -20,19 +20,20 @@ export class ObjectEntity {
     content: string;
 
     // historical dates
-    constructionYearStart: number;
-    constructionYearEnd: number;
-    lossYearStart: number;
-    lossYearEnd: number;
+    constructionYearStart?: number;
+    constructionYearEnd?: number;
+    lossYearStart?: number;
+    lossYearEnd?: number;
 
     // properties
-    materials: ObjectMaterialEnum[];
-    kind: ObjectKindEnum[];
+    materials?: ObjectMaterialEnum[];
+    kind?: ObjectKindEnum[];
 
     // status
-    condition: ObjectConditionEnum;
-    lost: boolean;
-    altered: boolean;
+    condition?: ObjectConditionEnum;
+    lost?: boolean;
+    altered?: boolean;
+    starred?: boolean;
 
     // location
     location: HeritageObjectLocationType[];
@@ -46,7 +47,6 @@ export class ObjectEntity {
 
     // photos
     photos: ObjectPhotoEntity[];
-    previewPhoto?: string; // system
 
     // aux
     createdAt: string;

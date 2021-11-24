@@ -7,4 +7,6 @@ export class ObjectPhotoEntity {
     capturedAt?: string;
     capturedYearStart?: number;
     capturedYearEnd?: number;
+    header?: boolean;
+    preview?: boolean;
 }

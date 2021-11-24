@@ -319,7 +319,6 @@ async function run() {
             // },
 
             let itemPhotos = [];
-            let previewPhoto = '';
 
             const photoId = oldItem.photoId;
             if (photoId) {
@@ -413,18 +412,14 @@ async function run() {
                             if (normalizedUploaded) {
                                 itemPhotos = [
                                     {
-                                        // author,
-                                        // source,
-                                        code: 'preview',
+                                        preview: true,
+                                        header: true,
                                         variants: {
                                             original: fileKey,
                                             normalized: normalizedFileKey,
                                         },
                                     },
                                 ];
-                                previewPhoto = normalizedFileKey;
-
-                                // console.log(itemPhotos);
                             }
                         }
                     }
@@ -456,8 +451,6 @@ async function run() {
                     .map((techItem) => materialMap[techItem])
                     .filter((x) => !!x),
                 photos: itemPhotos,
-                previewPhoto: previewPhoto,
-                headerPhoto: previewPhoto,
                 createdAt: new Date().toISOString(),
                 version: 1,
                 heritageStatus: statusMap[oldItem.status] ?? 0,

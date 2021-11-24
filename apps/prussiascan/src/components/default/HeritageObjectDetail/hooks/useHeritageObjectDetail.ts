@@ -1,5 +1,4 @@
 import { HeritageObjectDetailPropsType } from '../type';
-import { makePublicPath } from '../../../../util/makePublicPath';
 import { heritageStatusMap } from '../../../../maps/HeritageStatus';
 
 export const useHeritageObjectDetail = <E extends HTMLDivElement>({
@@ -8,13 +7,10 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
 }: HeritageObjectDetailPropsType) => {
     const name = data?.name ?? '';
     const content = data?.content ?? '';
-    const previewPhoto = data?.previewPhoto ?? '';
 
-    const previewPhotoURL = makePublicPath(previewPhoto);
-    const previewImage =
-        data?.previewPhotoImg?.childImageSharp?.gatsbyImageData;
-
-    const headerImage = data?.headerPhotoImg?.childImageSharp?.gatsbyImageData;
+    const headerImage =
+        data?.headerPhotoImage?.childImageSharp?.gatsbyImageData;
+    // const headerImageUrl = data?.headerPhotoImage?.url;
 
     const nameDe = data?.nameDe || '';
     const locationDescription = data?.locationDescription || '';
@@ -29,14 +25,14 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
 
     return {
         rootProps: props,
-        showPhoto: !!previewPhoto,
-        imageProps: {
-            image: previewImage,
-            alt: name,
-        },
-        imageLinkProps: {
-            href: previewPhotoURL,
-        },
+        // showPhoto: !!previewPhoto,
+        // imageProps: {
+        //     image: previewImage,
+        //     alt: name,
+        // },
+        // imageLinkProps: {
+        //     href: previewPhotoURL,
+        // },
         mapProps: {
             locations: data?.location ?? [],
         },

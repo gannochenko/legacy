@@ -17,6 +17,8 @@ const normalizePhotos = (photos) => {
             capturedAt: photo.capturedAt ?? '',
             capturedYearStart: photo.capturedYearStart ?? 0,
             capturedYearEnd: photo.capturedYearEnd ?? 0,
+            header: photo.header ?? false,
+            preview: photo.preview ?? false,
         };
     });
 };
@@ -45,8 +47,6 @@ module.exports = {
             createdAt: element.createdAt ?? '',
             updatedAt: element.updatedAt ?? '',
             photos: normalizePhotos(element.photos ?? []),
-            previewPhoto: element.previewPhoto ?? '',
-            headerPhoto: element.headerPhoto ?? '',
             heritageId: element.heritageId ?? '',
             heritageLevel: element.heritageLevel ?? '',
             heritageStatus: element.heritageStatus ?? '',

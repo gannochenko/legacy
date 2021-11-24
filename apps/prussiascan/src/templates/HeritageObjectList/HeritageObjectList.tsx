@@ -29,7 +29,7 @@ export const HeritageObjectList = forwardRef<
                     <br />
                     <Grid container spacing={3}>
                         {data.map((item) => {
-                            const { slug, name, previewPhotoImg } = item;
+                            const { slug, name, previewPhotoImage } = item;
                             const path = fillTemplate(HERITAGE_DETAIL, {
                                 slug,
                             });
@@ -37,10 +37,10 @@ export const HeritageObjectList = forwardRef<
                             return (
                                 <Grid item md={4} sm={6} xs={12} key={slug}>
                                     <HeritageObjectListItem to={path}>
-                                        {!!previewPhotoImg && (
+                                        {!!previewPhotoImage && (
                                             <HeritageObjectListItemImage
                                                 image={
-                                                    previewPhotoImg
+                                                    previewPhotoImage
                                                         .childImageSharp
                                                         .gatsbyImageData
                                                 }
@@ -77,8 +77,7 @@ export const heritageObjectListQuery = graphql`
             nodes {
                 name
                 slug
-                previewPhoto
-                previewPhotoImg {
+                previewPhotoImage {
                     childImageSharp {
                         gatsbyImageData(width: 500, layout: FIXED)
                     }

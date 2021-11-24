@@ -6,8 +6,8 @@ import { Grid } from '@material-ui/core';
 import { HeritageObjectDetailPropsType } from './type';
 import {
     HeritageObjectDetailRoot,
-    HeritageObjectDetailImageLink,
-    HeritageObjectDetailImage,
+    // HeritageObjectDetailImageLink,
+    // HeritageObjectDetailImage,
     HeritageObjectDetailData,
     HeritageObjectDetailTitle,
     HeritageObjectDetailGerman,
@@ -25,11 +25,8 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
 ) => {
     const {
         rootProps,
-        showPhoto,
         content,
-        imageLinkProps,
         pageHeaderProps,
-        imageProps,
         mapProps,
         name,
         nameDe,
@@ -73,16 +70,7 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
                             1
                         </Grid>
                         <Grid item xs={6}>
-                            {showPhoto && (
-                                <HeritageObjectDetailImageLink
-                                    {...imageLinkProps}
-                                >
-                                    {/* @ts-ignore */}
-                                    <HeritageObjectDetailImage
-                                        {...imageProps}
-                                    />
-                                </HeritageObjectDetailImageLink>
-                            )}
+                            2
                         </Grid>
                     </Grid>
                     <ReactMarkdown>{content}</ReactMarkdown>

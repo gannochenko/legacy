@@ -53,12 +53,12 @@ exports.sourceNodes = async ({ actions }) => {
 
     const data = result.data.data;
 
-    for (let object of data) {
+    for (let item of data) {
         actions.createNode({
-            ...normalizeHeritageObject(object),
+            ...normalizeHeritageObject(item),
             internal: {
                 type: 'HeritageObject',
-                contentDigest: (object.version ?? '1').toString(),
+                contentDigest: (item.version ?? '1').toString(),
             },
         });
     }
@@ -68,8 +68,9 @@ exports.createSchemaCustomization = ({ actions }) => {
     const { createTypes } = actions;
     createTypes(`
         type HeritageObject implements Node {
-            previewPhotoImg: File @link(from: "fields.localFile")
-            headerPhotoImg: File @link(from: "fields.headerLocalFile")
+            previewPhotoImage: File @link(from: "fields.previewPhoto")
+            headerPhotoImage: File @link(from: "fields.headerPhoto")
+            photoImages: [File] @link(from: "fields.photos")
         }
     `);
 };
@@ -84,49 +85,51 @@ exports.onCreateNode = async ({
     const { internal } = node;
 
     if (internal.type === 'HeritageObject') {
-        const { previewPhoto, headerPhoto, photos } = node;
+        const { photos } = node;
 
+        const fileNodes = [];
+        let previewPhoto = null;
+        let headerPhoto = null;
         if (photos) {
-        }
-
-        if (previewPhoto !== '') {
-            const photoURL = makePublicPath(previewPhoto);
-            const fileNode = await createRemoteFileNode({
-                url: photoURL, // string that points to the URL of the image
-                parentNodeId: node.id, // id of the parent node of the fileNode you are going to create
-                createNode, // helper function in gatsby-node to generate the node
-                createNodeId, // helper function in gatsby-node to generate the node id
-                cache, // Gatsby's cache
-                store, // Gatsby's Redux store
-            });
-
-            if (fileNode) {
-                createNodeField({
-                    node,
-                    name: 'localFile',
-                    value: fileNode.id,
+            for (const photo of photos) {
+                const { variants, header, preview } = photo;
+                const photoURL = makePublicPath(variants.normalized);
+                const fileNode = await createRemoteFileNode({
+                    url: photoURL, // string that points to the URL of the image
+                    parentNodeId: node.id, // id of the parent node of the fileNode you are going to create
+                    createNode, // helper function in gatsby-node to generate the node
+                    createNodeId, // helper function in gatsby-node to generate the node id
+                    cache, // Gatsby's cache
+                    store, // Gatsby's Redux store
                 });
+
+                if (fileNode) {
+                    fileNodes.push(fileNode);
+                }
+
+                if (header) {
+                    headerPhoto = fileNode.id;
+                }
+                if (preview) {
+                    previewPhoto = fileNode.id;
+                }
             }
         }
-        if (headerPhoto !== '') {
-            const photoURL = makePublicPath(headerPhoto);
-            const fileNode = await createRemoteFileNode({
-                url: photoURL, // string that points to the URL of the image
-                parentNodeId: node.id, // id of the parent node of the fileNode you are going to create
-                createNode, // helper function in gatsby-node to generate the node
-                createNodeId, // helper function in gatsby-node to generate the node id
-                cache, // Gatsby's cache
-                store, // Gatsby's Redux store
-            });
-
-            if (fileNode) {
-                createNodeField({
-                    node,
-                    name: 'headerLocalFile',
-                    value: fileNode.id,
-                });
-            }
-        }
+        createNodeField({
+            node,
+            name: 'photos',
+            value: fileNodes.map((fileNode) => fileNode.id),
+        });
+        createNodeField({
+            node,
+            name: 'headerPhoto',
+            value: headerPhoto,
+        });
+        createNodeField({
+            node,
+            name: 'previewPhoto',
+            value: previewPhoto,
+        });
     }
 };
 
