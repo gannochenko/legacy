@@ -5,8 +5,6 @@ import { Grid } from '@material-ui/core';
 import { HeritageObjectDetailPropsType } from './type';
 import {
     HeritageObjectDetailRoot,
-    // HeritageObjectDetailImageLink,
-    // HeritageObjectDetailImage,
     HeritageObjectDetailData,
     HeritageObjectDetailTitle,
     HeritageObjectDetailGerman,
@@ -30,10 +28,10 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
         imageGalleryProps,
         name,
         nameDe,
-        locationDescription,
+        location,
         heritageStatusLabel,
         showNameDe,
-        showLocationDescription,
+        showLocation,
         showHeritageStatusLabel,
     } = useHeritageObjectDetail(props);
 
@@ -50,9 +48,9 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
                                 {nameDe}
                             </HeritageObjectDetailGerman>
                         )}
-                        {showLocationDescription && (
+                        {showLocation && (
                             <HeritageObjectDetailLocation>
-                                {locationDescription}
+                                {location}
                             </HeritageObjectDetailLocation>
                         )}
                         {showHeritageStatusLabel && (

@@ -4,6 +4,7 @@ import {
     ObjectMaterialEnum,
 } from './enums';
 import { heritageStatusMap } from '../../maps/HeritageStatus';
+import { heritageLocationAreaMap } from '../../maps/HeritageLocationArea';
 
 type HeritageObjectPhotoType = {
     variants: {
@@ -31,6 +32,7 @@ export type HeritageObjectType = {
     condition: ObjectConditionEnum;
     location: { lat: number; lng: number }[];
     locationDescription?: string;
+    locationArea?: keyof typeof heritageLocationAreaMap;
     materials: ObjectMaterialEnum[];
     kind: ObjectKindEnum[];
     createdAt: string;

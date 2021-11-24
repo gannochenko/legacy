@@ -1,11 +1,9 @@
 import styled from 'styled-components';
 import {
-    absoluteCover,
     marginProps,
     reset,
     muiSpacing,
 } from '@gannochenko/ui.styled-components';
-import { GatsbyImage } from 'gatsby-plugin-image';
 
 import { propsBlocker } from '../../../util';
 import { HeritageObjectDetailRootPropsType } from './type';
@@ -15,18 +13,6 @@ export const HeritageObjectDetailRoot = styled.div.withConfig(
 )<HeritageObjectDetailRootPropsType>`
     ${reset};
     ${marginProps};
-`;
-
-export const HeritageObjectDetailImageLink = styled.a`
-    display: block;
-    max-height: 300px;
-    max-width: 300px;
-`;
-
-export const HeritageObjectDetailHeaderBackgroundImage = styled(GatsbyImage)`
-    ${absoluteCover()};
-    user-select: none;
-    position: absolute !important;
 `;
 
 export const HeritageObjectDetailData = styled.div`

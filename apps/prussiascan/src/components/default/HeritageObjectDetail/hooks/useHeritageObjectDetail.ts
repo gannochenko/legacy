@@ -1,6 +1,7 @@
 import { HeritageObjectDetailPropsType } from '../type';
 import { heritageStatusMap } from '../../../../maps/HeritageStatus';
 import { ImageGalleryImageType } from '../../ImageGallery/type';
+import { heritageLocationAreaMap } from '../../../../maps/HeritageLocationArea';
 
 export const useHeritageObjectDetail = <E extends HTMLDivElement>({
     data,
@@ -10,6 +11,13 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
     const content = data?.content ?? '';
     const nameDe = data?.nameDe || '';
     const locationDescription = data?.locationDescription || '';
+
+    const locationArea = data?.locationArea || '';
+    let locationAreaLabel = '';
+    if (locationArea && locationArea in heritageLocationAreaMap) {
+        locationAreaLabel = heritageLocationAreaMap[locationArea];
+    }
+
     const heritageStatus = data?.heritageStatus || '';
     let heritageStatusLabel = '';
     if (heritageStatus && heritageStatus in heritageStatusMap) {
@@ -18,8 +26,6 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
 
     const headerImage =
         data?.headerPhotoImage?.childImageSharp?.gatsbyImageData;
-
-    // const headerImageUrl = data?.headerPhotoImage?.url;
 
     const galleryImages: ImageGalleryImageType[] = [];
     const photos = data?.photos ?? [];
@@ -41,19 +47,10 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
         }
     }
 
-    console.log(galleryImages);
     console.log(data);
 
     return {
         rootProps: props,
-        // showPhoto: !!previewPhoto,
-        // imageProps: {
-        //     image: previewImage,
-        //     alt: name,
-        // },
-        // imageLinkProps: {
-        //     href: previewPhotoURL,
-        // },
         mapProps: {
             locations: data?.location ?? [],
         },
@@ -69,11 +66,11 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
         },
         name: data?.name ?? '',
         nameDe: nameDe,
-        locationDescription,
+        location: [locationAreaLabel, locationDescription].join(', '),
         heritageStatusLabel,
 
         showNameDe: !!nameDe,
-        showLocationDescription: !!locationDescription,
+        showLocation: !!locationDescription || !!locationAreaLabel,
         showHeritageStatusLabel: !!heritageStatusLabel,
     };
 };

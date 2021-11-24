@@ -14,6 +14,12 @@ export const useImageGallery = (
             return {
                 image: image.childImageSharp.gatsbyImageData,
                 alt: '',
+                className: 'gatsby-resp-image-link',
+            };
+        },
+        getImageWrapperProps: (image: ImageGalleryImageType) => {
+            return {
+                href: image.url,
             };
         },
 
