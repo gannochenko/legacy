@@ -4,10 +4,24 @@ import {
     MarginPropsType,
 } from '@gannochenko/ui.styled-components';
 import { HeritageObjectType } from '../../../services/HeritageObject/type';
+import { IGatsbyImageData } from 'gatsby-plugin-image';
+
+type ImageDataType = {
+    childImageSharp: {
+        gatsbyImageData: IGatsbyImageData;
+    };
+    url: string;
+};
+
+type HeritageObjectDetailType = HeritageObjectType & {
+    previewPhotoImage?: ImageDataType;
+    headerPhotoImage?: ImageDataType;
+    photoImages?: ImageDataType[];
+};
 
 export type HeritageObjectDetailPropsType = HTMLAttributes<HTMLDivElement> &
     Partial<{
-        data: HeritageObjectType;
+        data: HeritageObjectDetailType;
         // put your custom props here
     }> &
     MarginPropsType;

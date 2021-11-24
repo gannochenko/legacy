@@ -4,9 +4,9 @@ import {
     reset,
     getPropsBlocker,
 } from '@gannochenko/ui.styled-components';
+import { GatsbyImage } from 'gatsby-plugin-image';
 
 import { ImageGalleryRootPropsType } from './type';
-import Img from 'gatsby-image';
 
 export const ImageGalleryRoot = styled.div.withConfig(
     getPropsBlocker,
@@ -24,7 +24,7 @@ export const ImageGalleryImageWrapper = styled.div`
     cursor: pointer;
 `;
 
-export const ImageGalleryImage = styled(Img)`
+export const ImageGalleryImage = styled(GatsbyImage)`
     background-color: #c4c4c4;
     height: 15rem;
 `;

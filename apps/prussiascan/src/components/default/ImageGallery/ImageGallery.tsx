@@ -13,18 +13,17 @@ import { lightBoxOptions } from '../../../util/lightBoxOptions';
 
 export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryPropsType>(
     function ImageGallery(props, ref) {
-        const { rootProps, images } = useImageGallery(ref, props);
-
-        if (!images?.length) {
-            return null;
-        }
+        const { rootProps, images, getImageProps } = useImageGallery(
+            ref,
+            props,
+        );
 
         return (
             <ImageGalleryRoot {...rootProps}>
                 <SRLWrapper options={lightBoxOptions}>
                     <Grid container spacing={3}>
-                        {images.map((picture, index) => {
-                            if (!picture || !picture.image) {
+                        {images.map((image, index) => {
+                            if (!image) {
                                 return null;
                             }
 
@@ -32,10 +31,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryPropsType>(
                                 <Grid item md={4} sm={6} xs={12} key={index}>
                                     <ImageGalleryImageWrapper>
                                         <ImageGalleryImage
-                                            sizes={
-                                                picture.image.childImageSharp
-                                                    .fluid
-                                            }
+                                            {...getImageProps(image)}
                                             className="gatsby-resp-image-link"
                                         />
                                     </ImageGalleryImageWrapper>

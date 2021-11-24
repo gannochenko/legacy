@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { SRLWrapper } from 'simple-react-lightbox';
 import ReactMarkdown from 'react-markdown';
 import { Grid } from '@material-ui/core';
 
@@ -15,10 +14,10 @@ import {
     HeritageObjectDetailBadges,
 } from './style';
 import { useHeritageObjectDetail } from './hooks/useHeritageObjectDetail';
-import { lightBoxOptions } from '../../../util/lightBoxOptions';
 import { Container } from '../Container';
 import { PageHeader } from '../PageHeader';
 import { Map } from '../Map';
+import { ImageGallery } from '../ImageGallery';
 
 export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
     props,
@@ -28,6 +27,7 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
         content,
         pageHeaderProps,
         mapProps,
+        imageGalleryProps,
         name,
         nameDe,
         locationDescription,
@@ -63,20 +63,25 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
                     </HeritageObjectDetailData>
                 </Container>
             </PageHeader>
-            <SRLWrapper options={lightBoxOptions}>
-                <Container>
-                    <Grid container>
-                        <Grid item xs={6}>
-                            1
-                        </Grid>
-                        <Grid item xs={6}>
-                            2
-                        </Grid>
+            <Container>
+                <Grid container>
+                    <Grid item xs={6}>
+                        1
                     </Grid>
-                    <ReactMarkdown>{content}</ReactMarkdown>
-                </Container>
-                <Map {...mapProps} />
-            </SRLWrapper>
+                    <Grid item xs={6}>
+                        2
+                    </Grid>
+                </Grid>
+                <ReactMarkdown>{content}</ReactMarkdown>
+            </Container>
+            <Container>
+                <ImageGallery
+                    {...imageGalleryProps}
+                    marginTop="3rem"
+                    marginBottom="3rem"
+                />
+            </Container>
+            <Map {...mapProps} />
         </HeritageObjectDetailRoot>
     );
 };

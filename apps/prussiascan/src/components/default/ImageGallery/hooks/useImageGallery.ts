@@ -1,5 +1,5 @@
 import { Ref } from 'react';
-import { ImageGalleryPropsType } from '../type';
+import { ImageGalleryImageType, ImageGalleryPropsType } from '../type';
 
 export const useImageGallery = (
     ref: Ref<HTMLDivElement>,
@@ -10,7 +10,13 @@ export const useImageGallery = (
             ...props, // rest props go to the root node, as before
             ref, // same for the ref
         },
+        getImageProps: (image: ImageGalleryImageType) => {
+            return {
+                image: image.childImageSharp.gatsbyImageData,
+                alt: '',
+            };
+        },
 
-        images,
+        images: images ?? [],
     };
 };

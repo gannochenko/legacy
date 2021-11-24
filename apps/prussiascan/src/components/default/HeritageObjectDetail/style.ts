@@ -5,10 +5,10 @@ import {
     reset,
     muiSpacing,
 } from '@gannochenko/ui.styled-components';
-import { propsBlocker } from '../../../util';
-
-import { HeritageObjectDetailRootPropsType } from './type';
 import { GatsbyImage } from 'gatsby-plugin-image';
+
+import { propsBlocker } from '../../../util';
+import { HeritageObjectDetailRootPropsType } from './type';
 
 export const HeritageObjectDetailRoot = styled.div.withConfig(
     propsBlocker,
@@ -21,10 +21,6 @@ export const HeritageObjectDetailImageLink = styled.a`
     display: block;
     max-height: 300px;
     max-width: 300px;
-`;
-
-export const HeritageObjectDetailImage = styled(GatsbyImage)`
-    border-radius: 2px;
 `;
 
 export const HeritageObjectDetailHeaderBackgroundImage = styled(GatsbyImage)`
