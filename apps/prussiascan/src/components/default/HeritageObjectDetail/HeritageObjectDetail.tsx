@@ -9,7 +9,8 @@ import {
     HeritageObjectDetailTitle,
     HeritageObjectDetailGerman,
     HeritageObjectDetailLocation,
-    HeritageObjectDetailBadges,
+    HeritageObjectDetailSummaryLine,
+    HeritageObjectSummary,
 } from './style';
 import { useHeritageObjectDetail } from './hooks/useHeritageObjectDetail';
 import { Container } from '../Container';
@@ -30,9 +31,18 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
         nameDe,
         location,
         heritageStatusLabel,
+        lostLabel,
+        constructedLabel,
+        conditionLabel,
+
         showNameDe,
         showLocation,
+        showSummary,
         showHeritageStatusLabel,
+        showLost,
+        showConstructed,
+        showAltered,
+        showCondition,
     } = useHeritageObjectDetail(props);
 
     return (
@@ -53,10 +63,34 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
                                 {location}
                             </HeritageObjectDetailLocation>
                         )}
-                        {showHeritageStatusLabel && (
-                            <HeritageObjectDetailBadges>
-                                🛡️ {heritageStatusLabel}
-                            </HeritageObjectDetailBadges>
+                        {showSummary && (
+                            <HeritageObjectSummary>
+                                {showHeritageStatusLabel && (
+                                    <HeritageObjectDetailSummaryLine>
+                                        🛡️ {heritageStatusLabel}
+                                    </HeritageObjectDetailSummaryLine>
+                                )}
+                                {showConstructed && (
+                                    <HeritageObjectDetailSummaryLine>
+                                        🏗️️ {constructedLabel}
+                                    </HeritageObjectDetailSummaryLine>
+                                )}
+                                {showAltered && (
+                                    <HeritageObjectDetailSummaryLine>
+                                        🔄‍️ Перестроен
+                                    </HeritageObjectDetailSummaryLine>
+                                )}
+                                {showLost && (
+                                    <HeritageObjectDetailSummaryLine>
+                                        ☠️ {lostLabel}
+                                    </HeritageObjectDetailSummaryLine>
+                                )}
+                                {showCondition && (
+                                    <HeritageObjectDetailSummaryLine>
+                                        {conditionLabel}
+                                    </HeritageObjectDetailSummaryLine>
+                                )}
+                            </HeritageObjectSummary>
                         )}
                     </HeritageObjectDetailData>
                 </Container>

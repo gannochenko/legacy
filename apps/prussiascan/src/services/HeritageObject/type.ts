@@ -5,6 +5,8 @@ import {
 } from './enums';
 import { heritageStatusMap } from '../../maps/HeritageStatus';
 import { heritageLocationAreaMap } from '../../maps/HeritageLocationArea';
+import { heritageLevelMap } from '../../maps/HeritageLevel';
+import { conditionMap } from '../../maps/conditonMap';
 
 type HeritageObjectPhotoType = {
     variants: {
@@ -24,12 +26,12 @@ export type HeritageObjectType = {
     name: string;
     nameDe?: string;
     content: string;
-    yearBuiltStart: number;
-    yearBuiltEnd: number;
-    yearDemolishedStart: number;
-    yearDemolishedEnd: number;
+    constructionYearStart: number;
+    constructionYearEnd: number;
+    lossYearStart: number;
+    lossYearEnd: number;
     demolished: boolean;
-    condition: ObjectConditionEnum;
+    condition?: keyof typeof conditionMap;
     location: { lat: number; lng: number }[];
     locationDescription?: string;
     locationArea?: keyof typeof heritageLocationAreaMap;
@@ -39,5 +41,9 @@ export type HeritageObjectType = {
     updatedAt?: string;
     photos: HeritageObjectPhotoType[];
     heritageStatus?: keyof typeof heritageStatusMap;
+    heritageLevel?: keyof typeof heritageLevelMap;
+    heritageId?: string;
+    lost?: boolean;
+    altered?: boolean;
     version: number;
 };

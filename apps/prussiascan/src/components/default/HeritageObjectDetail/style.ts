@@ -27,15 +27,21 @@ export const HeritageObjectDetailTitle = styled.h1`
     max-width: 60%;
 `;
 
-export const HeritageObjectDetailGerman = styled.span`
+export const HeritageObjectDetailGerman = styled.div`
     margin-top: ${muiSpacing(3)};
 `;
 
-export const HeritageObjectDetailLocation = styled.span`
+export const HeritageObjectDetailLocation = styled.div`
     margin-top: ${muiSpacing(3)};
 `;
 
-export const HeritageObjectDetailBadges = styled.span`
-    margin-top: ${muiSpacing(10)};
+export const HeritageObjectSummary = styled.div`
+    margin-top: ${muiSpacing(6)};
+`;
+
+export const HeritageObjectDetailSummaryLine = styled.div`
     font-size: 0.8rem;
+    &:not(:last-child) {
+        margin-bottom: ${muiSpacing(2)};
+    }
 `;
