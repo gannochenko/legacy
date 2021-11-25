@@ -34,6 +34,7 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
         lostLabel,
         constructedLabel,
         conditionLabel,
+        conditionLevelIcon,
 
         showNameDe,
         showLocation,
@@ -87,7 +88,7 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
                                 )}
                                 {showCondition && (
                                     <HeritageObjectDetailSummaryLine>
-                                        {conditionLabel}
+                                        {conditionLevelIcon} {conditionLabel}
                                     </HeritageObjectDetailSummaryLine>
                                 )}
                             </HeritageObjectSummary>

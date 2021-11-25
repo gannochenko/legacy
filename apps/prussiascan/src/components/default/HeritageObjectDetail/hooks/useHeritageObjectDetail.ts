@@ -4,7 +4,10 @@ import { heritageStatusMap } from '../../../../maps/HeritageStatus';
 import { ImageGalleryImageType } from '../../ImageGallery/type';
 import { heritageLocationAreaMap } from '../../../../maps/HeritageLocationArea';
 import { heritageLevelMap } from '../../../../maps/HeritageLevel';
-import { conditionMap } from '../../../../maps/conditonMap';
+import {
+    HeritageObjectConditionEnum,
+    heritageObjectConditionMap,
+} from '../../../../maps/conditonMap';
 
 export const useHeritageObjectDetail = <E extends HTMLDivElement>({
     data,
@@ -15,15 +18,15 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
     const nameDe = data?.nameDe || '';
     const locationDescription = data?.locationDescription || '';
 
-    const locationArea = 1; //data?.locationArea || '';
+    const locationArea = data?.locationArea || '';
     let locationAreaLabel = '';
     if (locationArea && locationArea in heritageLocationAreaMap) {
         locationAreaLabel = heritageLocationAreaMap[locationArea];
     }
 
-    const heritageStatus = 1; // data?.heritageStatus || '';
-    const heritageLevel = 1; //data?.heritageLevel || '';
-    const heritageId = 999; //data?.heritageId || '';
+    const heritageStatus = data?.heritageStatus || '';
+    const heritageLevel = data?.heritageLevel || '';
+    const heritageId = data?.heritageId || '';
     let heritageStatusLabel = '';
     if (heritageStatus && heritageStatus in heritageStatusMap) {
         heritageStatusLabel = heritageStatusMap[heritageStatus];
@@ -38,8 +41,8 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
     }
 
     let constructedLabel = '';
-    const constructionYearStart = 1930; //data?.constructionYearStart ?? 0;
-    const constructionYearEnd = 1940; //data?.constructionYearEnd ?? 0;
+    const constructionYearStart = data?.constructionYearStart ?? 0;
+    const constructionYearEnd = data?.constructionYearEnd ?? 0;
     if (
         constructionYearStart &&
         constructionYearEnd &&
@@ -71,9 +74,12 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
     }
 
     let conditionLabel = '';
-    const condition = 4; // data?.condition ?? 0;
-    if (condition && condition in conditionMap) {
-        conditionLabel = conditionMap[condition];
+    let conditionLevelIcon = '';
+    const condition = data?.condition ?? 0;
+    if (condition && condition in heritageObjectConditionMap) {
+        conditionLabel = heritageObjectConditionMap[condition];
+        conditionLevelIcon =
+            condition >= HeritageObjectConditionEnum.poor ? '🛑' : '✅';
     }
 
     const headerImage =
@@ -125,6 +131,7 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
         lostLabel,
         constructedLabel,
         conditionLabel,
+        conditionLevelIcon,
 
         showNameDe: !!nameDe,
         showLocation: !!locationDescription || !!locationAreaLabel,
@@ -132,7 +139,7 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
         showLost: lost,
         showConstructed: !!constructedLabel,
         showHeritageStatusLabel: !!heritageStatusLabel,
-        showAltered: true, //data?.altered ?? false,
+        showAltered: data?.altered ?? false,
         showCondition: !lost && !!conditionLabel,
     };
 };

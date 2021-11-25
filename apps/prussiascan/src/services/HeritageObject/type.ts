@@ -6,7 +6,7 @@ import {
 import { heritageStatusMap } from '../../maps/HeritageStatus';
 import { heritageLocationAreaMap } from '../../maps/HeritageLocationArea';
 import { heritageLevelMap } from '../../maps/HeritageLevel';
-import { conditionMap } from '../../maps/conditonMap';
+import { heritageObjectConditionMap } from '../../maps/conditonMap';
 
 type HeritageObjectPhotoType = {
     variants: {
@@ -31,7 +31,7 @@ export type HeritageObjectType = {
     lossYearStart: number;
     lossYearEnd: number;
     demolished: boolean;
-    condition?: keyof typeof conditionMap;
+    condition?: keyof typeof heritageObjectConditionMap;
     location: { lat: number; lng: number }[];
     locationDescription?: string;
     locationArea?: keyof typeof heritageLocationAreaMap;
