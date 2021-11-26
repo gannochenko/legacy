@@ -8,6 +8,8 @@ import {
     HeritageObjectConditionEnum,
     heritageObjectConditionMap,
 } from '../../../../maps/heritageObjectConditionMap';
+import { heritageObjectKindMap } from '../../../../maps/heritageObjectKindMap';
+import { materialMap } from '../../../../maps/materialMap';
 
 export const useHeritageObjectDetail = <E extends HTMLDivElement>({
     data,
@@ -105,6 +107,20 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
         }
     }
 
+    let kindTags: string[] = [];
+    const kind = data?.kind ?? [];
+    if (kind.length) {
+        kindTags = kind.map((kindItem) => heritageObjectKindMap[kindItem]);
+    }
+
+    let materialTags: string[] = [];
+    const materials = data?.materials ?? [];
+    if (materials.length) {
+        materialTags = materials.map(
+            (materialItem) => materialMap[materialItem],
+        );
+    }
+
     console.log(data);
 
     return {
@@ -132,6 +148,12 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
         constructedLabel,
         conditionLabel,
         conditionLevelIcon,
+        kindProps: {
+            tags: kindTags,
+        },
+        materialProps: {
+            tags: materialTags,
+        },
 
         showNameDe: !!nameDe,
         showLocation: !!locationDescription || !!locationAreaLabel,

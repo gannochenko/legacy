@@ -38,6 +38,8 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
         constructedLabel,
         conditionLabel,
         conditionLevelIcon,
+        kindProps,
+        materialProps,
 
         showNameDe,
         showLocation,
@@ -105,7 +107,8 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
                         <ReactMarkdown>{content}</ReactMarkdown>
                     </HeritageObjectDetailLayoutCentral>
                     <HeritageObjectDetailLayoutSide>
-                        <TagCloud />
+                        <TagCloud {...kindProps} marginBottom="2rem" />
+                        <TagCloud {...materialProps} marginBottom="2rem" />
                     </HeritageObjectDetailLayoutSide>
                 </HeritageObjectDetailLayout>
             </Container>

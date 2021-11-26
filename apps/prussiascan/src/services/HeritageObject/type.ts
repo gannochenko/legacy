@@ -1,8 +1,9 @@
-import { ObjectKindEnum, ObjectMaterialEnum } from './enums';
 import { heritageObjectStatusMap } from '../../maps/heritageObjectStatusMap';
 import { locationAreaMap } from '../../maps/locationAreaMap';
 import { heritageObjectLevelMap } from '../../maps/heritageObjectLevelMap';
 import { heritageObjectConditionMap } from '../../maps/heritageObjectConditionMap';
+import { heritageObjectKindMap } from '../../maps/heritageObjectKindMap';
+import { materialMap } from '../../maps/materialMap';
 
 type HeritageObjectPhotoType = {
     variants: {
@@ -31,8 +32,8 @@ export type HeritageObjectType = {
     location: { lat: number; lng: number }[];
     locationDescription?: string;
     locationArea?: keyof typeof locationAreaMap;
-    materials: ObjectMaterialEnum[];
-    kind: ObjectKindEnum[];
+    materials: (keyof typeof materialMap)[];
+    kind: (keyof typeof heritageObjectKindMap)[];
     createdAt: string;
     updatedAt?: string;
     photos: HeritageObjectPhotoType[];

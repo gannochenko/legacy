@@ -1,11 +1,12 @@
 import { uniq } from 'lodash';
 import { TagCloudPropsType } from '../type';
+import { useMemo } from 'react';
 
 export const useTagCloud = <E extends HTMLDivElement>({
     tags,
     ...props
 }: TagCloudPropsType) => {
-    const safeTags = uniq(tags ?? []);
+    const safeTags = useMemo(() => uniq(tags ?? []).filter((x) => !!x), [tags]);
 
     return {
         rootProps: {
