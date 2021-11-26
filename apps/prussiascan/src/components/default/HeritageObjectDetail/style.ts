@@ -3,6 +3,7 @@ import {
     marginProps,
     reset,
     muiSpacing,
+    muiBreakpointDown,
 } from '@gannochenko/ui.styled-components';
 
 import { propsBlocker } from '../../../util';
@@ -43,5 +44,23 @@ export const HeritageObjectDetailSummaryLine = styled.div`
     font-size: 0.8rem;
     &:not(:last-child) {
         margin-bottom: ${muiSpacing(2)};
+    }
+`;
+
+export const HeritageObjectDetailLayout = styled.div`
+    display: flex;
+    ${muiBreakpointDown('sm')} {
+        flex-direction: column;
+    }
+`;
+
+export const HeritageObjectDetailLayoutCentral = styled.div`
+    flex: 1 auto;
+`;
+
+export const HeritageObjectDetailLayoutSide = styled.div`
+    flex: 0 0 ${muiSpacing(90)};
+    ${muiBreakpointDown('sm')} {
+        flex: 1 auto;
     }
 `;

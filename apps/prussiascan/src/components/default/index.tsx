@@ -20,3 +20,4 @@ export * from './PageOffset';
 export * from './PageHeader';
 export * from './Typography';
 export * from './Map';
+export * from './TagCloud';

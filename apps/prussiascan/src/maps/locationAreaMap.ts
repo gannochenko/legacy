@@ -1,4 +1,4 @@
-export const heritageLocationAreaMap = {
+export const locationAreaMap = {
     1: 'Багратионовский городской округ',
     2: 'Балтийский муниципальный район',
     3: 'Гвардейский городской округ',

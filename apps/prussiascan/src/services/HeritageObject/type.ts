@@ -1,12 +1,8 @@
-import {
-    ObjectConditionEnum,
-    ObjectKindEnum,
-    ObjectMaterialEnum,
-} from './enums';
-import { heritageStatusMap } from '../../maps/HeritageStatus';
-import { heritageLocationAreaMap } from '../../maps/HeritageLocationArea';
-import { heritageLevelMap } from '../../maps/HeritageLevel';
-import { heritageObjectConditionMap } from '../../maps/conditonMap';
+import { ObjectKindEnum, ObjectMaterialEnum } from './enums';
+import { heritageObjectStatusMap } from '../../maps/heritageObjectStatusMap';
+import { locationAreaMap } from '../../maps/locationAreaMap';
+import { heritageObjectLevelMap } from '../../maps/heritageObjectLevelMap';
+import { heritageObjectConditionMap } from '../../maps/heritageObjectConditionMap';
 
 type HeritageObjectPhotoType = {
     variants: {
@@ -34,14 +30,14 @@ export type HeritageObjectType = {
     condition?: keyof typeof heritageObjectConditionMap;
     location: { lat: number; lng: number }[];
     locationDescription?: string;
-    locationArea?: keyof typeof heritageLocationAreaMap;
+    locationArea?: keyof typeof locationAreaMap;
     materials: ObjectMaterialEnum[];
     kind: ObjectKindEnum[];
     createdAt: string;
     updatedAt?: string;
     photos: HeritageObjectPhotoType[];
-    heritageStatus?: keyof typeof heritageStatusMap;
-    heritageLevel?: keyof typeof heritageLevelMap;
+    heritageStatus?: keyof typeof heritageObjectStatusMap;
+    heritageLevel?: keyof typeof heritageObjectLevelMap;
     heritageId?: string;
     lost?: boolean;
     altered?: boolean;

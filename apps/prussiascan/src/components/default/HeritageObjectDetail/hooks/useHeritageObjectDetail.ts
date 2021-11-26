@@ -1,13 +1,13 @@
 import { lcFirst } from 'change-case';
 import { HeritageObjectDetailPropsType } from '../type';
-import { heritageStatusMap } from '../../../../maps/HeritageStatus';
+import { heritageObjectStatusMap } from '../../../../maps/heritageObjectStatusMap';
 import { ImageGalleryImageType } from '../../ImageGallery/type';
-import { heritageLocationAreaMap } from '../../../../maps/HeritageLocationArea';
-import { heritageLevelMap } from '../../../../maps/HeritageLevel';
+import { locationAreaMap } from '../../../../maps/locationAreaMap';
+import { heritageObjectLevelMap } from '../../../../maps/heritageObjectLevelMap';
 import {
     HeritageObjectConditionEnum,
     heritageObjectConditionMap,
-} from '../../../../maps/conditonMap';
+} from '../../../../maps/heritageObjectConditionMap';
 
 export const useHeritageObjectDetail = <E extends HTMLDivElement>({
     data,
@@ -20,20 +20,20 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
 
     const locationArea = data?.locationArea || '';
     let locationAreaLabel = '';
-    if (locationArea && locationArea in heritageLocationAreaMap) {
-        locationAreaLabel = heritageLocationAreaMap[locationArea];
+    if (locationArea && locationArea in locationAreaMap) {
+        locationAreaLabel = locationAreaMap[locationArea];
     }
 
     const heritageStatus = data?.heritageStatus || '';
     const heritageLevel = data?.heritageLevel || '';
     const heritageId = data?.heritageId || '';
     let heritageStatusLabel = '';
-    if (heritageStatus && heritageStatus in heritageStatusMap) {
-        heritageStatusLabel = heritageStatusMap[heritageStatus];
+    if (heritageStatus && heritageStatus in heritageObjectStatusMap) {
+        heritageStatusLabel = heritageObjectStatusMap[heritageStatus];
         if (heritageStatus === 1 && heritageLevel) {
-            heritageStatusLabel = `${heritageLevelMap[heritageLevel]} ${lcFirst(
-                heritageStatusLabel,
-            )}`;
+            heritageStatusLabel = `${
+                heritageObjectLevelMap[heritageLevel]
+            } ${lcFirst(heritageStatusLabel)}`;
         }
         if (heritageId) {
             heritageStatusLabel = `${heritageStatusLabel}, код: ${heritageId}`;

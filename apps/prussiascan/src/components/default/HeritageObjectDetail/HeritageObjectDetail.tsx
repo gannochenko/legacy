@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Grid } from '@material-ui/core';
 
 import { HeritageObjectDetailPropsType } from './type';
 import {
@@ -11,12 +10,16 @@ import {
     HeritageObjectDetailLocation,
     HeritageObjectDetailSummaryLine,
     HeritageObjectSummary,
+    HeritageObjectDetailLayout,
+    HeritageObjectDetailLayoutCentral,
+    HeritageObjectDetailLayoutSide,
 } from './style';
 import { useHeritageObjectDetail } from './hooks/useHeritageObjectDetail';
 import { Container } from '../Container';
 import { PageHeader } from '../PageHeader';
 import { Map } from '../Map';
 import { ImageGallery } from '../ImageGallery';
+import { TagCloud } from '../TagCloud';
 
 export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
     props,
@@ -97,20 +100,19 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
                 </Container>
             </PageHeader>
             <Container>
-                <Grid container>
-                    <Grid item xs={6}>
-                        1
-                    </Grid>
-                    <Grid item xs={6}>
-                        2
-                    </Grid>
-                </Grid>
-                <ReactMarkdown>{content}</ReactMarkdown>
+                <HeritageObjectDetailLayout>
+                    <HeritageObjectDetailLayoutCentral>
+                        <ReactMarkdown>{content}</ReactMarkdown>
+                    </HeritageObjectDetailLayoutCentral>
+                    <HeritageObjectDetailLayoutSide>
+                        <TagCloud />
+                    </HeritageObjectDetailLayoutSide>
+                </HeritageObjectDetailLayout>
             </Container>
             <Container>
                 <ImageGallery
                     {...imageGalleryProps}
-                    marginTop="3rem"
+                    marginTop="5rem"
                     marginBottom="3rem"
                 />
             </Container>
