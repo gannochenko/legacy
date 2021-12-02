@@ -43,4 +43,5 @@ export type HeritageObjectType = {
     lost?: boolean;
     altered?: boolean;
     version: number;
+    architects?: string[];
 };

@@ -29,7 +29,7 @@ type CommonFieldsType = {
     lossYearEnd?: number;
     lost?: boolean;
     altered?: boolean;
-    starred?: boolean;
+    remarkable?: boolean;
     condition?: ObjectConditionEnum;
     location: HeritageObjectLocationType[];
     locationDescription?: string;
@@ -39,6 +39,7 @@ type CommonFieldsType = {
     heritageId?: string;
     heritageStatus?: ObjectHeritageStatusEnum;
     heritageLevel?: ObjectHeritageLevelEnum;
+    architects?: string[];
 };
 
 type DateFieldsType = {

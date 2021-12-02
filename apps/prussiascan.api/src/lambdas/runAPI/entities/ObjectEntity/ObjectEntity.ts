@@ -33,7 +33,7 @@ export class ObjectEntity {
     condition?: ObjectConditionEnum;
     lost?: boolean;
     altered?: boolean;
-    starred?: boolean;
+    remarkable?: boolean;
 
     // location
     location: HeritageObjectLocationType[];
@@ -52,4 +52,6 @@ export class ObjectEntity {
     createdAt: string;
     updatedAt?: string;
     version: number;
+
+    architects?: string[];
 }

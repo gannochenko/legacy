@@ -277,6 +277,26 @@ const makeYear = (year) => {
     return yearNum;
 };
 
+const architects = {
+    'П. Мюльбах': '99e33f06-19ab-4fc4-916b-45ef6b141617',
+    'Ф. Хайтманн': '91188ce6-7e6c-4673-b041-7c2e3e6180dd',
+    'Ф. Ларс': 'b8da20a8-2e60-4019-b675-7866c941a77d',
+    'Рихард Зеел': '12e79a7b-2be0-45d4-afd5-762d97c8209d',
+    'Вадим Еремеев': '06244c93-7870-45d5-aca5-8eeb456d3c10',
+    'Ханс Хопп': 'c57537a7-aa46-4f50-9e8e-8bae5da9914c',
+    'О.В.Кукук': 'be5195f0-006c-42cf-b78e-21468fb0ee63',
+    'В. Браш': '8573b988-4317-4c70-a48a-7de31456085e',
+    Фишер: '529ed38e-a327-4016-9f98-391b003b5d80',
+    'В. Варрентрапп': 'ec52dfd5-9db8-4aa1-8ff4-81a28a3f410b',
+    'П. Бростовски': 'ad87d92e-bdd1-4541-a366-ca4d0af53fcb',
+    'Курт Фрик': 'ac86531d-eda6-4424-ac16-c00c4df27e3a',
+    'Генрих Тессин': '18a5ffb2-15c4-4e93-9717-2feb2e2556aa',
+    'Хайнц Бар': 'e88fb21e-8859-4262-a01a-732d7900c29f',
+    'А. Вайтмайер': 'd526aeb2-f60d-4063-8274-25a9f1c9f5bd',
+    'Макс Шенвальд': 'cc3945e8-e065-43f7-b1c4-e3701cdde1ee',
+    'Курт Фрик': 'f98d70a6-4a18-4fe3-9839-bf42c16d6000',
+};
+
 async function run() {
     try {
         const db = await client.connect();
@@ -318,6 +338,24 @@ async function run() {
             //     note: 'https://www.prussia39.ru/sight/index.php?sid=487\n' + 'Перестроена в дом культуры',
             // },
 
+            let itemArchitects = [];
+            if (oldItem.architect) {
+                let itemArchitectNames = [];
+                if (oldItem.architect === 'Рихард Зеел / Вадим Еремеев') {
+                    itemArchitectNames = ['Рихард Зеел', 'Вадим Еремеев'];
+                } else {
+                    itemArchitectNames = oldItem.architect
+                        .split(',')
+                        .map((i) => i.trim());
+                }
+
+                itemArchitects = itemArchitectNames.map(
+                    (arch) => architects[arch],
+                );
+                // console.log(itemArchitectNames);
+                // console.log(itemArchitects);
+            }
+
             let itemPhotos = [];
 
             const photoId = oldItem.photoId;
@@ -357,8 +395,8 @@ async function run() {
                                         Body: file,
                                     })
                                     .promise();
+                                uploaded = true;
                             }
-                            uploaded = true;
                         } catch (error) {
                             console.log(
                                 `Was not able to upload file ${photoPath}`,
@@ -440,6 +478,7 @@ async function run() {
                 lossYearEnd: makeYear(oldItem.tearDownPeriod),
                 lost: oldItem.condition === 'L',
                 altered: oldItem.condition === 'R',
+                remarkable: !!oldItem.remarkable,
                 condition: conditionMap[oldItem.condition] ?? 0,
                 location: oldItem.location ?? [],
                 locationDescription: oldItem.locationDescription,
@@ -456,6 +495,7 @@ async function run() {
                 heritageStatus: statusMap[oldItem.status] ?? 0,
                 heritageLevel: levelMap[oldItem.level] ?? 0,
                 heritageId: oldItem.code ?? '',
+                architects: itemArchitects,
             };
 
             if (!DRY_RUN) {

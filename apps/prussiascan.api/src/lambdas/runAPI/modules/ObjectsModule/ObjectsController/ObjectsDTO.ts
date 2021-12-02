@@ -143,6 +143,10 @@ export class CreateObjectDto {
     @IsIn(Object.values(ObjectHeritageLevelEnum))
     @IsOptional()
     heritageLevel: ObjectHeritageLevelEnum;
+
+    @IsString({ each: true })
+    @IsOptional()
+    architects: string[];
 }
 
 export class UpdateObjectDto {}
