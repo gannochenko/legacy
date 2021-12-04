@@ -40,6 +40,8 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
         conditionLevelIcon,
         kindProps,
         materialProps,
+        architects,
+        architectsLabel,
 
         showNameDe,
         showLocation,
@@ -49,6 +51,8 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
         showConstructed,
         showAltered,
         showCondition,
+        showRemarkable,
+        showArchitects,
     } = useHeritageObjectDetail(props);
 
     return (
@@ -94,6 +98,17 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
                                 {showCondition && (
                                     <HeritageObjectDetailSummaryLine>
                                         {conditionLevelIcon} {conditionLabel}
+                                    </HeritageObjectDetailSummaryLine>
+                                )}
+                                {showRemarkable && (
+                                    <HeritageObjectDetailSummaryLine>
+                                        🌟 Выдающийся объект!
+                                    </HeritageObjectDetailSummaryLine>
+                                )}
+                                {showArchitects && (
+                                    <HeritageObjectDetailSummaryLine>
+                                        {architectsLabel}:{' '}
+                                        {architects.join(', ')}
                                     </HeritageObjectDetailSummaryLine>
                                 )}
                             </HeritageObjectSummary>

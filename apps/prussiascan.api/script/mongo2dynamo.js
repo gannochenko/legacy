@@ -450,6 +450,7 @@ async function run() {
                             if (normalizedUploaded) {
                                 itemPhotos = [
                                     {
+                                        id: v4(),
                                         preview: true,
                                         header: true,
                                         variants: {

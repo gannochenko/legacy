@@ -37,6 +37,7 @@ export const HeritageObjectDetailTemplateQuery = graphql`
                 lossYearEnd
                 lost
                 altered
+                remarkable
                 condition
                 location {
                     lat
@@ -70,6 +71,7 @@ export const HeritageObjectDetailTemplateQuery = graphql`
                 heritageStatus
                 heritageLevel
                 heritageId
+                architects
             }
         }
     }

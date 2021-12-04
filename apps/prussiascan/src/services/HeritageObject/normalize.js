@@ -38,6 +38,7 @@ module.exports = {
             lossYearEnd: element.lossYearEnd ?? 0,
             lost: element.lost ?? false,
             altered: element.altered ?? false,
+            remarkable: element.remarkable ?? false,
             condition: element.condition ?? '',
             location: element.location ?? [],
             locationDescription: element.locationDescription ?? '',
@@ -50,6 +51,7 @@ module.exports = {
             heritageId: element.heritageId ?? '',
             heritageLevel: element.heritageLevel ?? '',
             heritageStatus: element.heritageStatus ?? '',
+            architects: element.architects ?? [],
             version: element.version ?? 1,
         };
     },

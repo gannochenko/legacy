@@ -10,6 +10,7 @@ import {
 } from '../../../../maps/heritageObjectConditionMap';
 import { heritageObjectKindMap } from '../../../../maps/heritageObjectKindMap';
 import { materialMap } from '../../../../maps/materialMap';
+import { architectsMap } from '../../../../maps/architectsMap';
 
 export const useHeritageObjectDetail = <E extends HTMLDivElement>({
     data,
@@ -121,6 +122,11 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
         );
     }
 
+    const architects =
+        data?.architects
+            ?.map((architectId) => architectsMap[architectId] ?? null)
+            .filter((x) => !!x) ?? [];
+
     console.log(data);
 
     return {
@@ -154,6 +160,8 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
         materialProps: {
             tags: materialTags,
         },
+        architects,
+        architectsLabel: architects.length > 1 ? 'Архитекторы' : 'Архитектор',
 
         showNameDe: !!nameDe,
         showLocation: !!locationDescription || !!locationAreaLabel,
@@ -163,5 +171,7 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
         showHeritageStatusLabel: !!heritageStatusLabel,
         showAltered: data?.altered ?? false,
         showCondition: !lost && !!conditionLabel,
+        showRemarkable: !!data?.remarkable,
+        showArchitects: !!architects.length,
     };
 };

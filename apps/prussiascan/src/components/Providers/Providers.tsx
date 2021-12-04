@@ -1,12 +1,13 @@
 import React, { FC } from 'react';
 import { MDXProvider } from '@mdx-js/react';
-import { ThemeProvider as MUIThemeProvider, StylesProvider } from '@material-ui/core/styles';
+import {
+    ThemeProvider as MUIThemeProvider,
+    StylesProvider,
+} from '@material-ui/core/styles';
 import { ThemeProvider } from 'styled-components';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import SimpleReactLightbox from 'simple-react-lightbox';
-
 import { Auth0Provider } from '@auth0/auth0-react';
-
 
 import { theme, GlobalStyle } from '../../style';
 import { MDXComponents } from './MDXComponents';
@@ -34,22 +35,27 @@ export const Providers: FC = ({ children }) => {
                                 domain={process.env.AUTH0_DOMAIN!}
                                 clientId={process.env.AUTH0_CLIENT_ID!}
                                 redirectUri={win ? win.location.origin : ''}
-                                audience={isDev() ? `http://localhost:3000` : `https://${process.env.AUTH0_DOMAIN}/api/v2/`}
+                                audience={
+                                    isDev()
+                                        ? `http://localhost:3000`
+                                        : `https://${process.env.AUTH0_DOMAIN}/api/v2/`
+                                }
                                 scope="read:current_user update:current_user_metadata"
-                                cacheLocation={isDev() ? 'localstorage' : undefined}
+                                cacheLocation={
+                                    isDev() ? 'localstorage' : undefined
+                                }
                                 useRefreshTokens={false}
                             >
-
                                 <QueryClientProvider client={queryClient}>
                                     <MDXProvider components={MDXComponents}>
                                         <NetworkStatusProvider>
-                                            <StateProviders>{children}</StateProviders>
+                                            <StateProviders>
+                                                {children}
+                                            </StateProviders>
                                         </NetworkStatusProvider>
                                     </MDXProvider>
                                 </QueryClientProvider>
-
                             </Auth0Provider>
-
                         </>
                     </ThemeProvider>
                 </MUIThemeProvider>

@@ -4,6 +4,7 @@ import { heritageObjectLevelMap } from '../../maps/heritageObjectLevelMap';
 import { heritageObjectConditionMap } from '../../maps/heritageObjectConditionMap';
 import { heritageObjectKindMap } from '../../maps/heritageObjectKindMap';
 import { materialMap } from '../../maps/materialMap';
+import { architectsMap } from '../../maps/architectsMap';
 
 type HeritageObjectPhotoType = {
     variants: {
@@ -27,7 +28,6 @@ export type HeritageObjectType = {
     constructionYearEnd: number;
     lossYearStart: number;
     lossYearEnd: number;
-    demolished: boolean;
     condition?: keyof typeof heritageObjectConditionMap;
     location: { lat: number; lng: number }[];
     locationDescription?: string;
@@ -42,6 +42,7 @@ export type HeritageObjectType = {
     heritageId?: string;
     lost?: boolean;
     altered?: boolean;
+    remarkable?: boolean;
+    architects?: (keyof typeof architectsMap)[];
     version: number;
-    architects?: string[];
 };
