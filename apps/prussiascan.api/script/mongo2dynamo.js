@@ -15,35 +15,42 @@ const {
     makeSlug,
 } = require('../src/lambdas/runAPI/entities/ObjectEntity/utils');
 
-const awsOptions = {
-    endpoint: 'http://localhost:4566',
-    region: 'eu-central-1',
-    accessKeyId: 'local',
-    secretAccessKey: 'local',
-};
+const DRY_RUN = false;
+const PRODUCTION = true;
+
+const BUCKET_NAME = 'prussiascans-object-photos';
+const IMAGE_SIZE_CONSTRAINT = 1500;
+const TABLE_NAME = 'prussiascan.api_ObjectCollection';
+const MONGO_URI = 'mongodb://localhost:27017/?maxPoolSize=20&w=majority';
+const UPLOADS_FOLDER = '/Users/sergei/proj/legacy/apps/prussiascan.api/upload';
+
+console.log(process.env.AWS_ACCESS_KEY_ID);
+console.log(process.env.AWS_SECRET_ACCESS_KEY);
+
+const awsOptions = PRODUCTION
+    ? {
+          region: 'eu-central-1',
+          accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      }
+    : {
+          endpoint: 'http://localhost:4566',
+          region: 'eu-central-1',
+          accessKeyId: 'local',
+          secretAccessKey: 'local',
+      };
 
 const s3 = new S3({
     ...awsOptions,
     s3ForcePathStyle: true,
     apiVersion: 'latest',
 });
-
-const BUCKET_NAME = 'prussiascans-object-photos';
-const IMAGE_SIZE_CONSTRAINT = 1500;
-
 const dynamoDB = new DynamoDB.DocumentClient({
     ...awsOptions,
     apiVersion: '2012-08-10',
 });
-const TABLE_NAME = 'prussiascan.api_ObjectCollection';
-
-const MONGO_URI = 'mongodb://localhost:27017/?maxPoolSize=20&w=majority';
-
-const UPLOADS_FOLDER = '/Users/sergei/proj/legacy/apps/prussiascan.api/upload';
 
 const client = new MongoClient(MONGO_URI);
-
-const DRY_RUN = false;
 
 const parseYear = (year) => {
     if (!year) {

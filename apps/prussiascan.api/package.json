@@ -6,7 +6,8 @@
     "scripts": {
         "dev": "serverless offline start -r eu-central-1 --noTimeout --host 0.0.0.0",
         "dev:runapi:standalone": "yarn nodemon --exec \"dotenv ts-node ./src/lambdas/runAPI/main.standalone.ts\" --watch \"./src/**\" --ext \"ts,json\"",
-        "deploy": "./script/deploy.sh"
+        "deploy": "./script/deploy.sh",
+        "mongo2dybamodb": "dotenv ./script/mongo2dynamo.js"
     },
     "devDependencies": {
         "@types/aws-lambda": "^8.10.83",
