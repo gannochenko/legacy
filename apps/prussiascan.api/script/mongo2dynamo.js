@@ -24,14 +24,11 @@ const TABLE_NAME = 'prussiascan.api_ObjectCollection';
 const MONGO_URI = 'mongodb://localhost:27017/?maxPoolSize=20&w=majority';
 const UPLOADS_FOLDER = '/Users/sergei/proj/legacy/apps/prussiascan.api/upload';
 
-console.log(process.env.AWS_ACCESS_KEY_ID);
-console.log(process.env.AWS_SECRET_ACCESS_KEY);
-
 const awsOptions = PRODUCTION
     ? {
           region: 'eu-central-1',
-          accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+          accessKeyId: process.env.AWS_ACCESS_KEY_ID ?? '',
+          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY ?? '',
       }
     : {
           endpoint: 'http://localhost:4566',

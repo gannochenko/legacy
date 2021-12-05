@@ -46,7 +46,7 @@ exports.onPostBootstrap = async ({ store }) => {
 
 exports.sourceNodes = async ({ actions }) => {
     const result = await axios.request({
-        url: `${process.env.API_URL}/dev/data/objects/findall`,
+        url: `${process.env.API_URL}/${process.env.API_ENV}/data/objects/findall`,
         method: 'post',
         headers: { 'x-api-key': process.env.CICD_API_KEY },
     });
