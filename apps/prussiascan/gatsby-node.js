@@ -21,7 +21,7 @@ const {
     HERITAGE_DETAIL,
 } = require('./src/pathTemplates');
 
-console.log('VERCEL!!!!!!');
+console.log('VERCEL!!!!!!!!');
 console.log(process.env.VERCEL_GIT_COMMIT_REF);
 
 /**
