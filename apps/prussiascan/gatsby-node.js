@@ -21,8 +21,10 @@ const {
     HERITAGE_DETAIL,
 } = require('./src/pathTemplates');
 
-console.log('VERCEL!!!!!!!!!!33333');
-console.log(process.env.VERCEL_GIT_COMMIT_REF);
+const vercelEnv = process.env.VERCEL_GIT_COMMIT_REF;
+if (vercelEnv !== undefined && vercelEnv !== 'master') {
+    throw new Error('Vercel, dont make me do this.');
+}
 
 /**
  * Generate GraphQL schema.json file to be read by tslint
