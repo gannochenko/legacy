@@ -244,7 +244,7 @@ export default class FilePicker extends BaseComponent
 
     getFilter() {
         if (this.acceptImagesOnly()) {
-            return 'image/x-png,image/gif,image/jpeg';
+            return 'image/x-png,image/gif,image/jpg';
         }
 
         return '';

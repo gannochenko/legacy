@@ -12,8 +12,10 @@ import {
     ObjectFieldsType,
     GetObjectByIdOutputType,
     AddObjectPhotoOutputType,
+    DynamoDBItemUpdateExpression,
 } from './type';
 import { ObjectEntity } from '../../entities/ObjectEntity';
+import { tryExecute } from '../../utils/tryExecute';
 
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html
@@ -25,20 +27,28 @@ const TABLE_NAME = process.env.AWS_OBJECT_TABLE_NAME ?? '';
 
 @Injectable()
 export class ObjectsService {
-    async create(item: CreateObjectInputType): Promise<CreateObjectOutputType> {
+    public async create(
+        item: CreateObjectInputType,
+    ): Promise<CreateObjectOutputType> {
         const {
             name,
+            nameDe,
             content,
-            yearBuiltStart,
-            yearBuiltEnd,
-            yearDemolishedStart,
-            yearDemolishedEnd,
-            demolished,
+            constructionYearStart,
+            constructionYearEnd,
+            lossYearStart,
+            lossYearEnd,
+            lost,
+            altered,
             condition,
-            locationLat,
-            locationLong,
+            location,
+            locationDescription,
+            locationArea,
             kind,
             materials,
+            heritageId,
+            heritageStatus,
+            heritageLevel,
         } = item;
 
         const id = v4();
@@ -51,19 +61,28 @@ export class ObjectsService {
             id,
             slug,
             name,
+            nameDe,
             content,
-            yearBuiltStart,
-            yearBuiltEnd,
-            yearDemolishedStart,
-            yearDemolishedEnd,
-            demolished,
+            constructionYearStart,
+            constructionYearEnd,
+            lossYearStart,
+            lossYearEnd,
+            lost,
+            altered,
             condition,
-            locationLat,
-            locationLong,
+            location,
+            locationDescription,
+            locationArea,
             kind,
             materials,
             photos: [],
+            // previewPhoto // todo
+            // headerPhoto // todo
             createdAt: new Date().toISOString(),
+            version: 1,
+            heritageStatus,
+            heritageLevel,
+            heritageId,
         };
 
         try {
@@ -84,7 +103,7 @@ export class ObjectsService {
         return { data: dynamodbItem, aux: {} };
     }
 
-    async findAll({
+    public async findAll({
         limit,
         lastId,
     }: FindAllObjectsInputType = {}): Promise<FindAllObjectsOutputType> {
@@ -114,7 +133,7 @@ export class ObjectsService {
     }
 
     // todo: get only the requested fields, don't use *
-    async getById(id: string): Promise<GetObjectByIdOutputType> {
+    public async getById(id: string): Promise<GetObjectByIdOutputType> {
         const item = await this.getItem(id);
         return {
             data: (item as ObjectFieldsType) ?? null,
@@ -122,7 +141,7 @@ export class ObjectsService {
         };
     }
 
-    async addPhoto(
+    public async addPhotos(
         id: string,
         input: AddObjectPhotoInputType,
     ): Promise<AddObjectPhotoOutputType> {
@@ -134,18 +153,20 @@ export class ObjectsService {
         const { photos } = item;
 
         const {
-            path,
+            variants,
             author,
             capturedAt,
             capturedYearEnd,
             capturedYearStart,
             source,
+            code,
         } = input;
 
         const newPhotos = [
             ...(photos ?? {}),
             {
-                path,
+                code,
+                variants,
                 author,
                 source,
                 capturedAt,
@@ -155,22 +176,16 @@ export class ObjectsService {
             },
         ];
 
-        try {
-            await dynamoDB
-                .update({
-                    TableName: TABLE_NAME,
-                    Key: { id },
-                    UpdateExpression: 'set photos = :x',
-                    ExpressionAttributeValues: {
-                        ':x': newPhotos,
-                    },
-                    ReturnValues: 'UPDATED_NEW',
-                })
-                .promise();
-        } catch (error) {
-            console.error(error);
-            throw new InternalServerErrorException('Could not add photo');
-        }
+        await this.updateItem(
+            id,
+            {
+                UpdateExpression: 'photos = :x',
+                ExpressionAttributeValues: {
+                    ':x': newPhotos,
+                },
+            },
+            'Could not add photo',
+        );
 
         return {
             data: null,
@@ -178,13 +193,11 @@ export class ObjectsService {
         };
     }
 
-    async isExists(id: string): Promise<boolean> {
-        const item = await this.getItem(id, ['id']);
-
-        return !!item;
+    public async isExists(id: string): Promise<boolean> {
+        return !!(await this.getItem(id, ['id']));
     }
 
-    private async getItem(id: string, fields?: string[]) {
+    public async getItem(id: string, fields?: string[]) {
         try {
             const result = await dynamoDB
                 .get({
@@ -201,5 +214,28 @@ export class ObjectsService {
             console.error(error);
             throw new InternalServerErrorException('Could not get an element');
         }
+    }
+
+    private async updateItem(
+        id: string,
+        expression: DynamoDBItemUpdateExpression,
+        message = 'Could not update item',
+    ) {
+        return tryExecute(async () => {
+            await dynamoDB
+                .update({
+                    TableName: TABLE_NAME,
+                    Key: { id },
+                    UpdateExpression: `SET ${expression.UpdateExpression}, updatedAt = :u, version = if_not_exists(version, :vs) + :vinc`,
+                    ExpressionAttributeValues: {
+                        ...expression.ExpressionAttributeValues,
+                        ':u': new Date().toISOString(),
+                        ':vs': 1,
+                        ':vinc': 1,
+                    },
+                    ReturnValues: 'UPDATED_NEW',
+                })
+                .promise();
+        }, message);
     }
 }

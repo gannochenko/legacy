@@ -4,7 +4,9 @@ import { ValidationPipe } from '@nestjs/common';
 import { ApplicationModule } from './modules/ApplicationModule';
 
 (async () => {
-    const app = await NestFactory.create(ApplicationModule);
+    const app = await NestFactory.create(ApplicationModule, {
+        bodyParser: false,
+    });
     app.useGlobalPipes(
         new ValidationPipe({ transform: true, whitelist: true }),
     );

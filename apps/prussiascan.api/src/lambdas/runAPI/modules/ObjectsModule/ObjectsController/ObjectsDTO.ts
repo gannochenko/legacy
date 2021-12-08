@@ -7,14 +7,58 @@ import {
     MinLength,
     IsIn,
     Max,
+    IsUUID,
+    MaxLength,
+    ValidatorConstraint,
+    ValidatorConstraintInterface,
+    ValidationArguments,
+    Validate,
 } from 'class-validator';
 import {
     ObjectConditionEnum,
+    ObjectHeritageLevelEnum,
+    ObjectHeritageStatusEnum,
     ObjectKindEnum,
+    ObjectLocationAreaEnum,
     ObjectMaterialEnum,
 } from '../../../entities/ObjectEntity/enums';
+import { MimeType } from '../type';
+import { HeritageObjectLocationType } from '../../../entities/ObjectEntity/type';
 
 // https://github.com/typestack/class-validator
+
+@ValidatorConstraint({ name: 'locations', async: false })
+export class LocationsValidatorConstraint
+    implements ValidatorConstraintInterface
+{
+    validate(input: [unknown, unknown][], args: ValidationArguments) {
+        if (!Array.isArray(input)) {
+            return false;
+        }
+
+        for (let i = 0; i < input.length; i++) {
+            const item = input[i] as unknown as HeritageObjectLocationType;
+
+            if (!item.lat || !item.lng) {
+                return false;
+            }
+
+            if (
+                Number.isNaN(parseFloat(item.lat as unknown as string)) ||
+                Number.isNaN(parseFloat(item.lng as unknown as string))
+            ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    defaultMessage(args: ValidationArguments) {
+        // here you can provide default error message if validation failed
+        return 'Locations should be an array of array of two numbers.';
+    }
+}
 
 export class CreateObjectDto {
     @IsString()
@@ -24,43 +68,61 @@ export class CreateObjectDto {
     name: string;
 
     @IsString()
+    @IsOptional()
+    nameDe: string;
+
+    @IsString()
     content: string;
 
     @IsNumber()
     @IsOptional()
     @Min(0)
-    yearBuiltStart: number;
+    constructionYearStart: number;
 
     @IsNumber()
     @IsOptional()
     @Min(0)
-    yearBuiltEnd: number;
+    constructionYearEnd: number;
 
     @IsNumber()
     @IsOptional()
     @Min(0)
-    yearDemolishedStart: number;
+    lossYearStart: number;
 
     @IsNumber()
     @IsOptional()
     @Min(0)
-    yearDemolishedEnd: number;
+    lossYearEnd: number;
 
     @IsBoolean()
     @IsOptional()
-    demolished: boolean;
+    lost: boolean;
+
+    @IsBoolean()
+    @IsOptional()
+    altered: boolean;
 
     @IsIn(Object.values(ObjectConditionEnum))
     @IsOptional()
     condition: ObjectConditionEnum;
 
     @IsNumber()
-    @Min(0)
-    locationLat: number;
+    @MaxLength(2, {
+        each: true,
+    })
+    @MinLength(2, {
+        each: true,
+    })
+    @Validate(LocationsValidatorConstraint)
+    location: { lat: number; lng: number }[];
 
-    @IsNumber()
-    @Min(0)
-    locationLong: number;
+    @IsString()
+    @IsOptional()
+    locationDescription: string;
+
+    @IsIn(Object.values(ObjectLocationAreaEnum))
+    @IsOptional()
+    locationArea: ObjectLocationAreaEnum;
 
     @IsIn(Object.values(ObjectMaterialEnum), { each: true })
     @IsOptional()
@@ -69,6 +131,22 @@ export class CreateObjectDto {
     @IsIn(Object.values(ObjectKindEnum), { each: true })
     @IsOptional()
     kind: ObjectKindEnum[];
+
+    @IsString()
+    @IsOptional()
+    heritageId: string;
+
+    @IsIn(Object.values(ObjectHeritageStatusEnum))
+    @IsOptional()
+    heritageStatus: ObjectHeritageStatusEnum;
+
+    @IsIn(Object.values(ObjectHeritageLevelEnum))
+    @IsOptional()
+    heritageLevel: ObjectHeritageLevelEnum;
+
+    @IsString({ each: true })
+    @IsOptional()
+    architects: string[];
 }
 
 export class UpdateObjectDto {}
@@ -82,4 +160,54 @@ export class FindObjectDto {
     @IsString()
     @IsOptional()
     lastId: string;
+}
+
+export class GetUploadURLDto {
+    @IsUUID()
+    objectId: string;
+
+    @IsIn([MimeType.jpg, MimeType.png])
+    fileMime: MimeType;
+}
+
+export class AttachFileDto {
+    @IsUUID()
+    objectId: string;
+
+    @IsUUID()
+    fileId: string;
+
+    @IsString()
+    code: string;
+
+    @IsIn([MimeType.jpg, MimeType.png])
+    fileMime: MimeType;
+
+    @IsString()
+    @IsOptional()
+    year: number;
+
+    @IsString()
+    @IsOptional()
+    period: string;
+
+    @IsOptional()
+    @IsString()
+    author: string;
+
+    @IsOptional()
+    @IsString()
+    source: string;
+
+    @IsOptional()
+    @IsString()
+    capturedAt: string;
+
+    @IsOptional()
+    @IsString()
+    capturedYearStart: number;
+
+    @IsOptional()
+    @IsString()
+    capturedYearEnd: number;
 }

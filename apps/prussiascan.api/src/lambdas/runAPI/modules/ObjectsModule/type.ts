@@ -1,28 +1,45 @@
 import {
     ObjectConditionEnum,
+    ObjectHeritageLevelEnum,
+    ObjectHeritageStatusEnum,
     ObjectKindEnum,
+    ObjectLocationAreaEnum,
     ObjectMaterialEnum,
 } from '../../entities/ObjectEntity/enums';
 import { ServiceResponseType } from '../../type';
+import { HeritageObjectLocationType } from '../../entities/ObjectEntity/type';
 
 type IdFieldsType = {
     id: string;
     slug: string;
 };
 
+export type DynamoDBItemUpdateExpression = {
+    UpdateExpression: string;
+    ExpressionAttributeValues: Record<string, unknown>;
+};
+
 type CommonFieldsType = {
     name: string;
+    nameDe: string;
     content: string;
-    yearBuiltStart?: number;
-    yearBuiltEnd?: number;
-    yearDemolishedStart?: number;
-    yearDemolishedEnd?: number;
-    demolished?: boolean;
+    constructionYearStart?: number;
+    constructionYearEnd?: number;
+    lossYearStart?: number;
+    lossYearEnd?: number;
+    lost?: boolean;
+    altered?: boolean;
+    remarkable?: boolean;
     condition?: ObjectConditionEnum;
-    locationLat: number;
-    locationLong: number;
+    location: HeritageObjectLocationType[];
+    locationDescription?: string;
+    locationArea?: ObjectLocationAreaEnum;
     materials?: ObjectMaterialEnum[];
     kind?: ObjectKindEnum[];
+    heritageId?: string;
+    heritageStatus?: ObjectHeritageStatusEnum;
+    heritageLevel?: ObjectHeritageLevelEnum;
+    architects?: string[];
 };
 
 type DateFieldsType = {
@@ -46,7 +63,7 @@ export type FindAllObjectsInputType = {
 };
 
 export type FindAllObjectsOutputType = ServiceResponseType<
-    (IdFieldsType & CommonFieldsType)[],
+    ObjectFieldsType[],
     { lastId: string | null }
 >;
 
@@ -54,7 +71,8 @@ export type GetObjectByIdOutputType =
     ServiceResponseType<ObjectFieldsType | null>;
 
 export type AddObjectPhotoInputType = {
-    path: string;
+    variants: Record<string, string>;
+    code: string;
     author?: string;
     source?: string;
     capturedAt?: string;
@@ -63,3 +81,29 @@ export type AddObjectPhotoInputType = {
 };
 
 export type AddObjectPhotoOutputType = ServiceResponseType<null>;
+
+////////
+
+export enum MimeType {
+    jpg = 'jpg',
+    png = 'png',
+}
+
+export type GetSignedUploadURLInputType = {
+    objectId: string;
+    fileMime: MimeType;
+};
+
+export type AttachFileInputType = {
+    objectId: string;
+    fileId: string;
+    code: string;
+    fileMime: MimeType;
+    author?: string;
+    source?: string;
+    capturedAt?: string;
+    capturedYearStart?: number;
+    capturedYearEnd?: number;
+    header?: boolean;
+    preview?: boolean;
+};

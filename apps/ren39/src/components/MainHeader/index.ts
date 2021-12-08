@@ -1,2 +1,2 @@
 export * from './MainHeader';
-// export type { MainHeaderPropsType } from './type';
+// export type { PageHeaderPropsType } from './type';

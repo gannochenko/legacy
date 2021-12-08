@@ -7,6 +7,6 @@ export const HeaderRoot = styled.header`
     flex-shrink: 0;
 `;
 
-export const MenuOffset = styled.div`
+export const HeaderOffset = styled.div`
     height: ${muiSpacing(10)};
 `;

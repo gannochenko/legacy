@@ -1,64 +1,38 @@
 import {
     Controller,
     Post,
-    Get,
-    // Header,
-    // Patch,
     Param,
-    // HttpCode,
     Body,
     Query,
-    // Delete,
     HttpException,
     HttpStatus,
 } from '@nestjs/common';
 import { ObjectsService } from '../ObjectsService';
 import {
+    AttachFileDto,
     CreateObjectDto,
     FindObjectDto,
     // UpdateObjectDto,
+    GetUploadURLDto,
 } from './ObjectsDTO';
 import { Roles } from '../../../utils/Roles';
 import { UserRoleEnum } from '../../../entities/UserEntity/enums';
+import { ObjectUploadsService } from '../ObjectUploadsService';
 
 @Controller('objects')
 export class ObjectsController {
-    constructor(private readonly objectsService: ObjectsService) {}
+    constructor(
+        private readonly objectsService: ObjectsService,
+        private readonly objectUploadsService: ObjectUploadsService,
+    ) {}
 
-    @Post()
-    // @Header('Cache-Control', 'none')
-    // @HttpCode(204)
+    @Post('create')
     @Roles(UserRoleEnum.contributor)
     async create(@Body() data: CreateObjectDto) {
         return this.objectsService.create(data);
     }
 
-    // @Patch(':id')
-    // @Roles('admin')
-    // async update(
-    //     @Param('id') id: IDType,
-    //     @Body() data: UpdateObjectDto,
-    // ): AsyncRESTResponse<AuthorEntity> {
-    //     if (!(await this.authorsService.isElementExists(id))) {
-    //         // https://docs.nestjs.com/exception-filters
-    //         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
-    //     }
-    //
-    //     return createResponse(await this.authorsService.update(id, data));
-    // }
-
-    // @Delete(':id')
-    // @Roles('admin')
-    // async delete(@Param('id') id: IDType): AsyncRESTResponse<AuthorEntity> {
-    //     if (!(await this.authorsService.isElementExists(id))) {
-    //         // https://docs.nestjs.com/exception-filters
-    //         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
-    //     }
-    //
-    //     return createResponse(await this.authorsService.delete(id));
-    // }
-
-    @Get()
+    @Post('findall')
     @Roles(UserRoleEnum.contributor, UserRoleEnum.cicd)
     async findAll(@Query() { limit, lastId }: FindObjectDto) {
         return this.objectsService.findAll({
@@ -67,7 +41,7 @@ export class ObjectsController {
         });
     }
 
-    @Get(':id')
+    @Post('find/:id')
     @Roles(UserRoleEnum.contributor, UserRoleEnum.cicd)
     async findOne(@Param('id') id: string) {
         const result = await this.objectsService.getById(id);
@@ -77,5 +51,17 @@ export class ObjectsController {
         }
 
         return result;
+    }
+
+    @Post('getuploadurl')
+    @Roles(UserRoleEnum.contributor)
+    async getSignedUploadURL(@Body() data: GetUploadURLDto) {
+        return this.objectUploadsService.getSignedUploadURL(data);
+    }
+
+    @Post('attachfile')
+    @Roles(UserRoleEnum.contributor)
+    async attachFile(@Body() data: AttachFileDto) {
+        return this.objectUploadsService.attachFile(data);
     }
 }

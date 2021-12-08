@@ -13,7 +13,11 @@ import { ApplicationModule } from './modules/ApplicationModule';
 // due to a compressed response (e.g. gzip) which has not been handled correctly
 // by aws-serverless-express and/or API Gateway. Add the necessary MIME types to
 // binaryMimeTypes below
-const binaryMimeTypes: string[] = [];
+const binaryMimeTypes: string[] = [
+    'multipart/form-data',
+    'image/png',
+    'image/jpg',
+];
 
 let cachedServer: Server;
 
@@ -24,7 +28,7 @@ export const bootstrapServer = async (): Promise<Server> => {
             ApplicationModule,
             new ExpressAdapter(expressApp),
         );
-        app.setGlobalPrefix('api');
+        app.setGlobalPrefix('data');
 
         if (!__DEV__) {
             app.use(helmet());
