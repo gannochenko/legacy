@@ -50,23 +50,42 @@ exports.onPostBootstrap = async ({ store }) => {
 };
 
 exports.sourceNodes = async ({ actions }) => {
-    const result = await axios.request({
-        url: `${process.env.API_URL}/${process.env.API_ENV}/data/objects/findall`,
-        method: 'post',
-        headers: { 'x-api-key': process.env.CICD_API_KEY },
-    });
-
-    const data = result.data.data;
-
-    for (let item of data) {
-        actions.createNode({
-            ...normalizeHeritageObject(item),
-            internal: {
-                type: 'HeritageObject',
-                contentDigest: (item.version ?? '1').toString(),
-            },
+    let safeExit = 0;
+    let lastReceivedId;
+    let count = 0;
+    do {
+        const result = await axios.request({
+            url: `${process.env.API_URL}/${
+                process.env.API_ENV
+            }/data/objects/findall${
+                lastReceivedId ? `?lastId=${lastReceivedId}` : ''
+            }`,
+            method: 'post',
+            headers: { 'x-api-key': process.env.CICD_API_KEY },
         });
-    }
+
+        const {
+            data,
+            aux: { lastId },
+        } = result.data;
+        lastReceivedId = lastId;
+
+        count += data.length;
+
+        for (let item of data) {
+            actions.createNode({
+                ...normalizeHeritageObject(item),
+                internal: {
+                    type: 'HeritageObject',
+                    contentDigest: (item.version ?? '1').toString(),
+                },
+            });
+        }
+
+        safeExit += 1;
+    } while (lastReceivedId && safeExit < 100);
+
+    console.log(`Items received: ${count}`);
 };
 
 exports.createSchemaCustomization = ({ actions }) => {

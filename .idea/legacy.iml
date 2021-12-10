@@ -10,6 +10,8 @@
       <excludeFolder url="file://$MODULE_DIR$/apps/prussiascan.api/build" />
       <excludeFolder url="file://$MODULE_DIR$/apps/prussiascan/.cache" />
       <excludeFolder url="file://$MODULE_DIR$/apps/prussiascan/public" />
+      <excludeFolder url="file://$MODULE_DIR$/.localstack" />
+      <excludeFolder url="file://$MODULE_DIR$/.mongo" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
