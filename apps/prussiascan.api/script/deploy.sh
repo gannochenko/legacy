@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+ENV="${DIR}"/../.env
 export AWS_PAGER=""
 
 S3_BUCKET=gannochenko--legacy--prussiascan.api--lambda-src
 FN_NAME=${1}
 FN_NAME_GLOBAL=prussiascan-api_"${FN_NAME}"
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ZIP=latest.zip
 S3_KEY="${FN_NAME}"/"${ZIP}"
 S3_REGION=eu-central-1
-ENV="${DIR}"/../.env
 
 if [ -f "${ENV}" ]
 then
