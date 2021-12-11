@@ -8,8 +8,6 @@ public/
 .idea/libraries
 .env
 .env.*
-!.env.js
-!.env.example
 
 # other
 *.zip
