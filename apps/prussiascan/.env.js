@@ -9,5 +9,4 @@ module.exports.allowedEnvVariables = [
     'GA_TRACKING_ID',
     'GA_LINK',
     'DEPLOYMENT_LINK',
-    'CICD_API_KEY',
 ];
