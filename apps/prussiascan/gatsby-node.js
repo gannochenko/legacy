@@ -59,7 +59,7 @@ exports.sourceNodes = async ({ actions }) => {
 
     try {
         do {
-            url = `${process.env.API_URL}/${
+            url = `${process.env.API_URL}${
                 process.env.API_ENV
             }/data/objects/findall${
                 lastReceivedId ? `?lastId=${lastReceivedId}` : ''
