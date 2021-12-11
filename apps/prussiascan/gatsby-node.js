@@ -50,6 +50,8 @@ exports.onPostBootstrap = async ({ store }) => {
 };
 
 exports.sourceNodes = async ({ actions }) => {
+    console.log(process.env);
+
     let safeExit = 0;
     let lastReceivedId;
     let count = 0;
