@@ -192,23 +192,25 @@ const createHeritageObjectPages = async ({ graphql, actions, reporter }) => {
 
     const objects = result.data.allHeritageObject.nodes;
 
-    // // list page with pagination
-    // const postsPerPage = 20;
-    // const numPages = Math.ceil(objects.length / postsPerPage);
-    // Array.from({ length: numPages }).forEach((_, i) => {
-    //     createPage({
-    //         path: i === 0 ? HERITAGE_LIST : `${HERITAGE_LIST}/${i + 1}`,
-    //         component: path.resolve(
-    //             './src/templates/HeritageObjectList/HeritageObjectList.tsx',
-    //         ),
-    //         context: {
-    //             limit: postsPerPage,
-    //             skip: i * postsPerPage,
-    //             numPages,
-    //             currentPage: i + 1,
-    //         },
-    //     });
-    // });
+    // list page with pagination
+    const postsPerPage = 20;
+    const numPages = Math.ceil(objects.length / postsPerPage);
+    Array.from({ length: numPages }).forEach((_, i) => {
+        if (i === 0) {
+            createPage({
+                path: i === 0 ? HERITAGE_LIST : `${HERITAGE_LIST}/${i + 1}`,
+                component: path.resolve(
+                    './src/templates/HeritageObjectList/HeritageObjectList.tsx',
+                ),
+                context: {
+                    limit: postsPerPage,
+                    skip: i * postsPerPage,
+                    numPages,
+                    currentPage: i + 1,
+                },
+            });
+        }
+    });
 
     // // detail page
     // objects.forEach(({ id, slug }) => {
