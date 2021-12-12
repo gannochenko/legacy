@@ -32,7 +32,7 @@ export const useMap = (
                 .filter((x) => !!x) as MapItemType[];
         }
         return result;
-    }, [location, edges]);
+    }, [locations, edges]);
 
     const defaultState = useMemo(() => {
         const state: MapState = { center: KGD_CENTER, zoom: 12 };
