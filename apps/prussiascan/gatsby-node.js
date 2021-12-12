@@ -210,18 +210,18 @@ const createHeritageObjectPages = async ({ graphql, actions, reporter }) => {
         });
     });
 
-    // // detail page
-    // objects.forEach(({ id, slug }) => {
-    //     actions.createPage({
-    //         path: fillTemplate(HERITAGE_DETAIL, { SLUG: slug }),
-    //         component: path.resolve(
-    //             './src/templates/HeritageObjectDetailTemplate/HeritageObjectDetailTemplate.tsx',
-    //         ),
-    //         context: {
-    //             id,
-    //         },
-    //     });
-    // });
+    // detail page
+    objects.forEach(({ id, slug }) => {
+        actions.createPage({
+            path: fillTemplate(HERITAGE_DETAIL, { SLUG: slug }),
+            component: path.resolve(
+                './src/templates/HeritageObjectDetailTemplate/HeritageObjectDetailTemplate.tsx',
+            ),
+            context: {
+                id,
+            },
+        });
+    });
 };
 
 // const createMDXPages = async ({ graphql, actions }) => {
