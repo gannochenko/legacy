@@ -11,7 +11,6 @@ import { Typography } from '../Typography';
 export const PageLayout: FC<PageLayoutPropsType> = (props) => {
     const {
         children,
-        // location: { pathname = '' } = {},
         pageContext: {
             frontmatter: {
                 title = '',
