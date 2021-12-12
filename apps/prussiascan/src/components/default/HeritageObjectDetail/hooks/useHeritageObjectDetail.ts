@@ -127,8 +127,6 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
             ?.map((architectId) => architectsMap[architectId] ?? null)
             .filter((x) => !!x) ?? [];
 
-    console.log(data);
-
     return {
         rootProps: props,
         mapProps: {
