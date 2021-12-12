@@ -196,7 +196,7 @@ const createHeritageObjectPages = async ({ graphql, actions, reporter }) => {
     const postsPerPage = 20;
     const numPages = Math.ceil(objects.length / postsPerPage);
     Array.from({ length: numPages }).forEach((_, i) => {
-        if (i === 0) {
+        if (i < 10) {
             createPage({
                 path: i === 0 ? HERITAGE_LIST : `${HERITAGE_LIST}/${i + 1}`,
                 component: path.resolve(
