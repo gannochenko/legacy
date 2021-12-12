@@ -3,5 +3,5 @@ module.exports.makePublicPath = (fileKey) => {
         return '';
     }
 
-    return `${process.env.AWS_S3_URL}/${process.env.AWS_OBJECT_PHOTOS_BUCKET_NAME}/${fileKey}`;
+    return `${process.env.IMAGES_URL}${fileKey}`;
 };
