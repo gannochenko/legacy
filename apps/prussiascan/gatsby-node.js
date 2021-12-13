@@ -192,6 +192,7 @@ const createHeritageObjectPages = async ({ graphql, actions, reporter }) => {
 
     const objects = result.data.allHeritageObject.nodes;
 
+    console.log('Making pages');
     // list page with pagination
     const postsPerPage = 20;
     const numPages = Math.ceil(objects.length / postsPerPage);
