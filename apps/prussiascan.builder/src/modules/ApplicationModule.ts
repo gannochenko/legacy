@@ -1,42 +1,12 @@
-import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-// import { RouteInfo } from '@nestjs/common/interfaces';
 
-import {
-    AuthorEntity,
-    PostEntity,
-    UserEntity,
-    UserRoleEntity,
-} from '../entities';
 import { RolesGuard } from '../guards/RolesGuard';
-
-import { AuthorsModule } from './AuthorsModule';
-import { PostsModule } from './PostsModule';
-
-// const rawBodyParsingRoutes: Array<RouteInfo> = [
-//     {
-//         path: '/authors/upload',
-//         method: RequestMethod.POST,
-//     },
-// ];
+import { BuildsModule } from './BuildsModule';
+import { APIKeyAuthenticationMiddleware } from '../middlewares/APIKeyAuthenticationMiddleware';
 
 @Module({
-    imports: [
-        AuthorsModule,
-        PostsModule,
-        TypeOrmModule.forRoot({
-            type: 'postgres',
-            port: 5432,
-            username: process.env.DB_USERNAME,
-            password: process.env.DB_PASSWORD,
-            database: process.env.DB_NAME,
-            synchronize: false,
-            host: process.env.DB_HOST,
-            entities: [AuthorEntity, PostEntity, UserEntity, UserRoleEntity],
-            // autoLoadEntities: true,
-        }),
-    ],
+    imports: [BuildsModule],
     providers: [
         {
             provide: APP_GUARD,
@@ -45,9 +15,9 @@ import { PostsModule } from './PostsModule';
     ],
 })
 export class ApplicationModule {
-    // public configure(consumer: MiddlewareConsumer) {
-    //     consumer
-    //         .apply(Auth0AuthenticationMiddleware)
-    //         .forRoutes({ path: '*', method: RequestMethod.ALL });
-    // }
+    public configure(consumer: MiddlewareConsumer) {
+        consumer
+            .apply(APIKeyAuthenticationMiddleware)
+            .forRoutes({ path: '*', method: RequestMethod.POST });
+    }
 }

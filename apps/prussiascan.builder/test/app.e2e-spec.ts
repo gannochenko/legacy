@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AuthorsController } from '../src/modules/AuthorsModule/AuthorsController/AuthorsController';
+import { AuthorsController } from '../src/modules/BuildsModule/BuildsController/BuildsController';
 
-describe('AuthorsController (e2e)', () => {
+describe('BuildsController (e2e)', () => {
     let app: INestApplication;
 
     beforeEach(async () => {
