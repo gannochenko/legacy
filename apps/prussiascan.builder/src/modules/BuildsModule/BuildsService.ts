@@ -1,11 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { exec } from 'child_process';
 import debug from 'debug';
-import { promisify } from 'util';
 import { tryExecute } from '../../utils/tryExecute';
-import { maybeCreateBuildFolder } from '../../utils/buildFolder';
-
-const execAsync = promisify(exec);
+import { maybeCreateFolder } from '../../utils/fs';
+import { cloneOrPull } from '../../utils/git';
 
 const d = debug('app.BuildsService');
 
@@ -13,24 +10,20 @@ const d = debug('app.BuildsService');
 export class BuildsService {
     async create() {
         return tryExecute(async () => {
-            const buildFolderPath = await maybeCreateBuildFolder();
+            const buildFolderPath = process.env.BUILDER_FOLDER;
+            if (!buildFolderPath) {
+                throw new Error('Builder folder path is not defined');
+            }
             const repository = process.env.REPOSITORY ?? '';
             if (!repository) {
                 throw new Error('Repository not defined');
             }
 
-            d(`Cloning to ${buildFolderPath}`);
-            const { stdout, stderr } = await execAsync(
-                `git clone ${repository} 111 --depth 1`,
-                {
-                    cwd: buildFolderPath,
-                },
-            );
+            await maybeCreateFolder(buildFolderPath);
+            await cloneOrPull(repository, buildFolderPath);
 
-            d('Cloned');
-
-            console.log(stdout);
-            console.log(stderr);
+            // console.log(stdout);
+            // console.log(stderr);
 
             // console.log(output);
             // const element = this.usersRepository.create(data);
