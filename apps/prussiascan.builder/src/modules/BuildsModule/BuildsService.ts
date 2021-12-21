@@ -22,13 +22,19 @@ export class BuildsService {
             await maybeCreateFolder(buildFolderPath);
             await cloneOrPull(repository, buildFolderPath);
 
-            // console.log(stdout);
-            // console.log(stderr);
-
-            // console.log(output);
-            // const element = this.usersRepository.create(data);
-            // return await this.usersRepository.save(element);
             return null;
+        });
+    }
+
+    async wipe() {
+        return tryExecute(async () => {
+            return 1;
+        });
+    }
+
+    async schedule() {
+        return tryExecute(async () => {
+            return 1;
         });
     }
 }
