@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import debug from 'debug';
+import { join } from 'path';
 import { tryExecute } from '../../utils/tryExecute';
 import { maybeCreateFolder } from '../../utils/fs';
-import { cloneOrPull } from '../../utils/git';
+import { cloneOrPull, getRepositoryName } from '../../utils/git';
+import { yarnBuild, yarnInstall } from '../../utils/yarn';
 
 const d = debug('app.BuildsService');
 
@@ -18,9 +20,20 @@ export class BuildsService {
             if (!repository) {
                 throw new Error('Repository not defined');
             }
+            const subFolder = process.env.SUBFOLDER ?? '';
 
             await maybeCreateFolder(buildFolderPath);
             await cloneOrPull(repository, buildFolderPath);
+
+            const projectPath = join(
+                buildFolderPath,
+                getRepositoryName(repository),
+                subFolder,
+            );
+            await yarnInstall(projectPath);
+            await yarnBuild(projectPath);
+
+            d('Finished');
 
             return null;
         });

@@ -5,12 +5,18 @@ import { isObjectExists } from './fs';
 
 const d = debug('app.Git');
 
-export const cloneOrPull = async (repository: string, folder: string) => {
+export const getRepositoryName = (repository: string) => {
     let code = '';
     const match = repository.match(/\/([a-zA-Z0-9_]+)\.git$/);
     if (match?.[1]) {
         code = match[1];
     }
+
+    return code;
+};
+
+export const cloneOrPull = async (repository: string, folder: string) => {
+    const code = getRepositoryName(repository);
 
     const repoFolder = join(folder, code);
     if (await isObjectExists(join(repoFolder, '.git'))) {
