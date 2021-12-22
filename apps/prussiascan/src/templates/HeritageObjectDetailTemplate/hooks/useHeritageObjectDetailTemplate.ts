@@ -10,6 +10,7 @@ export const useHeritageObjectDetailTemplate = ({
         rootProps: props,
         pageLayoutProps: {
             title: itemData?.name ?? '',
+            displayPageTitle: false,
         },
         detailPageProps: {
             data: itemData,

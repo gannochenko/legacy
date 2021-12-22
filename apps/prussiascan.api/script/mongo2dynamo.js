@@ -16,7 +16,7 @@ const {
 } = require('../src/lambdas/runAPI/entities/ObjectEntity/utils');
 
 const DRY_RUN = false;
-const PRODUCTION = true;
+const PRODUCTION = false;
 
 const BUCKET_NAME = 'prussiascans-object-photos';
 const IMAGE_SIZE_CONSTRAINT = 1500;
