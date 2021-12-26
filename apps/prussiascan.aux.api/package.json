@@ -1,13 +1,11 @@
 {
-    "name": "prussiascan-api",
+    "name": "prussiascan-aux-api",
     "version": "1.0.0",
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "dev": "serverless offline start -r eu-central-1 --noTimeout --host 0.0.0.0  --httpPort 3000",
-        "dev:runapi:standalone": "yarn nodemon --exec \"dotenv ts-node ./src/lambdas/runAPI/main.standalone.ts\" --watch \"./src/**\" --ext \"ts,json\"",
-        "deploy": "./script/deploy.sh",
-        "mongo2dybamodb": "dotenv ./script/mongo2dynamo.js"
+        "dev": "serverless offline start -r eu-central-1 --noTimeout --host 0.0.0.0 --httpPort 3010",
+        "deploy": "./script/deploy.sh"
     },
     "devDependencies": {
         "@types/aws-lambda": "^8.10.83",
@@ -71,7 +69,6 @@
         "reflect-metadata": "^0.1.13",
         "rxjs": "^7",
         "serverless-offline": "^8.2.0",
-        "sharp": "^0.29.1",
         "utf-8-validate": "^5.0.6",
         "uuid": "^8.3.2"
     }
