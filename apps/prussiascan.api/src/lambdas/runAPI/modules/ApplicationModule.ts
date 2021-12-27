@@ -3,10 +3,11 @@ import { APP_GUARD } from '@nestjs/core';
 
 import { RolesGuard } from '../guards/RolesGuard';
 import { ObjectsModule } from './ObjectsModule';
+import { OptionsModule } from './OptionsModule';
 import { APIKeyAuthenticationMiddleware } from '../middlewares/APIKeyAuthenticationMiddleware';
 
 @Module({
-    imports: [ObjectsModule],
+    imports: [ObjectsModule, OptionsModule],
     providers: [
         {
             provide: APP_GUARD,

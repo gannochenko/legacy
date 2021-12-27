@@ -14,8 +14,10 @@ import {
     AddObjectPhotoOutputType,
     DynamoDBItemUpdateExpression,
 } from './type';
-import { ObjectEntity } from '../../entities/ObjectEntity';
+import { ObjectEntity } from '../../entities';
 import { tryExecute } from '../../utils/tryExecute';
+import { OptionsService } from '../OptionsModule/OptionsService';
+import { OptionCodes } from '../OptionsModule/type';
 
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html
@@ -27,6 +29,8 @@ const TABLE_NAME = process.env.AWS_OBJECT_TABLE_NAME ?? '';
 
 @Injectable()
 export class ObjectsService {
+    constructor(private readonly optionsService: OptionsService) {}
+
     public async create(
         item: CreateObjectInputType,
     ): Promise<CreateObjectOutputType> {
@@ -93,6 +97,8 @@ export class ObjectsService {
                     ReturnConsumedCapacity: 'TOTAL',
                 })
                 .promise();
+
+            await this.optionsService.set(OptionCodes.dataUpdated, '1');
         } catch (error) {
             console.error(error);
             throw new InternalServerErrorException(
@@ -236,6 +242,7 @@ export class ObjectsService {
                     ReturnValues: 'UPDATED_NEW',
                 })
                 .promise();
+            await this.optionsService.set(OptionCodes.dataUpdated, '1');
         }, message);
     }
 }

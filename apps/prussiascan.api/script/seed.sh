@@ -19,19 +19,34 @@ then
 ################################################################################################
 
 echo "Delete tables"
+
+${AWS} dynamodb \
+    delete-table \
+    --table-name "prussiascan.api_ObjectCollection"
+
 ${AWS} dynamodb \
     delete-table \
     --table-name "prussiascan.api_ObjectCollection"
 
 echo "Re-create tables"
+
 ${AWS} dynamodb \
     create-table \
-    --table-name "prussiascan.api_ObjectCollection" \
+    --table-name "prussiascan.api_Flags" \
     --attribute-definitions \
         AttributeName=id,AttributeType=S \
     --key-schema \
         AttributeName=id,KeyType=HASH \
     --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+
+${AWS} dynamodb \
+    create-table \
+    --table-name "prussiascan.api_Flags" \
+    --attribute-definitions \
+        AttributeName=code,AttributeType=S \
+    --key-schema \
+        AttributeName=code,KeyType=HASH \
+    --provisioned-throughput ReadCapacityUnits=2,WriteCapacityUnits=2
 
 ${AWS} dynamodb list-tables
 

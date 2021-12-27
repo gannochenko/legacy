@@ -56,7 +56,7 @@ export class LocationsValidatorConstraint
 
     defaultMessage(args: ValidationArguments) {
         // here you can provide default error message if validation failed
-        return 'Locations should be an array of array of two numbers.';
+        return 'location should be an array of objects';
     }
 }
 
@@ -106,13 +106,6 @@ export class CreateObjectDto {
     @IsOptional()
     condition: ObjectConditionEnum;
 
-    @IsNumber()
-    @MaxLength(2, {
-        each: true,
-    })
-    @MinLength(2, {
-        each: true,
-    })
     @Validate(LocationsValidatorConstraint)
     location: { lat: number; lng: number }[];
 
