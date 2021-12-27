@@ -6,7 +6,7 @@ export AWS_PAGER=""
 
 S3_BUCKET=gannochenko--legacy--prussiascan.aux.api--lambda-src
 FN_NAME=${1}
-FN_NAME_GLOBAL=prussiascan-api_"${FN_NAME}"
+FN_NAME_GLOBAL=prussiascan-aux-api_"${FN_NAME}"
 ZIP=latest.zip
 S3_KEY="${FN_NAME}"/"${ZIP}"
 S3_REGION=eu-central-1
