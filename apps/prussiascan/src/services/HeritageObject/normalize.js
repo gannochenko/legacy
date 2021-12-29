@@ -23,10 +23,34 @@ const normalizePhotos = (photos) => {
     });
 };
 
+const ensureNumber = (value, field, item) => {
+    if (typeof value === 'string' || isNaN(parseInt(value, 10))) {
+        console.warn(
+            `An item "${item.slug}" has string at "${field}": "${value}"`,
+        );
+        return 0;
+    }
+
+    return value;
+};
+
+const ensureArrayOfNumbers = (value, field, item) => {
+    if (!value || !Array.isArray(value)) {
+        return [];
+    }
+
+    return value.map((element, index) =>
+        ensureNumber(item, `${field}[${index}]`, element),
+    );
+};
+
 module.exports = {
     normalizeHeritageObject: (element) => {
+        if (!element.slug || element.slug === 'undefined') {
+            return null;
+        }
+
         return {
-            bitch: '1',
             id: element.id ?? '',
             slug: element.slug ?? '',
             name: element.name ?? '',
@@ -39,18 +63,34 @@ module.exports = {
             lost: element.lost ?? false,
             altered: element.altered ?? false,
             remarkable: element.remarkable ?? false,
-            condition: element.condition ?? '',
+            condition: ensureNumber(element.condition, 'condition', element),
             location: element.location ?? [],
             locationDescription: element.locationDescription ?? '',
-            locationArea: element.locationArea ?? '',
-            materials: element.materials ?? [],
-            kind: element.kind ?? [],
+            locationArea: ensureNumber(
+                element.locationArea,
+                'locationArea',
+                element,
+            ),
+            materials: ensureArrayOfNumbers(
+                element.materials,
+                'materials',
+                element,
+            ),
+            kind: ensureArrayOfNumbers(element.kind, 'kind', element),
             createdAt: element.createdAt ?? '',
             updatedAt: element.updatedAt ?? '',
             photos: normalizePhotos(element.photos ?? []),
             heritageId: element.heritageId ?? '',
-            heritageLevel: element.heritageLevel ?? '',
-            heritageStatus: element.heritageStatus ?? '',
+            heritageLevel: ensureNumber(
+                element.heritageLevel,
+                'heritageLevel',
+                element,
+            ),
+            heritageStatus: ensureNumber(
+                element.heritageStatus,
+                'heritageStatus',
+                element,
+            ),
             architects: element.architects ?? [],
             version: element.version ?? 1,
         };

@@ -80,8 +80,13 @@ exports.sourceNodes = async ({ actions }) => {
             count += data.length;
 
             for (let item of data) {
+                item = normalizeHeritageObject(item);
+                if (!item) {
+                    return;
+                }
+
                 actions.createNode({
-                    ...normalizeHeritageObject(item),
+                    ...item,
                     internal: {
                         type: 'HeritageObject',
                         contentDigest: (item.version ?? '1').toString(),
