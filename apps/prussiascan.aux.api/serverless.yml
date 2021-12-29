@@ -15,21 +15,13 @@ provider:
 
 # here we describe our lambda function
 functions:
-    sendMessage: # function name
-        handler: src/lambdas/sendMessage/handler.handler # where the actual code is located
+    triggerDeployment: # function name
+        handler: src/lambdas/triggerDeployment/handler.handler # where the actual code is located
         # to call our function from outside, we need to expose it to the outer world
         # in order to do so, we create a REST endpoint
         events:
             - http:
-                  path: /message
-                  method: post
-    runAPI: # function name
-        handler: src/lambdas/runAPI/handler.handler # where the actual code is located
-        # to call our function from outside, we need to expose it to the outer world
-        # in order to do so, we create a REST endpoint
-        events:
-            - http:
-                  path: /data/{any+}
+                  path: /deployment
                   method: post
 
 custom:
@@ -39,3 +31,7 @@ custom:
         packager: 'yarn' # package manager we use
     serverless-offline:
         useChildProcesses: true
+        httpPort: 4000
+        websocketPort: 4001
+        lambdaPort: 4002
+

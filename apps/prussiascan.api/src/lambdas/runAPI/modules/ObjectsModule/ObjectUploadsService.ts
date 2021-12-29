@@ -14,7 +14,7 @@ import {
     MimeType,
 } from './type';
 import { ObjectsService } from './ObjectsService';
-import { ObjectPhotoEntity } from '../../entities/ObjectPhotoEntity';
+import { ObjectPhotoEntity } from '../../entities';
 import { tryExecute } from '../../utils/tryExecute';
 
 const s3 = new S3({
