@@ -5,9 +5,9 @@ import {
     muiSpacing,
     getPropsBlocker,
 } from '@gannochenko/ui.styled-components';
-// import { Container as MUIContainer } from '@material-ui/core';
 import { Container as MUIContainer } from '@mui/material';
 import styled from 'styled-components';
+
 import { ContainerPropsType } from './type';
 
 const ContainerRoot = styled(MUIContainer).withConfig(

@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 import { MDXProvider } from '@mdx-js/react';
 import {
     ThemeProvider as MUIThemeProvider,
-    StylesProvider,
-} from '@material-ui/core/styles';
+    StyledEngineProvider,
+} from '@mui/material/styles';
 import { ThemeProvider } from 'styled-components';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import SimpleReactLightbox from 'simple-react-lightbox';
@@ -25,7 +25,7 @@ const win = getWindow();
 export const Providers: FC = ({ children }) => {
     return (
         <SimpleReactLightbox>
-            <StylesProvider injectFirst>
+            <StyledEngineProvider injectFirst>
                 <MUIThemeProvider theme={theme}>
                     <ThemeProvider theme={theme}>
                         <>
@@ -59,7 +59,7 @@ export const Providers: FC = ({ children }) => {
                         </>
                     </ThemeProvider>
                 </MUIThemeProvider>
-            </StylesProvider>
+            </StyledEngineProvider>
         </SimpleReactLightbox>
     );
 };

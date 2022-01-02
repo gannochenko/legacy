@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { ThemeContext } from 'styled-components';
-import { createTheme } from '@material-ui/core';
+import { createTheme } from '@mui/material/styles';
 import { MUIThemeType } from '@gannochenko/ui.styled-components';
 
 import { makeTokenIndex } from '../util';
@@ -98,8 +98,10 @@ const makeTheme = (): MUIThemeType => {
 
     const muiTheme = createTheme(themeDeclaration);
 
+    // @ts-ignore
     return {
         ...muiTheme,
+        // @ts-ignore
         tokenIndex: makeTokenIndex(muiTheme),
     } as MUIThemeType;
 };
