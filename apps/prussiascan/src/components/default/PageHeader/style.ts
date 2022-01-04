@@ -9,7 +9,7 @@ import {
     central,
     rectangle,
     ScalarType,
-} from '@gannochenko/ui.styled-components';
+} from '@gannochenko/ui.emotion';
 
 import { GatsbyImage } from 'gatsby-plugin-image';
 import { MainHeaderRootPropsType } from './type';

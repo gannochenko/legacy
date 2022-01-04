@@ -8,7 +8,7 @@ import {
     absoluteCover,
     contentAlignment,
     muiBreakpointDown,
-} from '@gannochenko/ui.styled-components';
+} from '@gannochenko/ui.emotion';
 
 // @ts-ignore
 import cookies from '../../../../static/assets/aux/cookies.jpg';

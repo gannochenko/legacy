@@ -1,9 +1,5 @@
 import styled from 'styled-components';
-import {
-    marginProps,
-    reset,
-    getPropsBlocker,
-} from '@gannochenko/ui.styled-components';
+import { marginProps, reset, getPropsBlocker } from '@gannochenko/ui.emotion';
 import { GatsbyImage } from 'gatsby-plugin-image';
 
 import { ImageGalleryRootPropsType } from './type';

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { muiSpacing } from '@gannochenko/ui.styled-components';
+import { muiSpacing } from '@gannochenko/ui.emotion';
 
 export const HeaderRoot = styled.header`
     position: relative;

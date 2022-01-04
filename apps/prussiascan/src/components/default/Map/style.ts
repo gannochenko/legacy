@@ -1,9 +1,6 @@
-import styled, { css } from 'styled-components';
-import {
-    marginProps,
-    reset,
-    getPropsBlocker,
-} from '@gannochenko/ui.styled-components';
+import styled from '@emotion/styled';
+import { css } from '@emotion/react';
+import { marginProps, reset } from '@gannochenko/ui.emotion';
 
 import { MapRootPropsType } from './type';
 
@@ -20,7 +17,7 @@ const getRootStyle = ({ height }: MapRootPropsType) => {
     return result;
 };
 
-export const MapRoot = styled.div.withConfig(getPropsBlocker)<MapRootPropsType>`
+export const MapRoot = styled.div<MapRootPropsType>`
     ${reset};
     background-color: #e5e4e4;
     position: relative;

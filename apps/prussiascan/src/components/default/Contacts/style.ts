@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { marginProps, reset } from '@gannochenko/ui.styled-components';
+import { marginProps, reset } from '@gannochenko/ui.emotion';
 import MUIFormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';

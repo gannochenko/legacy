@@ -32,20 +32,20 @@ if (vercelEnv !== undefined && vercelEnv !== 'master') {
  * Thanks: https://gist.github.com/kkemple/6169e8dc16369b7c01ad7408fc7917a9
  */
 exports.onPostBootstrap = async (args) => {
-    await bootstrapGraphQL(args);
+    // await bootstrapGraphQL(args);
 };
 
 exports.createPages = async ({ graphql, actions }) => {
-    await createHeritagePages({ graphql, actions });
+    // await createHeritagePages({ graphql, actions });
     // await createMDXPages({ graphql, actions });
 };
 
 exports.sourceNodes = async (args) => {
-    await sourceHeritageNodes(args);
+    // await sourceHeritageNodes(args);
 };
 
 exports.onCreateNode = async (args) => {
-    await createHeritageNodes(args);
+    // await createHeritageNodes(args);
 };
 
 exports.onCreateWebpackConfig = ({

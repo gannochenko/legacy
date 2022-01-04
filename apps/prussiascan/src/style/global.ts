@@ -4,7 +4,7 @@ import {
     muiColor,
     muiToken,
     MUIThemeType,
-} from '@gannochenko/ui.styled-components';
+} from '@gannochenko/ui.emotion';
 
 export const GlobalStyle = createGlobalStyle<{ theme: MUIThemeType }>`
     html {

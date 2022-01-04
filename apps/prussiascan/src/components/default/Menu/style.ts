@@ -8,7 +8,7 @@ import {
     muiBreakpointUp,
     contentAlignment,
     gutter,
-} from '@gannochenko/ui.styled-components';
+} from '@gannochenko/ui.emotion';
 
 import { Container } from '../Container';
 

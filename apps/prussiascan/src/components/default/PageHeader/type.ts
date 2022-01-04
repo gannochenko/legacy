@@ -3,7 +3,7 @@ import {
     StylePropsType,
     MarginPropsType,
     ScalarType,
-} from '@gannochenko/ui.styled-components';
+} from '@gannochenko/ui.emotion';
 import { IGatsbyImageData } from 'gatsby-plugin-image';
 
 export type PageHeaderPropsType = Partial<{

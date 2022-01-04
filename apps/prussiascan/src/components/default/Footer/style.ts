@@ -4,7 +4,7 @@ import {
     muiColor,
     muiSpacing,
     contentAlignment,
-} from '@gannochenko/ui.styled-components';
+} from '@gannochenko/ui.emotion';
 
 export const FooterRoot = styled.footer`
     position: relative;

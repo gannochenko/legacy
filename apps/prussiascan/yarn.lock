@@ -1385,10 +1385,10 @@
     fs-extra "^9.0.1"
     inquirer "^7.3.3"
 
-"@gannochenko/ui.styled-components@^1.1.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@gannochenko/ui.styled-components/-/ui.styled-components-1.2.0.tgz#f3c0ab5544b09edce341d697783719e3b2d39260"
-  integrity sha512-RdWDoZ4qMmS/cx9NCZ/ol5FZnGTFag7rgYpKwBq6c0BOJ/eLICpv+P9cQt6XEgubFkdJdnQ7c/7bFyTOlRdJJQ==
+"@gannochenko/ui.emotion@^1.0.0":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@gannochenko/ui.emotion/-/ui.emotion-1.0.1.tgz#d2ab5628d5d616c949b9f523911d676088959554"
+  integrity sha512-DIn827Wwk8tilcYrW6nbLZj3JBBMDt/DbxKfKMnZGoBjtKjbvkOR4XO7D8uENUnWlihqts6VXBlUaFtdbsZ6aw==
 
 "@gannochenko/ui@^1.1.2":
   version "1.1.2"

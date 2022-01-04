@@ -1,5 +1,5 @@
 import { HTMLAttributes } from 'react';
-import { StylePropsType } from '@gannochenko/ui.styled-components';
+import { StylePropsType } from '@gannochenko/ui.emotion';
 import { TypographyProps } from '@material-ui/core';
 
 export type TypographyPropsType = Partial<{

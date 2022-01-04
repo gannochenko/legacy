@@ -4,7 +4,7 @@ import {
     HeightPropsType,
     muiSpacing,
     getPropsBlocker,
-} from '@gannochenko/ui.styled-components';
+} from '@gannochenko/ui.emotion';
 import { Container as MUIContainer } from '@mui/material';
 import styled from 'styled-components';
 

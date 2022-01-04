@@ -4,7 +4,7 @@ import {
     reset,
     muiSpacing,
     muiBreakpointDown,
-} from '@gannochenko/ui.styled-components';
+} from '@gannochenko/ui.emotion';
 
 import { propsBlocker } from '../../../util';
 import { HeritageObjectDetailRootPropsType } from './type';

@@ -4,7 +4,7 @@ import {
     reset,
     getPropsBlocker,
     muiSpacing,
-} from '@gannochenko/ui.styled-components';
+} from '@gannochenko/ui.emotion';
 
 import { TagCloudRootPropsType } from './type';
 

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 // import { Link } from 'gatsby';
-// import { muiTypography } from '@gannochenko/ui.styled-components';
+// import { muiTypography } from '@gannochenko/ui.emotion';
 
 export const PageLayoutContent = styled.div`
     flex-grow: 1;

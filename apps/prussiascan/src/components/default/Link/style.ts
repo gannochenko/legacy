@@ -1,9 +1,6 @@
 import { LinkRootPropsType } from './type';
 import styled, { css } from 'styled-components';
-import {
-    foregroundColor,
-    getPropsBlocker,
-} from '@gannochenko/ui.styled-components';
+import { foregroundColor, getPropsBlocker } from '@gannochenko/ui.emotion';
 import { Link as GatsbyLink } from 'gatsby';
 
 const fgColors = ({ inverted, theme }: LinkRootPropsType) => {

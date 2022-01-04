@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { ThemeContext } from 'styled-components';
 import { createTheme } from '@mui/material/styles';
-import { MUIThemeType } from '@gannochenko/ui.styled-components';
+import { MUIThemeType } from '@gannochenko/ui.emotion';
 
 import { makeTokenIndex } from '../util';
 import { palette } from './palette';
