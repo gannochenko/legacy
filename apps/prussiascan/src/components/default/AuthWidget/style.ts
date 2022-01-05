@@ -1,16 +1,14 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import {
     marginProps,
     reset,
-    getPropsBlocker,
+    // getPropsBlocker,
     muiSpacing,
 } from '@gannochenko/ui.emotion';
 import { Avatar, Popover, Typography } from '@material-ui/core';
 import { AuthWidgetRootPropsType } from './type';
 
-export const AuthWidgetRoot = styled.div.withConfig(
-    getPropsBlocker,
-)<AuthWidgetRootPropsType>`
+export const AuthWidgetRoot = styled.div<AuthWidgetRootPropsType>`
     ${reset};
     padding-left: ${muiSpacing(5)};
     ${marginProps};

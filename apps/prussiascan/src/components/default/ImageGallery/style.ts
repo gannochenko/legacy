@@ -1,12 +1,10 @@
-import styled from 'styled-components';
-import { marginProps, reset, getPropsBlocker } from '@gannochenko/ui.emotion';
+import styled from '@emotion/styled';
+import { marginProps, reset } from '@gannochenko/ui.emotion';
 import { GatsbyImage } from 'gatsby-plugin-image';
 
 import { ImageGalleryRootPropsType } from './type';
 
-export const ImageGalleryRoot = styled.div.withConfig(
-    getPropsBlocker,
-)<ImageGalleryRootPropsType>`
+export const ImageGalleryRoot = styled.div<ImageGalleryRootPropsType>`
     ${reset};
     ${marginProps};
 `;

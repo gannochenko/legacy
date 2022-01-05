@@ -1,4 +1,5 @@
-import { createGlobalStyle } from 'styled-components';
+import React from 'react';
+import { Global, css } from '@emotion/react';
 import {
     muiTypography,
     muiColor,
@@ -6,7 +7,7 @@ import {
     MUIThemeType,
 } from '@gannochenko/ui.emotion';
 
-export const GlobalStyle = createGlobalStyle<{ theme: MUIThemeType }>`
+const globalStyles = css`
     html {
         font-size: ${muiToken('typography.htmlFontSize')}px;
         cursor: default;
@@ -27,22 +28,24 @@ export const GlobalStyle = createGlobalStyle<{ theme: MUIThemeType }>`
         overflow-x: hidden;
     }
 
-    html, body, #root {
+    html,
+    body,
+    #root {
         height: 100%;
     }
 
     *,
     ::before,
     ::after {
-      box-sizing: border-box;
+        box-sizing: border-box;
     }
-    
+
     ::before,
     ::after {
-      text-decoration: inherit;
-      vertical-align: inherit;
+        text-decoration: inherit;
+        vertical-align: inherit;
     }
-    
+
     dl dl,
     dl ol,
     dl ul,
@@ -52,47 +55,47 @@ export const GlobalStyle = createGlobalStyle<{ theme: MUIThemeType }>`
     ul dl,
     ul ol,
     ul ul {
-      margin-block-start: 0;
-      margin-block-end: 0;
+        margin-block-start: 0;
+        margin-block-end: 0;
     }
 
     main {
-      display: block;
+        display: block;
     }
 
     nav ol,
     nav ul {
-      list-style: none;
-      padding: 0;
+        list-style: none;
+        padding: 0;
     }
 
     pre {
-      font-family: monospace, monospace;
-      font-size: 1rem;
+        font-family: monospace, monospace;
+        font-size: 1rem;
     }
 
     a {
-      background-color: transparent;
+        background-color: transparent;
     }
 
     abbr[title] {
-      text-decoration: underline;
-      text-decoration: underline dotted;
+        text-decoration: underline;
+        text-decoration: underline dotted;
     }
 
     b,
     strong {
-      font-weight: bolder;
+        font-weight: bolder;
     }
-    
+
     code,
     kbd,
     samp {
-      font-family: monospace, monospace;
+        font-family: monospace, monospace;
     }
-    
+
     small {
-      font-size: 80%;
+        font-size: 80%;
     }
 
     audio,
@@ -101,103 +104,106 @@ export const GlobalStyle = createGlobalStyle<{ theme: MUIThemeType }>`
     img,
     svg,
     video {
-      vertical-align: middle;
+        vertical-align: middle;
     }
-    
+
     audio,
     video {
-      display: inline-block;
+        display: inline-block;
     }
-    
+
     audio:not([controls]) {
-      display: none;
-      height: 0;
+        display: none;
+        height: 0;
     }
-    
+
     img {
-      border-style: none;
+        border-style: none;
     }
-    
+
     svg:not([fill]) {
-      fill: currentColor;
+        fill: currentColor;
     }
-    
+
     svg:not(:root) {
-      overflow: hidden;
+        overflow: hidden;
     }
-    
+
     button,
     input,
     select {
-      margin: 0;
+        margin: 0;
     }
-    
-    button, a, input, textarea {
+
+    button,
+    a,
+    input,
+    textarea {
         outline: none;
     }
-    
+
     button {
-      overflow: visible;
-      text-transform: none;
+        overflow: visible;
+        text-transform: none;
     }
-    
+
     button,
-    [type="button"],
-    [type="reset"],
-    [type="submit"] {
+    [type='button'],
+    [type='reset'],
+    [type='submit'] {
         -webkit-appearance: button;
     }
-    
+
     input {
-      overflow: visible;
+        overflow: visible;
     }
-    
+
     select {
-      text-transform: none;
+        text-transform: none;
     }
-    
+
     textarea {
-      margin: 0;
-      overflow: auto;
-      resize: vertical;
+        margin: 0;
+        overflow: auto;
+        resize: vertical;
     }
-    
-    [type="checkbox"],
-    [type="radio"] {
-      padding: 0;
+
+    [type='checkbox'],
+    [type='radio'] {
+        padding: 0;
     }
-    
+
     ::-webkit-input-placeholder {
-      color: inherit;
-      opacity: 0.54;
+        color: inherit;
+        opacity: 0.54;
     }
-    
+
     ::-webkit-file-upload-button {
-      -webkit-appearance: button;
-      font: inherit;
+        -webkit-appearance: button;
+        font: inherit;
     }
-    
+
     ::-moz-focus-inner {
-      border-style: none;
-      padding: 0;
+        border-style: none;
+        padding: 0;
     }
-    
+
     :-moz-focusring {
-      outline: 1px dotted ButtonText;
+        outline: 1px dotted ButtonText;
     }
-    
+
     :-moz-ui-invalid {
-      box-shadow: none;
+        box-shadow: none;
     }
-    
+
     summary {
-      display: list-item;
+        display: list-item;
     }
-    
+
     canvas {
-      display: inline-block;
+        display: inline-block;
     }
-    
+
     a,
     area,
     button,
@@ -207,30 +213,30 @@ export const GlobalStyle = createGlobalStyle<{ theme: MUIThemeType }>`
     summary,
     textarea,
     [tabindex] {
-      -ms-touch-action: manipulation;
-      touch-action: manipulation;
-    }
-    
-    [hidden] {
-      display: none;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
     }
 
-    [aria-busy="true"] {
-      cursor: progress;
+    [hidden] {
+        display: none;
     }
-    
-    [aria-disabled="true"],
+
+    [aria-busy='true'] {
+        cursor: progress;
+    }
+
+    [aria-disabled='true'],
     [disabled] {
-      cursor: not-allowed;
+        cursor: not-allowed;
     }
-    
-    [aria-hidden="false"][hidden] {
-      display: initial;
+
+    [aria-hidden='false'][hidden] {
+        display: initial;
     }
-    
-    [aria-hidden="false"][hidden]:not(:focus) {
-      clip: rect(0, 0, 0, 0);
-      position: absolute;
+
+    [aria-hidden='false'][hidden]:not(:focus) {
+        clip: rect(0, 0, 0, 0);
+        position: absolute;
     }
 
     td {
@@ -242,3 +248,5 @@ export const GlobalStyle = createGlobalStyle<{ theme: MUIThemeType }>`
         margin-inline-end: 0;
     }
 `;
+
+export const GlobalStyle = () => <Global styles={globalStyles} />;

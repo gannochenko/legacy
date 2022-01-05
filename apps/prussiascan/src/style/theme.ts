@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { ThemeContext } from 'styled-components';
+import { ThemeContext } from '@emotion/react';
 import { createTheme } from '@mui/material/styles';
 import { MUIThemeType } from '@gannochenko/ui.emotion';
 

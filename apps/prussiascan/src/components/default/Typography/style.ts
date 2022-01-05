@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { foregroundColor, getPropsBlocker } from '@gannochenko/ui.emotion';
+import styled from '@emotion/styled';
+import { foregroundColor } from '@gannochenko/ui.emotion';
 import { Typography } from '@material-ui/core';
 import { TypographyRootPropsType } from './type';
 

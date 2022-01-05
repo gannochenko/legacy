@@ -1,6 +1,7 @@
-import styled, { css, keyframes } from 'styled-components';
+import styled from '@emotion/styled';
+import { css, keyframes } from '@emotion/react';
 import {
-    getPropsBlocker,
+    // getPropsBlocker,
     backgroundCover,
     absoluteCover,
     muiSpacing,
@@ -15,15 +16,11 @@ import { MainHeaderRootPropsType } from './type';
 import arrow from './assets/arrow.svg';
 import { HEADER_HEIGHT } from './constants';
 
-export const HomePageHeaderRoot = styled.div.withConfig(
-    getPropsBlocker,
-)<MainHeaderRootPropsType>`
+export const HomePageHeaderRoot = styled.div<MainHeaderRootPropsType>`
     margin-bottom: 4rem;
 `;
 
-export const HomePageHeaderMainContainer = styled.div.withConfig(
-    getPropsBlocker,
-)`
+export const HomePageHeaderMainContainer = styled.div`
     position: relative;
     min-width: 320px;
     flex-shrink: 0;
