@@ -13,16 +13,16 @@ const fgColors = ({ inverted, theme }: LinkRootPropsType) => {
                 text-decoration: underline;
             }
             ${foregroundColor(
-                theme.palette.primary.contrastText,
-                theme.palette.primary.contrastText,
+                theme?.palette.primary.contrastText ?? '',
+                theme?.palette.primary.contrastText ?? '',
                 '200ms',
             )};
         `;
     }
 
     return foregroundColor(
-        theme.palette.primary.main,
-        theme.palette.primary.dark,
+        theme?.palette.primary.main ?? '',
+        theme?.palette.primary.dark ?? '',
         '200ms',
     );
 };

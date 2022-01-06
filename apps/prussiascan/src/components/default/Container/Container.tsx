@@ -1,18 +1,15 @@
 import React, { FC } from 'react';
+import styled from '@emotion/styled';
 import {
     heightProps,
     HeightPropsType,
     muiSpacing,
-    getPropsBlocker,
 } from '@gannochenko/ui.emotion';
 import { Container as MUIContainer } from '@mui/material';
-import styled from 'styled-components';
 
 import { ContainerPropsType } from './type';
 
-const ContainerRoot = styled(MUIContainer).withConfig(
-    getPropsBlocker,
-)<HeightPropsType>`
+const ContainerRoot = styled(MUIContainer)<HeightPropsType>`
     padding-left: ${muiSpacing(5)};
     padding-right: ${muiSpacing(5)};
     ${heightProps};

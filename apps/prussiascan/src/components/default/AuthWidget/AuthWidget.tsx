@@ -1,4 +1,4 @@
-import React, { forwardRef, FC } from 'react';
+import React, { forwardRef } from 'react';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import { Button, PopoverOrigin } from '@material-ui/core';
 

@@ -8,6 +8,7 @@ import {
     muiBreakpointUp,
     contentAlignment,
     gutter,
+    MUIThemeType,
 } from '@gannochenko/ui.emotion';
 
 import { Container } from '../Container';
@@ -104,7 +105,10 @@ export const MenuBar = styled.div`
     display: block;
 `;
 
-export const MenuMobileItems = styled.nav<{ open: boolean }>`
+export const MenuMobileItems = styled.nav<{
+    open: boolean;
+    theme?: MUIThemeType;
+}>`
     background-color: ${muiColor('background.default')};
     position: absolute;
     top: 100%;

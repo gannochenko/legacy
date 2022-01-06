@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { css, keyframes } from '@emotion/react';
+import { keyframes } from '@emotion/react';
 import {
     backgroundCover,
     absoluteCover,
@@ -9,6 +9,9 @@ import {
     central,
     rectangle,
     ScalarType,
+    MUIThemeType,
+    muiBreakpointUp,
+    muiBreakpointDown,
 } from '@gannochenko/ui.emotion';
 
 import { GatsbyImage } from 'gatsby-plugin-image';
@@ -57,30 +60,27 @@ export const ImageOverlay = styled.div<{ opacity: number }>`
     opacity: ${(props) => props.opacity};
 `;
 
-export const PageHeaderData = styled.div<{ maxWidth?: ScalarType }>`
+export const PageHeaderData = styled.div<{
+    maxWidth?: ScalarType;
+    theme?: MUIThemeType;
+}>`
     position: relative;
     color: ${muiColor('text.inverted')};
-    font-family: ${({ theme }) => theme.typography.fontFamilyHeader};
+    font-family: ${({ theme }) => theme?.typography.fontFamilyHeader ?? ''};
     ${central()};
     ${align('center', 'center', 'column')};
-    ${({ theme }) => css`
-        ${theme.breakpoints.up('md')} {
-            height: calc(100vh - ${HEADER_HEIGHT}px);
-            overflow-y: hidden;
-        }
-    `};
+    ${muiBreakpointUp('md')} {
+        height: calc(100vh - ${HEADER_HEIGHT}px);
+        overflow-y: hidden;
+    }
     padding: 2rem 0 7rem 0;
-    ${({ theme }) => css`
-        ${theme.breakpoints.down('sm')} {
-            padding-top: 4rem;
-        }
-    `};
+    ${muiBreakpointDown('sm')} {
+        padding-top: 4rem;
+    }
     max-width: ${(props) => muiSpacing(props.maxWidth ?? 0)};
 `;
 
-export const Arrow = styled.div<{
-    onClick: () => void;
-}>`
+export const Arrow = styled.div`
     ${backgroundCover(arrow)};
     ${rectangle('72px', '53px', 0.7)};
     position: absolute;
@@ -97,11 +97,9 @@ export const Arrow = styled.div<{
     animation-timing-function: ease-in;
 
     display: none;
-    ${({ theme }) => css`
-        ${theme.breakpoints.up('md')} {
-            display: block;
-        }
-    `};
+    ${muiBreakpointUp('md')} {
+        display: block;
+    }
 `;
 
 export const DataColumn = styled.div`

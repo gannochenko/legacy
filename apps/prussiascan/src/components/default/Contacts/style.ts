@@ -5,13 +5,10 @@ import Typography from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
-import { propsBlocker } from '../../../util';
 
 import { ContactsRootPropsType } from './type';
 
-export const ContactsRoot = styled.div.withConfig(
-    propsBlocker,
-)<ContactsRootPropsType>`
+export const ContactsRoot = styled.div<ContactsRootPropsType>`
     ${reset};
     ${marginProps};
 `;

@@ -1,10 +1,5 @@
 import styled from '@emotion/styled';
-import {
-    marginProps,
-    reset,
-    // getPropsBlocker,
-    muiSpacing,
-} from '@gannochenko/ui.emotion';
+import { marginProps, reset, muiSpacing } from '@gannochenko/ui.emotion';
 import { Avatar, Popover, Typography } from '@material-ui/core';
 import { AuthWidgetRootPropsType } from './type';
 

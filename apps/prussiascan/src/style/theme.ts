@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, Context } from 'react';
 import { ThemeContext } from '@emotion/react';
 import { createTheme } from '@mui/material/styles';
 import { MUIThemeType } from '@gannochenko/ui.emotion';
@@ -108,4 +108,5 @@ const makeTheme = (): MUIThemeType => {
 
 export const theme = makeTheme();
 
-export const useTheme = () => useContext<MUIThemeType>(ThemeContext);
+export const useTheme = () =>
+    useContext<MUIThemeType>(ThemeContext as Context<MUIThemeType>);

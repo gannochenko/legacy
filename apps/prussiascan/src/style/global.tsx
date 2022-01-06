@@ -1,252 +1,253 @@
 import React from 'react';
 import { Global, css } from '@emotion/react';
-import {
-    muiTypography,
-    muiColor,
-    muiToken,
-    MUIThemeType,
-} from '@gannochenko/ui.emotion';
+import { useTheme } from './theme';
 
-const globalStyles = css`
-    html {
-        font-size: ${muiToken('typography.htmlFontSize')}px;
-        cursor: default;
-        -moz-tab-size: 4;
-        tab-size: 4;
-        -webkit-tap-highlight-color: transparent;
-        -ms-text-size-adjust: 100%;
-        -webkit-text-size-adjust: 100%;
-    }
+export const GlobalStyle = () => {
+    const theme = useTheme();
 
-    body {
-        padding: 0 !important;
-        margin: 0 !important;
-        color: ${muiColor('text.primary')};
-        background-color: ${muiColor('background.default')};
-        ${muiTypography('body1')};
-        min-width: 320px;
-        overflow-x: hidden;
-    }
+    return (
+        <Global
+            styles={css`
+                html {
+                    font-size: ${theme.typography.htmlFontSize}px;
+                    cursor: default;
+                    -moz-tab-size: 4;
+                    tab-size: 4;
+                    -webkit-tap-highlight-color: transparent;
+                    -ms-text-size-adjust: 100%;
+                    -webkit-text-size-adjust: 100%;
+                }
 
-    html,
-    body,
-    #root {
-        height: 100%;
-    }
+                body {
+                    padding: 0 !important;
+                    margin: 0 !important;
+                    color: ${theme.palette.primary};
+                    background-color: ${theme.palette.background.default};
+                    ${theme.typography.body1};
+                    min-width: 320px;
+                    overflow-x: hidden;
+                }
 
-    *,
-    ::before,
-    ::after {
-        box-sizing: border-box;
-    }
+                html,
+                body,
+                #root {
+                    height: 100%;
+                }
 
-    ::before,
-    ::after {
-        text-decoration: inherit;
-        vertical-align: inherit;
-    }
+                *,
+                ::before,
+                ::after {
+                    box-sizing: border-box;
+                }
 
-    dl dl,
-    dl ol,
-    dl ul,
-    ol dl,
-    ol ol,
-    ol ul,
-    ul dl,
-    ul ol,
-    ul ul {
-        margin-block-start: 0;
-        margin-block-end: 0;
-    }
+                ::before,
+                ::after {
+                    text-decoration: inherit;
+                    vertical-align: inherit;
+                }
 
-    main {
-        display: block;
-    }
+                dl dl,
+                dl ol,
+                dl ul,
+                ol dl,
+                ol ol,
+                ol ul,
+                ul dl,
+                ul ol,
+                ul ul {
+                    margin-block-start: 0;
+                    margin-block-end: 0;
+                }
 
-    nav ol,
-    nav ul {
-        list-style: none;
-        padding: 0;
-    }
+                main {
+                    display: block;
+                }
 
-    pre {
-        font-family: monospace, monospace;
-        font-size: 1rem;
-    }
+                nav ol,
+                nav ul {
+                    list-style: none;
+                    padding: 0;
+                }
 
-    a {
-        background-color: transparent;
-    }
+                pre {
+                    font-family: monospace, monospace;
+                    font-size: 1rem;
+                }
 
-    abbr[title] {
-        text-decoration: underline;
-        text-decoration: underline dotted;
-    }
+                a {
+                    background-color: transparent;
+                }
 
-    b,
-    strong {
-        font-weight: bolder;
-    }
+                abbr[title] {
+                    text-decoration: underline;
+                    text-decoration: underline dotted;
+                }
 
-    code,
-    kbd,
-    samp {
-        font-family: monospace, monospace;
-    }
+                b,
+                strong {
+                    font-weight: bolder;
+                }
 
-    small {
-        font-size: 80%;
-    }
+                code,
+                kbd,
+                samp {
+                    font-family: monospace, monospace;
+                }
 
-    audio,
-    canvas,
-    iframe,
-    img,
-    svg,
-    video {
-        vertical-align: middle;
-    }
+                small {
+                    font-size: 80%;
+                }
 
-    audio,
-    video {
-        display: inline-block;
-    }
+                audio,
+                canvas,
+                iframe,
+                img,
+                svg,
+                video {
+                    vertical-align: middle;
+                }
 
-    audio:not([controls]) {
-        display: none;
-        height: 0;
-    }
+                audio,
+                video {
+                    display: inline-block;
+                }
 
-    img {
-        border-style: none;
-    }
+                audio:not([controls]) {
+                    display: none;
+                    height: 0;
+                }
 
-    svg:not([fill]) {
-        fill: currentColor;
-    }
+                img {
+                    border-style: none;
+                }
 
-    svg:not(:root) {
-        overflow: hidden;
-    }
+                svg:not([fill]) {
+                    fill: currentColor;
+                }
 
-    button,
-    input,
-    select {
-        margin: 0;
-    }
+                svg:not(:root) {
+                    overflow: hidden;
+                }
 
-    button,
-    a,
-    input,
-    textarea {
-        outline: none;
-    }
+                button,
+                input,
+                select {
+                    margin: 0;
+                }
 
-    button {
-        overflow: visible;
-        text-transform: none;
-    }
+                button,
+                a,
+                input,
+                textarea {
+                    outline: none;
+                }
 
-    button,
-    [type='button'],
-    [type='reset'],
-    [type='submit'] {
-        -webkit-appearance: button;
-    }
+                button {
+                    overflow: visible;
+                    text-transform: none;
+                }
 
-    input {
-        overflow: visible;
-    }
+                button,
+                [type='button'],
+                [type='reset'],
+                [type='submit'] {
+                    -webkit-appearance: button;
+                }
 
-    select {
-        text-transform: none;
-    }
+                input {
+                    overflow: visible;
+                }
 
-    textarea {
-        margin: 0;
-        overflow: auto;
-        resize: vertical;
-    }
+                select {
+                    text-transform: none;
+                }
 
-    [type='checkbox'],
-    [type='radio'] {
-        padding: 0;
-    }
+                textarea {
+                    margin: 0;
+                    overflow: auto;
+                    resize: vertical;
+                }
 
-    ::-webkit-input-placeholder {
-        color: inherit;
-        opacity: 0.54;
-    }
+                [type='checkbox'],
+                [type='radio'] {
+                    padding: 0;
+                }
 
-    ::-webkit-file-upload-button {
-        -webkit-appearance: button;
-        font: inherit;
-    }
+                ::-webkit-input-placeholder {
+                    color: inherit;
+                    opacity: 0.54;
+                }
 
-    ::-moz-focus-inner {
-        border-style: none;
-        padding: 0;
-    }
+                ::-webkit-file-upload-button {
+                    -webkit-appearance: button;
+                    font: inherit;
+                }
 
-    :-moz-focusring {
-        outline: 1px dotted ButtonText;
-    }
+                ::-moz-focus-inner {
+                    border-style: none;
+                    padding: 0;
+                }
 
-    :-moz-ui-invalid {
-        box-shadow: none;
-    }
+                :-moz-focusring {
+                    outline: 1px dotted ButtonText;
+                }
 
-    summary {
-        display: list-item;
-    }
+                :-moz-ui-invalid {
+                    box-shadow: none;
+                }
 
-    canvas {
-        display: inline-block;
-    }
+                summary {
+                    display: list-item;
+                }
 
-    a,
-    area,
-    button,
-    input,
-    label,
-    select,
-    summary,
-    textarea,
-    [tabindex] {
-        -ms-touch-action: manipulation;
-        touch-action: manipulation;
-    }
+                canvas {
+                    display: inline-block;
+                }
 
-    [hidden] {
-        display: none;
-    }
+                a,
+                area,
+                button,
+                input,
+                label,
+                select,
+                summary,
+                textarea,
+                [tabindex] {
+                    -ms-touch-action: manipulation;
+                    touch-action: manipulation;
+                }
 
-    [aria-busy='true'] {
-        cursor: progress;
-    }
+                [hidden] {
+                    display: none;
+                }
 
-    [aria-disabled='true'],
-    [disabled] {
-        cursor: not-allowed;
-    }
+                [aria-busy='true'] {
+                    cursor: progress;
+                }
 
-    [aria-hidden='false'][hidden] {
-        display: initial;
-    }
+                [aria-disabled='true'],
+                [disabled] {
+                    cursor: not-allowed;
+                }
 
-    [aria-hidden='false'][hidden]:not(:focus) {
-        clip: rect(0, 0, 0, 0);
-        position: absolute;
-    }
+                [aria-hidden='false'][hidden] {
+                    display: initial;
+                }
 
-    td {
-        word-break: break-word;
-    }
+                [aria-hidden='false'][hidden]:not(:focus) {
+                    clip: rect(0, 0, 0, 0);
+                    position: absolute;
+                }
 
-    p {
-        margin-inline-start: 0;
-        margin-inline-end: 0;
-    }
-`;
+                td {
+                    word-break: break-word;
+                }
 
-export const GlobalStyle = () => <Global styles={globalStyles} />;
+                p {
+                    margin-inline-start: 0;
+                    margin-inline-end: 0;
+                }
+            `}
+        />
+    );
+};
