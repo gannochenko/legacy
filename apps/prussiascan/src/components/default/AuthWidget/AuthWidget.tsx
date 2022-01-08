@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
-import { Button, PopoverOrigin } from '@material-ui/core';
+import { Button, PopoverOrigin } from '@mui/material';
 
 import { AuthWidgetPropsType } from './type';
 import {

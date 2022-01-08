@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Chip } from '@material-ui/core';
+import { Chip } from '@mui/material';
 
 import { TagCloudPropsType } from './type';
 import { TagCloudRoot } from './style';

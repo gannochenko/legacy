@@ -21,14 +21,6 @@ module.exports = {
     },
     flags: {},
     plugins: [
-        // {
-        //     resolve: `gatsby-plugin-material-ui`,
-        //     options: {
-        //         stylesProvider: {
-        //             injectFirst: true,
-        //         },
-        //     },
-        // },
         {
             resolve: `gatsby-plugin-emotion`,
             options: {
@@ -40,15 +32,6 @@ module.exports = {
                 cssPropOptimization: true,
             },
         },
-        // {
-        //     resolve: 'gatsby-theme-material-ui',
-        //     // options: {
-        //     //     stylesProvider: {
-        //     //         injectFirst: true,
-        //     //     },
-        //     // },
-        // },
-        // 'gatsby-plugin-styled-components',
         {
             resolve: 'gatsby-plugin-google-fonts',
             options: {

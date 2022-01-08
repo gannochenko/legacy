@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 import { SRLWrapper } from 'simple-react-lightbox';
 
 import { ImageGalleryPropsType } from './type';

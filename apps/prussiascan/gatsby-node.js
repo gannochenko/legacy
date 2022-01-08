@@ -4,16 +4,16 @@
  *
  * See: https://www.gatsbyjs.org/docs/node-apis/
  */
-const {
-    normalizeHeritageObject,
-} = require('./src/services/HeritageObject/normalize');
-const { makePublicPath } = require('./src/util/makePublicPath');
 const { introspectionQuery, graphql, printSchema } = require('gatsby/graphql');
 const { createRemoteFileNode } = require('gatsby-source-filesystem');
 const write = require('write');
 const axios = require('axios');
-// const { fmImagesToRelative } = require('gatsby-remark-relative-images');
 const path = require('path');
+
+const {
+    normalizeHeritageObject,
+} = require('./src/services/HeritageObject/normalize');
+const { makePublicPath } = require('./src/util/makePublicPath');
 const allowedEnvVariables = require('./.env.js').allowedEnvVariables;
 
 const {
@@ -32,20 +32,20 @@ if (vercelEnv !== undefined && vercelEnv !== 'master') {
  * Thanks: https://gist.github.com/kkemple/6169e8dc16369b7c01ad7408fc7917a9
  */
 exports.onPostBootstrap = async (args) => {
-    // await bootstrapGraphQL(args);
+    await bootstrapGraphQL(args);
 };
 
 exports.createPages = async ({ graphql, actions }) => {
-    // await createHeritagePages({ graphql, actions });
-    // await createMDXPages({ graphql, actions });
+    await createHeritagePages({ graphql, actions });
+    await createMDXPages({ graphql, actions });
 };
 
 exports.sourceNodes = async (args) => {
-    // await sourceHeritageNodes(args);
+    await sourceHeritageNodes(args);
 };
 
 exports.onCreateNode = async (args) => {
-    // await createHeritageNodes(args);
+    await createHeritageNodes(args);
 };
 
 exports.onCreateWebpackConfig = ({

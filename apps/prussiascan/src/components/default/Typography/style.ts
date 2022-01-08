@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { foregroundColor, MUIThemeType } from '@gannochenko/ui.emotion';
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import { TypographyRootPropsType } from './type';
 
 const getRootDynamicStyle = ({
@@ -8,11 +8,18 @@ const getRootDynamicStyle = ({
     variant,
     theme,
 }: TypographyRootPropsType) => {
-    // const { typographyGutter } = theme;
-    //
-    // if (enableVerticalGutter && variant && variant in typographyGutter) {
-    //     return typographyGutter[variant];
-    // }
+    const typography = theme?.typography ?? {};
+
+    if (enableVerticalGutter) {
+        const gutter = typography?.[variant ?? '']?.gutter ?? {
+            marginTop: 0,
+            marginBottom: 0,
+        };
+        return `
+            margin-top: ${gutter.marginTop} !important;
+            margin-bottom: ${gutter.marginBottom} !important;
+        `;
+    }
 
     return '';
 };

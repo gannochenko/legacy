@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { marginProps, reset, muiSpacing } from '@gannochenko/ui.emotion';
-import { Avatar, Popover, Typography } from '@material-ui/core';
+import { Avatar, Popover, Typography } from '@mui/material';
 import { AuthWidgetRootPropsType } from './type';
 
 export const AuthWidgetRoot = styled.div<AuthWidgetRootPropsType>`

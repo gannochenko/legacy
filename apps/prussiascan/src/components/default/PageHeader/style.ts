@@ -13,8 +13,8 @@ import {
     muiBreakpointUp,
     muiBreakpointDown,
 } from '@gannochenko/ui.emotion';
-
 import { GatsbyImage } from 'gatsby-plugin-image';
+
 import { MainHeaderRootPropsType } from './type';
 import arrow from './assets/arrow.svg';
 import { HEADER_HEIGHT } from './constants';

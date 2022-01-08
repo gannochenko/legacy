@@ -1,6 +1,6 @@
 import { Ref, useCallback } from 'react';
 import { AuthWidgetPropsType } from '../type';
-import { PropTypes } from '@material-ui/core';
+import { PropTypes } from '@mui/material';
 import { useAuth } from '../../../../hooks';
 
 export const useAuthWidget = (

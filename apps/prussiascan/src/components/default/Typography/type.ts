@@ -1,6 +1,6 @@
 import { HTMLAttributes } from 'react';
 import { StylePropsType } from '@gannochenko/ui.emotion';
-import { TypographyProps } from '@material-ui/core';
+import { TypographyProps } from '@mui/material';
 
 export type TypographyPropsType = Partial<{
     enableVerticalGutter: boolean;

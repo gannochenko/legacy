@@ -18,9 +18,6 @@ export const FooterRoot = styled.footer`
 `;
 
 export const FooterInfo = styled.div`
-    &:not(:first-child) {
-        padding-top: ${muiSpacing(2)};
-    }
     text-align: center;
 `;
 

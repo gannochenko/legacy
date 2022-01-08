@@ -1,10 +1,12 @@
 import styled from '@emotion/styled';
 import { marginProps, reset } from '@gannochenko/ui.emotion';
-import MUIFormControl from '@material-ui/core/FormControl';
-import Typography from '@material-ui/core/Typography';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Button from '@material-ui/core/Button';
-import Alert from '@material-ui/lab/Alert';
+import {
+    Button,
+    Alert,
+    FormControl as MUIFormControl,
+    Typography,
+    FormControlLabel,
+} from '@mui/material';
 
 import { ContactsRootPropsType } from './type';
 
