@@ -37,7 +37,7 @@ exports.onPostBootstrap = async (args) => {
 
 exports.createPages = async ({ graphql, actions }) => {
     await createHeritagePages({ graphql, actions });
-    await createMDXPages({ graphql, actions });
+    // await createMDXPages({ graphql, actions });
 };
 
 exports.sourceNodes = async (args) => {
