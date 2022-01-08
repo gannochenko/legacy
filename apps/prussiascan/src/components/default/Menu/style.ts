@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { Link } from 'gatsby';
 import {
     muiTypography,
@@ -8,7 +8,8 @@ import {
     muiBreakpointUp,
     contentAlignment,
     gutter,
-} from '@gannochenko/ui.styled-components';
+    MUIThemeType,
+} from '@gannochenko/ui.emotion';
 
 import { Container } from '../Container';
 
@@ -104,7 +105,10 @@ export const MenuBar = styled.div`
     display: block;
 `;
 
-export const MenuMobileItems = styled.nav<{ open: boolean }>`
+export const MenuMobileItems = styled.nav<{
+    open: boolean;
+    theme?: MUIThemeType;
+}>`
     background-color: ${muiColor('background.default')};
     position: absolute;
     top: 100%;

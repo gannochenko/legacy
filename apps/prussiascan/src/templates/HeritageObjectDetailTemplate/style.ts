@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { muiSpacing } from '@gannochenko/ui.styled-components';
+import styled from '@emotion/styled';
+import { muiSpacing } from '@gannochenko/ui.emotion';
 import { GatsbyImage } from 'gatsby-plugin-image';
 
 export const HeritageObjectDetailRoot = styled.div``;

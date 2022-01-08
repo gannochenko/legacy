@@ -1,11 +1,14 @@
-import React, { forwardRef, FC } from 'react';
+import React, { forwardRef } from 'react';
 import { YMaps, Map as YMap, Placemark, ZoomControl } from 'react-yandex-maps';
 
 import { MapPropsType } from './type';
 import { MapRoot } from './style';
 import { useMap } from './hooks/useMap';
 
-export const Map: FC<MapPropsType> = forwardRef(function Map(props, ref) {
+export const Map = forwardRef<HTMLDivElement, MapPropsType>(function Map(
+    props,
+    ref,
+) {
     const { rootProps, mapProps, placeMarks, zoomControlProps } = useMap(
         ref,
         props,

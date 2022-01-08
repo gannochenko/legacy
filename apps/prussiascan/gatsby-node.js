@@ -1,18 +1,19 @@
+/* eslint-disable @typescript-eslint/no-use-before-define, no-console, @typescript-eslint/no-var-requires */
 /**
  * Implement Gatsby's Node APIs in this file.
  *
  * See: https://www.gatsbyjs.org/docs/node-apis/
  */
-const {
-    normalizeHeritageObject,
-} = require('./src/services/HeritageObject/normalize');
-const { makePublicPath } = require('./src/util/makePublicPath');
 const { introspectionQuery, graphql, printSchema } = require('gatsby/graphql');
 const { createRemoteFileNode } = require('gatsby-source-filesystem');
 const write = require('write');
 const axios = require('axios');
-// const { fmImagesToRelative } = require('gatsby-remark-relative-images');
 const path = require('path');
+
+const {
+    normalizeHeritageObject,
+} = require('./src/services/HeritageObject/normalize');
+const { makePublicPath } = require('./src/util/makePublicPath');
 const allowedEnvVariables = require('./.env.js').allowedEnvVariables;
 
 const {
@@ -30,76 +31,42 @@ if (vercelEnv !== undefined && vercelEnv !== 'master') {
  * Generate GraphQL schema.json file to be read by tslint
  * Thanks: https://gist.github.com/kkemple/6169e8dc16369b7c01ad7408fc7917a9
  */
-exports.onPostBootstrap = async ({ store }) => {
-    try {
-        const { schema } = store.getState();
-        const jsonSchema = await graphql(schema, introspectionQuery);
-        const sdlSchema = printSchema(schema);
-
-        write.sync('schema.json', JSON.stringify(jsonSchema.data), {});
-        write.sync('schema.graphql', sdlSchema, {});
-
-        console.log('\n\n[gatsby-plugin-extract-schema] Wrote schema\n'); // eslint-disable-line
-    } catch (error) {
-        console.error(
-            '\n\n[gatsby-plugin-extract-schema] Failed to write schema: ',
-            error,
-            '\n',
-        );
-    }
+exports.onPostBootstrap = async (args) => {
+    await bootstrapGraphQL(args);
 };
 
-exports.sourceNodes = async ({ actions }) => {
-    let safeExit = 0;
-    let lastReceivedId;
-    let count = 0;
-    let url = '';
+exports.createPages = async ({ graphql, actions }) => {
+    await createHeritagePages({ graphql, actions });
+    // await createMDXPages({ graphql, actions });
+};
 
-    const headers = { 'x-api-key': process.env.CICD_API_KEY };
+exports.sourceNodes = async (args) => {
+    await sourceHeritageNodes(args);
+};
 
-    try {
-        do {
-            url = `${process.env.API_URL}${
-                process.env.API_ENV
-            }/data/objects/findall${
-                lastReceivedId ? `?lastId=${lastReceivedId}` : ''
-            }`;
+exports.onCreateNode = async (args) => {
+    await createHeritageNodes(args);
+};
 
-            const result = await axios.request({
-                url,
-                method: 'post',
-                headers: { 'x-api-key': process.env.CICD_API_KEY },
-            });
-
-            const {
-                data,
-                aux: { lastId },
-            } = result.data;
-            lastReceivedId = lastId;
-
-            count += data.length;
-
-            for (let item of data) {
-                actions.createNode({
-                    ...normalizeHeritageObject(item),
-                    internal: {
-                        type: 'HeritageObject',
-                        contentDigest: (item.version ?? '1').toString(),
-                    },
-                });
-            }
-
-            safeExit += 1;
-        } while (lastReceivedId && safeExit < 100);
-    } catch (e) {
-        console.log(url);
-        console.log(headers);
-        console.log(e);
-
-        throw new Error('Was not able to source nodes, exiting');
-    }
-
-    console.log(`Items received: ${count}`);
+exports.onCreateWebpackConfig = ({
+    stage,
+    // rules,
+    // loaders,
+    plugins,
+    actions,
+}) => {
+    actions.setWebpackConfig({
+        plugins: [
+            plugins.define({
+                __DEV__: stage === `develop` || stage === `develop-html`,
+                ...getEnv(),
+            }),
+        ],
+        resolve: {
+            modules: [path.resolve(__dirname, 'src'), 'node_modules'],
+            symlinks: false,
+        },
+    });
 };
 
 exports.createSchemaCustomization = ({ actions }) => {
@@ -113,7 +80,9 @@ exports.createSchemaCustomization = ({ actions }) => {
     `);
 };
 
-exports.onCreateNode = async ({
+// ----------------
+
+const createHeritageNodes = async ({
     node,
     actions: { createNode, createNodeField },
     store,
@@ -171,7 +140,84 @@ exports.onCreateNode = async ({
     }
 };
 
-const createHeritageObjectPages = async ({ graphql, actions, reporter }) => {
+const sourceHeritageNodes = async ({ actions }) => {
+    let safeExit = 0;
+    let lastReceivedId;
+    let count = 0;
+    let url = '';
+
+    const headers = { 'x-api-key': process.env.CICD_API_KEY };
+
+    try {
+        do {
+            url = `${process.env.API_URL}${
+                process.env.API_ENV
+            }/data/objects/findall${
+                lastReceivedId ? `?lastId=${lastReceivedId}` : ''
+            }`;
+
+            const result = await axios.request({
+                url,
+                method: 'post',
+                headers: { 'x-api-key': process.env.CICD_API_KEY },
+            });
+
+            const {
+                data,
+                aux: { lastId },
+            } = result.data;
+            lastReceivedId = lastId;
+
+            count += data.length;
+
+            for (let item of data) {
+                item = normalizeHeritageObject(item);
+                if (!item) {
+                    return;
+                }
+
+                actions.createNode({
+                    ...item,
+                    internal: {
+                        type: 'HeritageObject',
+                        contentDigest: (item.version ?? '1').toString(),
+                    },
+                });
+            }
+
+            safeExit += 1;
+        } while (lastReceivedId && safeExit < 100);
+    } catch (e) {
+        console.log(url);
+        console.log(headers);
+        console.log(e);
+
+        throw new Error('Was not able to source nodes, exiting');
+    }
+
+    console.log(`Items received: ${count}`);
+};
+
+const bootstrapGraphQL = async ({ store }) => {
+    try {
+        const { schema } = store.getState();
+        const jsonSchema = await graphql(schema, introspectionQuery);
+        const sdlSchema = printSchema(schema);
+
+        write.sync('schema.json', JSON.stringify(jsonSchema.data), {});
+        write.sync('schema.graphql', sdlSchema, {});
+
+        console.log('\n\n[gatsby-plugin-extract-schema] Wrote schema\n'); // eslint-disable-line
+    } catch (error) {
+        console.error(
+            '\n\n[gatsby-plugin-extract-schema] Failed to write schema: ',
+            error,
+            '\n',
+        );
+    }
+};
+
+const createHeritagePages = async ({ graphql, actions, reporter }) => {
     const { createPage } = actions;
 
     const result = await graphql(`
@@ -310,11 +356,6 @@ const createHeritageObjectPages = async ({ graphql, actions, reporter }) => {
 //     });
 // };
 
-exports.createPages = async ({ graphql, actions }) => {
-    await createHeritageObjectPages({ graphql, actions });
-    // await createMDXPages({ graphql, actions });
-};
-
 const getEnv = () => {
     const result = [];
 
@@ -329,25 +370,4 @@ const getEnv = () => {
     });
 
     return result;
-};
-
-exports.onCreateWebpackConfig = ({
-    stage,
-    // rules,
-    // loaders,
-    plugins,
-    actions,
-}) => {
-    actions.setWebpackConfig({
-        plugins: [
-            plugins.define({
-                __DEV__: stage === `develop` || stage === `develop-html`,
-                ...getEnv(),
-            }),
-        ],
-        resolve: {
-            modules: [path.resolve(__dirname, 'src'), 'node_modules'],
-            symlinks: false,
-        },
-    });
 };

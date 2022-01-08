@@ -5,7 +5,7 @@ import { KGD_CENTER, PLACE_MARK_MODULES } from '../constants';
 // import { fillTemplate } from '../../../../pathTemplates';
 
 export const useMap = (
-    ref: Ref<unknown>,
+    ref: Ref<HTMLDivElement>,
     { locations, edges, height, ...props }: MapPropsType,
 ) => {
     const placeMarks = useMemo(() => {

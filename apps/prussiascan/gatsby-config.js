@@ -1,12 +1,15 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 require('dotenv').config({
     path: `.env.${process.env.NODE_ENV}`,
 });
 
-const { site: { title, description, keywords, author, baseURL } } = require('./src/meta/site');
+const {
+    site: { title, description, keywords, author, baseURL },
+} = require('./src/meta/site');
 const { palette } = require('./src/style/palette');
 
 module.exports = {
-
     // pathPrefix: '/foo',
 
     siteMetadata: {
@@ -18,6 +21,17 @@ module.exports = {
     },
     flags: {},
     plugins: [
+        {
+            resolve: `gatsby-plugin-emotion`,
+            options: {
+                // Accepts the following options, all of which are defined by `@emotion/babel-plugin` plugin.
+                // The values for each key in this example are the defaults the plugin uses.
+                sourceMap: true,
+                autoLabel: 'dev-only',
+                labelFormat: `[local]`,
+                cssPropOptimization: true,
+            },
+        },
         {
             resolve: 'gatsby-plugin-google-fonts',
             options: {
@@ -107,18 +121,8 @@ module.exports = {
                 display: 'minimal-ui',
                 categories: [], // https://github.com/w3c/manifest/wiki/Categories
                 icon: 'static/icon.png', // This path is relative to the root of the site.
-
             },
         },
-        {
-            resolve: `gatsby-plugin-material-ui`,
-            options: {
-                stylesProvider: {
-                    injectFirst: true,
-                },
-            },
-        },
-        'gatsby-plugin-styled-components',
         // 'gatsby-plugin-typescript',
         {
             // https://github.com/d4rekanguok/gatsby-typescript/tree/master/packages/gatsby-plugin-ts
@@ -145,7 +149,6 @@ module.exports = {
             },
         },
 
-
         {
             resolve: `gatsby-plugin-gtag`,
             options: {
@@ -157,6 +160,5 @@ module.exports = {
                 anonymize: true,
             },
         },
-
     ],
 };

@@ -1,7 +1,6 @@
 import React, { forwardRef } from 'react';
-import { Grid } from '@material-ui/core';
+import { Grid, Pagination } from '@mui/material';
 import { graphql } from 'gatsby';
-import { Pagination } from '@material-ui/lab';
 
 import { HeritageObjectListPropsType } from './type';
 import {

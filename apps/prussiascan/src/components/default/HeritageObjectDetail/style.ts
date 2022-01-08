@@ -1,17 +1,14 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import {
     marginProps,
     reset,
     muiSpacing,
     muiBreakpointDown,
-} from '@gannochenko/ui.styled-components';
+} from '@gannochenko/ui.emotion';
 
-import { propsBlocker } from '../../../util';
 import { HeritageObjectDetailRootPropsType } from './type';
 
-export const HeritageObjectDetailRoot = styled.div.withConfig(
-    propsBlocker,
-)<HeritageObjectDetailRootPropsType>`
+export const HeritageObjectDetailRoot = styled.div<HeritageObjectDetailRootPropsType>`
     ${reset};
     ${marginProps};
 `;

@@ -3,7 +3,7 @@ import {
     StylePropsType,
     ObjectLiteralType,
     MarginPropsType,
-} from '@gannochenko/ui.styled-components';
+} from '@gannochenko/ui.emotion';
 // import { BuildingEdgeType } from '../../type';
 
 export type MapGeometryType = [number, number];

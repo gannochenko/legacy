@@ -1,27 +1,27 @@
-import styled, { css, keyframes } from 'styled-components';
+import styled from '@emotion/styled';
+import { css, keyframes } from '@emotion/react';
 import {
-    getPropsBlocker,
     backgroundCover,
     absoluteCover,
     muiSpacing,
     muiColor,
-    align, central, rectangle,
-} from '@gannochenko/ui.styled-components';
+    align,
+    central,
+    rectangle,
+    muiBreakpointDown,
+    muiBreakpointUp,
+} from '@gannochenko/ui.emotion';
 
 import { GatsbyImage } from 'gatsby-plugin-image';
 import { MainHeaderRootPropsType } from './type';
 import arrow from './assets/arrow.svg';
 import { HEADER_HEIGHT } from './constants';
 
-export const HomePageHeaderRoot = styled.div.withConfig(
-    getPropsBlocker,
-)<MainHeaderRootPropsType>`
+export const HomePageHeaderRoot = styled.div<MainHeaderRootPropsType>`
     margin-bottom: 4rem;
 `;
 
-export const HomePageHeaderMainContainer = styled.div.withConfig(
-    getPropsBlocker,
-)`
+export const HomePageHeaderMainContainer = styled.div`
     position: relative;
     min-width: 320px;
     flex-shrink: 0;
@@ -67,16 +67,12 @@ export const Data = styled.div`
         }
     `};
     padding: 2rem 1rem;
-    ${({ theme }) => css`
-        ${theme.breakpoints.down('sm')} {
-            padding-top: 4rem;
-        }
-    `};
+    ${muiBreakpointDown('sm')} {
+        padding-top: 4rem;
+    }
 `;
 
-export const Arrow = styled.div<{
-    onClick: () => void;
-}>`
+export const Arrow = styled.div`
     ${backgroundCover(arrow)};
     ${rectangle('72px', '53px', 0.7)};
     position: absolute;
@@ -93,11 +89,9 @@ export const Arrow = styled.div<{
     animation-timing-function: ease-in;
 
     display: none;
-    ${({ theme }) => css`
-        ${theme.breakpoints.up('md')} {
-            display: block;
-        }
-    `};
+    ${muiBreakpointUp('md')} {
+        display: block;
+    }
 `;
 
 export const DataColumn = styled.div`

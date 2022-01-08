@@ -1,8 +1,5 @@
-import styled from 'styled-components';
-import {
-    muiSpacing,
-    muiBreakpointDown,
-} from '@gannochenko/ui.styled-components';
+import styled from '@emotion/styled';
+import { muiSpacing, muiBreakpointDown } from '@gannochenko/ui.emotion';
 import { GatsbyImage } from 'gatsby-plugin-image';
 import { Link } from 'gatsby';
 
