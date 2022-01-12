@@ -1,11 +1,33 @@
 ---
+title: 'Выдающиеся объекты области'
 ---
 
-import { Container, HomePageHeader, PageOffset } from 'components';
+import { Container, HomePageHeader, PageOffset, HeritageObjectList } from 'components';
 import { Button } from '@mui/material';
 
 <Container>
+    <HeritageObjectList foo={props} />
 
+    // data={props.data.allHeritageObject.edges}
 </Container>
 
 <PageOffset />
+
+export const IndexQuery = graphql`
+    query IndexQuery {
+        allHeritageObject(
+            sort: { fields: [name], order: ASC }
+            limit: 20
+        ) {
+            nodes {
+                name
+                slug
+                previewPhotoImage {
+                    childImageSharp {
+                        gatsbyImageData(width: 500, layout: FIXED)
+                    }
+                }
+            }
+        }
+    }
+`;

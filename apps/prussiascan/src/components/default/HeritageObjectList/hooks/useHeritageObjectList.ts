@@ -11,8 +11,11 @@ import { HeritageObjectListPropsType } from '../type';
 
 export const useHeritageObjectList = (
     ref: Ref<HTMLDivElement>,
-    { data, pageContext, ...props }: HeritageObjectListPropsType,
+    { data, pageContext, foo, ...props }: HeritageObjectListPropsType,
 ) => {
+    console.log('foo');
+    console.log(foo);
+
     const currentPage = pageContext?.currentPage ?? 1;
     const items = useMemo(() => {
         return (data ?? []).map((item) => {
