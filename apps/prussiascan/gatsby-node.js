@@ -245,7 +245,7 @@ const createHeritagePages = async ({ graphql, actions, reporter }) => {
         createPage({
             path: i === 0 ? HERITAGE_LIST : `${HERITAGE_LIST}/${i + 1}`,
             component: path.resolve(
-                './src/templates/HeritageObjectList/HeritageObjectList.tsx',
+                './src/templates/HeritageObjectListTemplate/HeritageObjectListTemplate.tsx',
             ),
             context: {
                 limit: postsPerPage,

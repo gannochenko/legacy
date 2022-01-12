@@ -55,15 +55,6 @@ export enum ObjectKindEnum {
     // burial = 6, // USSR
 }
 
-// {key: 'CONCRETE', value: 'Бетон',},
-// {key: 'BRICK', value: 'Красный кирпич',},
-// {key: 'WBRICK', value: 'Белый кирпич',},
-// {key: 'FWERK', value: 'Фахверк',},
-// {key: 'WOOD', value: 'Дерево',},
-// {key: 'GRANITE', value: 'Гранит',},
-// {key: 'STEEL', value: 'Сталь',},
-// {key: 'CIRON', value: 'Чугун',},
-
 export enum ObjectMaterialEnum {
     concrete = 1,
     redBrick = 2,
