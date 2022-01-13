@@ -1,23 +1,22 @@
 ---
-title: 'Выдающиеся объекты области'
+title: 'Выдающиеся объекты'
 ---
 
 import { Container, HomePageHeader, PageOffset, HeritageObjectList } from 'components';
 import { Button } from '@mui/material';
+import { graphql } from 'gatsby';
 
 <Container>
-    <HeritageObjectList foo={props} />
-
-    // data={props.data.allHeritageObject.edges}
+    <HeritageObjectList data={props.data.allHeritageObject.nodes} />
 </Container>
 
 <PageOffset />
 
-export const IndexQuery = graphql`
-    query IndexQuery {
+export const pageQuery = graphql`
+    query {
         allHeritageObject(
+            filter: { remarkable: {eq: true}, lost: { ne: true } }
             sort: { fields: [name], order: ASC }
-            limit: 20
         ) {
             nodes {
                 name
