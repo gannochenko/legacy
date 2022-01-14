@@ -21,3 +21,5 @@ export * from './PageHeader';
 export * from './Typography';
 export * from './Map';
 export * from './TagCloud';
+export * from './HeritageObjectList';
+export * from './HeritageObjectDetail';

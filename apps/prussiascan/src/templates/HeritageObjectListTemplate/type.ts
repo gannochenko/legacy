@@ -1,11 +1,12 @@
 import { HTMLAttributes } from 'react';
 import { StylePropsType, MarginPropsType } from '@gannochenko/ui.emotion';
+import { HeritageObjectListDataItem } from '../../components/default/HeritageObjectList/type';
 
 export type HeritageObjectListPropsType = HTMLAttributes<HTMLDivElement> &
     Partial<{
         data: {
             allHeritageObject: {
-                nodes: Record<string, any>[];
+                nodes: HeritageObjectListDataItem[];
             };
         };
         path: string;

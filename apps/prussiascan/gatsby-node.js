@@ -217,11 +217,59 @@ const bootstrapGraphQL = async ({ store }) => {
     }
 };
 
-const createHeritagePages = async ({ graphql, actions, reporter }) => {
+const createHeritagePages = async (params) => {
+    await createHeritageDetailPages(params);
+    await createHeritageListPages(params, 'actual');
+};
+
+const createHeritageListPages = async (
+    { graphql, actions, reporter },
+    kind,
+) => {
     const { createPage } = actions;
 
     const result = await graphql(`
-        query MyHeritageObjectQuery {
+        query {
+            allHeritageObject(filter: { lost: { ne: true } }) {
+                nodes {
+                    id
+                }
+            }
+        }
+    `);
+
+    if (result.errors) {
+        reporter.panicOnBuild(`Error while running GraphQL query.`);
+        return;
+    }
+
+    const objects = result.data.allHeritageObject.nodes;
+
+    // list page with pagination
+    const postsPerPage = 20;
+    const numPages = Math.ceil(objects.length / postsPerPage);
+    const rootURL = `${HERITAGE_LIST}/${kind}`;
+    Array.from({ length: numPages }).forEach((_, i) => {
+        createPage({
+            path: i === 0 ? rootURL : `${rootURL}/${i + 1}`, // todo: use fillTemplate here
+            component: path.resolve(
+                './src/templates/HeritageObjectListTemplate/HeritageObjectListTemplate.tsx',
+            ),
+            context: {
+                limit: postsPerPage,
+                skip: i * postsPerPage,
+                numPages,
+                currentPage: i + 1,
+            },
+        });
+    });
+};
+
+const createHeritageDetailPages = async ({ graphql, actions, reporter }) => {
+    const { createPage } = actions;
+
+    const result = await graphql(`
+        query {
             allHeritageObject {
                 nodes {
                     id
@@ -238,27 +286,8 @@ const createHeritagePages = async ({ graphql, actions, reporter }) => {
 
     const objects = result.data.allHeritageObject.nodes;
 
-    // list page with pagination
-    const postsPerPage = 20;
-    const numPages = Math.ceil(objects.length / postsPerPage);
-    Array.from({ length: numPages }).forEach((_, i) => {
-        createPage({
-            path: i === 0 ? HERITAGE_LIST : `${HERITAGE_LIST}/${i + 1}`,
-            component: path.resolve(
-                './src/templates/HeritageObjectList/HeritageObjectList.tsx',
-            ),
-            context: {
-                limit: postsPerPage,
-                skip: i * postsPerPage,
-                numPages,
-                currentPage: i + 1,
-            },
-        });
-    });
-
-    // detail page
     objects.forEach(({ id, slug }) => {
-        actions.createPage({
+        createPage({
             path: fillTemplate(HERITAGE_DETAIL, { SLUG: slug }),
             component: path.resolve(
                 './src/templates/HeritageObjectDetailTemplate/HeritageObjectDetailTemplate.tsx',
