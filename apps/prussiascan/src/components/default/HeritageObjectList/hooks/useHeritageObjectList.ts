@@ -11,12 +11,8 @@ import { HeritageObjectListPropsType } from '../type';
 
 export const useHeritageObjectList = (
     ref: Ref<HTMLDivElement>,
-    { data, pageContext, foo, ...props }: HeritageObjectListPropsType,
+    { data, numPages, currentPage, ...props }: HeritageObjectListPropsType,
 ) => {
-    console.log('foo');
-    console.log(foo);
-
-    const currentPage = pageContext?.currentPage ?? 1;
     const items = useMemo(() => {
         return (data ?? []).map((item) => {
             const { slug, name, previewPhotoImage } = item;
@@ -39,13 +35,13 @@ export const useHeritageObjectList = (
             ref, // same for the ref
         },
         paginationProps: {
-            count: pageContext?.numPages ?? 0,
-            page: currentPage,
+            count: numPages ?? 0,
+            page: currentPage ?? 1,
             onChange: (event: ChangeEvent<unknown>, newPage: number) => {
                 navigate(
                     fillTemplate(
                         newPage === 1 ? HERITAGE_LIST : HERITAGE_LIST_PAGE,
-                        { page: newPage },
+                        { page: newPage, kind: 'actual' },
                     ),
                     {
                         replace: true,
@@ -54,7 +50,10 @@ export const useHeritageObjectList = (
             },
         },
         nextPageProps: {
-            to: fillTemplate(HERITAGE_LIST_PAGE, { page: currentPage + 1 }),
+            to: fillTemplate(HERITAGE_LIST_PAGE, {
+                page: (currentPage ?? 1) + 1,
+                kind: 'actual',
+            }),
         },
         data: items,
     };

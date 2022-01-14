@@ -4,7 +4,7 @@ import { HeritageObjectListPropsType } from '../type';
 
 export const useHeritageObjectListTemplate = (
     ref: Ref<HTMLDivElement>,
-    { data, path, ...props }: HeritageObjectListPropsType,
+    { data, path, pageContext, ...props }: HeritageObjectListPropsType,
 ) => {
     const location = useMemo(() => ({ pathname: path ?? '' }), [path]);
 
@@ -19,6 +19,7 @@ export const useHeritageObjectListTemplate = (
         },
         objectListProps: {
             data: data?.allHeritageObject?.nodes ?? [],
+            ...pageContext,
         },
     };
 };

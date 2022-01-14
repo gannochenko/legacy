@@ -16,11 +16,8 @@ export type HeritageObjectListPropsType = HTMLAttributes<HTMLDivElement> &
     Partial<{
         data: HeritageObjectListDataItem[];
         path: string;
-        pageContext: {
-            numPages: number;
-            currentPage: number;
-        };
-        foo: any;
+        numPages: number;
+        currentPage: number;
     }> &
     MarginPropsType;
 

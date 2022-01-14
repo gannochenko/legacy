@@ -4,7 +4,7 @@ import { graphql } from 'gatsby';
 import { HeritageObjectListPropsType } from './type';
 import { useHeritageObjectListTemplate } from './hooks/useHeritageObjectListTemplate';
 import { PageLayout, Container, PageOffset } from '../../components/default';
-import { HeritageObjectList } from '../../components/default/HeritageObjectList/HeritageObjectList';
+import { HeritageObjectList } from '../../components';
 
 export const HeritageObjectListTemplate = forwardRef<
     HTMLDivElement,
@@ -29,6 +29,7 @@ export const heritageObjectListQuery = graphql`
     query HeritageObjectIndexQuery($skip: Int!, $limit: Int!) {
         allHeritageObject(
             sort: { fields: [name], order: ASC }
+            filter: { lost: { ne: true } }
             limit: $limit
             skip: $skip
         ) {
