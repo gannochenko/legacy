@@ -1,5 +1,5 @@
 module.exports = {
-    HERITAGE_LIST: '/heritage',
+    HERITAGE_LIST: '/heritage/#KIND#/',
     HERITAGE_LIST_PAGE: '/heritage/#KIND#/#PAGE#/',
     HERITAGE_DETAIL: '/heritage/#SLUG#/',
     CONTACTS: '/contacts',

@@ -26,13 +26,13 @@ ${AWS} dynamodb \
 
 ${AWS} dynamodb \
     delete-table \
-    --table-name "prussiascan.api_ObjectCollection"
+    --table-name "prussiascan.api_Flags"
 
 echo "Re-create tables"
 
 ${AWS} dynamodb \
     create-table \
-    --table-name "prussiascan.api_Flags" \
+    --table-name "prussiascan.api_ObjectCollection" \
     --attribute-definitions \
         AttributeName=id,AttributeType=S \
     --key-schema \
@@ -48,6 +48,8 @@ ${AWS} dynamodb \
         AttributeName=code,KeyType=HASH \
     --provisioned-throughput ReadCapacityUnits=2,WriteCapacityUnits=2
 
+echo "Tables we have now:"
+
 ${AWS} dynamodb list-tables
 
 ################################################################################################
@@ -58,6 +60,8 @@ ${AWS} s3 rb s3://prussiascans-object-photos --force
 
 ${AWS} s3 mb s3://prussiascans-object-photos
 ${AWS} s3api put-bucket-acl --bucket prussiascans-object-photos --acl public-read
+
+echo "Buckets we have now:"
 
 ${AWS} s3api list-buckets --query "Buckets[].Name"
 
