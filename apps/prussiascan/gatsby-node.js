@@ -19,6 +19,7 @@ const allowedEnvVariables = require('./.env.js').allowedEnvVariables;
 const {
     fillTemplate,
     HERITAGE_LIST,
+    HERITAGE_LIST_PAGE,
     HERITAGE_DETAIL,
 } = require('./src/pathTemplates');
 
@@ -230,7 +231,12 @@ const createHeritageListPages = async (
 
     const result = await graphql(`
         query {
-            allHeritageObject(filter: { lost: { ne: true } }) {
+            allHeritageObject(
+                filter: {
+                    lost: { ne: true }
+                    kind: { nin: [6, 7, 8, 9, 10, 13] }
+                }
+            ) {
                 nodes {
                     id
                 }
@@ -248,10 +254,13 @@ const createHeritageListPages = async (
     // list page with pagination
     const postsPerPage = 20;
     const numPages = Math.ceil(objects.length / postsPerPage);
-    const rootURL = `${HERITAGE_LIST}/${kind}`;
+    const listURL = fillTemplate(HERITAGE_LIST, { kind });
+    const listURLPage = fillTemplate(HERITAGE_LIST_PAGE, { kind });
     Array.from({ length: numPages }).forEach((_, i) => {
         createPage({
-            path: i === 0 ? rootURL : `${rootURL}/${i + 1}`, // todo: use fillTemplate here
+            path: fillTemplate(i === 0 ? listURL : listURLPage, {
+                page: i + 1,
+            }),
             component: path.resolve(
                 './src/templates/HeritageObjectListTemplate/HeritageObjectListTemplate.tsx',
             ),

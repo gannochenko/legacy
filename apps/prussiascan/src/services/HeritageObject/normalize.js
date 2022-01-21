@@ -23,25 +23,18 @@ const normalizePhotos = (photos) => {
     });
 };
 
-const ensureNumber = (value, field, item) => {
-    if (typeof value === 'string' || isNaN(parseInt(value, 10))) {
-        console.warn(
-            `An item "${item.slug}" has string at "${field}": "${value}"`,
-        );
-        return 0;
-    }
-
-    return value;
+const ensureNumber = (value) => {
+    return parseInt(value, 10);
 };
 
-const ensureArrayOfNumbers = (value, field, item) => {
+const ensureArrayOfNumbers = (value) => {
     if (!value || !Array.isArray(value)) {
         return [];
     }
 
-    return value.map((element, index) =>
-        ensureNumber(item, `${field}[${index}]`, element),
-    );
+    return value
+        .map((element) => ensureNumber(element))
+        .filter((element) => !!element);
 };
 
 module.exports = {
@@ -71,26 +64,14 @@ module.exports = {
                 'locationArea',
                 element,
             ),
-            materials: ensureArrayOfNumbers(
-                element.materials,
-                'materials',
-                element,
-            ),
-            kind: ensureArrayOfNumbers(element.kind, 'kind', element),
+            materials: ensureArrayOfNumbers(element.materials),
+            kind: ensureArrayOfNumbers(element.kind),
             createdAt: element.createdAt ?? '',
             updatedAt: element.updatedAt ?? '',
             photos: normalizePhotos(element.photos ?? []),
             heritageId: element.heritageId ?? '',
-            heritageLevel: ensureNumber(
-                element.heritageLevel,
-                'heritageLevel',
-                element,
-            ),
-            heritageStatus: ensureNumber(
-                element.heritageStatus,
-                'heritageStatus',
-                element,
-            ),
+            heritageLevel: ensureNumber(element.heritageLevel),
+            heritageStatus: ensureNumber(element.heritageStatus),
             architects: element.architects ?? [],
             version: element.version ?? 1,
         };

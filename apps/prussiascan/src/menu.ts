@@ -1,4 +1,4 @@
-import { HERITAGE_LIST, ABOUT, CONTACTS } from './pathTemplates';
+import { fillTemplate, HERITAGE_LIST, ABOUT, CONTACTS } from './pathTemplates';
 
 type MenuItemsType = {
     text: string;
@@ -6,7 +6,10 @@ type MenuItemsType = {
 }[];
 
 export const menu: MenuItemsType = [
-    { text: 'Объекты', link: `${HERITAGE_LIST}/actual` },
+    {
+        text: 'Объекты',
+        link: `${fillTemplate(HERITAGE_LIST, { kind: 'actual' })}`,
+    },
     { text: 'О проекте', link: ABOUT },
     { text: 'Контакты', link: CONTACTS },
 ];

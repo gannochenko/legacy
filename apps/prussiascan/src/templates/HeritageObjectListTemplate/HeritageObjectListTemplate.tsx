@@ -29,7 +29,7 @@ export const heritageObjectListQuery = graphql`
     query HeritageObjectIndexQuery($skip: Int!, $limit: Int!) {
         allHeritageObject(
             sort: { fields: [name], order: ASC }
-            filter: { lost: { ne: true } }
+            filter: { lost: { ne: true }, kind: { nin: [6, 7, 8, 9, 10, 13] } }
             limit: $limit
             skip: $skip
         ) {
