@@ -9,6 +9,7 @@ import {
     HeritageObjectListNext,
 } from './style';
 import { useHeritageObjectList } from './hooks/useHeritageObjectList';
+import { Categories } from '../Categories';
 
 export const HeritageObjectList = forwardRef<
     HTMLDivElement,
@@ -19,6 +20,7 @@ export const HeritageObjectList = forwardRef<
 
     return (
         <HeritageObjectListRoot {...rootProps}>
+            <Categories marginBottom={5} />
             <Grid container spacing={3}>
                 {data.map((item) => {
                     const { slug, name, image, path } = item;

@@ -52,6 +52,12 @@ export const BackgroundImage = styled(GatsbyImage)`
     user-select: none;
     position: absolute !important;
     object-fit: contain;
+
+    [data-placeholder-image=''] {
+        object-fit: contain !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
 `;
 
 export const ImageOverlay = styled.div<{ opacity: number }>`
