@@ -220,58 +220,80 @@ const bootstrapGraphQL = async ({ store }) => {
 
 const createHeritagePages = async (params) => {
     await createHeritageDetailPages(params);
-    await createHeritageListPages(params, 'actual');
+    await createHeritageListPages(params);
 };
 
-const createHeritageListPages = async (
-    { graphql, actions, reporter },
-    kind,
-) => {
-    const { createPage } = actions;
-
-    const result = await graphql(`
-        query {
-            allHeritageObject(
-                filter: {
-                    lost: { ne: true }
-                    kind: { nin: [6, 7, 8, 9, 10, 13] }
-                }
-            ) {
-                nodes {
-                    id
+const createHeritageListPages = async (params) => {
+    await createListPages(
+        params,
+        `
+            query {
+                allHeritageObject(
+                    filter: {
+                        lost: { ne: true }
+                        kind: { nin: [6, 7, 8, 9, 10, 13] }
+                    }
+                ) {
+                    nodes {
+                        id
+                    }
                 }
             }
-        }
-    `);
-
-    if (result.errors) {
-        reporter.panicOnBuild(`Error while running GraphQL query.`);
-        return;
-    }
-
-    const objects = result.data.allHeritageObject.nodes;
-
-    // list page with pagination
-    const postsPerPage = 20;
-    const numPages = Math.ceil(objects.length / postsPerPage);
-    const listURL = fillTemplate(HERITAGE_LIST, { kind });
-    const listURLPage = fillTemplate(HERITAGE_LIST_PAGE, { kind });
-    Array.from({ length: numPages }).forEach((_, i) => {
-        createPage({
-            path: fillTemplate(i === 0 ? listURL : listURLPage, {
-                page: i + 1,
-            }),
-            component: path.resolve(
-                './src/templates/HeritageObjectListTemplate/HeritageObjectListTemplate.tsx',
-            ),
-            context: {
-                limit: postsPerPage,
-                skip: i * postsPerPage,
-                numPages,
-                currentPage: i + 1,
-            },
-        });
-    });
+        `,
+        'allHeritageObject',
+        './src/templates/HeritageObjectListTemplate/HeritageObjectListTemplate.tsx',
+        {
+            listURL: fillTemplate(HERITAGE_LIST, { kind: 'actual' }),
+            listURLPage: fillTemplate(HERITAGE_LIST_PAGE, { kind: 'actual' }),
+        },
+    );
+    await createListPages(
+        params,
+        `
+            query {
+                allHeritageObject(
+                    filter: {
+                        lost: { eq: true }
+                        kind: { nin: [6, 7, 8, 9, 10, 13] }
+                    }
+                ) {
+                    nodes {
+                        id
+                    }
+                }
+            }
+        `,
+        'allHeritageObject',
+        './src/templates/LostHeritageObjectListTemplate/LostHeritageObjectListTemplate.tsx',
+        {
+            listURL: fillTemplate(HERITAGE_LIST, { kind: 'lost' }),
+            listURLPage: fillTemplate(HERITAGE_LIST_PAGE, { kind: 'lost' }),
+        },
+    );
+    await createListPages(
+        params,
+        `
+            query {
+                allHeritageObject(
+                    filter: {
+                        lost: { ne: true }
+                        heritageId: { ne: "" }
+                        kind: { nin: [6, 7, 8, 9, 10, 13] }
+                    }
+                ) {
+                    nodes {
+                        id
+                    }
+                }
+            }
+        `,
+        'allHeritageObject',
+        './src/templates/OKNHeritageObjectListTemplate/OKNHeritageObjectListTemplate.tsx',
+        {
+            listURL: fillTemplate(HERITAGE_LIST, { kind: 'okn' }),
+            listURLPage: fillTemplate(HERITAGE_LIST_PAGE, { kind: 'okn' }),
+        },
+    );
 };
 
 const createHeritageDetailPages = async ({ graphql, actions, reporter }) => {
@@ -408,4 +430,42 @@ const getEnv = () => {
     });
 
     return result;
+};
+
+const createListPages = async (
+    { graphql, actions, reporter },
+    query,
+    name,
+    template,
+    urlTemplates,
+) => {
+    const { createPage } = actions;
+
+    const result = await graphql(query);
+
+    if (result.errors) {
+        reporter.panicOnBuild(`Error while running GraphQL query.`);
+        return;
+    }
+
+    const elements = result.data?.[name]?.nodes ?? [];
+
+    const { listURL, listURLPage } = urlTemplates;
+
+    const postsPerPage = 20;
+    const numPages = Math.ceil(elements.length / postsPerPage);
+    Array.from({ length: numPages }).forEach((_, i) => {
+        createPage({
+            path: fillTemplate(i === 0 ? listURL : listURLPage, {
+                page: i + 1,
+            }),
+            component: path.resolve(template),
+            context: {
+                limit: postsPerPage,
+                skip: i * postsPerPage,
+                numPages,
+                currentPage: i + 1,
+            },
+        });
+    });
 };

@@ -1,15 +1,15 @@
 import { Ref, useMemo } from 'react';
 
-import { HeritageObjectListPropsType } from '../type';
+import { LostHeritageObjectListPropsType } from '../type';
 import {
     fillTemplate,
     HERITAGE_LIST,
     HERITAGE_LIST_PAGE,
 } from '../../../pathTemplates';
 
-export const useHeritageObjectListTemplate = (
+export const useOKNHeritageObjectListTemplate = (
     ref: Ref<HTMLDivElement>,
-    { data, path, pageContext, ...props }: HeritageObjectListPropsType,
+    { data, path, pageContext, ...props }: LostHeritageObjectListPropsType,
 ) => {
     const location = useMemo(() => ({ pathname: path ?? '' }), [path]);
 
@@ -20,13 +20,13 @@ export const useHeritageObjectListTemplate = (
         },
         pageLayoutProps: {
             location,
-            title: 'Объекты',
+            title: 'Объекты культурного наследия',
         },
         objectListProps: {
             data: data?.allHeritageObject?.nodes ?? [],
             urlTemplates: {
-                indexURL: fillTemplate(HERITAGE_LIST, { kind: 'actual' }),
-                pageURL: fillTemplate(HERITAGE_LIST_PAGE, { kind: 'actual' }),
+                indexURL: fillTemplate(HERITAGE_LIST, { kind: 'okn' }),
+                pageURL: fillTemplate(HERITAGE_LIST_PAGE, { kind: 'okn' }),
             },
             ...pageContext,
         },

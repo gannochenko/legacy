@@ -1,19 +1,17 @@
 import React, { forwardRef } from 'react';
 import { graphql } from 'gatsby';
 
-import { HeritageObjectListPropsType } from './type';
-import { useHeritageObjectListTemplate } from './hooks/useHeritageObjectListTemplate';
+import { LostHeritageObjectListPropsType } from './type';
+import { useLostHeritageObjectListTemplate } from './hooks/useLostHeritageObjectListTemplate';
 import { PageLayout, Container, PageOffset } from '../../components/default';
 import { HeritageObjectList } from '../../components';
 
-export const HeritageObjectListTemplate = forwardRef<
+export const LostHeritageObjectListTemplate = forwardRef<
     HTMLDivElement,
-    HeritageObjectListPropsType
->(function HeritageObjectListTemplate(props, ref) {
-    const { pageLayoutProps, objectListProps } = useHeritageObjectListTemplate(
-        ref,
-        props,
-    );
+    LostHeritageObjectListPropsType
+>(function LostHeritageObjectListTemplate(props, ref) {
+    const { pageLayoutProps, objectListProps } =
+        useLostHeritageObjectListTemplate(ref, props);
 
     return (
         <PageLayout {...pageLayoutProps}>
@@ -29,7 +27,7 @@ export const query = graphql`
     query ($skip: Int!, $limit: Int!) {
         allHeritageObject(
             sort: { fields: [name], order: ASC }
-            filter: { lost: { ne: true }, kind: { nin: [6, 7, 8, 9, 10, 13] } }
+            filter: { lost: { eq: true }, kind: { nin: [6, 7, 8, 9, 10, 13] } }
             limit: $limit
             skip: $skip
         ) {
@@ -46,4 +44,4 @@ export const query = graphql`
     }
 `;
 
-export default HeritageObjectListTemplate;
+export default LostHeritageObjectListTemplate;

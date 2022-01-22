@@ -1,18 +1,24 @@
 import { ChangeEvent, Ref, useMemo } from 'react';
 import { navigate } from 'gatsby';
-import {
-    fillTemplate,
-    HERITAGE_DETAIL,
-    HERITAGE_LIST,
-    HERITAGE_LIST_PAGE,
-} from '../../../../pathTemplates';
+import { fillTemplate, HERITAGE_DETAIL } from '../../../../pathTemplates';
 
 import { HeritageObjectListPropsType } from '../type';
 
 export const useHeritageObjectList = (
     ref: Ref<HTMLDivElement>,
-    { data, numPages, currentPage, ...props }: HeritageObjectListPropsType,
+    {
+        data,
+        numPages,
+        currentPage,
+        urlTemplates,
+        ...props
+    }: HeritageObjectListPropsType,
 ) => {
+    const realTemplates = urlTemplates ?? {
+        indexURL: '/',
+        pageURL: '/',
+    };
+
     const items = useMemo(() => {
         return (data ?? []).map((item) => {
             const { slug, name, previewPhotoImage } = item;
@@ -40,8 +46,10 @@ export const useHeritageObjectList = (
             onChange: (event: ChangeEvent<unknown>, newPage: number) => {
                 navigate(
                     fillTemplate(
-                        newPage === 1 ? HERITAGE_LIST : HERITAGE_LIST_PAGE,
-                        { page: newPage, kind: 'actual' },
+                        newPage === 1
+                            ? realTemplates.indexURL
+                            : realTemplates.pageURL,
+                        { page: newPage },
                     ),
                     {
                         replace: true,
@@ -50,9 +58,8 @@ export const useHeritageObjectList = (
             },
         },
         nextPageProps: {
-            to: fillTemplate(HERITAGE_LIST_PAGE, {
+            to: fillTemplate(realTemplates.pageURL, {
                 page: (currentPage ?? 1) + 1,
-                kind: 'actual',
             }),
         },
         data: items,
