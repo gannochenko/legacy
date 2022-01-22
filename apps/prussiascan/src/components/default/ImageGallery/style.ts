@@ -24,4 +24,10 @@ export const ImageGalleryImage = styled(GatsbyImage)`
     object-fit: contain !important;
     width: 100% !important;
     height: 100% !important;
+
+    [data-placeholder-image=''] {
+        object-fit: contain !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
 `;

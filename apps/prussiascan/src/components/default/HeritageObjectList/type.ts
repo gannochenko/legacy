@@ -18,6 +18,10 @@ export type HeritageObjectListPropsType = HTMLAttributes<HTMLDivElement> &
         path: string;
         numPages: number;
         currentPage: number;
+        urlTemplates: {
+            indexURL: string;
+            pageURL: string;
+        };
     }> &
     MarginPropsType;
 
