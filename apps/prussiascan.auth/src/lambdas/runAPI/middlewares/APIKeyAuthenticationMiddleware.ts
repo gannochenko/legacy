@@ -20,6 +20,10 @@ export class APIKeyAuthenticationMiddleware implements NestMiddleware {
             roles = [UserRoleEnum.cicd];
         }
 
+        if (key === process.env.ADMIN_API_KEY) {
+            roles = [UserRoleEnum.admin];
+        }
+
         if (roles.length) {
             req.user = {
                 ...(req.user ?? {}),
