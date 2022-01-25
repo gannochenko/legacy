@@ -21,7 +21,7 @@ functions:
         # in order to do so, we create a REST endpoint
         events:
             - http:
-                  path: /api/{any+}
+                  path: /auth/{any+}
                   method: post
 
 custom:

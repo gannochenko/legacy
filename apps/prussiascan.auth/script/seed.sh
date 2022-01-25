@@ -14,8 +14,6 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 
-
-
 ################################################################################################
 ## DynamoDB
 ################################################################################################
@@ -24,15 +22,30 @@ echo "Delete tables"
 
 ${AWS} dynamodb \
     delete-table \
-    --table-name "prussiascan.auth.api_GroupCollection"
+    --table-name "prussiascan.auth_Users"
+
+${AWS} dynamodb \
+    delete-table \
+    --table-name "prussiascan.auth_InvitationTokens"
 
 echo "Re-create tables"
 
 ${AWS} dynamodb \
     create-table \
-    --table-name "prussiascan.auth.api_GroupCollection" \
+    --table-name "prussiascan.auth_Users" \
     --attribute-definitions \
         AttributeName=id,AttributeType=S \
     --key-schema \
         AttributeName=id,KeyType=HASH \
     --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+
+${AWS} dynamodb \
+    create-table \
+    --table-name "prussiascan.auth_InvitationTokens" \
+    --attribute-definitions \
+        AttributeName=id,AttributeType=S \
+    --key-schema \
+        AttributeName=id,KeyType=HASH \
+    --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+
+fi
