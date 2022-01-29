@@ -43,9 +43,9 @@ ${AWS} dynamodb \
     create-table \
     --table-name "prussiascan.auth_InvitationTokens" \
     --attribute-definitions \
-        AttributeName=id,AttributeType=S \
+        AttributeName=email,AttributeType=S \
     --key-schema \
-        AttributeName=id,KeyType=HASH \
+        AttributeName=email,KeyType=HASH \
     --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
 
 fi

@@ -1,6 +1,7 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { v4 } from 'uuid';
+import { Injectable, HttpException } from '@nestjs/common';
 import { DynamoDB } from 'aws-sdk';
+import { randomBytes } from 'crypto';
+import { promisify } from 'util';
 
 import { awsOptions } from '../../utils/awsOptions';
 import {
@@ -9,6 +10,7 @@ import {
     InviteOutputType,
     JoinOutputType,
 } from './type';
+import { tryExecute } from '../../utils/tryExecute';
 
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html
@@ -18,6 +20,8 @@ const dynamoDB = new DynamoDB.DocumentClient({
 });
 const TABLE_NAME = process.env.AWS_INVITATION_TOKENS_TABLE_NAME ?? '';
 
+const randomBytesAsync = promisify(randomBytes);
+
 @Injectable()
 export class InvitationService {
     constructor() {}
@@ -25,28 +29,36 @@ export class InvitationService {
     public async invite(item: InviteInputType): Promise<InviteOutputType> {
         const { email } = item;
 
-        const id = v4();
+        // check if already invited
+        const invitation = await tryExecute(async () => {
+            return await dynamoDB
+                .get({
+                    TableName: TABLE_NAME,
+                    Key: {
+                        email,
+                    },
+                })
+                .promise();
+        }, 'Could not check the invitation existence');
+
+        if (invitation?.Item) {
+            throw new HttpException('User already invited', 409);
+        }
 
         const dynamodbItem = {
-            id,
             email,
+            token: (await randomBytesAsync(48)).toString('hex'),
             createdAt: new Date().toISOString(),
         };
 
-        try {
-            await dynamoDB
+        await tryExecute(async () => {
+            return await dynamoDB
                 .put({
                     TableName: TABLE_NAME,
                     Item: dynamodbItem,
-                    ReturnConsumedCapacity: 'TOTAL',
                 })
                 .promise();
-        } catch (error) {
-            console.error(error);
-            throw new InternalServerErrorException(
-                'Could not create an invitation',
-            );
-        }
+        }, 'Could not create an invitation');
 
         return { data: dynamodbItem, aux: {} };
     }
@@ -81,4 +93,6 @@ export class InvitationService {
 
         return { data: {}, aux: {} };
     }
+
+    private async sendInvitation() {}
 }
