@@ -2,6 +2,7 @@ import { Injectable, HttpException } from '@nestjs/common';
 import { DynamoDB } from 'aws-sdk';
 import { randomBytes } from 'crypto';
 import { promisify } from 'util';
+import { compile } from 'pug';
 
 import { awsOptions } from '../../utils/awsOptions';
 import {
@@ -11,6 +12,8 @@ import {
     JoinOutputType,
 } from './type';
 import { tryExecute } from '../../utils/tryExecute';
+import { invitationMessageTemplate } from './invitationMessageTemplate';
+import { sendMessage } from './sendMessage';
 
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html
@@ -21,6 +24,8 @@ const dynamoDB = new DynamoDB.DocumentClient({
 const TABLE_NAME = process.env.AWS_INVITATION_TOKENS_TABLE_NAME ?? '';
 
 const randomBytesAsync = promisify(randomBytes);
+
+const compiledFunction = compile(invitationMessageTemplate);
 
 @Injectable()
 export class InvitationService {
@@ -45,9 +50,11 @@ export class InvitationService {
             throw new HttpException('User already invited', 409);
         }
 
+        const token = (await randomBytesAsync(48)).toString('hex');
+
         const dynamodbItem = {
             email,
-            token: (await randomBytesAsync(48)).toString('hex'),
+            token,
             createdAt: new Date().toISOString(),
         };
 
@@ -59,6 +66,8 @@ export class InvitationService {
                 })
                 .promise();
         }, 'Could not create an invitation');
+
+        await this.sendInvitation(email, token);
 
         return { data: dynamodbItem, aux: {} };
     }
@@ -94,5 +103,13 @@ export class InvitationService {
         return { data: {}, aux: {} };
     }
 
-    private async sendInvitation() {}
+    private async sendInvitation(email: string, token: string) {
+        return sendMessage(
+            email,
+            'New message from "Архитектурный Архив"',
+            compiledFunction({
+                invitationLink: `https://${process.env.DOMAIN}/join?token=${token}`,
+            }),
+        );
+    }
 }
