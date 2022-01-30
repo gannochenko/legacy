@@ -16,6 +16,7 @@ then
 
 ################################################################################################
 ## DynamoDB
+## https://docs.aws.amazon.com/cli/latest/reference/dynamodb/create-table.html
 ################################################################################################
 
 echo "Delete tables"
@@ -35,9 +36,27 @@ ${AWS} dynamodb \
     --table-name "prussiascan.auth_Users" \
     --attribute-definitions \
         AttributeName=id,AttributeType=S \
+        AttributeName=email,AttributeType=S \
     --key-schema \
         AttributeName=id,KeyType=HASH \
-    --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+    --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
+    --global-secondary-indexes \
+        "[
+            {
+                \"IndexName\": \"emailIndex\",
+                \"KeySchema\": [
+                    {\"AttributeName\":\"email\",\"KeyType\":\"HASH\"}
+                ],
+                \"Projection\": {
+                    \"ProjectionType\":\"INCLUDE\",
+                    \"NonKeyAttributes\":[\"email\"]
+                },
+                \"ProvisionedThroughput\": {
+                    \"ReadCapacityUnits\": 5,
+                    \"WriteCapacityUnits\": 5
+                }
+            }
+        ]"
 
 ${AWS} dynamodb \
     create-table \

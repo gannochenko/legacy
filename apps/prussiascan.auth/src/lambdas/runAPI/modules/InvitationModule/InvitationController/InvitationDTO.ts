@@ -13,4 +13,7 @@ export class JoinDto {
         message: 'Token is too short',
     })
     token: string;
+
+    @IsEmail()
+    email: string;
 }

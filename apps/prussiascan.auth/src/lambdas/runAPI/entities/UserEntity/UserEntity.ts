@@ -1,5 +1,6 @@
-export class GroupEntity {
-  id: string;
-  slug: string;
-  name: string;
+export class UserEntity {
+    id: string;
+    slug: string;
+    name: string;
+    createdAt: string;
 }
