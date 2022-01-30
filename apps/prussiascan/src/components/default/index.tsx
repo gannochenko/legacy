@@ -23,3 +23,4 @@ export * from './Map';
 export * from './TagCloud';
 export * from './HeritageObjectList';
 export * from './HeritageObjectDetail';
+export * from './Join';
