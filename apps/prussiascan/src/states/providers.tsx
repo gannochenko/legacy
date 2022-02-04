@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
 
-import { ContactFormState } from './contactFormState';
-
+import { ContactFormState, AuthState } from '.';
 
 export const StateProviders: FC = ({ children }) => {
-
-    return <ContactFormState.Provider>{children}</ContactFormState.Provider>;
-
+    return (
+        <ContactFormState.Provider>
+            <AuthState.Provider>{children}</AuthState.Provider>
+        </ContactFormState.Provider>
+    );
 };

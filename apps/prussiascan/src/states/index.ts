@@ -1,3 +1,2 @@
 export * from './contactFormState';
-export const foo = 'bar';
-
+export * from './authState';
