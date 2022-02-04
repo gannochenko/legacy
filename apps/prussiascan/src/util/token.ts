@@ -11,3 +11,5 @@ export const storeToken = (token: string) => {
 export const getToken = () => window.localStorage.getItem(TOKEN_LS_KEY);
 
 export const revokeToken = () => window.localStorage.removeItem(TOKEN_LS_KEY);
+
+export const hasToken = () => !!window.localStorage.getItem(TOKEN_LS_KEY);

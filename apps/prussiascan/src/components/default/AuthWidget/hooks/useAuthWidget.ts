@@ -1,20 +1,18 @@
 import { Ref, useCallback } from 'react';
 import { AuthWidgetPropsType } from '../type';
 import { PropTypes } from '@mui/material';
-import { useAuth } from '../../../../hooks';
+import { AuthState } from '../../../../states';
 
 export const useAuthWidget = (
     ref: Ref<HTMLDivElement>,
     props: AuthWidgetPropsType,
 ) => {
     const {
-        isAuthenticated,
-        signIn,
-        userName,
+        user: { id },
         signOut,
-        avatar,
-        // getToken,
-    } = useAuth();
+        signIn,
+        isAuthenticated,
+    } = AuthState.useContainer();
 
     const color: PropTypes.Color = 'primary';
     const variant: 'text' | 'outlined' | 'contained' = 'contained';
@@ -38,10 +36,10 @@ export const useAuthWidget = (
             variant,
         },
         avatarProps: {
-            src: avatar,
+            src: '',
         },
         userNameProps: {
-            children: userName,
+            children: id,
         },
         authenticated: isAuthenticated,
     };

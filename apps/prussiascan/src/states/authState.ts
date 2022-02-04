@@ -11,11 +11,15 @@ const useAuth = (initialState = initialAuthState) => {
     //     setData({ ...data, ...newData });
     // const reset = () => setData({ ...initialAuthState });
 
+    const user = {
+        id: 'asdfdfsd',
+    };
+
     return {
-        user: {
-            id: 'asdfdfsd',
-        },
+        user,
         signOut: () => {},
+        signIn: () => {},
+        isAuthenticated: !!user.id,
     };
 };
 
