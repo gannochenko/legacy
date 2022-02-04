@@ -7,7 +7,7 @@ import { useJoin } from './hooks/useJoin';
 export const Join: FC<JoinPropsType> = (props) => {
     const { rootProps } = useJoin(props);
 
-    return <JoinRoot {...rootProps}>Hello</JoinRoot>;
+    return <JoinRoot {...rootProps}>Присоединяемся...</JoinRoot>;
 };
 
 Join.defaultProps = {};
