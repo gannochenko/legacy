@@ -10,7 +10,7 @@ export const useJoin = <E extends HTMLDivElement>({
     ...props
 }: JoinPropsType) => {
     const joinMutation = useMutation('join', join, {
-        retry: false,
+        // retry: false,
     });
 
     const { isLoading, isSuccess, isError, data } = joinMutation;
@@ -22,6 +22,8 @@ export const useJoin = <E extends HTMLDivElement>({
     useEffect(() => {
         if (isSuccess) {
             storeToken(data?.data?.token ?? '');
+            // @ts-ignore
+            window.location = '/';
         }
     }, [isSuccess, data]);
 
