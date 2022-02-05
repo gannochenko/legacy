@@ -16,6 +16,7 @@ type GetUserResult = {
         message: string;
         code?: string;
     }[];
+    expired: boolean;
 };
 
 type GetUserTokenContentResult = {
@@ -34,6 +35,7 @@ export const fn = async ({ token }: GetUserArgsType) => {
     const result: GetUserResult = {
         data: {},
         errors: [],
+        expired: false,
     };
 
     try {
@@ -68,6 +70,7 @@ export const fn = async ({ token }: GetUserArgsType) => {
         result.errors.push({
             message: 'Token expired',
         });
+        result.expired = true;
     }
 
     return result;

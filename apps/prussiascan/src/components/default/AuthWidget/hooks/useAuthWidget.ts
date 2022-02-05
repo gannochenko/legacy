@@ -7,12 +7,7 @@ export const useAuthWidget = (
     ref: Ref<HTMLDivElement>,
     props: AuthWidgetPropsType,
 ) => {
-    const {
-        user: { id },
-        signOut,
-        signIn,
-        isAuthenticated,
-    } = AuthState.useContainer();
+    const { signOut, signIn, isAuthenticated } = AuthState.useContainer();
 
     const color: PropTypes.Color = 'primary';
     const variant: 'text' | 'outlined' | 'contained' = 'contained';
@@ -35,11 +30,15 @@ export const useAuthWidget = (
             color,
             variant,
         },
+        getInvitationRequestButtonProps: () => ({
+            color,
+            variant,
+        }),
         avatarProps: {
             src: '',
         },
         userNameProps: {
-            children: id,
+            // children: userId,
         },
         authenticated: isAuthenticated,
     };
