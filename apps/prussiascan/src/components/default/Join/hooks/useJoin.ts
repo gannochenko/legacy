@@ -2,13 +2,15 @@ import { useEffect } from 'react';
 import { useMutation } from 'react-query';
 import { JoinPropsType } from '../type';
 import { join } from '../../../../services/auth';
-import { storeToken } from '../../../../util/token';
+import { AuthState } from '../../../../states';
 
 export const useJoin = <E extends HTMLDivElement>({
     token,
     email,
     ...props
 }: JoinPropsType) => {
+    const { setToken } = AuthState.useContainer();
+
     const joinMutation = useMutation('join', join, {
         // retry: false,
     });
@@ -21,7 +23,7 @@ export const useJoin = <E extends HTMLDivElement>({
 
     useEffect(() => {
         if (isSuccess) {
-            storeToken(data?.data?.token ?? '');
+            setToken(data?.data?.token ?? '');
             // @ts-ignore
             window.location = '/';
         }

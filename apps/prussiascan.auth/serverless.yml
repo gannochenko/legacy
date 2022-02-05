@@ -15,6 +15,14 @@ provider:
 
 # here we describe our lambda function
 functions:
+    getUser: # function name
+        handler: src/lambdas/getUser/handler.handler # where the actual code is located
+        # to call our function from outside, we need to expose it to the outer world
+        # in order to do so, we create a REST endpoint
+        events:
+            - http:
+                  path: /auth/user
+                  method: post
     runAPI: # function name
         handler: src/lambdas/runAPI/handler.handler # where the actual code is located
         # to call our function from outside, we need to expose it to the outer world
