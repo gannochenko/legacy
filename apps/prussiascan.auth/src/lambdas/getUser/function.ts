@@ -31,10 +31,6 @@ const dynamoDB = new DynamoDB.DocumentClient({
 const TABLE_NAME = process.env.AWS_USERS_TABLE_NAME ?? '';
 
 export const fn = async ({ token }: GetUserArgsType) => {
-    console.log('!!!!');
-    console.log(TABLE_NAME);
-    console.log(token);
-
     const result: GetUserResult = {
         data: {},
         errors: [],

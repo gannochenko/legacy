@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
 import { createContainer } from 'unstated-next';
+import { useQuery } from 'react-query';
+import { getUser } from '../services/auth';
 
 const TOKEN_LS_KEY = 'prussiascan:token';
 
@@ -30,6 +32,14 @@ const useAuth = (initialState = initialAuthState) => {
     const user = {
         id: 'asdfdfsd',
     };
+
+    const token = getToken();
+    // @ts-ignore
+    const result = useQuery(['userData', token], getUser, {
+        enabled: !!token,
+    });
+
+    console.log(result.data);
 
     const setToken = useCallback((token: string) => {
         storeToken(token);
