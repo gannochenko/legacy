@@ -20,7 +20,6 @@ import { MenuPropsType } from './type';
 
 import { AuthWidget } from '../AuthWidget';
 
-
 export const Menu: FC<MenuPropsType> = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const onHamburgerClick = useCallback(() => {
