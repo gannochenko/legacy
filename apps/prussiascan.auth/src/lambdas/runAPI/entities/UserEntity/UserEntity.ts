@@ -1,6 +1,6 @@
 export class UserEntity {
     id: string;
-    slug: string;
-    name: string;
+    email: string;
+    roles: string[];
     createdAt: string;
 }

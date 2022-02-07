@@ -11,13 +11,15 @@ type GetUserOutputType = {
     data: {
         id?: string;
         type?: 'user';
-        attributes?: Record<string, string | number>;
+        attributes?: {
+            roles: string[];
+        };
     };
     errors: {
         message: string;
         code?: string;
     }[];
-    expired: boolean;
+    revoke: boolean;
 };
 
 const AUTH_URL = process.env.AUTH_URL;
@@ -39,7 +41,7 @@ export const getUser = async ({
     queryKey: string[];
 }): Promise<GetUserOutputType> => {
     const token = queryKey[1];
-    return fetch(`${AUTH_URL}/${API_ENV}/auth/user`, {
+    return fetch(`${AUTH_URL}/${API_ENV}/user`, {
         method: 'POST',
         body: JSON.stringify({
             token,

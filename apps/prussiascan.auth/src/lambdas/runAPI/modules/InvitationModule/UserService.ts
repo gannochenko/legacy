@@ -21,12 +21,13 @@ export class UserService {
     public async create(
         item: CreateUserInputType,
     ): Promise<CreateUserOutputType> {
-        const { email } = item;
+        const { email, roles } = item;
 
         const id = v4();
         const dynamodbItem = {
             id,
             email,
+            roles,
             createdAt: new Date().toISOString(),
         };
 

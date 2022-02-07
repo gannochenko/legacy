@@ -37,7 +37,7 @@ export class InvitationService {
     ) {}
 
     public async invite(item: InviteInputType): Promise<InviteOutputType> {
-        const { email } = item;
+        const { email, role } = item;
 
         // check if already invited
         const invitation = await this.getInvitation(email);
@@ -50,6 +50,7 @@ export class InvitationService {
         const dynamodbItem = {
             email,
             token,
+            role: role ?? '',
             createdAt: new Date().toISOString(),
         };
 
@@ -75,7 +76,7 @@ export class InvitationService {
             throw new HttpException('You were not invited', 400);
         }
 
-        const { token: storedToken } = invitation?.Item;
+        const { token: storedToken, role } = invitation?.Item;
 
         let userId = '';
         const user = await this.userService.getByEmail(email);
@@ -88,7 +89,10 @@ export class InvitationService {
             }
         } else {
             // create and authenticate
-            const { data: newUser } = await this.userService.create({ email });
+            const { data: newUser } = await this.userService.create({
+                email,
+                roles: role ? [role] : [],
+            });
             userId = newUser.id;
         }
 
@@ -99,7 +103,7 @@ export class InvitationService {
                         userId,
                     },
                     {
-                        expiresIn: '3 days',
+                        expiresIn: '7 days',
                         audience: `https://${process.env.DOMAIN}`,
                     },
                 ),
@@ -126,7 +130,7 @@ export class InvitationService {
             'New message from "Архитектурный Архив"',
             compiledFunction({
                 invitationLink: `https://${
-                    process.env.DOMAIN
+                    process.env.WEBAPP_DOMAIN
                 }/join?token=${encodeURIComponent(
                     token,
                 )}&email=${encodeURIComponent(email)}`,

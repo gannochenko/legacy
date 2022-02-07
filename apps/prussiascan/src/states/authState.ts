@@ -5,6 +5,7 @@ import { getUser } from '../services/auth';
 
 type UserType = {
     id: string;
+    roles: string[];
 };
 
 const TOKEN_LS_KEY = 'prussiascan:token';
@@ -42,21 +43,23 @@ const useAuth = () => {
         },
     );
 
-    const expired = userQueryData?.expired ?? false;
+    const revoke = userQueryData?.revoke ?? false;
     const userData = userQueryData?.data;
     const userId = userData?.id;
+    const userRoles = userData?.attributes?.roles ?? [];
 
     useEffect(() => {
-        if (isSuccess && expired) {
+        if (isSuccess && revoke) {
             revokeToken();
             setSerial((previousSerial) => previousSerial + 1);
         }
-    }, [isSuccess, expired]);
+    }, [isSuccess, revoke]);
 
     const user: UserType | undefined =
-        isSuccess && !expired && !!userId
+        isSuccess && !revoke && !!userId
             ? {
                   id: userId,
+                  roles: userRoles,
               }
             : undefined;
 

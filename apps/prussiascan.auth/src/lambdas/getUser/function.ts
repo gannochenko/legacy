@@ -10,13 +10,15 @@ type GetUserResult = {
     data: {
         id?: string;
         type?: 'user';
-        attributes?: Record<string, string | number>;
+        attributes?: {
+            roles: string[];
+        };
     };
     errors: {
         message: string;
         code?: string;
     }[];
-    expired: boolean;
+    revoke: boolean;
 };
 
 type GetUserTokenContentResult = {
@@ -35,7 +37,7 @@ export const fn = async ({ token }: GetUserArgsType) => {
     const result: GetUserResult = {
         data: {},
         errors: [],
-        expired: false,
+        revoke: false,
     };
 
     try {
@@ -51,7 +53,7 @@ export const fn = async ({ token }: GetUserArgsType) => {
                 Key: {
                     id: userId,
                 },
-                AttributesToGet: ['id'],
+                AttributesToGet: ['id', 'roles'],
             })
             .promise();
 
@@ -59,18 +61,21 @@ export const fn = async ({ token }: GetUserArgsType) => {
             result.errors.push({
                 message: 'User not found',
             });
+            result.revoke = true;
         } else {
             result.data = {
                 id: userId,
                 type: 'user',
-                attributes: {},
+                attributes: {
+                    roles: databaseResult?.Item?.roles ?? [],
+                },
             };
         }
     } catch (error) {
         result.errors.push({
             message: 'Token expired',
         });
-        result.expired = true;
+        result.revoke = true;
     }
 
     return result;

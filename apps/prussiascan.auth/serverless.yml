@@ -21,7 +21,7 @@ functions:
         # in order to do so, we create a REST endpoint
         events:
             - http:
-                  path: /auth/user
+                  path: /user
                   method: post
     runAPI: # function name
         handler: src/lambdas/runAPI/handler.handler # where the actual code is located

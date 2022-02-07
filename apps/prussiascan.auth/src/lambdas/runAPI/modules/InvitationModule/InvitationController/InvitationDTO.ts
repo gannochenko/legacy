@@ -1,10 +1,14 @@
-import { IsString, IsEmail, MinLength } from 'class-validator';
+import { IsString, IsEmail, MinLength, IsOptional } from 'class-validator';
 
 // https://github.com/typestack/class-validator
 
 export class InviteDto {
     @IsEmail()
     email: string;
+
+    @IsString()
+    @IsOptional()
+    role: string;
 }
 
 export class JoinDto {
