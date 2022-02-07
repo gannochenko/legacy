@@ -1,0 +1,44 @@
+service: prussiascans-api
+
+# enable required plugins, in order to make what we want
+plugins:
+    - serverless-webpack
+    - serverless-offline
+
+# serverless supports different cloud environments to run at.
+# we will be deploying and running this project at AWS cloud with Node v8.10 environment
+provider:
+    name: aws
+    runtime: nodejs14.x
+    region: eu-central-1
+    stage: dev
+
+# here we describe our lambda function
+functions:
+    getUser: # function name
+        handler: src/lambdas/getUser/handler.handler # where the actual code is located
+        # to call our function from outside, we need to expose it to the outer world
+        # in order to do so, we create a REST endpoint
+        events:
+            - http:
+                  path: /user
+                  method: post
+    runAPI: # function name
+        handler: src/lambdas/runAPI/handler.handler # where the actual code is located
+        # to call our function from outside, we need to expose it to the outer world
+        # in order to do so, we create a REST endpoint
+        events:
+            - http:
+                  path: /auth/{any+}
+                  method: post
+
+custom:
+    webpack:
+        webpackConfig: 'webpack.config.js' # name of webpack configuration file
+        includeModules: true # add excluded modules to the bundle
+        packager: 'yarn' # package manager we use
+    serverless-offline:
+        useChildProcesses: true
+        httpPort: 4000
+        websocketPort: 4001
+        lambdaPort: 4002
