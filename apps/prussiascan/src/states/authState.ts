@@ -11,16 +11,26 @@ type UserType = {
 const TOKEN_LS_KEY = 'prussiascan:token';
 
 export const storeToken = (token: string) => {
-    if (!token) {
+    if (typeof window === 'undefined' || !token) {
         return;
     }
 
     window.localStorage.setItem(TOKEN_LS_KEY, token);
 };
 
-export const getToken = () => window.localStorage.getItem(TOKEN_LS_KEY);
+export const getToken = () => {
+    if (typeof window === 'undefined') {
+        return null;
+    }
+    window.localStorage.getItem(TOKEN_LS_KEY);
+};
 
-export const revokeToken = () => window.localStorage.removeItem(TOKEN_LS_KEY);
+export const revokeToken = () => {
+    if (typeof window === 'undefined') {
+        return;
+    }
+    window.localStorage.removeItem(TOKEN_LS_KEY);
+};
 
 const noop = () => {};
 
