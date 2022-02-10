@@ -9,8 +9,8 @@ export const useAuthWidget = (
 ) => {
     const { signOut, signIn, isAuthenticated, user } = AuthState.useContainer();
 
-    console.log('USER');
-    console.log(user);
+    // console.log('USER');
+    // console.log(user);
 
     const color: PropTypes.Color = 'primary';
     const variant: 'text' | 'outlined' | 'contained' = 'contained';
