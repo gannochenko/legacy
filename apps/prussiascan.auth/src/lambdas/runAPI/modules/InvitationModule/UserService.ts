@@ -31,14 +31,12 @@ export class UserService {
             createdAt: new Date().toISOString(),
         };
 
-        await tryExecute(async () => {
-            return await dynamoDB
-                .put({
-                    TableName: TABLE_NAME,
-                    Item: dynamodbItem,
-                })
-                .promise();
-        }, 'Could not create an user');
+        await dynamoDB
+            .put({
+                TableName: TABLE_NAME,
+                Item: dynamodbItem,
+            })
+            .promise();
 
         return { data: dynamodbItem };
     }

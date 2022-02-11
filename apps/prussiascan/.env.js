@@ -5,6 +5,7 @@
 
 module.exports.allowedEnvVariables = [
     'API_URL',
+    'AUTH_URL',
     'API_ENV',
     'GA_TRACKING_ID',
     'GA_LINK',
