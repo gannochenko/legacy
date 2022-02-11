@@ -54,14 +54,12 @@ export class InvitationService {
             createdAt: new Date().toISOString(),
         };
 
-        await tryExecute(async () => {
-            return await dynamoDB
-                .put({
-                    TableName: TABLE_NAME,
-                    Item: dynamodbItem,
-                })
-                .promise();
-        }, 'Could not create an invitation');
+        await dynamoDB
+            .put({
+                TableName: TABLE_NAME,
+                Item: dynamodbItem,
+            })
+            .promise();
 
         await this.sendInvitationMessage(email, token);
 
