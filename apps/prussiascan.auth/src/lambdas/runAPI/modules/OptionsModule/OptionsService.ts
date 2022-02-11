@@ -49,7 +49,7 @@ export class OptionsService {
             return (result?.Item?.value as string) ?? null;
         } catch (error) {
             console.error(error);
-            throw new InternalServerErrorException('Could not get an value.');
+            throw new InternalServerErrorException('Could not get an value');
         }
     }
 }
