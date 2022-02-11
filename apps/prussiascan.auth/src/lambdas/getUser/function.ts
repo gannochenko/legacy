@@ -59,7 +59,7 @@ export const fn = async ({ token }: GetUserArgsType) => {
 
         if (!databaseResult?.Item) {
             result.errors.push({
-                message: 'User not found',
+                message: 'User not found.',
             });
             result.revoke = true;
         } else {
@@ -73,7 +73,7 @@ export const fn = async ({ token }: GetUserArgsType) => {
         }
     } catch (error) {
         result.errors.push({
-            message: 'Token expired',
+            message: 'Token expired.',
         });
         result.revoke = true;
     }
