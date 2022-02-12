@@ -19,6 +19,9 @@ export const storeToken = (token: string) => {
 };
 
 export const getToken = () => {
+    // eslint-disable-next-line no-console
+    console.log(window);
+
     if (typeof window === 'undefined') {
         return null;
     }
@@ -30,6 +33,11 @@ export const revokeToken = () => {
         return;
     }
     window.localStorage.removeItem(TOKEN_LS_KEY);
+};
+
+// @ts-ignore
+window._wtf = {
+    getToken,
 };
 
 const noop = () => {};
