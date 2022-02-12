@@ -19,12 +19,13 @@ export const storeToken = (token: string) => {
 };
 
 export const getToken = () => {
-    // eslint-disable-next-line no-console
-    console.log(window);
-
     if (typeof window === 'undefined') {
         return null;
     }
+
+    // eslint-disable-next-line no-console
+    console.log(window);
+
     window.localStorage.getItem(TOKEN_LS_KEY);
 };
 
@@ -35,10 +36,12 @@ export const revokeToken = () => {
     window.localStorage.removeItem(TOKEN_LS_KEY);
 };
 
-// @ts-ignore
-window._wtf = {
-    getToken,
-};
+if (typeof window !== 'undefined') {
+    // @ts-ignore
+    window._wtf = {
+        getToken,
+    };
+}
 
 const noop = () => {};
 
