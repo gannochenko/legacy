@@ -40,6 +40,9 @@ const useAuth = () => {
     const token = getToken();
     const hasToken = !!token;
 
+    console.log(token);
+    console.log(hasToken);
+
     const { isSuccess, data: userQueryData } = useQuery(
         ['userData', token],
         // @ts-ignore

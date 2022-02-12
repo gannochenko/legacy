@@ -41,6 +41,8 @@ export const getUser = async ({
     queryKey: string[];
 }): Promise<GetUserOutputType> => {
     const token = queryKey[1];
+    console.log('running getUser');
+
     return fetch(`${AUTH_URL}${API_ENV}/user`, {
         method: 'POST',
         body: JSON.stringify({
