@@ -1,5 +1,3 @@
-import { normaliseUrl } from '../util/normaliseUrl';
-
 type JoinInputType = {
     token: string;
     email: string;
@@ -27,8 +25,13 @@ type GetUserOutputType = {
 const AUTH_URL = process.env.AUTH_URL;
 const API_ENV = process.env.API_ENV;
 
+console.log(AUTH_URL);
+console.log(API_ENV);
+console.log(`${AUTH_URL}/${API_ENV}/auth/join`);
+console.log(`${AUTH_URL}${API_ENV}/auth/join`);
+
 export const join = async (data: JoinInputType) => {
-    return fetch(normaliseUrl(`${AUTH_URL}/${API_ENV}/auth/join`), {
+    return fetch(`${AUTH_URL}${API_ENV}/auth/join`, {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
@@ -43,7 +46,7 @@ export const getUser = async ({
     queryKey: string[];
 }): Promise<GetUserOutputType> => {
     const token = queryKey[1];
-    return fetch(normaliseUrl(`${AUTH_URL}/${API_ENV}/user`), {
+    return fetch(`${AUTH_URL}${API_ENV}/user`, {
         method: 'POST',
         body: JSON.stringify({
             token,
