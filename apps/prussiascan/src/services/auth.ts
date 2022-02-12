@@ -25,11 +25,6 @@ type GetUserOutputType = {
 const AUTH_URL = process.env.AUTH_URL;
 const API_ENV = process.env.API_ENV;
 
-console.log(AUTH_URL);
-console.log(API_ENV);
-console.log(`${AUTH_URL}/${API_ENV}/auth/join`);
-console.log(`${AUTH_URL}${API_ENV}/auth/join`);
-
 export const join = async (data: JoinInputType) => {
     return fetch(`${AUTH_URL}${API_ENV}/auth/join`, {
         method: 'POST',

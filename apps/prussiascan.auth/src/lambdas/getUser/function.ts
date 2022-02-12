@@ -72,6 +72,7 @@ export const fn = async ({ token }: GetUserArgsType) => {
             };
         }
     } catch (error) {
+        console.error(error);
         result.errors.push({
             message: 'Token expired.',
         });
