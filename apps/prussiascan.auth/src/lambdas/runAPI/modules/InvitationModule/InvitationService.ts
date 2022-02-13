@@ -37,7 +37,7 @@ export class InvitationService {
     ) {}
 
     public async invite(item: InviteInputType): Promise<InviteOutputType> {
-        const { email, role } = item;
+        const { email, roles } = item;
 
         // check if already invited
         const invitation = await this.getInvitation(email);
@@ -50,7 +50,7 @@ export class InvitationService {
         const dynamodbItem = {
             email,
             token,
-            role: role ?? '',
+            roles: roles ?? [],
             createdAt: new Date().toISOString(),
         };
 
@@ -74,7 +74,7 @@ export class InvitationService {
             throw new HttpException('You were not invited', 400);
         }
 
-        const { token: storedToken, role } = invitation?.Item;
+        const { token: storedToken, roles } = invitation?.Item;
 
         let userId = '';
         const user = await this.userService.getByEmail(email);
@@ -89,7 +89,7 @@ export class InvitationService {
             // create and authenticate
             const { data: newUser } = await this.userService.create({
                 email,
-                roles: role ? [role] : [],
+                roles: roles ?? [],
             });
             userId = newUser.id;
         }
@@ -123,11 +123,13 @@ export class InvitationService {
     }
 
     private async sendInvitationMessage(email: string, token: string) {
+        const protocol = __DEV__ ? 'http' : 'https';
+
         return sendMessage(
             email,
             'New message from "Архитектурный Архив"',
             compiledFunction({
-                invitationLink: `https://${
+                invitationLink: `${protocol}://${
                     process.env.WEBAPP_DOMAIN
                 }/join?token=${encodeURIComponent(
                     token,

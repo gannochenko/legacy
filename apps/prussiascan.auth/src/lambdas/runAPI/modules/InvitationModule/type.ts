@@ -2,7 +2,7 @@ import { ServiceResponseType } from '../../type';
 
 export type InviteInputType = {
     email: string;
-    role: string;
+    roles: string[];
 };
 
 export type InviteOutputType = ServiceResponseType<{}>;

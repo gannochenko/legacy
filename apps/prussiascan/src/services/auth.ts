@@ -35,7 +35,7 @@ export const join = async (data: JoinInputType) => {
     }).then((result) => result.json());
 };
 
-export const getUser = async ({
+export const getUserByToken = async ({
     queryKey,
 }: {
     queryKey: string[];

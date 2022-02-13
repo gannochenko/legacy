@@ -1,12 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { createContainer } from 'unstated-next';
 import { useQuery } from 'react-query';
-import { getUser } from '../services/auth';
-
-type UserType = {
-    id: string;
-    roles: string[];
-};
+import { getUserByToken } from '../services/auth';
+import { UserRoleEnum, UserType } from '../services/user';
 
 const TOKEN_LS_KEY = 'prussiascan:token';
 
@@ -44,7 +40,7 @@ const useAuth = () => {
     const { isSuccess, data: userQueryData } = useQuery(
         ['userData', token],
         // @ts-ignore
-        getUser,
+        getUserByToken,
         {
             enabled: hasToken,
             refetchOnMount: false,
@@ -90,6 +86,9 @@ const useAuth = () => {
         signIn: noop,
         setToken,
         isAuthenticated: !!user?.id,
+        isEditor:
+            userRoles.includes(UserRoleEnum.contributor) ||
+            userRoles.includes(UserRoleEnum.admin),
     };
 };
 
