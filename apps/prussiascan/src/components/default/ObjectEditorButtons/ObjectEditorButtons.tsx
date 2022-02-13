@@ -8,7 +8,13 @@ import { Button } from '@mui/material';
 export const ObjectEditorButtons: FC<ObjectEditorButtonsPropsType> = (
     props,
 ) => {
-    const { rootProps, visible } = useObjectEditorButtons(props);
+    const {
+        rootProps,
+        visible,
+        editModeToggleButtonProps,
+        objectEditorContainerProps,
+        portal,
+    } = useObjectEditorButtons(props);
 
     if (!visible) {
         return null;
@@ -16,7 +22,11 @@ export const ObjectEditorButtons: FC<ObjectEditorButtonsPropsType> = (
 
     return (
         <ObjectEditorButtonsRoot {...rootProps}>
-            <Button variant="contained">Режим редактирования</Button>
+            <Button {...editModeToggleButtonProps} variant="contained">
+                Режим редактирования
+            </Button>
+            {portal}
+            <div key="editor-here" {...objectEditorContainerProps} />
         </ObjectEditorButtonsRoot>
     );
 };
