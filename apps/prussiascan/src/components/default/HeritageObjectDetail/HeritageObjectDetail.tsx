@@ -13,6 +13,7 @@ import {
     HeritageObjectDetailLayout,
     HeritageObjectDetailLayoutCentral,
     HeritageObjectDetailLayoutSide,
+    EditorButtonsPlacement,
 } from './style';
 import { useHeritageObjectDetail } from './hooks/useHeritageObjectDetail';
 import { Container } from '../Container';
@@ -20,6 +21,7 @@ import { PageHeader } from '../PageHeader';
 import { Map } from '../Map';
 import { ImageGallery } from '../ImageGallery';
 import { TagCloud } from '../TagCloud';
+import { ObjectEditorButtons } from '../ObjectEditorButtons';
 
 export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
     props,
@@ -115,6 +117,9 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
                         )}
                     </HeritageObjectDetailData>
                 </Container>
+                <EditorButtonsPlacement>
+                    <ObjectEditorButtons />
+                </EditorButtonsPlacement>
             </PageHeader>
             <Container>
                 <HeritageObjectDetailLayout>
