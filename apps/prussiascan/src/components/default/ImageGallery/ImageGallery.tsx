@@ -7,14 +7,21 @@ import {
     ImageGalleryRoot,
     ImageGalleryImageWrapper,
     ImageGalleryImage,
+    ImageGalleryAddButton,
 } from './style';
 import { useImageGallery } from './hooks/useImageGallery';
 import { lightBoxOptions } from '../../../util/lightBoxOptions';
 
 export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryPropsType>(
     function ImageGallery(props, ref) {
-        const { rootProps, images, getImageProps, getImageWrapperProps } =
-            useImageGallery(ref, props);
+        const {
+            rootProps,
+            images,
+            getImageProps,
+            getImageWrapperProps,
+            showAddButton,
+            getAddButtonProps,
+        } = useImageGallery(ref, props);
 
         return (
             <ImageGalleryRoot {...rootProps}>
@@ -37,11 +44,16 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryPropsType>(
                                 </Grid>
                             );
                         })}
+                        {showAddButton && (
+                            <Grid item md={4} sm={6} xs={12} key="placeholder">
+                                <ImageGalleryAddButton {...getAddButtonProps()}>
+                                    Добавить фотографию
+                                </ImageGalleryAddButton>
+                            </Grid>
+                        )}
                     </Grid>
                 </SRLWrapper>
             </ImageGalleryRoot>
         );
     },
 );
-
-ImageGallery.defaultProps = {};

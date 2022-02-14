@@ -137,6 +137,7 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
                     {...imageGalleryProps}
                     marginTop="5rem"
                     marginBottom="3rem"
+                    enableAddButton
                 />
             </Container>
             <Map {...mapProps} />
