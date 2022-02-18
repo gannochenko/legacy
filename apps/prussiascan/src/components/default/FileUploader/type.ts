@@ -10,3 +10,8 @@ export type FileUploaderPropsType = HTMLAttributes<HTMLDivElement> &
     MarginPropsType;
 
 export type FileUploaderRootPropsType = StylePropsType & FileUploaderPropsType;
+
+export type SelectedFileType = {
+    file: File;
+    preview: string;
+};

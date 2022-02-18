@@ -1,14 +1,32 @@
 import React, { FC } from 'react';
-import { Dialog, DialogTitle, DialogContent, Box } from '@mui/material';
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    Button,
+    LinearProgress,
+} from '@mui/material';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
-import { Typography } from '../Typography';
 import { FileUploaderPropsType } from './type';
-import { FileUploaderRoot, FileUploaderFiles } from './style';
+import {
+    FileUploaderRoot,
+    FileUploaderFiles,
+    FileUploaderActions,
+    FileUploaderActionButtons,
+    FileSelectorButton,
+} from './style';
 import { FileUploaderFile } from './FileUploaderFile';
 import { useFileUploader } from './hooks/useFileUploader';
 
 export const FileUploader: FC<FileUploaderPropsType> = (props) => {
-    const { rootProps, dialogProps } = useFileUploader(props);
+    const {
+        rootProps,
+        dialogProps,
+        fileInputProps,
+        fileSelectorProps,
+        selectedFiles,
+    } = useFileUploader(props);
 
     return (
         <FileUploaderRoot {...rootProps}>
@@ -16,29 +34,22 @@ export const FileUploader: FC<FileUploaderPropsType> = (props) => {
                 <DialogTitle>Загрузка фотографий</DialogTitle>
                 <DialogContent>
                     <FileUploaderFiles>
-                        <FileUploaderFile />
-                        <FileUploaderFile />
-                        <FileUploaderFile />
-                        <FileUploaderFile />
-                        <FileUploaderFile />
-                        <FileUploaderFile />
-                        <FileUploaderFile />
-                        <FileUploaderFile />
-                        <FileUploaderFile />
-                        <FileUploaderFile />
-                        <FileUploaderFile />
-                        <FileUploaderFile />
-                        <FileUploaderFile />
-                        <FileUploaderFile />
-                        <FileUploaderFile />
+                        {selectedFiles.map((file, index) => (
+                            <FileUploaderFile key={index} file={file} />
+                        ))}
+                        {/*<FileUploaderFile loading progress={30} />*/}
+                        {/*<FileUploaderFile loading />*/}
+                        <FileSelectorButton {...fileSelectorProps}>
+                            <AddCircleOutlineIcon fontSize="inherit" />
+                        </FileSelectorButton>
                     </FileUploaderFiles>
-                    {/*<Typography*/}
-                    {/*    id="modal-modal-title"*/}
-                    {/*    variant="h6"*/}
-                    {/*    component="h2"*/}
-                    {/*>*/}
-                    {/*    Text in a modal*/}
-                    {/*</Typography>*/}
+                    <FileUploaderActions>
+                        <LinearProgress variant="determinate" value={35} />
+                        <FileUploaderActionButtons>
+                            <Button variant="contained">Начать загрузку</Button>
+                        </FileUploaderActionButtons>
+                    </FileUploaderActions>
+                    <input {...fileInputProps} />
                 </DialogContent>
             </Dialog>
         </FileUploaderRoot>

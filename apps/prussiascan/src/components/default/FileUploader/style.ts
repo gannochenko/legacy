@@ -1,7 +1,14 @@
 import styled from '@emotion/styled';
-import { marginProps, muiSpacing, reset } from '@gannochenko/ui.emotion';
+import {
+    marginProps,
+    muiColor,
+    muiSpacing,
+    muiTypography,
+    reset,
+} from '@gannochenko/ui.emotion';
 
 import { FileUploaderRootPropsType } from './type';
+import { borderRadius, transition } from '../../../style';
 
 export const FileUploaderRoot = styled.div<FileUploaderRootPropsType>`
     ${reset};
@@ -12,4 +19,35 @@ export const FileUploaderFiles = styled.div`
     display: flex;
     flex-wrap: wrap;
     gap: ${muiSpacing(2)};
+    height: ${muiSpacing(62)};
+    overflow-y: auto;
+    overflow-x: hidden;
+`;
+
+export const FileUploaderActions = styled.div`
+    margin-top: ${muiSpacing(3)};
+`;
+
+export const FileUploaderActionButtons = styled.div`
+    margin-top: ${muiSpacing(2)};
+`;
+
+export const FileSelectorButton = styled.button`
+    width: ${muiSpacing(30)};
+    height: ${muiSpacing(30)};
+    padding: ${muiSpacing(2)};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    ${borderRadius()};
+    border: 1px solid ${muiColor('secondary.light')};
+    ${muiTypography('h1')};
+    color: ${muiColor('secondary.light')};
+    background-color: ${muiColor('background.default')};
+    &:hover {
+        color: ${muiColor('secondary.main')};
+        border-color: ${muiColor('secondary.main')};
+    }
+    ${transition({ color: true, 'border-color': true })};
 `;
