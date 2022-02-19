@@ -16,7 +16,7 @@ import {
     GetUploadURLDto,
 } from './ObjectsDTO';
 import { Roles } from '../../../utils/Roles';
-import { UserRoleEnum } from '../../../entities/UserEntity/enums';
+import { UserRoleEnum } from '../../../entities';
 import { ObjectUploadsService } from '../ObjectUploadsService';
 
 @Controller('objects')

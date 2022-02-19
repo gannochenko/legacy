@@ -30,6 +30,8 @@ export const useFileUploader = <E extends HTMLDivElement>({
         }
     }, [fileInputRef.current]);
 
+    const onStartButtonProps = useCallback(() => {}, []);
+
     return {
         rootProps: {
             ...props, // rest props go to the root node, as before
@@ -51,5 +53,8 @@ export const useFileUploader = <E extends HTMLDivElement>({
             onClick: onFileSelectorClick,
         },
         selectedFiles,
+        startButtonProps: {
+            onClick: onStartButtonProps,
+        },
     };
 };

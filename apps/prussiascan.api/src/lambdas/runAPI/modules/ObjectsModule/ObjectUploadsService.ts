@@ -34,33 +34,69 @@ export class ObjectUploadsService {
 
     async getSignedUploadURL({
         objectId,
-        fileMime,
+        fileQuota,
     }: GetSignedUploadURLInputType) {
+        if (!BUCKET_NAME) {
+            throw new InternalServerErrorException('BUCKET_NAME not defined');
+        }
+
         this.ensureBasketDefined();
         await this.ensureObjectExists(objectId);
-
-        const fileId = v4();
-
         const safeObjectId = this.sanitizeObjectId(objectId);
-        const fileExtension = fileMime === MimeType.png ? 'png' : 'jpg';
-        const key = this.makeFileKey(safeObjectId, fileId, fileExtension);
 
-        // Get signed URL from S3
-        const s3Params = {
-            Bucket: BUCKET_NAME,
-            Key: key,
-            Expires: URL_EXPIRATION_SECONDS,
-            ContentType: fileMime === MimeType.png ? 'image/png' : 'image/jpeg',
+        const promises: Promise<{
+            fileId: string;
+            fileExtension: string;
+            url: string;
+        }>[] = [];
+
+        const makeCall = async (
+            s3Params: Record<string, string | number>,
+            fileId: string,
+            fileExtension: string,
+        ) => {
+            return {
+                fileId,
+                fileExtension,
+                url: await s3.getSignedUrlPromise('putObject', s3Params),
+            };
         };
-        const url = await s3.getSignedUrlPromise('putObject', s3Params);
+
+        const quotaKeys = Object.keys(fileQuota) as MimeType[];
+        for (const fileMime of quotaKeys) {
+            const fileExtension = fileMime === MimeType.png ? 'png' : 'jpg';
+            const count = fileQuota[fileMime];
+
+            for (let i = 0; i < count; i++) {
+                const fileId = v4();
+                const fileKey = this.makeFileKey(
+                    safeObjectId,
+                    fileId,
+                    fileExtension,
+                );
+
+                const s3Params = {
+                    Bucket: BUCKET_NAME,
+                    Key: fileKey,
+                    Expires: URL_EXPIRATION_SECONDS,
+                    ContentType:
+                        fileMime === MimeType.png ? 'image/png' : 'image/jpeg',
+                };
+
+                promises.push(makeCall(s3Params, fileId, fileExtension));
+            }
+        }
 
         return {
-            data: {
-                url,
-                objectId: safeObjectId,
-                fileId,
-                fileMime: fileExtension,
-            },
+            data: (await Promise.all(promises)).map((item) => ({
+                type: 'objectUploadUrl',
+                attributes: {
+                    url: item.url,
+                    objectId: safeObjectId,
+                    fileId: item.fileId,
+                    fileMime: item.fileExtension,
+                },
+            })),
             aux: {},
         };
     }

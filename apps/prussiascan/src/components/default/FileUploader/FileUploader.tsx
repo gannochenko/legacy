@@ -26,6 +26,7 @@ export const FileUploader: FC<FileUploaderPropsType> = (props) => {
         fileInputProps,
         fileSelectorProps,
         selectedFiles,
+        startButtonProps,
     } = useFileUploader(props);
 
     return (
@@ -46,7 +47,9 @@ export const FileUploader: FC<FileUploaderPropsType> = (props) => {
                     <FileUploaderActions>
                         <LinearProgress variant="determinate" value={35} />
                         <FileUploaderActionButtons>
-                            <Button variant="contained">Начать загрузку</Button>
+                            <Button variant="contained" {...startButtonProps}>
+                                Начать загрузку
+                            </Button>
                         </FileUploaderActionButtons>
                     </FileUploaderActions>
                     <input {...fileInputProps} />
