@@ -6,8 +6,9 @@ export type FileUploaderPropsType = HTMLAttributes<HTMLDivElement> &
         open: boolean;
         onOpenChange: (newState: boolean) => void;
         // put your custom props here
-    }> &
-    MarginPropsType;
+    }> & {
+        objectId: string;
+    } & MarginPropsType;
 
 export type FileUploaderRootPropsType = StylePropsType & FileUploaderPropsType;
 
@@ -15,4 +16,14 @@ export type SelectedFileType = {
     file: File;
     preview: string;
     id: string;
+};
+
+export enum ProcessStages {
+    INITIAL,
+    GET_UPLOAD_URL,
+}
+
+export type ProcessType = {
+    serial: number;
+    stage: ProcessStages;
 };

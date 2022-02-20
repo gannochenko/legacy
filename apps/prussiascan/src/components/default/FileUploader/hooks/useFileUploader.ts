@@ -1,15 +1,18 @@
-import { useCallback, useRef, useState, DragEvent, useEffect } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Breakpoint } from '@mui/system';
 import { FileUploaderPropsType, SelectedFileType } from '../type';
 import { convertFileToBase64 } from '../util/convertFileToBase64';
 import { LinearProgressProps } from '@mui/material/LinearProgress/LinearProgress';
+import { useFileUploaderProcess } from './useFileUploaderProcess';
 
 export const useFileUploader = <E extends HTMLDivElement>({
     open,
     ...props
 }: FileUploaderPropsType) => {
-    const [showDragDropIndicator, setShowDragDropIndicator] = useState(false);
+    // const [showDragDropIndicator, setShowDragDropIndicator] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState<SelectedFileType[]>([]);
+
+    const { next } = useFileUploaderProcess(props, { files: selectedFiles });
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -51,8 +54,6 @@ export const useFileUploader = <E extends HTMLDivElement>({
             fileInputRef.current.click();
         }
     }, [fileInputRef.current]);
-
-    const onStartButtonProps = useCallback(() => {}, []);
 
     // const onFileListDrop = useCallback((event: DragEvent) => {
     //     event.preventDefault();
@@ -116,7 +117,7 @@ export const useFileUploader = <E extends HTMLDivElement>({
         selectedFiles,
         startButtonProps: {
             disabled: !selectedFiles.length,
-            onClick: onStartButtonProps,
+            onClick: next,
         },
         getFileProps: (file: SelectedFileType) => ({
             file,
@@ -133,7 +134,7 @@ export const useFileUploader = <E extends HTMLDivElement>({
             // onDragEnter: onFileListDragEnter,
             // onDragLeave: onFileListDragLeave,
         },
-        showDragDropIndicator,
+        showDragDropIndicator: false,
         progressProps: {
             variant: 'determinate' as LinearProgressProps['variant'],
             value: 0,

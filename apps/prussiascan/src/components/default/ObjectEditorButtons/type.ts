@@ -4,7 +4,9 @@ import { StylePropsType, MarginPropsType } from '@gannochenko/ui.emotion';
 export type ObjectEditorButtonsPropsType = HTMLAttributes<HTMLDivElement> &
     Partial<{
         // put your custom props here
-    }> &
-    MarginPropsType;
+    }> & {
+        objectId: string;
+    } & MarginPropsType;
 
-export type ObjectEditorButtonsRootPropsType = StylePropsType & ObjectEditorButtonsPropsType;
+export type ObjectEditorButtonsRootPropsType = StylePropsType &
+    HTMLAttributes<HTMLDivElement>;

@@ -44,7 +44,6 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
         materialProps,
         architects,
         architectsLabel,
-
         showNameDe,
         showLocation,
         showSummary,
@@ -55,6 +54,7 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
         showCondition,
         showRemarkable,
         showArchitects,
+        objectEditorButtonsProps,
     } = useHeritageObjectDetail(props);
 
     return (
@@ -118,7 +118,7 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
                     </HeritageObjectDetailData>
                 </Container>
                 <EditorButtonsPlacement>
-                    <ObjectEditorButtons />
+                    <ObjectEditorButtons {...objectEditorButtonsProps} />
                 </EditorButtonsPlacement>
             </PageHeader>
             <Container>

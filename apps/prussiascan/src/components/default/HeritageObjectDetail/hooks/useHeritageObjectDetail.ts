@@ -16,6 +16,7 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
     data,
     ...props
 }: HeritageObjectDetailPropsType) => {
+    const id = data?.id ?? '';
     const name = data?.name ?? '';
     const content = data?.content ?? '';
     const nameDe = data?.nameDe || '';
@@ -160,7 +161,6 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
         },
         architects,
         architectsLabel: architects.length > 1 ? 'Архитекторы' : 'Архитектор',
-
         showNameDe: !!nameDe,
         showLocation: !!locationDescription || !!locationAreaLabel,
         showSummary: true,
@@ -171,5 +171,8 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
         showCondition: !lost && !!conditionLabel,
         showRemarkable: !!data?.remarkable,
         showArchitects: !!architects.length,
+        objectEditorButtonsProps: {
+            objectId: id,
+        },
     };
 };

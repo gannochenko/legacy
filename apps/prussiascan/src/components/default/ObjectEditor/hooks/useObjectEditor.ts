@@ -1,12 +1,12 @@
-import ReactDOM from 'react-dom';
-import { createElement, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ObjectEditorPropsType } from '../type';
 import { eventBus } from '../../../../util/eventBus';
 import { EventsEnum } from '../../../../util/events';
 
 export const useObjectEditor = <E extends HTMLDivElement>({
-    ...props
-}: ObjectEditorPropsType) => {
+    objectId,
+}: // ...props
+ObjectEditorPropsType) => {
     const [fileUploaderOpen, setFileUploaderOpen] = useState(false);
 
     useEffect(() => {
@@ -45,6 +45,7 @@ export const useObjectEditor = <E extends HTMLDivElement>({
     return {
         fileUploaderProps: {
             open: fileUploaderOpen,
+            objectId,
         },
     };
 };

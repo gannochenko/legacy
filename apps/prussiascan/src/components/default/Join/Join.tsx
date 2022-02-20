@@ -9,5 +9,3 @@ export const Join: FC<JoinPropsType> = (props) => {
 
     return <JoinRoot {...rootProps}>Присоединяемся...</JoinRoot>;
 };
-
-Join.defaultProps = {};

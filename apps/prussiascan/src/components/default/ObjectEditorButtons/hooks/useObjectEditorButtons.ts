@@ -1,13 +1,17 @@
 import { ObjectEditorButtonsPropsType } from '../type';
 import { AuthState } from '../../../../states';
 import { createElement, FC, useCallback, useRef, useState } from 'react';
+import { ObjectEditorPropsType } from '../../ObjectEditor/type';
 
 export const useObjectEditorButtons = <E extends HTMLDivElement>({
+    objectId,
     ...props
 }: ObjectEditorButtonsPropsType) => {
     const { isEditor } = AuthState.useContainer();
     const containerRef = useRef<HTMLDivElement>(null);
-    const [Editor, setEditor] = useState<FC | null>(null);
+    const [Editor, setEditor] = useState<FC<ObjectEditorPropsType> | null>(
+        null,
+    );
 
     const onModeToggleButtonClick = useCallback(() => {
         import('../../ObjectEditor').then((data) => {
@@ -24,6 +28,8 @@ export const useObjectEditorButtons = <E extends HTMLDivElement>({
         },
         visible: isEditor,
         hasEditor: Editor !== null,
-        editor: Editor ? createElement(Editor, { key: 'editor' }) : null,
+        editor: Editor
+            ? createElement(Editor, { key: 'editor', objectId })
+            : null,
     };
 };
