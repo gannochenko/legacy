@@ -46,3 +46,5 @@ export type HeritageObjectType = {
     architects?: (keyof typeof architectsMap)[];
     version: number;
 };
+
+export type FileUploadQuota = Record<string, number>;

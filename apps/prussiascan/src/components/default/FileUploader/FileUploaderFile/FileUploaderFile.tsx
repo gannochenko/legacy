@@ -12,8 +12,12 @@ import {
 import { useFileUploaderFile } from './hooks/useFileUploaderFile';
 
 export const FileUploaderFile: FC<FileUploaderFilePropsType> = (props) => {
-    const { rootProps, showDeleteButton, showLoadingSpinner } =
-        useFileUploaderFile(props);
+    const {
+        rootProps,
+        showDeleteButton,
+        showLoadingSpinner,
+        deleteButtonProps,
+    } = useFileUploaderFile(props);
 
     return (
         <FileUploaderFileRoot {...rootProps}>
@@ -23,7 +27,10 @@ export const FileUploaderFile: FC<FileUploaderFilePropsType> = (props) => {
                 </FileUploaderFileSpinnerContainer>
             )}
             {showDeleteButton && (
-                <FileUploaderFileDeleteIcon className="FileUploaderFileRoot--DeleteIcon">
+                <FileUploaderFileDeleteIcon
+                    className="FileUploaderFileRoot--DeleteIcon"
+                    {...deleteButtonProps}
+                >
                     <RemoveCircleIcon />
                     <FileUploaderFileDeleteIconText>
                         Удалить файл

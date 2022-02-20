@@ -15,6 +15,7 @@ import {
     FileUploaderActions,
     FileUploaderActionButtons,
     FileSelectorButton,
+    DragDropZoneIndicator,
 } from './style';
 import { FileUploaderFile } from './FileUploaderFile';
 import { useFileUploader } from './hooks/useFileUploader';
@@ -27,6 +28,10 @@ export const FileUploader: FC<FileUploaderPropsType> = (props) => {
         fileSelectorProps,
         selectedFiles,
         startButtonProps,
+        getFileProps,
+        fileListProps,
+        showDragDropIndicator,
+        progressProps,
     } = useFileUploader(props);
 
     return (
@@ -34,18 +39,20 @@ export const FileUploader: FC<FileUploaderPropsType> = (props) => {
             <Dialog {...dialogProps}>
                 <DialogTitle>Загрузка фотографий</DialogTitle>
                 <DialogContent>
-                    <FileUploaderFiles>
-                        {selectedFiles.map((file, index) => (
-                            <FileUploaderFile key={index} file={file} />
+                    <FileUploaderFiles {...fileListProps}>
+                        {selectedFiles.map((file) => (
+                            <FileUploaderFile
+                                key={file.id}
+                                {...getFileProps(file)}
+                            />
                         ))}
-                        {/*<FileUploaderFile loading progress={30} />*/}
-                        {/*<FileUploaderFile loading />*/}
                         <FileSelectorButton {...fileSelectorProps}>
                             <AddCircleOutlineIcon fontSize="inherit" />
                         </FileSelectorButton>
+                        {showDragDropIndicator && <DragDropZoneIndicator />}
                     </FileUploaderFiles>
                     <FileUploaderActions>
-                        <LinearProgress variant="determinate" value={35} />
+                        <LinearProgress {...progressProps} />
                         <FileUploaderActionButtons>
                             <Button variant="contained" {...startButtonProps}>
                                 Начать загрузку

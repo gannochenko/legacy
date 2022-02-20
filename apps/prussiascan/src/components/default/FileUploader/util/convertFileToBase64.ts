@@ -1,12 +1,14 @@
 import { SelectedFileType } from '../type';
 
-export const convertFileToBase64 = (file: File): Promise<SelectedFileType> => {
+export const convertFileToBase64 = (
+    selectedFile: SelectedFileType,
+): Promise<SelectedFileType> => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(selectedFile.file);
         reader.onload = () => {
             const result = {
-                file,
+                ...selectedFile,
                 preview: reader.result?.toString() || '',
             };
             resolve(result);

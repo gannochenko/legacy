@@ -23,6 +23,7 @@ export const FileUploaderFileRoot = styled.div<FileUploaderFileRootPropsType>`
     cursor: pointer;
     ${borderRadius()};
     position: relative;
+    background-color: ${muiColor('grey.300')};
     ${({ filePreview }) => backgroundCover(filePreview)};
 
     &:hover {
@@ -32,13 +33,16 @@ export const FileUploaderFileRoot = styled.div<FileUploaderFileRootPropsType>`
     }
 `;
 
-export const FileUploaderFileDeleteIcon = styled.div`
+export const FileUploaderFileDeleteIcon = styled.button`
     color: ${muiColor('grey.600')};
     display: flex;
     flex-direction: column;
     align-items: center;
     opacity: 0;
     transition: opacity 200ms ease;
+    border: 0 none;
+    appearance: none;
+    cursor: pointer;
     background-color: ${muiColor('background.default')};
     padding: ${muiSpacing(2)};
     ${borderRadius()};

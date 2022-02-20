@@ -3,6 +3,7 @@ import { FileUploaderFilePropsType } from '../type';
 export const useFileUploaderFile = <E extends HTMLDivElement>({
     loading,
     progress,
+    onDeleteFileClick,
     file,
     ...props
 }: FileUploaderFilePropsType) => {
@@ -14,5 +15,8 @@ export const useFileUploaderFile = <E extends HTMLDivElement>({
         showDeleteButton: !loading,
         showLoadingSpinner: !!loading,
         getLoadingSpinnerProps: () => {},
+        deleteButtonProps: {
+            onClick: onDeleteFileClick,
+        },
     };
 };

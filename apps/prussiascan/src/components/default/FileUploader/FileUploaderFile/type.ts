@@ -7,6 +7,7 @@ export type FileUploaderFilePropsType = HTMLAttributes<HTMLDivElement> &
         loading: boolean;
         progress: number;
         file: SelectedFileType;
+        onDeleteFileClick: () => void;
         // put your custom props here
     }> &
     MarginPropsType;

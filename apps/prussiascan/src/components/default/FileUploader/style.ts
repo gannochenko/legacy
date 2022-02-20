@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import {
+    absoluteCover,
     marginProps,
     muiColor,
     muiSpacing,
@@ -19,9 +20,10 @@ export const FileUploaderFiles = styled.div`
     display: flex;
     flex-wrap: wrap;
     gap: ${muiSpacing(2)};
-    height: ${muiSpacing(62)};
+    max-height: ${muiSpacing(62)};
     overflow-y: auto;
     overflow-x: hidden;
+    position: relative;
 `;
 
 export const FileUploaderActions = styled.div`
@@ -41,13 +43,21 @@ export const FileSelectorButton = styled.button`
     align-items: center;
     cursor: pointer;
     ${borderRadius()};
-    border: 1px solid ${muiColor('secondary.light')};
+    border: 1px solid ${muiColor('primary.main')};
     ${muiTypography('h1')};
-    color: ${muiColor('secondary.light')};
+    color: ${muiColor('primary.main')};
     background-color: ${muiColor('background.default')};
     &:hover {
-        color: ${muiColor('secondary.main')};
-        border-color: ${muiColor('secondary.main')};
+        color: ${muiColor('primary.dark')};
+        border-color: ${muiColor('primary.dark')};
     }
     ${transition({ color: true, 'border-color': true })};
+`;
+
+export const DragDropZoneIndicator = styled.div`
+    ${absoluteCover()};
+    border: 1px solid ${muiColor('primary.main')};
+    background-color: ${muiColor('primary.light')};
+    opacity: 0.6;
+    ${borderRadius()};
 `;
