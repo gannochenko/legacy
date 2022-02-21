@@ -16,12 +16,14 @@ export const useFileUploader = <E extends HTMLDivElement>({
 }: FileUploaderPropsType) => {
     const { t } = useTranslation();
 
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const { enqueueSnackbar } = useSnackbar();
 
     // const [showDragDropIndicator, setShowDragDropIndicator] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState<SelectedFileType[]>([]);
 
-    const { next } = useFileUploaderProcess(props, { files: selectedFiles });
+    const { next, loading } = useFileUploaderProcess(props, {
+        files: selectedFiles,
+    });
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -32,10 +34,11 @@ export const useFileUploader = <E extends HTMLDivElement>({
             if (files) {
                 let fileArray = Array.from(files);
                 const fileLengthBefore = fileArray.length;
+                const fileLimit = Math.abs(FILE_LIMIT - selectedFiles.length);
 
                 fileArray = fileArray.slice(
                     0,
-                    Math.min(FILE_LIMIT, fileArray.length),
+                    Math.min(fileLimit, fileArray.length),
                 );
 
                 if (fileLengthBefore !== fileArray.length) {
@@ -153,14 +156,16 @@ export const useFileUploader = <E extends HTMLDivElement>({
         },
         fileSelectorProps: {
             onClick: onFileSelectorClick,
+            disabled: loading || selectedFiles.length >= FILE_LIMIT,
         },
         selectedFiles,
         startButtonProps: {
-            disabled: !selectedFiles.length,
+            disabled: loading || !selectedFiles.length,
             onClick: next,
         },
         getFileProps: (file: SelectedFileType) => ({
             file,
+            loading,
             onDeleteFileClick: () => {
                 setSelectedFiles((prevState) => {
                     return prevState.filter(

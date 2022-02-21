@@ -61,5 +61,6 @@ export const useFileUploaderProcess = (
                 serial: prevState.serial + 1,
                 stage: ProcessStages.GET_UPLOAD_URL,
             })),
+        loading: process.stage !== ProcessStages.INITIAL,
     };
 };

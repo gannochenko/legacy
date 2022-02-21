@@ -51,6 +51,11 @@ export const FileSelectorButton = styled.button`
         color: ${muiColor('primary.dark')};
         border-color: ${muiColor('primary.dark')};
     }
+    &:disabled {
+        color: ${muiColor('grey.400')};
+        border-color: ${muiColor('grey.400')};
+        cursor: default;
+    }
     ${transition({ color: true, 'border-color': true })};
 `;
 
