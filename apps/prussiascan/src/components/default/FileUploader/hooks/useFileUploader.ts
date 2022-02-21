@@ -1,14 +1,23 @@
 import { useCallback, useRef, useState } from 'react';
 import { Breakpoint } from '@mui/system';
+import { LinearProgressProps } from '@mui/material/LinearProgress/LinearProgress';
+import { useSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
+
 import { FileUploaderPropsType, SelectedFileType } from '../type';
 import { convertFileToBase64 } from '../util/convertFileToBase64';
-import { LinearProgressProps } from '@mui/material/LinearProgress/LinearProgress';
 import { useFileUploaderProcess } from './useFileUploaderProcess';
+
+const FILE_LIMIT = 10;
 
 export const useFileUploader = <E extends HTMLDivElement>({
     open,
     ...props
 }: FileUploaderPropsType) => {
+    const { t } = useTranslation();
+
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
     // const [showDragDropIndicator, setShowDragDropIndicator] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState<SelectedFileType[]>([]);
 
@@ -16,39 +25,70 @@ export const useFileUploader = <E extends HTMLDivElement>({
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const onFileInputChange = useCallback((event) => {
-        const target = event.target as HTMLInputElement;
-        const files = target.files;
-        if (files) {
-            const selectedFiles = Array.from(files).map((file) => ({
-                file,
-                id: Math.round(Math.random() * 100000).toString(),
-                preview: '',
-            }));
-            setSelectedFiles((prevState) => [...prevState, ...selectedFiles]);
+    const onFileInputChange = useCallback(
+        (event) => {
+            const target = event.target as HTMLInputElement;
+            const files = target.files;
+            if (files) {
+                let fileArray = Array.from(files);
+                const fileLengthBefore = fileArray.length;
 
-            (async () => {
-                const previews = (
-                    await Promise.all(
-                        selectedFiles.map((file) => convertFileToBase64(file)),
-                    )
-                ).reduce<Record<string, SelectedFileType>>((result, item) => {
-                    result[item.id] = item;
-                    return result;
-                }, {});
-
-                setSelectedFiles((prevState) =>
-                    prevState.map((item) => {
-                        if (item.id in previews) {
-                            item.preview = previews[item.id].preview;
-                        }
-
-                        return item;
-                    }),
+                fileArray = fileArray.slice(
+                    0,
+                    Math.min(FILE_LIMIT, fileArray.length),
                 );
-            })();
-        }
-    }, []);
+
+                if (fileLengthBefore !== fileArray.length) {
+                    enqueueSnackbar(t('FileUploader.maxFilesReached'), {
+                        autoHideDuration: 4000,
+                        variant: 'error',
+                    });
+                }
+
+                if (!fileArray.length) {
+                    return;
+                }
+
+                const selectedFilesLocal = fileArray.map((file) => ({
+                    file,
+                    id: Math.round(Math.random() * 100000).toString(),
+                    preview: '',
+                }));
+                setSelectedFiles((prevState) => [
+                    ...prevState,
+                    ...selectedFilesLocal,
+                ]);
+
+                (async () => {
+                    const previews = (
+                        await Promise.all(
+                            selectedFilesLocal.map((file) =>
+                                convertFileToBase64(file),
+                            ),
+                        )
+                    ).reduce<Record<string, SelectedFileType>>(
+                        (result, item) => {
+                            result[item.id] = item;
+                            return result;
+                        },
+                        {},
+                    );
+
+                    setSelectedFiles((prevState) =>
+                        prevState.map((item) => {
+                            if (item.id in previews) {
+                                item.preview = previews[item.id].preview;
+                            }
+
+                            return item;
+                        }),
+                    );
+                })();
+            }
+        },
+        [selectedFiles, enqueueSnackbar],
+    );
+
     const onFileSelectorClick = useCallback(() => {
         if (fileInputRef.current) {
             fileInputRef.current.click();

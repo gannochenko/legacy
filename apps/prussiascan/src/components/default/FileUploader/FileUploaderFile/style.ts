@@ -20,12 +20,10 @@ export const FileUploaderFileRoot = styled.div<FileUploaderFileRootPropsType>`
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
     ${borderRadius()};
     position: relative;
     background-color: ${muiColor('grey.300')};
     ${({ filePreview }) => backgroundCover(filePreview)};
-
     &:hover {
         .FileUploaderFileRoot--DeleteIcon {
             opacity: 1;

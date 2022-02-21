@@ -27,3 +27,8 @@ export type ProcessType = {
     serial: number;
     stage: ProcessStages;
 };
+
+export enum MimeType {
+    jpg = 'jpg',
+    png = 'png',
+}

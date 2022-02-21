@@ -1,5 +1,6 @@
 import {
     FileUploaderPropsType,
+    MimeType,
     ProcessStages,
     ProcessType,
     SelectedFileType,
@@ -10,6 +11,27 @@ import { getUploadUrls } from '../../../../services/HeritageObject/heritageObjec
 
 const getProgress = () => {
     return 0;
+};
+
+const makeFileQuota = (files: SelectedFileType[]) => {
+    const result: Record<string, number> = {};
+
+    files.forEach(({ file }) => {
+        const fileName = file.name.toUpperCase();
+        let mime = '';
+        if (fileName.endsWith('.JPG') || fileName.endsWith('.JPEG')) {
+            mime = MimeType.jpg;
+        }
+        if (fileName.endsWith('.PNG')) {
+            mime = MimeType.png;
+        }
+
+        if (mime) {
+            result[mime] = result[mime] ? result[mime] + 1 : 1;
+        }
+    });
+
+    return result;
 };
 
 export const useFileUploaderProcess = (
@@ -23,7 +45,7 @@ export const useFileUploaderProcess = (
 
     const { data: uploadUrlsData, isSuccess: isUploadUrlsSuccess } = useQuery(
         `proc-${process.serial}`,
-        () => getUploadUrls(objectId, {}),
+        () => getUploadUrls(objectId, makeFileQuota(files)),
         {
             enabled: process.stage === ProcessStages.GET_UPLOAD_URL,
         },
