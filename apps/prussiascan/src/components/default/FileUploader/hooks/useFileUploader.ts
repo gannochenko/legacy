@@ -21,7 +21,7 @@ export const useFileUploader = <E extends HTMLDivElement>({
     // const [showDragDropIndicator, setShowDragDropIndicator] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState<SelectedFileType[]>([]);
 
-    const { next, loading } = useFileUploaderProcess(props, {
+    const { next, loading, progress } = useFileUploaderProcess(props, {
         files: selectedFiles,
     });
 
@@ -182,7 +182,8 @@ export const useFileUploader = <E extends HTMLDivElement>({
         showDragDropIndicator: false,
         progressProps: {
             variant: 'determinate' as LinearProgressProps['variant'],
-            value: 0,
+            value: progress,
         },
+        t,
     };
 };

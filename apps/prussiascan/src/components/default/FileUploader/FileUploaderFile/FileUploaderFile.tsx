@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import CircularProgress from '@mui/material/CircularProgress';
 
 import { FileUploaderFilePropsType } from './type';
 import {
@@ -10,6 +9,7 @@ import {
     FileUploaderFileSpinnerContainer,
 } from './style';
 import { useFileUploaderFile } from './hooks/useFileUploaderFile';
+import { CircularProgress } from '@mui/material';
 
 export const FileUploaderFile: FC<FileUploaderFilePropsType> = (props) => {
     const {
@@ -17,13 +17,17 @@ export const FileUploaderFile: FC<FileUploaderFilePropsType> = (props) => {
         showDeleteButton,
         showLoadingSpinner,
         deleteButtonProps,
+        getSpinnerProps,
     } = useFileUploaderFile(props);
 
     return (
         <FileUploaderFileRoot {...rootProps}>
             {showLoadingSpinner && (
                 <FileUploaderFileSpinnerContainer>
-                    <CircularProgress variant="determinate" value={35} />
+                    <CircularProgress
+                        variant="determinate"
+                        {...getSpinnerProps()}
+                    />
                 </FileUploaderFileSpinnerContainer>
             )}
             {showDeleteButton && (

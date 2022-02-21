@@ -32,12 +32,13 @@ export const FileUploader: FC<FileUploaderPropsType> = (props) => {
         fileListProps,
         showDragDropIndicator,
         progressProps,
+        t,
     } = useFileUploader(props);
 
     return (
         <FileUploaderRoot {...rootProps}>
             <Dialog {...dialogProps}>
-                <DialogTitle>Загрузка фотографий</DialogTitle>
+                <DialogTitle>{t('FileUploader.title')}</DialogTitle>
                 <DialogContent>
                     <FileUploaderFiles {...fileListProps}>
                         {selectedFiles.map((file) => (
@@ -55,7 +56,7 @@ export const FileUploader: FC<FileUploaderPropsType> = (props) => {
                         <LinearProgress {...progressProps} />
                         <FileUploaderActionButtons>
                             <Button variant="contained" {...startButtonProps}>
-                                Начать загрузку
+                                {t('FileUploader.uploadStart')}
                             </Button>
                         </FileUploaderActionButtons>
                     </FileUploaderActions>

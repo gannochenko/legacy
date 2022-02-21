@@ -21,6 +21,8 @@ export type SelectedFileType = {
 export enum ProcessStages {
     INITIAL,
     GET_UPLOAD_URL,
+    UPLOAD_IMAGES,
+    ATTACHING_IMAGES,
 }
 
 export type ProcessType = {

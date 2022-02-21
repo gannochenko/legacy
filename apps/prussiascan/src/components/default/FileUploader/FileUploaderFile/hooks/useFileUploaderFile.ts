@@ -18,5 +18,8 @@ export const useFileUploaderFile = <E extends HTMLDivElement>({
         deleteButtonProps: {
             onClick: onDeleteFileClick,
         },
+        getSpinnerProps: () => ({
+            value: progress ?? 0,
+        }),
     };
 };

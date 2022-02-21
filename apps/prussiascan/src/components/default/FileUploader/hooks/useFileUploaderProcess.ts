@@ -5,11 +5,21 @@ import {
     ProcessType,
     SelectedFileType,
 } from '../type';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { getUploadUrls } from '../../../../services/HeritageObject/heritageObject';
 
-const getProgress = () => {
+const getProgress = (process: ProcessType) => {
+    if (
+        process.stage === ProcessStages.INITIAL ||
+        process.stage === ProcessStages.GET_UPLOAD_URL
+    ) {
+        return 0;
+    }
+    if (process.stage === ProcessStages.UPLOAD_IMAGES) {
+        return 20;
+    }
+
     return 0;
 };
 
@@ -43,7 +53,11 @@ export const useFileUploaderProcess = (
         stage: ProcessStages.INITIAL,
     });
 
-    const { data: uploadUrlsData, isSuccess: isUploadUrlsSuccess } = useQuery(
+    const {
+        data: uploadUrlsData,
+        isSuccess: isUploadUrlsSuccess,
+        isLoading: isUploadUrlsLoading,
+    } = useQuery(
         `proc-${process.serial}`,
         () => getUploadUrls(objectId, makeFileQuota(files)),
         {
@@ -51,9 +65,18 @@ export const useFileUploaderProcess = (
         },
     );
 
+    useEffect(() => {
+        if (isUploadUrlsSuccess && !isUploadUrlsLoading) {
+            setProcess((prevState) => ({
+                ...prevState,
+                stage: ProcessStages.UPLOAD_IMAGES,
+            }));
+        }
+    }, [isUploadUrlsLoading, isUploadUrlsSuccess]);
+
     return {
         setProcess,
-        progress: getProgress(),
+        progress: getProgress(process),
         uploadUrls: uploadUrlsData,
         next: () =>
             setProcess((prevState) => ({
