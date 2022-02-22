@@ -14,8 +14,15 @@ export type FileUploaderRootPropsType = StylePropsType & FileUploaderPropsType;
 
 export type SelectedFileType = {
     file: File;
+    mime: MimeType | null;
     preview: string;
     id: string;
+};
+
+export type UploadElementType = SelectedFileType & {
+    objectId: string;
+    url: string;
+    fileId: string;
 };
 
 export enum ProcessStages {
@@ -34,3 +41,12 @@ export enum MimeType {
     jpg = 'jpg',
     png = 'png',
 }
+
+export type UploadURLListType = {
+    attributes: {
+        fileId: string;
+        fileMime: MimeType;
+        objectId: string;
+        url: string;
+    };
+};

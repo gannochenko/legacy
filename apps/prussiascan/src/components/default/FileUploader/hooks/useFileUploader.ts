@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { FileUploaderPropsType, SelectedFileType } from '../type';
 import { convertFileToBase64 } from '../util/convertFileToBase64';
 import { useFileUploaderProcess } from './useFileUploaderProcess';
+import { extractMime } from '../util/uploadHelpers';
 
 const FILE_LIMIT = 10;
 
@@ -54,6 +55,7 @@ export const useFileUploader = <E extends HTMLDivElement>({
 
                 const selectedFilesLocal = fileArray.map((file) => ({
                     file,
+                    mime: extractMime(file),
                     id: Math.round(Math.random() * 100000).toString(),
                     preview: '',
                 }));
