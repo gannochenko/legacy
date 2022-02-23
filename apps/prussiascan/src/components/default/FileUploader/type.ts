@@ -35,6 +35,7 @@ export enum ProcessStages {
 export type ProcessType = {
     serial: number;
     stage: ProcessStages;
+    fileProgress: Record<string, number>;
 };
 
 export enum MimeType {

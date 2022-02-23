@@ -4,7 +4,7 @@ import {
     ProcessType,
     SelectedFileType,
 } from '../type';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
 import {
     getUploadUrls,
@@ -26,36 +26,66 @@ const getProgress = (process: ProcessType) => {
     return 0;
 };
 
+const initialProcess: ProcessType = {
+    serial: 0,
+    stage: ProcessStages.INITIAL,
+    fileProgress: {},
+};
+
 export const useFileUploaderProcess = (
     { objectId }: FileUploaderPropsType,
     { files }: { files: SelectedFileType[] },
 ) => {
-    const [process, setProcess] = useState<ProcessType>({
-        serial: 0,
-        stage: ProcessStages.INITIAL,
-    });
+    const [process, setProcess] = useState<ProcessType>(initialProcess);
 
+    useEffect(() => {
+        setProcess(initialProcess);
+    }, [files]);
+
+    const fileQuota = useMemo(() => makeFileQuota(files), [files]);
     const {
         data: uploadUrlsData,
         isSuccess: isUploadUrlsSuccess,
         isLoading: isUploadUrlsLoading,
     } = useQuery(
-        `proc-${process.serial}`,
-        () => getUploadUrls(objectId, makeFileQuota(files)),
+        `proc-upload-urls-${process.serial}`,
+        () => getUploadUrls(objectId, fileQuota),
         {
+            cacheTime: 0,
             enabled: process.stage === ProcessStages.GET_UPLOAD_URL,
+            refetchOnWindowFocus: false,
+            refetchOnReconnect: false,
+            refetchOnMount: false,
         },
     );
 
+    const uploadList = useMemo(
+        () => makeUploadList(files, uploadUrlsData?.data),
+        [files, uploadUrlsData],
+    );
+    const onFileProgressChange = useCallback(
+        (fileId: string, progress: number) => {
+            // setProcess(prevState => {
+            //     return [];
+            // });
+            console.log(fileId, progress);
+        },
+        [],
+    );
     const {
         data: uploadsData,
         isSuccess: isUploadsSuccess,
         isLoading: isUploadsLoading,
     } = useQuery(
-        `proc-${process.serial}`,
-        () => uploadFiles(makeUploadList(files, uploadUrlsData?.data)),
+        `proc-upload-${process.serial}`,
+        () => uploadFiles(uploadList, onFileProgressChange),
         {
+            cacheTime: 0,
             enabled: process.stage === ProcessStages.UPLOAD_IMAGES,
+            retry: false,
+            refetchOnWindowFocus: false,
+            refetchOnReconnect: false,
+            refetchOnMount: false,
         },
     );
 
@@ -71,6 +101,7 @@ export const useFileUploaderProcess = (
     return {
         setProcess,
         progress: getProgress(process),
+        fileProgress: process.fileProgress,
         uploadUrls: uploadUrlsData,
         next: () =>
             setProcess((prevState) => ({
