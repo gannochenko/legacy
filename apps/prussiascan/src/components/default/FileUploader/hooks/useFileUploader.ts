@@ -22,9 +22,12 @@ export const useFileUploader = <E extends HTMLDivElement>({
     // const [showDragDropIndicator, setShowDragDropIndicator] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState<SelectedFileType[]>([]);
 
-    const { next, loading, progress } = useFileUploaderProcess(props, {
-        files: selectedFiles,
-    });
+    const { next, loading, progress, fileProgress } = useFileUploaderProcess(
+        props,
+        {
+            files: selectedFiles,
+        },
+    );
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -175,6 +178,7 @@ export const useFileUploader = <E extends HTMLDivElement>({
                     );
                 });
             },
+            progress: fileProgress[file.id] ?? 0,
         }),
         fileListProps: {
             // onDrop: onFileListDrop,

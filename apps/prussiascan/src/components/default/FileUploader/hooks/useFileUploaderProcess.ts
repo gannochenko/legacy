@@ -3,6 +3,7 @@ import {
     ProcessStages,
     ProcessType,
     SelectedFileType,
+    UploadElementType,
 } from '../type';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
@@ -12,18 +13,22 @@ import {
 } from '../../../../services/HeritageObject/heritageObject';
 import { makeFileQuota, makeUploadList } from '../util/uploadHelpers';
 
-const getProgress = (process: ProcessType) => {
+const getProgress = (files: SelectedFileType[], process: ProcessType) => {
+    let result = 0;
+
     if (
         process.stage === ProcessStages.INITIAL ||
         process.stage === ProcessStages.GET_UPLOAD_URL
     ) {
-        return 0;
+        return result;
     }
     if (process.stage === ProcessStages.UPLOAD_IMAGES) {
-        return 20;
+        result = 20;
+        // todo: add file upload progress percentage
+        // files
     }
 
-    return 0;
+    return result;
 };
 
 const initialProcess: ProcessType = {
@@ -64,11 +69,12 @@ export const useFileUploaderProcess = (
         [files, uploadUrlsData],
     );
     const onFileProgressChange = useCallback(
-        (fileId: string, progress: number) => {
-            // setProcess(prevState => {
-            //     return [];
-            // });
-            console.log(fileId, progress);
+        (upload: UploadElementType, progress: number) => {
+            setProcess((prevState) => {
+                const newState = { ...prevState };
+                newState.fileProgress[upload.id] = progress;
+                return newState;
+            });
         },
         [],
     );
@@ -100,7 +106,7 @@ export const useFileUploaderProcess = (
 
     return {
         setProcess,
-        progress: getProgress(process),
+        progress: getProgress(files, process),
         fileProgress: process.fileProgress,
         uploadUrls: uploadUrlsData,
         next: () =>

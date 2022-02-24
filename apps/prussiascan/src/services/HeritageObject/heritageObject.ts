@@ -20,13 +20,12 @@ export const getUploadUrls = async (
 
 export const uploadFiles = async (
     uploads: UploadElementType[],
-    onFileProgressChange: (fileId: string, progress: number) => void,
+    onFileProgressChange: (upload: UploadElementType, progress: number) => void,
 ) => {
     console.log('CALLLL!');
 
     const upload = uploads[0];
-    console.log(upload.url);
-    console.log(upload.fileId);
+    console.log(upload);
 
     await axios.request({
         method: 'put',
@@ -34,7 +33,7 @@ export const uploadFiles = async (
         data: upload.file,
         onUploadProgress: (p) => {
             onFileProgressChange(
-                upload.fileId,
+                upload,
                 Math.round((p.loaded / p.total) * 100),
             );
         },

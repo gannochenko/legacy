@@ -20,6 +20,7 @@ export type SelectedFileType = {
 };
 
 export type UploadElementType = SelectedFileType & {
+    id: string;
     objectId: string;
     url: string;
     fileId: string;
