@@ -2,7 +2,10 @@ import axios from 'axios';
 
 import { FileUploadQuota } from './type';
 import { fetchJSON } from '../../util/fetchJSON';
-import { UploadElementType } from '../../components/default/FileUploader/type';
+import {
+    SelectedFileType,
+    UploadElementType,
+} from '../../components/default/FileUploader/type';
 
 const API_URL = process.env.API_URL;
 const API_ENV = process.env.API_ENV;
@@ -11,7 +14,6 @@ export const getUploadUrls = async (
     objectId: string,
     fileQuota: FileUploadQuota,
 ) => {
-    console.log('GET UPLOAD URLS');
     return fetchJSON(`${API_URL}${API_ENV}/data/objects/getuploadurl`, {
         objectId,
         fileQuota,
@@ -22,27 +24,31 @@ export const uploadFiles = async (
     uploads: UploadElementType[],
     onFileProgressChange: (upload: UploadElementType, progress: number) => void,
 ) => {
-    console.log('CALLLL!');
+    return Promise.all(
+        uploads.map((upload) => {
+            return axios.request({
+                method: 'put',
+                url: upload.url,
+                data: upload.file,
+                onUploadProgress: (p) => {
+                    onFileProgressChange(
+                        upload,
+                        Math.round((p.loaded / p.total) * 100),
+                    );
+                },
+            });
+        }),
+    );
+};
 
-    const upload = uploads[0];
-    console.log(upload);
-
-    await axios.request({
-        method: 'put',
-        url: upload.url,
-        data: upload.file,
-        onUploadProgress: (p) => {
-            onFileProgressChange(
-                upload,
-                Math.round((p.loaded / p.total) * 100),
-            );
-        },
-    });
-
-    // return fetchJSON(`${API_URL}${API_ENV}/data/objects/getuploadurl`, {
-    //     objectId,
-    //     fileQuota,
-    // });
-
-    return [];
+export const attachFiles = async (uploads: UploadElementType[]) => {
+    for (const upload of uploads) {
+        await fetchJSON(`${API_URL}${API_ENV}/data/objects/attachfile`, {
+            objectId: upload.objectId,
+            fileId: upload.fileId,
+            fileMime: upload.mime,
+            author: '',
+            code: '',
+        });
+    }
 };

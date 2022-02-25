@@ -31,6 +31,7 @@ export enum ProcessStages {
     GET_UPLOAD_URL,
     UPLOAD_IMAGES,
     ATTACHING_IMAGES,
+    DONE,
 }
 
 export type ProcessType = {

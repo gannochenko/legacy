@@ -8,6 +8,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
 import {
+    attachFiles,
     getUploadUrls,
     uploadFiles,
 } from '../../../../services/HeritageObject/heritageObject';
@@ -22,10 +23,28 @@ const getProgress = (files: SelectedFileType[], process: ProcessType) => {
     ) {
         return result;
     }
+
     if (process.stage === ProcessStages.UPLOAD_IMAGES) {
         result = 20;
-        // todo: add file upload progress percentage
-        // files
+
+        const maximum = 70;
+        const part = maximum / files.length;
+        let sum = 0;
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const fileProgress = process.fileProgress[file.id] ?? 0;
+            sum += (part * fileProgress) / 100;
+        }
+
+        result += sum;
+    }
+
+    if (process.stage === ProcessStages.ATTACHING_IMAGES) {
+        result = 90;
+    }
+
+    if (process.stage === ProcessStages.DONE) {
+        result = 100;
     }
 
     return result;
@@ -78,16 +97,26 @@ export const useFileUploaderProcess = (
         },
         [],
     );
-    const {
-        data: uploadsData,
-        isSuccess: isUploadsSuccess,
-        isLoading: isUploadsLoading,
-    } = useQuery(
-        `proc-upload-${process.serial}`,
-        () => uploadFiles(uploadList, onFileProgressChange),
+    const { isSuccess: isUploadsSuccess, isLoading: isUploadsLoading } =
+        useQuery(
+            `proc-upload-${process.serial}`,
+            () => uploadFiles(uploadList, onFileProgressChange),
+            {
+                cacheTime: 0,
+                enabled: process.stage === ProcessStages.UPLOAD_IMAGES,
+                retry: false,
+                refetchOnWindowFocus: false,
+                refetchOnReconnect: false,
+                refetchOnMount: false,
+            },
+        );
+
+    const { isSuccess: isAttachSuccess, isLoading: isAttachLoading } = useQuery(
+        `proc-attach-${process.serial}`,
+        () => attachFiles(uploadList),
         {
             cacheTime: 0,
-            enabled: process.stage === ProcessStages.UPLOAD_IMAGES,
+            enabled: process.stage === ProcessStages.ATTACHING_IMAGES,
             retry: false,
             refetchOnWindowFocus: false,
             refetchOnReconnect: false,
@@ -102,7 +131,26 @@ export const useFileUploaderProcess = (
                 stage: ProcessStages.UPLOAD_IMAGES,
             }));
         }
-    }, [isUploadUrlsLoading, isUploadUrlsSuccess]);
+        if (isUploadsSuccess && !isUploadsLoading) {
+            setProcess((prevState) => ({
+                ...prevState,
+                stage: ProcessStages.ATTACHING_IMAGES,
+            }));
+        }
+        if (isAttachSuccess && !isAttachLoading) {
+            setProcess((prevState) => ({
+                ...prevState,
+                stage: ProcessStages.DONE,
+            }));
+        }
+    }, [
+        isUploadUrlsLoading,
+        isUploadUrlsSuccess,
+        isUploadsSuccess,
+        isUploadsLoading,
+        isAttachSuccess,
+        isAttachLoading,
+    ]);
 
     return {
         setProcess,
