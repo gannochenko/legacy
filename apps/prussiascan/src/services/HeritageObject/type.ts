@@ -48,3 +48,8 @@ export type HeritageObjectType = {
 };
 
 export type FileUploadQuota = Record<string, number>;
+
+export enum MimeType {
+    jpg = 'jpg',
+    png = 'png',
+}

@@ -1,10 +1,13 @@
+import { createElement, FC, useCallback, useRef, useState } from 'react';
+
 import { ObjectEditorButtonsPropsType } from '../type';
 import { AuthState } from '../../../../states';
-import { createElement, FC, useCallback, useRef, useState } from 'react';
 import { ObjectEditorPropsType } from '../../ObjectEditor/type';
 
 export const useObjectEditorButtons = <E extends HTMLDivElement>({
     objectId,
+    data,
+    onDataUpdate,
     ...props
 }: ObjectEditorButtonsPropsType) => {
     const { isEditor } = AuthState.useContainer();
@@ -28,8 +31,14 @@ export const useObjectEditorButtons = <E extends HTMLDivElement>({
         },
         visible: isEditor,
         hasEditor: Editor !== null,
-        editor: Editor
-            ? createElement(Editor, { key: 'editor', objectId })
-            : null,
+        editor:
+            Editor && objectId && data && onDataUpdate
+                ? createElement(Editor, {
+                      key: 'editor',
+                      objectId,
+                      data,
+                      onDataUpdate,
+                  })
+                : null,
     };
 };

@@ -1,14 +1,16 @@
 import { HTMLAttributes } from 'react';
 import { StylePropsType, MarginPropsType } from '@gannochenko/ui.emotion';
+import { ObjectEditorPropsGenericType } from '../type';
 
 export type FileUploaderPropsType = HTMLAttributes<HTMLDivElement> &
     Partial<{
         open: boolean;
         onOpenChange: (newState: boolean) => void;
+        onUploadComplete: () => void;
         // put your custom props here
-    }> & {
-        objectId: string;
-    } & MarginPropsType;
+    }> &
+    Pick<ObjectEditorPropsGenericType, 'objectId'> &
+    MarginPropsType;
 
 export type FileUploaderRootPropsType = StylePropsType & FileUploaderPropsType;
 

@@ -5,8 +5,9 @@ import { EventsEnum } from '../../../../util/events';
 
 export const useObjectEditor = <E extends HTMLDivElement>({
     objectId,
-}: // ...props
-ObjectEditorPropsType) => {
+    data,
+    onDataUpdate,
+}: ObjectEditorPropsType) => {
     const [fileUploaderOpen, setFileUploaderOpen] = useState(false);
 
     useEffect(() => {
@@ -17,6 +18,7 @@ ObjectEditorPropsType) => {
     }, []);
 
     const onAddPhoto = useCallback(() => {
+        console.log('onAddPhoto');
         setFileUploaderOpen((prevState) => !prevState);
     }, []);
 
@@ -34,18 +36,23 @@ ObjectEditorPropsType) => {
         };
     }, []);
 
-    // const portal =
-    //     containerRef.current && Editor
-    //         ? ReactDOM.createPortal(
-    //             [createElement(Editor, { key: 'editor' })],
-    //             containerRef.current,
-    //         )
-    //         : null;
-
     return {
         fileUploaderProps: {
             open: fileUploaderOpen,
+            onOpenChange: () => setFileUploaderOpen(false),
+            onUploadComplete: () => {
+                console.log('UPLOADED!');
+                setFileUploaderOpen(false);
+            },
             objectId,
         },
     };
 };
+
+// const portal =
+//     containerRef.current && Editor
+//         ? ReactDOM.createPortal(
+//             [createElement(Editor, { key: 'editor' })],
+//             containerRef.current,
+//         )
+//         : null;

@@ -173,6 +173,10 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
         showArchitects: !!architects.length,
         objectEditorButtonsProps: {
             objectId: id,
+            data,
+            onDataUpdate: () => {
+                console.log('UPDATE!');
+            },
         },
     };
 };

@@ -10,7 +10,7 @@ type ImageDataType = {
     url: string;
 };
 
-type HeritageObjectDetailType = HeritageObjectType & {
+export type HeritageObjectDetailType = HeritageObjectType & {
     previewPhotoImage?: ImageDataType;
     headerPhotoImage?: ImageDataType;
     photoImages?: ImageDataType[];

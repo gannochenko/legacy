@@ -13,21 +13,20 @@ const FILE_LIMIT = 10;
 
 export const useFileUploader = <E extends HTMLDivElement>({
     open,
+    onOpenChange,
+    onUploadComplete,
     ...props
 }: FileUploaderPropsType) => {
     const { t } = useTranslation();
 
     const { enqueueSnackbar } = useSnackbar();
-
-    // const [showDragDropIndicator, setShowDragDropIndicator] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState<SelectedFileType[]>([]);
 
-    const { next, loading, progress, fileProgress } = useFileUploaderProcess(
-        props,
-        {
+    const { startUpload, loading, progress, fileProgress } =
+        useFileUploaderProcess(props, {
             files: selectedFiles,
-        },
-    );
+            onFinish: () => onUploadComplete?.(),
+        });
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -103,51 +102,13 @@ export const useFileUploader = <E extends HTMLDivElement>({
         }
     }, [fileInputRef.current]);
 
-    // const onFileListDrop = useCallback((event: DragEvent) => {
-    //     event.preventDefault();
-    //
-    //     if (event.dataTransfer.items) {
-    //         for (let i = 0; i < event.dataTransfer.items.length; i++) {
-    //             if (event.dataTransfer.items[i].kind === 'file') {
-    //                 const file = event.dataTransfer.items[i].getAsFile()!;
-    //                 console.log('... file[' + i + '].name = ' + file.name);
-    //             }
-    //         }
-    //     } else {
-    //         // Use DataTransfer interface to access the file(s)
-    //         for (let i = 0; i < event.dataTransfer.files.length; i++) {
-    //             console.log(
-    //                 '... file[' +
-    //                     i +
-    //                     '].name = ' +
-    //                     event.dataTransfer.files[i].name,
-    //             );
-    //         }
-    //     }
-    // }, []);
-
-    // useEffect(() => {
-    //     window.addEventListener('drop', (event) => {
-    //         event.preventDefault();
-    //         console.log('DROP!');
-    //     });
-    // }, []);
-
-    // const onFileListDragEnter = useCallback(() => {
-    //     setShowDragDropIndicator(true);
-    // }, []);
-    //
-    // const onFileListDragLeave = useCallback(() => {
-    //     setShowDragDropIndicator(false);
-    // }, []);
-
     return {
         rootProps: {
             ...props, // rest props go to the root node, as before
         },
         dialogProps: {
             open: !!open,
-            onClose: () => {},
+            onClose: () => onOpenChange?.(false),
             maxWidth: 'lg' as Breakpoint,
             fullWidth: true,
         },
@@ -166,7 +127,7 @@ export const useFileUploader = <E extends HTMLDivElement>({
         selectedFiles,
         startButtonProps: {
             disabled: loading || !selectedFiles.length,
-            onClick: next,
+            onClick: startUpload,
         },
         getFileProps: (file: SelectedFileType) => ({
             file,

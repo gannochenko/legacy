@@ -1,3 +1,6 @@
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useQuery } from 'react-query';
+
 import {
     FileUploaderPropsType,
     ProcessStages,
@@ -5,8 +8,6 @@ import {
     SelectedFileType,
     UploadElementType,
 } from '../type';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useQuery } from 'react-query';
 import {
     attachFiles,
     getUploadUrls,
@@ -56,9 +57,16 @@ const initialProcess: ProcessType = {
     fileProgress: {},
 };
 
+const queryParams = {
+    cacheTime: 0,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
+};
+
 export const useFileUploaderProcess = (
     { objectId }: FileUploaderPropsType,
-    { files }: { files: SelectedFileType[] },
+    { files, onFinish }: { files: SelectedFileType[]; onFinish: () => void },
 ) => {
     const [process, setProcess] = useState<ProcessType>(initialProcess);
 
@@ -73,13 +81,11 @@ export const useFileUploaderProcess = (
         isLoading: isUploadUrlsLoading,
     } = useQuery(
         `proc-upload-urls-${process.serial}`,
-        () => getUploadUrls(objectId, fileQuota),
+        () => getUploadUrls(objectId!, fileQuota),
         {
-            cacheTime: 0,
-            enabled: process.stage === ProcessStages.GET_UPLOAD_URL,
-            refetchOnWindowFocus: false,
-            refetchOnReconnect: false,
-            refetchOnMount: false,
+            ...queryParams,
+            enabled:
+                !!objectId && process.stage === ProcessStages.GET_UPLOAD_URL,
         },
     );
 
@@ -102,12 +108,8 @@ export const useFileUploaderProcess = (
             `proc-upload-${process.serial}`,
             () => uploadFiles(uploadList, onFileProgressChange),
             {
-                cacheTime: 0,
+                ...queryParams,
                 enabled: process.stage === ProcessStages.UPLOAD_IMAGES,
-                retry: false,
-                refetchOnWindowFocus: false,
-                refetchOnReconnect: false,
-                refetchOnMount: false,
             },
         );
 
@@ -115,12 +117,8 @@ export const useFileUploaderProcess = (
         `proc-attach-${process.serial}`,
         () => attachFiles(uploadList),
         {
-            cacheTime: 0,
+            ...queryParams,
             enabled: process.stage === ProcessStages.ATTACHING_IMAGES,
-            retry: false,
-            refetchOnWindowFocus: false,
-            refetchOnReconnect: false,
-            refetchOnMount: false,
         },
     );
 
@@ -152,12 +150,18 @@ export const useFileUploaderProcess = (
         isAttachLoading,
     ]);
 
+    useEffect(() => {
+        if (process.stage === ProcessStages.DONE) {
+            onFinish();
+        }
+    }, [process, onFinish]);
+
     return {
         setProcess,
         progress: getProgress(files, process),
         fileProgress: process.fileProgress,
         uploadUrls: uploadUrlsData,
-        next: () =>
+        startUpload: () =>
             setProcess((prevState) => ({
                 ...prevState,
                 serial: prevState.serial + 1,

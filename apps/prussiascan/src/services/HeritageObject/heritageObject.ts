@@ -1,11 +1,8 @@
 import axios from 'axios';
 
-import { FileUploadQuota } from './type';
+import { FileUploadQuota, MimeType } from './type';
 import { fetchJSON } from '../../util/fetchJSON';
-import {
-    SelectedFileType,
-    UploadElementType,
-} from '../../components/default/FileUploader/type';
+import { UploadElementType } from '../../components/default/FileUploader/type';
 
 const API_URL = process.env.API_URL;
 const API_ENV = process.env.API_ENV;
@@ -20,6 +17,18 @@ export const getUploadUrls = async (
     });
 };
 
+const getContentType = (mime: MimeType | null) => {
+    if (!mime) {
+        return 'text/octet-stream';
+    }
+
+    if (mime === MimeType.jpg) {
+        return 'image/jpeg';
+    }
+
+    return 'image/png';
+};
+
 export const uploadFiles = async (
     uploads: UploadElementType[],
     onFileProgressChange: (upload: UploadElementType, progress: number) => void,
@@ -30,6 +39,7 @@ export const uploadFiles = async (
                 method: 'put',
                 url: upload.url,
                 data: upload.file,
+                headers: { 'Content-Type': getContentType(upload.mime) },
                 onUploadProgress: (p) => {
                     onFileProgressChange(
                         upload,

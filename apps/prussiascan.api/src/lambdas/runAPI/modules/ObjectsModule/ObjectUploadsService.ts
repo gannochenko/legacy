@@ -119,7 +119,7 @@ export class ObjectUploadsService {
             'photos',
         ]);
 
-        if (await this.isImageAlreadyAttached(item.photos, fileId, code)) {
+        if (this.isImageAlreadyAttached(item.photos, fileId)) {
             throw new BadRequestException('File was already attached');
         }
 
@@ -165,16 +165,10 @@ export class ObjectUploadsService {
     private isImageAlreadyAttached(
         photos: ObjectPhotoEntity[],
         fileId: string,
-        code: string,
     ) {
         let result = false;
         photos.forEach((photo) => {
             if (result) {
-                return;
-            }
-
-            if (photo.code === code) {
-                result = true;
                 return;
             }
 
