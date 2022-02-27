@@ -25,7 +25,10 @@ export const useFileUploader = <E extends HTMLDivElement>({
     const { startUpload, loading, progress, fileProgress } =
         useFileUploaderProcess(props, {
             files: selectedFiles,
-            onFinish: () => onUploadComplete?.(),
+            onFinish: () => {
+                onUploadComplete?.();
+                setSelectedFiles([]);
+            },
         });
 
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -108,7 +111,11 @@ export const useFileUploader = <E extends HTMLDivElement>({
         },
         dialogProps: {
             open: !!open,
-            onClose: () => onOpenChange?.(false),
+            onClose: () => {
+                if (!loading) {
+                    onOpenChange?.(false);
+                }
+            },
             maxWidth: 'lg' as Breakpoint,
             fullWidth: true,
         },
@@ -150,6 +157,10 @@ export const useFileUploader = <E extends HTMLDivElement>({
         progressProps: {
             variant: 'determinate' as LinearProgressProps['variant'],
             value: progress,
+        },
+        closeDialogButtonProps: {
+            onClick: () => onOpenChange?.(false),
+            disabled: loading,
         },
         t,
     };

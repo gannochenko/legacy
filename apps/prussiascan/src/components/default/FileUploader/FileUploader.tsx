@@ -7,6 +7,7 @@ import {
     LinearProgress,
 } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { FileUploaderPropsType } from './type';
 import {
@@ -16,6 +17,7 @@ import {
     FileUploaderActionButtons,
     FileSelectorButton,
     DragDropZoneIndicator,
+    CloseDialogButton,
 } from './style';
 import { FileUploaderFile } from './FileUploaderFile';
 import { useFileUploader } from './hooks/useFileUploader';
@@ -32,12 +34,20 @@ export const FileUploader: FC<FileUploaderPropsType> = (props) => {
         fileListProps,
         showDragDropIndicator,
         progressProps,
+        closeDialogButtonProps,
         t,
     } = useFileUploader(props);
 
     return (
         <FileUploaderRoot {...rootProps}>
             <Dialog {...dialogProps}>
+                <CloseDialogButton
+                    {...closeDialogButtonProps}
+                    variant="contained"
+                    color="primary"
+                >
+                    <CloseIcon />
+                </CloseDialogButton>
                 <DialogTitle>{t('FileUploader.title')}</DialogTitle>
                 <DialogContent>
                     <FileUploaderFiles {...fileListProps}>

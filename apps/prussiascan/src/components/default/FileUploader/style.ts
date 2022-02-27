@@ -10,6 +10,7 @@ import {
 
 import { FileUploaderRootPropsType } from './type';
 import { borderRadius, transition } from '../../../style';
+import { Button } from '@mui/material';
 
 export const FileUploaderRoot = styled.div<FileUploaderRootPropsType>`
     ${reset};
@@ -65,4 +66,15 @@ export const DragDropZoneIndicator = styled.div`
     background-color: ${muiColor('primary.light')};
     opacity: 0.6;
     ${borderRadius()};
+`;
+
+export const CloseDialogButton = styled(Button)`
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: ${muiSpacing(10)};
+    height: ${muiSpacing(10)};
+    padding: 0;
+    min-width: 0;
+    box-shadow: none !important;
 `;

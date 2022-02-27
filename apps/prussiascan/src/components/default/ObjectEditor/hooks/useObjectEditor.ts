@@ -18,7 +18,6 @@ export const useObjectEditor = <E extends HTMLDivElement>({
     }, []);
 
     const onAddPhoto = useCallback(() => {
-        console.log('onAddPhoto');
         setFileUploaderOpen((prevState) => !prevState);
     }, []);
 

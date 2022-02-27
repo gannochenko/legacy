@@ -153,6 +153,7 @@ export const useFileUploaderProcess = (
     useEffect(() => {
         if (process.stage === ProcessStages.DONE) {
             onFinish();
+            setProcess(initialProcess);
         }
     }, [process, onFinish]);
 
@@ -167,6 +168,8 @@ export const useFileUploaderProcess = (
                 serial: prevState.serial + 1,
                 stage: ProcessStages.GET_UPLOAD_URL,
             })),
-        loading: process.stage !== ProcessStages.INITIAL,
+        loading:
+            process.stage !== ProcessStages.INITIAL &&
+            process.stage !== ProcessStages.DONE,
     };
 };
