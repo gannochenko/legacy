@@ -6,7 +6,7 @@ export type ObjectEditorPropsType = HTMLAttributes<HTMLDivElement> &
     Partial<{
         // put your custom props here
     }> &
-    ObjectEditorPropsGenericType &
+    Pick<ObjectEditorPropsGenericType, 'objectId' | 'data'> &
     MarginPropsType;
 
 export type ObjectEditorRootPropsType = StylePropsType & ObjectEditorPropsType;

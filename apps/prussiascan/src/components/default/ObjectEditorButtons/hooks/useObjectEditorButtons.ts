@@ -37,7 +37,6 @@ export const useObjectEditorButtons = <E extends HTMLDivElement>({
                       key: 'editor',
                       objectId,
                       data,
-                      onDataUpdate,
                   })
                 : null,
     };

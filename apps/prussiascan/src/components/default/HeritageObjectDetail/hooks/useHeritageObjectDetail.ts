@@ -1,132 +1,56 @@
-import { lcFirst } from 'change-case';
+import { useQuery } from 'react-query';
 import { HeritageObjectDetailPropsType } from '../type';
-import { heritageObjectStatusMap } from '../../../../maps/heritageObjectStatusMap';
-import { ImageGalleryImageType } from '../../ImageGallery/type';
-import { locationAreaMap } from '../../../../maps/locationAreaMap';
-import { heritageObjectLevelMap } from '../../../../maps/heritageObjectLevelMap';
-import {
-    HeritageObjectConditionEnum,
-    heritageObjectConditionMap,
-} from '../../../../maps/heritageObjectConditionMap';
-import { heritageObjectKindMap } from '../../../../maps/heritageObjectKindMap';
-import { materialMap } from '../../../../maps/materialMap';
-import { architectsMap } from '../../../../maps/architectsMap';
+import { useDataProcess } from './useDataProcess';
+import { useEvents } from './useEvents';
+import { getObject } from '../../../../services/HeritageObject/heritageObject';
 
-export const useHeritageObjectDetail = <E extends HTMLDivElement>({
-    data,
-    ...props
-}: HeritageObjectDetailPropsType) => {
-    const id = data?.id ?? '';
-    const name = data?.name ?? '';
-    const content = data?.content ?? '';
-    const nameDe = data?.nameDe || '';
-    const locationDescription = data?.locationDescription || '';
+export const useHeritageObjectDetail = <E extends HTMLDivElement>(
+    props: HeritageObjectDetailPropsType,
+) => {
+    const { data } = props;
+    const objectId = data?.id || '';
 
-    const locationArea = data?.locationArea || '';
-    let locationAreaLabel = '';
-    if (locationArea && locationArea in locationAreaMap) {
-        locationAreaLabel = locationAreaMap[locationArea];
-    }
+    const {
+        data: newData,
+        isSuccess,
+        isLoading,
+        refetch,
+    } = useQuery(`data-${objectId}`, () => getObject(objectId), {
+        cacheTime: 0,
+        refetchOnMount: false,
+        refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
+        retryOnMount: false,
+    });
 
-    const heritageStatus = data?.heritageStatus || '';
-    const heritageLevel = data?.heritageLevel || '';
-    const heritageId = data?.heritageId || '';
-    let heritageStatusLabel = '';
-    if (heritageStatus && heritageStatus in heritageObjectStatusMap) {
-        heritageStatusLabel = heritageObjectStatusMap[heritageStatus];
-        if (heritageStatus === 1 && heritageLevel) {
-            heritageStatusLabel = `${
-                heritageObjectLevelMap[heritageLevel]
-            } ${lcFirst(heritageStatusLabel)}`;
-        }
-        if (heritageId) {
-            heritageStatusLabel = `${heritageStatusLabel}, код: ${heritageId}`;
-        }
-    }
+    console.log('newData');
+    console.log(newData);
 
-    let constructedLabel = '';
-    const constructionYearStart = data?.constructionYearStart ?? 0;
-    const constructionYearEnd = data?.constructionYearEnd ?? 0;
-    if (
-        constructionYearStart &&
-        constructionYearEnd &&
-        // @ts-ignore
-        constructionYearStart !== constructionYearEnd
-    ) {
-        constructedLabel = `Построен между ${constructionYearStart} и ${constructionYearEnd} годами`;
-    }
-    if (
-        constructionYearStart &&
-        // @ts-ignore
-        (!constructionYearEnd || constructionYearStart === constructionYearEnd)
-    ) {
-        constructedLabel = `Построен в ${constructionYearEnd} году`;
-    }
+    const {
+        content,
+        headerImage,
+        name,
+        galleryImages,
+        nameDe,
+        locationAreaLabel,
+        locationDescription,
+        heritageStatusLabel,
+        lostLabel,
+        constructedLabel,
+        conditionLabel,
+        conditionLevelIcon,
+        kindTags,
+        materialTags,
+        architects,
+        architectsLabel,
+        lost,
+        id,
+        location,
+    } = useDataProcess(props, data);
 
-    const lost = !!data?.lost;
-    const lossYearStart = data?.lossYearStart ?? 0;
-    const lossYearEnd = data?.lossYearEnd ?? 0;
-    let lostLabel = '';
-    if (lost) {
-        lostLabel = 'Был утрачен';
-        if (lossYearStart && lossYearEnd && lossYearStart !== lossYearEnd) {
-            lostLabel = `${lostLabel} между ${lossYearStart} и ${lossYearEnd} годами`;
-        }
-        if (lossYearStart && (!lossYearEnd || lossYearStart === lossYearEnd)) {
-            lostLabel = `${lostLabel} в ${lossYearStart} году`;
-        }
-    }
-
-    let conditionLabel = '';
-    let conditionLevelIcon = '';
-    const condition = data?.condition ?? 0;
-    if (condition && condition in heritageObjectConditionMap) {
-        conditionLabel = heritageObjectConditionMap[condition];
-        conditionLevelIcon =
-            condition >= HeritageObjectConditionEnum.poor ? '🛑' : '✅';
-    }
-
-    const headerImage =
-        data?.headerPhotoImage?.childImageSharp?.gatsbyImageData;
-
-    const galleryImages: ImageGalleryImageType[] = [];
-    const photos = data?.photos ?? [];
-    const photoImages = data?.photoImages ?? [];
-    if (photos.length) {
-        for (let i = 0; i < photos.length; i++) {
-            const photo = photos[i];
-            const photoImage = photoImages[i];
-            galleryImages.push({
-                childImageSharp: photoImage.childImageSharp,
-                url: photoImage.url,
-                author: photo.author,
-                source: photo.source,
-                uploadedAt: photo.uploadedAt,
-                capturedAt: photo.capturedAt,
-                capturedYearStart: photo.capturedYearStart,
-                capturedYearEnd: photo.capturedYearEnd,
-            });
-        }
-    }
-
-    let kindTags: string[] = [];
-    const kind = data?.kind ?? [];
-    if (kind.length) {
-        kindTags = kind.map((kindItem) => heritageObjectKindMap[kindItem]);
-    }
-
-    let materialTags: string[] = [];
-    const materials = data?.materials ?? [];
-    if (materials.length) {
-        materialTags = materials.map(
-            (materialItem) => materialMap[materialItem],
-        );
-    }
-
-    const architects =
-        data?.architects
-            ?.map((architectId) => architectsMap[architectId] ?? null)
-            .filter((x) => !!x) ?? [];
+    useEvents({
+        reload: refetch,
+    });
 
     return {
         rootProps: props,
@@ -143,11 +67,9 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
         imageGalleryProps: {
             images: galleryImages,
         },
-        name: data?.name ?? '',
-        nameDe: nameDe,
-        location: [locationAreaLabel, locationDescription]
-            .filter((x) => !!x)
-            .join(', '),
+        name,
+        nameDe,
+        location,
         heritageStatusLabel,
         lostLabel,
         constructedLabel,
@@ -160,7 +82,7 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
             tags: materialTags,
         },
         architects,
-        architectsLabel: architects.length > 1 ? 'Архитекторы' : 'Архитектор',
+        architectsLabel,
         showNameDe: !!nameDe,
         showLocation: !!locationDescription || !!locationAreaLabel,
         showSummary: true,
@@ -174,9 +96,6 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
         objectEditorButtonsProps: {
             objectId: id,
             data,
-            onDataUpdate: () => {
-                console.log('UPDATE!');
-            },
         },
     };
 };

@@ -7,6 +7,10 @@ import { UploadElementType } from '../../components/default/FileUploader/type';
 const API_URL = process.env.API_URL;
 const API_ENV = process.env.API_ENV;
 
+export const getObject = async (objectId: string) => {
+    return fetchJSON(`${API_URL}${API_ENV}/data/objects/find/${objectId}`);
+};
+
 export const getUploadUrls = async (
     objectId: string,
     fileQuota: FileUploadQuota,
