@@ -16,10 +16,6 @@ export const useEvents = ({ setFileUploaderOpen }: UseEventsPropsType) => {
     }, []);
 
     useEffect(() => {
-        eventBus.dispatch(EventsEnum.OBJECT_DETAIL_EDIT_MODE_TOGGLE);
-    }, []);
-
-    useEffect(() => {
         eventBus.on(
             EventsEnum.OBJECT_DETAIL_ADD_PHOTO_BUTTON_CLICK,
             onAddPhoto,

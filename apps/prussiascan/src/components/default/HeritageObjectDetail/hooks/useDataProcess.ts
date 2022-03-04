@@ -14,11 +14,14 @@ import {
     HeritageObjectDetailPropsType,
     HeritageObjectDetailType,
 } from '../type';
+import { useTranslation } from 'react-i18next';
 
 export const useDataProcess = (
     props: HeritageObjectDetailPropsType,
     data: HeritageObjectDetailType | undefined,
 ) => {
+    const { t } = useTranslation();
+
     const id = data?.id ?? '';
     const name = data?.name ?? '';
     const content = data?.content ?? '';
@@ -71,7 +74,7 @@ export const useDataProcess = (
     const lossYearEnd = data?.lossYearEnd ?? 0;
     let lostLabel = '';
     if (lost) {
-        lostLabel = 'Был утрачен';
+        lostLabel = t('HeritageObjectDetail.objectLost');
         if (lossYearStart && lossYearEnd && lossYearStart !== lossYearEnd) {
             lostLabel = `${lostLabel} между ${lossYearStart} и ${lossYearEnd} годами`;
         }

@@ -5,5 +5,8 @@ export const ru = {
             maxFilesReached: 'Вы можете загрузить до 10 файлов за один раз',
             uploadStart: 'Начать загрузку',
         },
+        HeritageObjectDetail: {
+            objectLost: 'Был утрачен',
+        },
     },
 };

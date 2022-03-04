@@ -26,11 +26,9 @@ export const useImageGallery = (
             );
     }, [onEnableEditMode]);
 
-    const onAddButtonClick = useCallback(
-        () =>
-            eventBus.dispatch(EventsEnum.OBJECT_DETAIL_ADD_PHOTO_BUTTON_CLICK),
-        [],
-    );
+    const onAddButtonClick = useCallback(() => {
+        eventBus.dispatch(EventsEnum.OBJECT_DETAIL_ADD_PHOTO_BUTTON_CLICK);
+    }, []);
 
     return {
         rootProps: {

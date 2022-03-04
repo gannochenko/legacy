@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useMutation } from 'react-query';
 import { HeritageObjectDetailPropsType } from '../type';
 import { useDataProcess } from './useDataProcess';
 import { useEvents } from './useEvents';
@@ -14,14 +14,8 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>(
         data: newData,
         isSuccess,
         isLoading,
-        refetch,
-    } = useQuery(`data-${objectId}`, () => getObject(objectId), {
-        cacheTime: 0,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
-        retryOnMount: false,
-    });
+        mutate,
+    } = useMutation(`data-${objectId}`, () => getObject(objectId));
 
     console.log('newData');
     console.log(newData);
@@ -49,7 +43,7 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>(
     } = useDataProcess(props, data);
 
     useEvents({
-        reload: refetch,
+        reload: mutate,
     });
 
     return {
