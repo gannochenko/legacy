@@ -56,6 +56,8 @@ export const HeritageObjectDetailTemplateQuery = graphql`
                     source
                     capturedYearStart
                     capturedYearEnd
+                    header
+                    preview
                 }
                 headerPhotoImage {
                     childImageSharp {

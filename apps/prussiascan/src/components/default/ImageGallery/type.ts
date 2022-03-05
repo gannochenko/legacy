@@ -3,7 +3,7 @@ import { StylePropsType, MarginPropsType } from '@gannochenko/ui.emotion';
 import { IGatsbyImageData } from 'gatsby-plugin-image';
 
 export type ImageGalleryImageType = {
-    childImageSharp: {
+    childImageSharp?: {
         gatsbyImageData: IGatsbyImageData;
     };
     url: string;

@@ -41,7 +41,20 @@ export const ImageGalleryImageWrapper = styled.a`
     height: 15rem;
 `;
 
-export const ImageGalleryImage = styled(GatsbyImage)`
+export const ImageGalleryGatsbyImage = styled(GatsbyImage)`
+    background-color: #c4c4c4;
+    object-fit: contain !important;
+    width: 100% !important;
+    height: 100% !important;
+
+    [data-placeholder-image=''] {
+        object-fit: contain !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+`;
+
+export const Image = styled.img`
     background-color: #c4c4c4;
     object-fit: contain !important;
     width: 100% !important;

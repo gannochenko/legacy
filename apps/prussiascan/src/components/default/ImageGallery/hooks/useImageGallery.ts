@@ -35,9 +35,16 @@ export const useImageGallery = (
             ...props, // rest props go to the root node, as before
             ref, // same for the ref
         },
+        getGatsbyImageProps: (image: ImageGalleryImageType) => {
+            return {
+                image: image.childImageSharp!.gatsbyImageData,
+                alt: '',
+                className: 'gatsby-resp-image-link',
+            };
+        },
         getImageProps: (image: ImageGalleryImageType) => {
             return {
-                image: image.childImageSharp.gatsbyImageData,
+                src: image.url,
                 alt: '',
                 className: 'gatsby-resp-image-link',
             };
@@ -53,5 +60,8 @@ export const useImageGallery = (
         getAddButtonProps: () => ({
             onClick: onAddButtonClick,
         }),
+        isGatsbyImage: (image: ImageGalleryImageType) => {
+            return !!image.childImageSharp;
+        },
     };
 };

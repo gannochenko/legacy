@@ -6,8 +6,9 @@ import { ImageGalleryPropsType } from './type';
 import {
     ImageGalleryRoot,
     ImageGalleryImageWrapper,
-    ImageGalleryImage,
+    ImageGalleryGatsbyImage,
     ImageGalleryAddButton,
+    Image,
 } from './style';
 import { useImageGallery } from './hooks/useImageGallery';
 import { lightBoxOptions } from '../../../util/lightBoxOptions';
@@ -17,10 +18,12 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryPropsType>(
         const {
             rootProps,
             images,
+            getGatsbyImageProps,
             getImageProps,
             getImageWrapperProps,
             showAddButton,
             getAddButtonProps,
+            isGatsbyImage,
         } = useImageGallery(ref, props);
 
         return (
@@ -37,9 +40,14 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryPropsType>(
                                     <ImageGalleryImageWrapper
                                         {...getImageWrapperProps(image)}
                                     >
-                                        <ImageGalleryImage
-                                            {...getImageProps(image)}
-                                        />
+                                        {isGatsbyImage(image) && (
+                                            <ImageGalleryGatsbyImage
+                                                {...getGatsbyImageProps(image)}
+                                            />
+                                        )}
+                                        {!isGatsbyImage(image) && (
+                                            <Image {...getImageProps(image)} />
+                                        )}
                                     </ImageGalleryImageWrapper>
                                 </Grid>
                             );

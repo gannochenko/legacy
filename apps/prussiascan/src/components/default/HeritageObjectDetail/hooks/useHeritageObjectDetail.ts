@@ -3,6 +3,7 @@ import { HeritageObjectDetailPropsType } from '../type';
 import { useDataProcess } from './useDataProcess';
 import { useEvents } from './useEvents';
 import { getObject } from '../../../../services/HeritageObject/heritageObject';
+import { useCombinedData } from './useCombinedData';
 
 export const useHeritageObjectDetail = <E extends HTMLDivElement>(
     props: HeritageObjectDetailPropsType,
@@ -17,8 +18,7 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>(
         mutate,
     } = useMutation(`data-${objectId}`, () => getObject(objectId));
 
-    console.log('newData');
-    console.log(newData);
+    const resultData = useCombinedData(data, newData?.data);
 
     const {
         content,
