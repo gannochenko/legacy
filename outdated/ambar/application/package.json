@@ -17,7 +17,7 @@
     "babel-polyfill": "^6.26.0",
     "compression": "^1.7.0",
     "concurrently": "^3.5.0",
-    "ejs": "^2.6.1",
+    "ejs": "^3.1.7",
     "express": "^4.15.4",
     "express-http-proxy": "^1.0.6",
     "jquery": "^3.3.1",
