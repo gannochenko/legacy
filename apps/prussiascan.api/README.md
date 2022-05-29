@@ -9,24 +9,28 @@
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
 
-* [Installation](#installation)
+* [Local installation](#local-installation)
+* [Local launch](#local-launch)
+* [How it works](#how-it-works)
 * [Manual deployment](#manual-deployment)
 * [Setup CD](#setup-cd)
 * [Contact](#contact)
 
-## Installation
+## Local installation
 
-To prepare the application, simply install `node_modules`:
+1. copy `.env.example` to `.env`
+2. run `yarn` to install the dependencies, if wasn't done before
 
-~~~bash
-yarn
-~~~
+## Local launch
 
-Then, to start the lambda functions locally, run:
+1. run `yarn dev`
 
-~~~bash
-yarn dev
-~~~
+## How it works
+
+The microservice contains the following serverless functions:
+
+* `runAPI` - provides API for data sourcing, mostly called during the build time of the front-end.
+* `sendMessage` - allows sending a message via the contact form.
 
 ## Manual deployment
 

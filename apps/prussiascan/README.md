@@ -26,6 +26,10 @@ Then, to run the app:
 yarn dev
 ~~~
 
+## How it works
+
+A brief recap here.
+
 ## Contact
 
 Sergei Gannochenko - [Linkedin](https://www.linkedin.com/in/gannochenko/)
