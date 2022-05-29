@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
 ################################################################################################
+## This script creates AWS resources needed to run this microservice with Localstack.
+################################################################################################
+
+################################################################################################
 ## https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AttributeValue.html
 ################################################################################################
 
@@ -9,13 +13,7 @@
 export AWS_PAGER=""
 AWS="aws --endpoint-url http://localhost:4566 --profile legacy"
 
-read -p "Running this script will wipe out clean all your local data. Proceed? " -n 1 -r
-echo    # (optional) move to a new line
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-
 ################################################################################################
-## DynamoDB
 ## https://docs.aws.amazon.com/cli/latest/reference/dynamodb/create-table.html
 ################################################################################################
 
@@ -66,5 +64,3 @@ ${AWS} dynamodb \
     --key-schema \
         AttributeName=email,KeyType=HASH \
     --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
-
-fi

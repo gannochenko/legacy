@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+################################################################################################
+## This script creates AWS resources needed to run a specified lambda in production.
+## The script is executed within the CI/CD pipeline.
+################################################################################################
+
 export AWS_PAGER=""
 
 S3_BUCKET=gannochenko--legacy--prussiascan-auth--lambda-src

@@ -16,6 +16,8 @@ type HeritageObjectPhotoType = {
     capturedAt?: string;
     capturedYearStart?: number;
     capturedYearEnd?: number;
+    header?: boolean;
+    preview?: boolean;
 };
 
 export type HeritageObjectType = {

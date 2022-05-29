@@ -58,11 +58,4 @@ export const Image = styled.img`
     background-color: #c4c4c4;
     object-fit: contain !important;
     width: 100% !important;
-    height: 100% !important;
-
-    [data-placeholder-image=''] {
-        object-fit: contain !important;
-        width: 100% !important;
-        height: 100% !important;
-    }
 `;

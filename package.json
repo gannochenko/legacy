@@ -3,9 +3,10 @@
     "version": "1.0.0",
     "description": "",
     "scripts": {
-        "install-all": "./script/install.sh",
+        "setup": "./script/setup.sh",
         "infra": "docker-compose up",
-        "infra:stop": "docker-compose stop"
+        "infra:stop": "docker-compose stop",
+        "seed": "./script/seed.sh"
     },
     "keywords": [],
     "author": "",

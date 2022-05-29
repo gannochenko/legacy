@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+################################################################################################
+## This script creates AWS resources needed to run a specified lambda in production.
+## The script is executed within the CI/CD pipeline.
+################################################################################################
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ENV="${DIR}"/../.env
 export AWS_PAGER=""

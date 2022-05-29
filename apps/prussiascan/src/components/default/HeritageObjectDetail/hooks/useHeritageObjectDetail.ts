@@ -40,7 +40,7 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>(
         lost,
         id,
         location,
-    } = useDataProcess(props, data);
+    } = useDataProcess(props, resultData);
 
     useEvents({
         reload: mutate,
