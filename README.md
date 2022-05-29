@@ -37,11 +37,10 @@ Note: `prussiascans` is a work-in-progress title. This title will most likely be
 
 1. Run `yarn infra` to launch the local infrastructure.
 2. Wait until the infrastructure is ready.
-3. If not done before, in the other terminal, run `yarn seed` to create the resources in the Localstack.
-4. In the other terminal, run `cd apps/prussiascan & yarn dev` to launch the front-end application.
-5. In the other terminal, run: `cd apps/prussiascan.api && yarn dev`.
-5. In the other terminal, run: `cd apps/prussiascan.auth && yarn dev`.
-5. In the other terminal, run: `cd apps/prussiascan.aux.api && yarn dev`.
+3. If not done before, in another terminal run `yarn seed` to create the resources in the Localstack.
+4. In another terminal run `cd apps/prussiascan & yarn dev` to launch the front-end application.
+5. In another terminal run: `cd apps/prussiascan.api && yarn dev` to launch the API microservice.
+5. In another terminal run: `cd apps/prussiascan.auth && yarn dev` to launch the Auth microservice.
 
 ## Endpoints
 
