@@ -36,7 +36,7 @@
         "react-query": "^3.34.5",
         "react-router": "^6.2.1",
         "react-yandex-maps": "^4.6.0",
-        "sharp": "^0.29.3",
+        "sharp": "^0.30.5",
         "simple-react-lightbox": "^3.6.9-0",
         "throttle-debounce": "^3.0.1",
         "unstated-next": "^1.1.0",
