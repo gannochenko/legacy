@@ -1,4 +1,4 @@
-# Go experiments
+# Prussia Scans
 
 ## Github setup
 
@@ -22,4 +22,3 @@
 To deploy, just create a PR from `dev` branch to `master`, and merge it.
 
 The infrastructure lives in the other repository.
-
