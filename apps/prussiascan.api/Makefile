@@ -4,7 +4,7 @@ export AWS_PAGER=""
 AWS:="aws --endpoint-url http://localhost:4566 --profile legacy"
 
 LAMBDA_SRC_S3_BUCKET:="gannochenko--legacy--prussiascan.api--lambda-src"
-LAMBDA_SRC_S3_REGION=eu-central-1
+LAMBDA_SRC_S3_REGION="eu-central-1"
 LAMBDA_SRC_FN_NAME_GLOBAL_PREFIX="prussiascan-api_"
 LAMBDA_SRC_ZIP="latest.zip"
 
