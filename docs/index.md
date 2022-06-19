@@ -17,7 +17,14 @@ Note: `prussiascans` is a work-in-progress title. This title will most likely be
 1. Clone the repo, `cd` to the folder.
 2. Run `make install` to install all local dependencies for every application.
 
-## Running all services
+### Localstack profile
+
+~~~
+mkdir ~/.aws
+printf "[legacy]\naws_access_key_id=doesnt-matter\naws_secret_access_key=doesnt-matter\nregion=us-east-1\n" >> ~/.aws/credentials
+~~~
+
+### Running all services
 
 1. Run `make run_infra` to launch local infrastructure.
 2. Wait until the infrastructure is ready.
@@ -26,7 +33,7 @@ Note: `prussiascans` is a work-in-progress title. This title will most likely be
 5. In another terminal run: `cd apps/prussiascan.api && yarn dev` to launch the API microservice.
 5. In another terminal run: `cd apps/prussiascan.auth && yarn dev` to launch the Auth microservice.
 
-## Seeding data
+### Seeding data
 
 // todo
 
