@@ -14,6 +14,7 @@
       <excludeFolder url="file://$MODULE_DIR$/.mongo" />
       <excludeFolder url="file://$MODULE_DIR$/apps/prussiascan.builder/dist" />
       <excludeFolder url="file://$MODULE_DIR$/.builder" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/prussiascan.api/upload" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

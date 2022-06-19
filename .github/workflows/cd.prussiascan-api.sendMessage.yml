@@ -25,5 +25,5 @@ jobs:
         working-directory: ./apps/prussiascan.api/
 
       - name: Build and Deploy
-        run: ./script/deploy.sh sendMessage
+        run: make deploy sendMessage
         working-directory: ./apps/prussiascan.api/

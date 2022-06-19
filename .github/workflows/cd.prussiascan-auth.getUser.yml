@@ -25,5 +25,5 @@ jobs:
         working-directory: ./apps/prussiascan.auth/
 
       - name: Build and Deploy
-        run: ./script/deploy.sh getUser
+        run: make deploy getUser
         working-directory: ./apps/prussiascan.auth/
