@@ -24,6 +24,11 @@ mkdir ~/.aws
 printf "[legacy]\naws_access_key_id=doesnt-matter\naws_secret_access_key=doesnt-matter\nregion=eu-central-1\n" >> ~/.aws/credentials
 ~~~
 
+### Env file
+
+1. Copy the env file template: `cp ./.env.example ./.env.local`
+2. Fill up the secret variables
+
 ### Running all services
 
 1. Run `make run_infra` to launch local infrastructure.
