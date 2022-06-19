@@ -42,21 +42,21 @@ create_resources: ## Create local resources, such as data tables, buckets, etc.
 			AttributeName=id,KeyType=HASH \
 		--provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
 		--global-secondary-indexes \
-			"[
-				{
-					\"IndexName\": \"emailIndex\",
-					\"KeySchema\": [
-						{\"AttributeName\":\"email\",\"KeyType\":\"HASH\"}
-					],
-					\"Projection\": {
-						\"ProjectionType\":\"INCLUDE\",
-						\"NonKeyAttributes\":[\"email\"]
-					},
-					\"ProvisionedThroughput\": {
-						\"ReadCapacityUnits\": 5,
-						\"WriteCapacityUnits\": 5
-					}
-				}
+			"[ \
+				{ \
+					\"IndexName\": \"emailIndex\", \
+					\"KeySchema\": [ \
+						{\"AttributeName\":\"email\",\"KeyType\":\"HASH\"} \
+					], \
+					\"Projection\": { \
+						\"ProjectionType\":\"INCLUDE\", \
+						\"NonKeyAttributes\":[\"email\"] \
+					}, \
+					\"ProvisionedThroughput\": { \
+						\"ReadCapacityUnits\": 5, \
+						\"WriteCapacityUnits\": 5 \
+					} \
+				} \
 			]"
 
 	@$(AWS) dynamodb \

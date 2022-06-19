@@ -23,7 +23,7 @@ list_resources: ## List all local resources
 	$(MAKE) -C ./apps/prussiascan.api/ list_resources
 
 remove_resources: ## Remove all local resources
-	rm -rf ./.localstack
+	rm -rf ./.localstack/data
 
 migrate_databases: ## Migrate databases of all applications
 	$(MAKE) -C ./apps/prussiascan.aux.api/ migrate_database
