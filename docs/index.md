@@ -21,7 +21,7 @@ Note: `prussiascans` is a work-in-progress title. This title will most likely be
 
 ~~~
 mkdir ~/.aws
-printf "[legacy]\naws_access_key_id=doesnt-matter\naws_secret_access_key=doesnt-matter\nregion=us-east-1\n" >> ~/.aws/credentials
+printf "[legacy]\naws_access_key_id=doesnt-matter\naws_secret_access_key=doesnt-matter\nregion=eu-central-1\n" >> ~/.aws/credentials
 ~~~
 
 ### Running all services
@@ -29,13 +29,15 @@ printf "[legacy]\naws_access_key_id=doesnt-matter\naws_secret_access_key=doesnt-
 1. Run `make run_infra` to launch local infrastructure.
 2. Wait until the infrastructure is ready.
 3. If not done before, in another terminal run `make create_resources` to create the resources in the Localstack.
-4. In another terminal run `cd apps/prussiascan & yarn dev` to launch the front-end application.
-5. In another terminal run: `cd apps/prussiascan.api && yarn dev` to launch the API microservice.
-5. In another terminal run: `cd apps/prussiascan.auth && yarn dev` to launch the Auth microservice.
+4. In another terminal run `make run app=prussiascan` to launch the front-end application.
+5. In another terminal run: `make run app=prussiascan.api` to launch the API microservice.
+5. In another terminal run: `make run app=prussiascan.auth` to launch the Auth microservice.
 
 ### Seeding data
 
-// todo
+1. Obtain the following folders, since they are not included due to massive weight: `.mongo`, `apps/prussiascan.api/upload`
+2. Go to the `prussiascan.api` folder: `cd apps/prussiascan.api`.
+3. Run the seeding script: `make mongo2dynamo`.
 
 ### Inviting a user
 

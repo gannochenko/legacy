@@ -63,10 +63,10 @@ run: ## Run the application locally on the host machine
 	@yarn dotenv -e $(ROOT_DIR)/../../.env.local serverless offline start -r eu-central-1 --noTimeout --host 0.0.0.0
 
 list_resources: ## List all available resources
-	$(AWS) dynamodb list-tables
-	$(AWS) s3api list-buckets --query "Buckets[].Name"
+	@$(AWS) dynamodb list-tables
+	@$(AWS) s3api list-buckets --query "Buckets[].Name"
 
-mongo2dybamodb:
+mongo2dynamo:
 	@yarn dotenv -e $(ROOT_DIR)/../../.env.local dotenv ./script/mongo2dynamo.js
 
 deploy:
