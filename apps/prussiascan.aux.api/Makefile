@@ -1,12 +1,12 @@
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 export AWS_PAGER=""
-AWS:="aws --endpoint-url http://localhost:4566 --profile legacy"
+AWS:=aws --endpoint-url http://localhost:4566 --profile legacy
 
-LAMBDA_SRC_S3_BUCKET:="gannochenko--legacy--prussiascan.api--lambda-src"
-LAMBDA_SRC_S3_REGION="eu-central-1"
-LAMBDA_SRC_FN_NAME_GLOBAL_PREFIX="prussiascan-api_"
-LAMBDA_SRC_ZIP="latest.zip"
+LAMBDA_SRC_S3_BUCKET:=gannochenko--legacy--prussiascan.api--lambda-src
+LAMBDA_SRC_S3_REGION:=eu-central-1
+LAMBDA_SRC_FN_NAME_GLOBAL_PREFIX:=prussiascan-api_
+LAMBDA_SRC_ZIP:=latest.zip
 
 help:
 	@printf "usage: make [target] ...\n\n"
@@ -25,13 +25,6 @@ migrate_database: ## Migrate the database
 
 run: ## Run the application locally on the host machine
 	@yarn dotenv -e $(ROOT_DIR)/../../.env.local serverless offline start -r eu-central-1 --noTimeout --host 0.0.0.0
-
-list:
-	echo "Tables we have now:"
-	$(AWS) dynamodb list-tables
-
-	echo "Buckets we have now:"
-	$(AWS) s3api list-buckets --query "Buckets[].Name"
 
 deploy:
 ifeq ($(lambda),)
