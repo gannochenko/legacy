@@ -55,7 +55,7 @@ Import the `postman_collection.json` file to Postman to be able to call the endp
 
 #### Q: I have troubles launching localstack
 
-A: Remove the `.localstack/data` folder and try restarting. Note, that all your local data will be lost.
+A: Remove the `.localstack/data` folder and try restarting. Note, that all your local data will be lost, and you will have to run `yarn seed` once again.
 
 ## Deployment
 
