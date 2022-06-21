@@ -17,8 +17,8 @@ help:
 # ---------------------------------
 
 install:
-	@pwd
 	@yarn
+	@brew install awscli
 
 create_resources: ## Create local resources, such as data tables, buckets, etc.
 	@echo "Delete tables"

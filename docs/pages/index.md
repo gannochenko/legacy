@@ -49,3 +49,25 @@ printf "[legacy]\naws_access_key_id=doesnt-matter\naws_secret_access_key=doesnt-
 1. Import the Postman collection from the `postman.json` file in order to be able to call the endpoints from there.
 2. Call `legacy/auth/invite`, providing an email and roles in the body.
 3. The person will receive an email with the link. Navigating to that link should automatically authenticate the user.
+
+## CI/CD
+
+Before running CI/CD make sure that infrastructure was pre-created.
+
+### Secrets
+
+So far we do not use any software like Vault for managing secrets.
+The following secrets should be obtained/generated and then added as [environment variables on GitHub](https://github.com/gannochenko/legacy/settings/environments):
+
+* `AWS_ACCESS_KEY_ID`
+* `AWS_SECRET_ACCESS_KEY`
+* `AWS_REGION`
+* `SENDIN_BLUE_API_KEY`
+* `JWT_SECRET`
+* `CONTRIBUTOR_API_KEY`
+* `CICD_API_KEY`
+* `ADMIN_API_KEY`
+
+The other env vars come from the infrastructure.
+
+`SendinBlue` is used to send email. Either [reuse your previous API key](https://account.sendinblue.com/advanced/api/), or [create a new one](https://account.sendinblue.com/advanced/api/).
