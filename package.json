@@ -2,12 +2,7 @@
     "name": "legacy",
     "version": "1.0.0",
     "description": "",
-    "scripts": {
-        "setup": "./script/setup.sh",
-        "infra": "docker-compose up",
-        "infra:stop": "docker-compose stop",
-        "seed": "./script/seed.sh"
-    },
+    "scripts": {},
     "keywords": [],
     "author": "",
     "license": "MIT",
