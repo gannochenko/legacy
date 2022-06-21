@@ -528,8 +528,6 @@ async function run() {
 
             if (itemBatch.length === 25) {
                 try {
-                    console.log(itemBatch);
-
                     await dynamoDB
                         .batchWrite({
                             RequestItems: {

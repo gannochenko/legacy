@@ -66,8 +66,8 @@ list_resources: ## List all available resources
 	@$(AWS) dynamodb list-tables
 	@$(AWS) s3api list-buckets --query "Buckets[].Name"
 
-mongo2dynamo:
-	@yarn dotenv -e $(ROOT_DIR)/../../.env.local dotenv ./script/mongo2dynamo.js
+seed_database:
+	@yarn dotenv -e $(ROOT_DIR)/../../.env.local ./script/mongo2dynamo.js
 
 deploy:
 ifeq ($(lambda),)

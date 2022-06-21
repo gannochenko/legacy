@@ -16,6 +16,6 @@ create_resources: ## Create local resources, such as data tables, buckets, etc.
 migrate_database: ## Migrate the database
 
 run: ## Run the application locally on the host machine
-	@yarn dev
+	@yarn dotenv -e $(ROOT_DIR)/../../.env.local yarn dev
 
 deploy:
