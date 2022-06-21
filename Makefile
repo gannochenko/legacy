@@ -42,5 +42,4 @@ else
 endif
 
 run_docs: ## Run the documentation locally
-	@cd docs/
-	@mkdocs serve
+	@mkdocs serve -f docs/mkdocs.yml
