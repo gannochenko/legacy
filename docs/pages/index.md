@@ -35,9 +35,9 @@ printf "[legacy]\naws_access_key_id=doesnt-matter\naws_secret_access_key=doesnt-
 2. Wait until the infrastructure is ready.
 3. If not done before, in another terminal run `make create_resources` to create the resources in the Localstack.
 4. If not done before, run `make seed_database` to fill the database with some data.
-5. In another terminal run `make run app=prussiascan` to launch the front-end application.
-6. In another terminal run: `make run app=prussiascan.api` to launch the API microservice.
-7. In another terminal run: `make run app=prussiascan.auth` to launch the Auth microservice.
+5. In another terminal run: `make run app=prussiascan.api` to launch the API microservice.
+6. In another terminal run: `make run app=prussiascan.auth` to launch the Auth microservice.
+7. Wait for `prussiascan.api` to finish booting and then in another terminal run `make run app=prussiascan` to launch the front-end application.
 
 ### Seeding data
 
