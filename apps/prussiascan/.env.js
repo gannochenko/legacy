@@ -10,4 +10,5 @@ module.exports.allowedEnvVariables = [
     'GA_TRACKING_ID',
     'GA_LINK',
     'DEPLOYMENT_LINK',
+    'IMAGES_URL',
 ];

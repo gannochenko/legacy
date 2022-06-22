@@ -56,7 +56,7 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
         showArchitects,
         objectEditorButtonsProps,
     } = useHeritageObjectDetail(props);
-
+    
     return (
         <HeritageObjectDetailRoot {...rootProps}>
             <PageHeader {...pageHeaderProps}>
