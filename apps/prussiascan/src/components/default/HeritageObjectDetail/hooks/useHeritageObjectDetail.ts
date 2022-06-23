@@ -4,6 +4,8 @@ import { useDataProcess } from './useDataProcess';
 import { getObject } from '../../../../services/HeritageObject/heritageObject';
 import { useCombinedData } from './useCombinedData';
 import { useState } from 'react';
+import { eventBus } from '../../../../util/eventBus';
+import { EventsEnum } from '../../../../util/events';
 
 export const useHeritageObjectDetail = <E extends HTMLDivElement>(
     props: HeritageObjectDetailPropsType,
@@ -85,13 +87,18 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>(
         imageGalleryProps: {
             images: galleryImages,
             showAddImageButton: editMode,
+            onAddImageButtonClick: () => {
+                eventBus.dispatch(
+                    EventsEnum.OBJECT_EDITOR_FILE_UPLOADER_TOGGLE,
+                );
+            },
         },
         objectEditorButtonsProps: {
             objectId: id,
             data,
             showToggleEditModeButton: !editMode,
             onToggleEditMode: () => {
-                setEditMode(prevState => !prevState);
+                setEditMode((prevState) => !prevState);
             },
             onDataChange: () => {
                 reloadData();

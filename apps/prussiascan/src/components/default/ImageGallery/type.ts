@@ -20,6 +20,7 @@ export type ImageGalleryPropsType = HTMLAttributes<HTMLDivElement> &
     Partial<{
         images: ImageGalleryImageType[];
         showAddImageButton: boolean;
+        onAddImageButtonClick: () => void;
         // put your custom props here
     }> &
     MarginPropsType;

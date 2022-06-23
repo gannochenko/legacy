@@ -1,5 +1,3 @@
 export enum EventsEnum {
-    OBJECT_DETAIL_EDIT_MODE_TOGGLE = 'object-detail:edit-mode:toggle',
-    OBJECT_DETAIL_ADD_PHOTO_BUTTON_CLICK = 'object-detail:add-photo-button:click',
-    OBJECT_DETAIL_RELOAD = 'object-detail:reload',
+    OBJECT_EDITOR_FILE_UPLOADER_TOGGLE = 'EventObject:FileUploader:Toggle',
 }

@@ -1,16 +1,15 @@
-import { Ref, useCallback } from 'react';
+import { Ref } from 'react';
 import { ImageGalleryImageType, ImageGalleryPropsType } from '../type';
-import { eventBus } from '../../../../util/eventBus';
-import { EventsEnum } from '../../../../util/events';
 
 export const useImageGallery = (
     ref: Ref<HTMLDivElement>,
-    { images, showAddImageButton, ...props }: ImageGalleryPropsType,
+    {
+        images,
+        showAddImageButton,
+        onAddImageButtonClick,
+        ...props
+    }: ImageGalleryPropsType,
 ) => {
-    const onAddImageButtonClick = useCallback(() => {
-        eventBus.dispatch(EventsEnum.OBJECT_DETAIL_ADD_PHOTO_BUTTON_CLICK);
-    }, []);
-
     return {
         rootProps: {
             ...props, // rest props go to the root node, as before
