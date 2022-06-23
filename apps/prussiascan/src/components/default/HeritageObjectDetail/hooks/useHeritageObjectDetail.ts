@@ -86,7 +86,7 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>(
         showArchitects: !!architects.length,
         imageGalleryProps: {
             images: galleryImages,
-            showAddImageButton: editMode,
+            showAddImageButton: editMode && !isLoading,
             onAddImageButtonClick: () => {
                 eventBus.dispatch(
                     EventsEnum.OBJECT_EDITOR_FILE_UPLOADER_TOGGLE,
@@ -99,6 +99,7 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>(
             showToggleEditModeButton: !editMode,
             onToggleEditMode: () => {
                 setEditMode((prevState) => !prevState);
+                reloadData();
             },
             onDataChange: () => {
                 reloadData();
