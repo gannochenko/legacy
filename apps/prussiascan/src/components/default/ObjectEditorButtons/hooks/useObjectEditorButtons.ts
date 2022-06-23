@@ -3,12 +3,13 @@ import { createElement, FC, useCallback, useRef, useState } from 'react';
 import { ObjectEditorButtonsPropsType } from '../type';
 import { AuthState } from '../../../../states';
 import { ObjectEditorPropsType } from '../../ObjectEditor/type';
-import { eventBus } from '../../../../util/eventBus';
-import { EventsEnum } from '../../../../util/events';
 
 export const useObjectEditorButtons = <E extends HTMLDivElement>({
     objectId,
     data,
+    onToggleEditMode,
+    showToggleEditModeButton,
+    onDataChange,
     ...props
 }: ObjectEditorButtonsPropsType) => {
     const { isEditor } = AuthState.useContainer();
@@ -16,15 +17,11 @@ export const useObjectEditorButtons = <E extends HTMLDivElement>({
     const [Editor, setEditor] = useState<FC<ObjectEditorPropsType> | null>(
         null,
     );
-    const [editorMode, setEditorMode] = useState(false);
 
     const onModeToggleButtonClick = useCallback(() => {
         import('../../ObjectEditor').then((data) => {
             setEditor(() => data.ObjectEditor);
-            setEditorMode((prevMode) => !prevMode);
-            setTimeout(() => {
-                eventBus.dispatch(EventsEnum.OBJECT_DETAIL_EDIT_MODE_TOGGLE);
-            }, 500);
+            onToggleEditMode?.();
         });
     }, [containerRef]);
 
@@ -36,7 +33,7 @@ export const useObjectEditorButtons = <E extends HTMLDivElement>({
             onClick: onModeToggleButtonClick,
         },
         visible: isEditor,
-        showEditModeToggleButton: !editorMode,
+        showToggleEditModeButton: !!showToggleEditModeButton,
         hasEditor: Editor !== null,
         editor:
             Editor && objectId && data
@@ -44,6 +41,7 @@ export const useObjectEditorButtons = <E extends HTMLDivElement>({
                       key: 'editor',
                       objectId,
                       data,
+                      onDataChange,
                   })
                 : null,
     };

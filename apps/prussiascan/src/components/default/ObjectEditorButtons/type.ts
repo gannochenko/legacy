@@ -5,7 +5,9 @@ import { ObjectEditorPropsGenericType } from '../type';
 
 export type ObjectEditorButtonsPropsType = HTMLAttributes<HTMLDivElement> &
     Partial<{
-        // put your custom props here
+        showToggleEditModeButton: boolean;
+        onToggleEditMode: () => void;
+        onDataChange: () => void;
     }> &
     ObjectEditorPropsGenericType &
     MarginPropsType;

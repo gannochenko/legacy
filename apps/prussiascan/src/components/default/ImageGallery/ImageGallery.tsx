@@ -21,8 +21,8 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryPropsType>(
             getGatsbyImageProps,
             getImageProps,
             getImageWrapperProps,
-            showAddButton,
-            getAddButtonProps,
+            showAddImageButton,
+            getAddImageButtonProps,
             isGatsbyImage,
         } = useImageGallery(ref, props);
 
@@ -52,9 +52,9 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryPropsType>(
                                 </Grid>
                             );
                         })}
-                        {showAddButton && (
+                        {showAddImageButton && (
                             <Grid item md={4} sm={6} xs={12} key="placeholder">
-                                <ImageGalleryAddButton {...getAddButtonProps()}>
+                                <ImageGalleryAddButton {...getAddImageButtonProps()}>
                                     Добавить фотографию
                                 </ImageGalleryAddButton>
                             </Grid>

@@ -1,32 +1,13 @@
-import { Ref, useCallback, useEffect, useState } from 'react';
+import { Ref, useCallback } from 'react';
 import { ImageGalleryImageType, ImageGalleryPropsType } from '../type';
 import { eventBus } from '../../../../util/eventBus';
 import { EventsEnum } from '../../../../util/events';
 
 export const useImageGallery = (
     ref: Ref<HTMLDivElement>,
-    { images, enableAddButton, ...props }: ImageGalleryPropsType,
+    { images, showAddImageButton, ...props }: ImageGalleryPropsType,
 ) => {
-    const [showAddButton, setShowAddButton] = useState(false);
-
-    const onEnableEditMode = useCallback(() => {
-        setShowAddButton((prevState) => !prevState);
-    }, []);
-
-    useEffect(() => {
-        eventBus.on(
-            EventsEnum.OBJECT_DETAIL_EDIT_MODE_TOGGLE,
-            onEnableEditMode,
-        );
-
-        return () =>
-            eventBus.off(
-                EventsEnum.OBJECT_DETAIL_EDIT_MODE_TOGGLE,
-                onEnableEditMode,
-            );
-    }, [onEnableEditMode]);
-
-    const onAddButtonClick = useCallback(() => {
+    const onAddImageButtonClick = useCallback(() => {
         eventBus.dispatch(EventsEnum.OBJECT_DETAIL_ADD_PHOTO_BUTTON_CLICK);
     }, []);
 
@@ -56,9 +37,9 @@ export const useImageGallery = (
         },
 
         images: images ?? [],
-        showAddButton: !!enableAddButton && showAddButton,
-        getAddButtonProps: () => ({
-            onClick: onAddButtonClick,
+        showAddImageButton: !!showAddImageButton,
+        getAddImageButtonProps: () => ({
+            onClick: onAddImageButtonClick,
         }),
         isGatsbyImage: (image: ImageGalleryImageType) => {
             return !!image.childImageSharp;

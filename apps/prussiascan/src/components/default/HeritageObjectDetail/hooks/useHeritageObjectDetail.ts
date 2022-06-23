@@ -1,9 +1,9 @@
 import { useMutation } from 'react-query';
 import { HeritageObjectDetailPropsType } from '../type';
 import { useDataProcess } from './useDataProcess';
-import { useEvents } from './useEvents';
 import { getObject } from '../../../../services/HeritageObject/heritageObject';
 import { useCombinedData } from './useCombinedData';
+import { useState } from 'react';
 
 export const useHeritageObjectDetail = <E extends HTMLDivElement>(
     props: HeritageObjectDetailPropsType,
@@ -11,11 +11,13 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>(
     const { data } = props;
     const objectId = data?.id || '';
 
+    const [editMode, setEditMode] = useState(false);
+
     const {
         data: newData,
         isSuccess,
         isLoading,
-        mutate,
+        mutate: reloadData,
     } = useMutation(`data-${objectId}`, () => getObject(objectId));
 
     const resultData = useCombinedData(data, newData?.data);
@@ -42,10 +44,6 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>(
         location,
     } = useDataProcess(props, resultData);
 
-    useEvents({
-        reload: mutate,
-    });
-
     return {
         rootProps: props,
         mapProps: {
@@ -57,9 +55,6 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>(
             imageAlt: name,
             imageOverlayOpacity: 0.7,
             containerMaxWidth: '100%',
-        },
-        imageGalleryProps: {
-            images: galleryImages,
         },
         name,
         nameDe,
@@ -87,9 +82,20 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>(
         showCondition: !lost && !!conditionLabel,
         showRemarkable: !!data?.remarkable,
         showArchitects: !!architects.length,
+        imageGalleryProps: {
+            images: galleryImages,
+            showAddImageButton: editMode,
+        },
         objectEditorButtonsProps: {
             objectId: id,
             data,
+            showToggleEditModeButton: !editMode,
+            onToggleEditMode: () => {
+                setEditMode(prevState => !prevState);
+            },
+            onDataChange: () => {
+                reloadData();
+            },
         },
     };
 };

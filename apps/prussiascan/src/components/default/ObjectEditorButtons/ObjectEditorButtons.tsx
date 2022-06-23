@@ -13,7 +13,7 @@ export const ObjectEditorButtons: FC<ObjectEditorButtonsPropsType> = (
         visible,
         editModeToggleButtonProps,
         editor,
-        showEditModeToggleButton,
+        showToggleEditModeButton,
     } = useObjectEditorButtons(props);
 
     if (!visible) {
@@ -22,7 +22,7 @@ export const ObjectEditorButtons: FC<ObjectEditorButtonsPropsType> = (
 
     return (
         <ObjectEditorButtonsRoot {...rootProps}>
-            {showEditModeToggleButton && (
+            {showToggleEditModeButton && (
                 <Button {...editModeToggleButtonProps} variant="contained">
                     Режим редактирования
                 </Button>

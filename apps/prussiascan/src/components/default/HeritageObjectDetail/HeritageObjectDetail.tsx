@@ -56,7 +56,7 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
         showArchitects,
         objectEditorButtonsProps,
     } = useHeritageObjectDetail(props);
-    
+
     return (
         <HeritageObjectDetailRoot {...rootProps}>
             <PageHeader {...pageHeaderProps}>
@@ -137,7 +137,6 @@ export const HeritageObjectDetail: FC<HeritageObjectDetailPropsType> = (
                     {...imageGalleryProps}
                     marginTop="5rem"
                     marginBottom="3rem"
-                    enableAddButton
                 />
             </Container>
             <Map {...mapProps} />

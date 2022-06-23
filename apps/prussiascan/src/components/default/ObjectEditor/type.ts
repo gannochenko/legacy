@@ -4,7 +4,7 @@ import { ObjectEditorPropsGenericType } from '../type';
 
 export type ObjectEditorPropsType = HTMLAttributes<HTMLDivElement> &
     Partial<{
-        // put your custom props here
+        onDataChange: () => void;
     }> &
     Pick<ObjectEditorPropsGenericType, 'objectId' | 'data'> &
     MarginPropsType;
