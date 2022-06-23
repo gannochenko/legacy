@@ -63,7 +63,7 @@ export class InvitationService {
 
         await this.sendInvitationMessage(email, token);
 
-        return { data: dynamodbItem };
+        return { data: dynamodbItem, invitationUrl: this.getInvitationLink(email, token) };
     }
 
     public async join(item: JoinInputType): Promise<JoinOutputType> {
@@ -123,18 +123,20 @@ export class InvitationService {
     }
 
     private async sendInvitationMessage(email: string, token: string) {
-        const protocol = __DEV__ ? 'http' : 'https';
-
         return sendMessage(
             email,
             'New message from "Архитектурный Архив"',
             compiledFunction({
-                invitationLink: `${protocol}://${
-                    process.env.WEBAPP_DOMAIN
-                }/join?token=${encodeURIComponent(
-                    token,
-                )}&email=${encodeURIComponent(email)}`,
+                invitationLink: this.getInvitationLink(email, token),
             }),
         );
+    }
+
+    private getInvitationLink(email: string, token: string) {
+        return `${
+            process.env.WEBAPP_URL
+        }join?token=${encodeURIComponent(
+            token,
+        )}&email=${encodeURIComponent(email)}`;
     }
 }

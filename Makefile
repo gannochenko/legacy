@@ -28,11 +28,19 @@ remove_resources: ## Remove all local resources
 seed_database:
 	@$(MAKE) -C ./apps/prussiascan.api/ seed_database
 
+reinit:
+	@$(MAKE) create_resources
+	@$(MAKE) seed_database
+
 migrate_databases: ## Migrate databases of all applications
 	@$(MAKE) -C ./apps/prussiascan.aux.api/ migrate_database
 
 run_infra: ## Run the infrastructure locally
 	@docker-compose up
+
+reinit_infra:
+	@$(MAKE) remove_resources
+	@$(MAKE) run_infra
 
 stop_infra: ## Run the infrastructure locally
 	@docker-compose stop
