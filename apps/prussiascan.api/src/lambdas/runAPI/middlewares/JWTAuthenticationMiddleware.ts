@@ -41,41 +41,40 @@ export class JWTAuthenticationMiddleware implements NestMiddleware {
                         next();
                     }),
             );
-        }
+        } else {
+            if (process.env.AWS_AUTH_GETUSER_LAMBDA_NAME) {
+                const params = {
+                    FunctionName: process.env.AWS_AUTH_GETUSER_LAMBDA_NAME,
+                    InvocationType: 'RequestResponse',
+                    LogType: 'Tail',
+                    Payload: JSON.stringify({
+                        token,
+                    }),
+                };
 
-        if (!__DEV__ && process.env.AWS_AUTH_GETUSER_LAMBDA_NAME) {
-            const params = {
-                FunctionName: process.env.AWS_AUTH_GETUSER_LAMBDA_NAME,
-                InvocationType: 'RequestResponse',
-                LogType: 'Tail',
-                Payload: JSON.stringify({
-                    token,
-                }),
-            };
-
-            lambda.invoke(params, function (error, data) {
-                if (error) {
-                    throw new InternalServerErrorException(
-                        'Could not call the getUser lambda',
-                    );
-                } else {
-                    const Payload = data.Payload as {
-                        id: string;
-                        attributes: UserEntity;
-                    };
-                    const { id } = Payload;
-                    const roles = Payload.attributes?.roles ?? [];
-                    if (id && roles.length) {
-                        req.user = {
-                            ...(req.user ?? {}),
-                            id,
-                            roles,
+                lambda.invoke(params, function (error, data) {
+                    if (error) {
+                        throw new InternalServerErrorException(
+                            'Could not call the getUser lambda',
+                        );
+                    } else {
+                        const Payload = data.Payload as {
+                            id: string;
+                            attributes: UserEntity;
                         };
+                        const { id } = Payload;
+                        const roles = Payload.attributes?.roles ?? [];
+                        if (id && roles.length) {
+                            req.user = {
+                                ...(req.user ?? {}),
+                                id,
+                                roles,
+                            };
+                        }
+                        next();
                     }
-
-                    next();
-                }
-            });
+                });
+            }
         }
     }
 }
