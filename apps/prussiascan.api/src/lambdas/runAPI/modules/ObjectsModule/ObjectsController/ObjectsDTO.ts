@@ -8,7 +8,6 @@ import {
     IsIn,
     Max,
     IsUUID,
-    MaxLength,
     ValidatorConstraint,
     ValidatorConstraintInterface,
     ValidationArguments,
@@ -22,43 +21,11 @@ import {
     ObjectLocationAreaEnum,
     ObjectMaterialEnum,
 } from '../../../entities/ObjectEntity/enums';
-import { MimeType } from '../type';
+import { FileQuotaType, MimeType } from '../type';
 import { HeritageObjectLocationType } from '../../../entities/ObjectEntity/type';
+import { FileQuotaValidator, LocationsValidatorConstraint } from './validators';
 
 // https://github.com/typestack/class-validator
-
-@ValidatorConstraint({ name: 'locations', async: false })
-export class LocationsValidatorConstraint
-    implements ValidatorConstraintInterface
-{
-    validate(input: [unknown, unknown][], args: ValidationArguments) {
-        if (!Array.isArray(input)) {
-            return false;
-        }
-
-        for (let i = 0; i < input.length; i++) {
-            const item = input[i] as unknown as HeritageObjectLocationType;
-
-            if (!item.lat || !item.lng) {
-                return false;
-            }
-
-            if (
-                Number.isNaN(parseFloat(item.lat as unknown as string)) ||
-                Number.isNaN(parseFloat(item.lng as unknown as string))
-            ) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    defaultMessage(args: ValidationArguments) {
-        // here you can provide default error message if validation failed
-        return 'location should be an array of objects';
-    }
-}
 
 export class CreateObjectDto {
     @IsString()
@@ -159,8 +126,8 @@ export class GetUploadURLDto {
     @IsUUID()
     objectId: string;
 
-    @IsIn([MimeType.jpg, MimeType.png])
-    fileMime: MimeType;
+    @Validate(FileQuotaValidator)
+    fileQuota: FileQuotaType;
 }
 
 export class AttachFileDto {

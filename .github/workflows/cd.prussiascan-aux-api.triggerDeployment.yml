@@ -25,5 +25,5 @@ jobs:
         working-directory: ./apps/prussiascan.aux.api/
 
       - name: Build and Deploy
-        run: ./script/deploy.sh triggerDeployment
+        run: make deploy triggerDeployment
         working-directory: ./apps/prussiascan.aux.api/

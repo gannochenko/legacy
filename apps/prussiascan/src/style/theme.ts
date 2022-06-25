@@ -72,6 +72,9 @@ const makeTheme = (): MUIThemeType => {
                     marginBottom: '1.2rem',
                 },
             },
+            small: {
+                fontSize: '0.8rem',
+            },
             micro: {
                 fontSize: '0.6rem',
             },

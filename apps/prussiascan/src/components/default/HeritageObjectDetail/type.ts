@@ -1,16 +1,17 @@
 import { HTMLAttributes } from 'react';
 import { StylePropsType, MarginPropsType } from '@gannochenko/ui.emotion';
+
 import { HeritageObjectType } from '../../../services/HeritageObject/type';
 import { IGatsbyImageData } from 'gatsby-plugin-image';
 
 type ImageDataType = {
-    childImageSharp: {
+    childImageSharp?: {
         gatsbyImageData: IGatsbyImageData;
     };
     url: string;
 };
 
-type HeritageObjectDetailType = HeritageObjectType & {
+export type HeritageObjectDetailType = HeritageObjectType & {
     previewPhotoImage?: ImageDataType;
     headerPhotoImage?: ImageDataType;
     photoImages?: ImageDataType[];

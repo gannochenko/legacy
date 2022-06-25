@@ -6,9 +6,9 @@ export class InviteDto {
     @IsEmail()
     email: string;
 
-    @IsString()
+    @IsString({ each: true })
     @IsOptional()
-    role: string;
+    roles: string[];
 }
 
 export class JoinDto {

@@ -2,17 +2,24 @@ import { ServiceResponseType } from '../../type';
 
 export type InviteInputType = {
     email: string;
-    role: string;
+    roles: string[];
 };
 
-export type InviteOutputType = ServiceResponseType<{}>;
+export type InviteOutputType = ServiceResponseType<{
+    email: string;
+    token: string;
+    roles: string[];
+    createdAt: string;
+}> & {
+    invitationUrl?: string;
+};
 
 export type JoinInputType = {
     email: string;
     token: string;
 };
 
-export type JoinOutputType = ServiceResponseType<{}>;
+export type JoinOutputType = ServiceResponseType;
 
 export type CreateUserInputType = {
     email: string;

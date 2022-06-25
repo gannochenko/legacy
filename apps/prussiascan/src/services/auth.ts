@@ -35,14 +35,12 @@ export const join = async (data: JoinInputType) => {
     }).then((result) => result.json());
 };
 
-export const getUser = async ({
+export const getUserByToken = async ({
     queryKey,
 }: {
     queryKey: string[];
 }): Promise<GetUserOutputType> => {
     const token = queryKey[1];
-    console.log('running getUser');
-
     return fetch(`${AUTH_URL}${API_ENV}/user`, {
         method: 'POST',
         body: JSON.stringify({

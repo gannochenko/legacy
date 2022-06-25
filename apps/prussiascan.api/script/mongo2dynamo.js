@@ -16,26 +16,20 @@ const {
 } = require('../src/lambdas/runAPI/entities/ObjectEntity/utils');
 
 const DRY_RUN = false;
-const PRODUCTION = false;
 
 const BUCKET_NAME = 'prussiascans-object-photos';
 const IMAGE_SIZE_CONSTRAINT = 1500;
 const TABLE_NAME = 'prussiascan.api_ObjectCollection';
 const MONGO_URI = 'mongodb://localhost:27017/?maxPoolSize=20&w=majority';
-const UPLOADS_FOLDER = '/Users/sergei/proj/legacy/apps/prussiascan.api/upload';
+const UPLOADS_FOLDER =
+    '/Users/gannochenko.sv/proj/legacy/apps/prussiascan.api/upload';
 
-const awsOptions = PRODUCTION
-    ? {
-          region: 'eu-central-1',
-          accessKeyId: process.env.AWS_ACCESS_KEY_ID ?? '',
-          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY ?? '',
-      }
-    : {
-          endpoint: 'http://localhost:4566',
-          region: 'eu-central-1',
-          accessKeyId: 'local',
-          secretAccessKey: 'local',
-      };
+const awsOptions = {
+    endpoint: 'http://localhost:4566',
+    region: 'eu-central-1',
+    accessKeyId: 'local',
+    secretAccessKey: 'local',
+};
 
 const s3 = new S3({
     ...awsOptions,
@@ -301,6 +295,9 @@ const architects = {
     'Курт Фрик': 'f98d70a6-4a18-4fe3-9839-bf42c16d6000',
 };
 
+// const MAX = 100;
+let count = 0;
+
 async function run() {
     try {
         const db = await client.connect();
@@ -315,6 +312,10 @@ async function run() {
         let itemBatch = [];
 
         for (const oldItem of findResult) {
+            // if (count > MAX) {
+            //     break;
+            // }
+            count += 1;
             const itemId = v4();
             const years = parseYear(oldItem.creationPeriod);
 

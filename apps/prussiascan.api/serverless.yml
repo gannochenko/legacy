@@ -39,3 +39,6 @@ custom:
         packager: 'yarn' # package manager we use
     serverless-offline:
         useChildProcesses: true
+        httpPort: 3000
+        websocketPort: 3001
+        lambdaPort: 3002

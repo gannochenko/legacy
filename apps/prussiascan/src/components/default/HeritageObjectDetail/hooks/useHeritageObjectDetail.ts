@@ -1,131 +1,50 @@
-import { lcFirst } from 'change-case';
+import { useMutation } from 'react-query';
 import { HeritageObjectDetailPropsType } from '../type';
-import { heritageObjectStatusMap } from '../../../../maps/heritageObjectStatusMap';
-import { ImageGalleryImageType } from '../../ImageGallery/type';
-import { locationAreaMap } from '../../../../maps/locationAreaMap';
-import { heritageObjectLevelMap } from '../../../../maps/heritageObjectLevelMap';
-import {
-    HeritageObjectConditionEnum,
-    heritageObjectConditionMap,
-} from '../../../../maps/heritageObjectConditionMap';
-import { heritageObjectKindMap } from '../../../../maps/heritageObjectKindMap';
-import { materialMap } from '../../../../maps/materialMap';
-import { architectsMap } from '../../../../maps/architectsMap';
+import { useDataProcess } from './useDataProcess';
+import { getObject } from '../../../../services/HeritageObject/heritageObject';
+import { useCombinedData } from './useCombinedData';
+import { useState } from 'react';
+import { eventBus } from '../../../../util/eventBus';
+import { EventsEnum } from '../../../../util/events';
 
-export const useHeritageObjectDetail = <E extends HTMLDivElement>({
-    data,
-    ...props
-}: HeritageObjectDetailPropsType) => {
-    const name = data?.name ?? '';
-    const content = data?.content ?? '';
-    const nameDe = data?.nameDe || '';
-    const locationDescription = data?.locationDescription || '';
+export const useHeritageObjectDetail = <E extends HTMLDivElement>(
+    props: HeritageObjectDetailPropsType,
+) => {
+    const { data } = props;
+    const objectId = data?.id || '';
 
-    const locationArea = data?.locationArea || '';
-    let locationAreaLabel = '';
-    if (locationArea && locationArea in locationAreaMap) {
-        locationAreaLabel = locationAreaMap[locationArea];
-    }
+    const [editMode, setEditMode] = useState(false);
 
-    const heritageStatus = data?.heritageStatus || '';
-    const heritageLevel = data?.heritageLevel || '';
-    const heritageId = data?.heritageId || '';
-    let heritageStatusLabel = '';
-    if (heritageStatus && heritageStatus in heritageObjectStatusMap) {
-        heritageStatusLabel = heritageObjectStatusMap[heritageStatus];
-        if (heritageStatus === 1 && heritageLevel) {
-            heritageStatusLabel = `${
-                heritageObjectLevelMap[heritageLevel]
-            } ${lcFirst(heritageStatusLabel)}`;
-        }
-        if (heritageId) {
-            heritageStatusLabel = `${heritageStatusLabel}, код: ${heritageId}`;
-        }
-    }
+    const {
+        data: newData,
+        isSuccess,
+        isLoading,
+        mutate: reloadData,
+    } = useMutation(`data-${objectId}`, () => getObject(objectId));
 
-    let constructedLabel = '';
-    const constructionYearStart = data?.constructionYearStart ?? 0;
-    const constructionYearEnd = data?.constructionYearEnd ?? 0;
-    if (
-        constructionYearStart &&
-        constructionYearEnd &&
-        // @ts-ignore
-        constructionYearStart !== constructionYearEnd
-    ) {
-        constructedLabel = `Построен между ${constructionYearStart} и ${constructionYearEnd} годами`;
-    }
-    if (
-        constructionYearStart &&
-        // @ts-ignore
-        (!constructionYearEnd || constructionYearStart === constructionYearEnd)
-    ) {
-        constructedLabel = `Построен в ${constructionYearEnd} году`;
-    }
+    const resultData = useCombinedData(data, newData?.data);
 
-    const lost = !!data?.lost;
-    const lossYearStart = data?.lossYearStart ?? 0;
-    const lossYearEnd = data?.lossYearEnd ?? 0;
-    let lostLabel = '';
-    if (lost) {
-        lostLabel = 'Был утрачен';
-        if (lossYearStart && lossYearEnd && lossYearStart !== lossYearEnd) {
-            lostLabel = `${lostLabel} между ${lossYearStart} и ${lossYearEnd} годами`;
-        }
-        if (lossYearStart && (!lossYearEnd || lossYearStart === lossYearEnd)) {
-            lostLabel = `${lostLabel} в ${lossYearStart} году`;
-        }
-    }
-
-    let conditionLabel = '';
-    let conditionLevelIcon = '';
-    const condition = data?.condition ?? 0;
-    if (condition && condition in heritageObjectConditionMap) {
-        conditionLabel = heritageObjectConditionMap[condition];
-        conditionLevelIcon =
-            condition >= HeritageObjectConditionEnum.poor ? '🛑' : '✅';
-    }
-
-    const headerImage =
-        data?.headerPhotoImage?.childImageSharp?.gatsbyImageData;
-
-    const galleryImages: ImageGalleryImageType[] = [];
-    const photos = data?.photos ?? [];
-    const photoImages = data?.photoImages ?? [];
-    if (photos.length) {
-        for (let i = 0; i < photos.length; i++) {
-            const photo = photos[i];
-            const photoImage = photoImages[i];
-            galleryImages.push({
-                childImageSharp: photoImage.childImageSharp,
-                url: photoImage.url,
-                author: photo.author,
-                source: photo.source,
-                uploadedAt: photo.uploadedAt,
-                capturedAt: photo.capturedAt,
-                capturedYearStart: photo.capturedYearStart,
-                capturedYearEnd: photo.capturedYearEnd,
-            });
-        }
-    }
-
-    let kindTags: string[] = [];
-    const kind = data?.kind ?? [];
-    if (kind.length) {
-        kindTags = kind.map((kindItem) => heritageObjectKindMap[kindItem]);
-    }
-
-    let materialTags: string[] = [];
-    const materials = data?.materials ?? [];
-    if (materials.length) {
-        materialTags = materials.map(
-            (materialItem) => materialMap[materialItem],
-        );
-    }
-
-    const architects =
-        data?.architects
-            ?.map((architectId) => architectsMap[architectId] ?? null)
-            .filter((x) => !!x) ?? [];
+    const {
+        content,
+        headerImage,
+        name,
+        galleryImages,
+        nameDe,
+        locationAreaLabel,
+        locationDescription,
+        heritageStatusLabel,
+        lostLabel,
+        constructedLabel,
+        conditionLabel,
+        conditionLevelIcon,
+        kindTags,
+        materialTags,
+        architects,
+        architectsLabel,
+        lost,
+        id,
+        location,
+    } = useDataProcess(props, resultData);
 
     return {
         rootProps: props,
@@ -139,14 +58,9 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
             imageOverlayOpacity: 0.7,
             containerMaxWidth: '100%',
         },
-        imageGalleryProps: {
-            images: galleryImages,
-        },
-        name: data?.name ?? '',
-        nameDe: nameDe,
-        location: [locationAreaLabel, locationDescription]
-            .filter((x) => !!x)
-            .join(', '),
+        name,
+        nameDe,
+        location,
         heritageStatusLabel,
         lostLabel,
         constructedLabel,
@@ -159,8 +73,7 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
             tags: materialTags,
         },
         architects,
-        architectsLabel: architects.length > 1 ? 'Архитекторы' : 'Архитектор',
-
+        architectsLabel,
         showNameDe: !!nameDe,
         showLocation: !!locationDescription || !!locationAreaLabel,
         showSummary: true,
@@ -171,5 +84,26 @@ export const useHeritageObjectDetail = <E extends HTMLDivElement>({
         showCondition: !lost && !!conditionLabel,
         showRemarkable: !!data?.remarkable,
         showArchitects: !!architects.length,
+        imageGalleryProps: {
+            images: galleryImages,
+            showAddImageButton: editMode && !isLoading,
+            onAddImageButtonClick: () => {
+                eventBus.dispatch(
+                    EventsEnum.OBJECT_EDITOR_FILE_UPLOADER_TOGGLE,
+                );
+            },
+        },
+        objectEditorButtonsProps: {
+            objectId: id,
+            data,
+            showToggleEditModeButton: !editMode,
+            onToggleEditMode: () => {
+                setEditMode((prevState) => !prevState);
+                reloadData();
+            },
+            onDataChange: () => {
+                reloadData();
+            },
+        },
     };
 };

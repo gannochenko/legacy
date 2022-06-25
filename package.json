@@ -2,10 +2,7 @@
     "name": "legacy",
     "version": "1.0.0",
     "description": "",
-    "scripts": {
-        "install-all": "./script/install.sh",
-        "infra": "docker-compose up"
-    },
+    "scripts": {},
     "keywords": [],
     "author": "",
     "license": "MIT",
