@@ -4,7 +4,10 @@ import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from '../guards/RolesGuard';
 import { ObjectsModule } from './ObjectsModule';
 import { OptionsModule } from './OptionsModule';
-import { APIKeyAuthenticationMiddleware } from '../middlewares/APIKeyAuthenticationMiddleware';
+import {
+    APIKeyAuthenticationMiddleware,
+    JWTAuthenticationMiddleware,
+} from '../middlewares';
 
 @Module({
     imports: [ObjectsModule, OptionsModule],
@@ -19,6 +22,8 @@ export class ApplicationModule {
     public configure(consumer: MiddlewareConsumer) {
         consumer
             .apply(APIKeyAuthenticationMiddleware)
+            .forRoutes({ path: '*', method: RequestMethod.POST })
+            .apply(JWTAuthenticationMiddleware)
             .forRoutes({ path: '*', method: RequestMethod.POST });
     }
 }

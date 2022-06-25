@@ -3,16 +3,28 @@ import { ImageGalleryImageType, ImageGalleryPropsType } from '../type';
 
 export const useImageGallery = (
     ref: Ref<HTMLDivElement>,
-    { images, ...props }: ImageGalleryPropsType,
+    {
+        images,
+        showAddImageButton,
+        onAddImageButtonClick,
+        ...props
+    }: ImageGalleryPropsType,
 ) => {
     return {
         rootProps: {
             ...props, // rest props go to the root node, as before
             ref, // same for the ref
         },
+        getGatsbyImageProps: (image: ImageGalleryImageType) => {
+            return {
+                image: image.childImageSharp!.gatsbyImageData,
+                alt: '',
+                className: 'gatsby-resp-image-link',
+            };
+        },
         getImageProps: (image: ImageGalleryImageType) => {
             return {
-                image: image.childImageSharp.gatsbyImageData,
+                src: image.url,
                 alt: '',
                 className: 'gatsby-resp-image-link',
             };
@@ -24,5 +36,12 @@ export const useImageGallery = (
         },
 
         images: images ?? [],
+        showAddImageButton: !!showAddImageButton,
+        getAddImageButtonProps: () => ({
+            onClick: onAddImageButtonClick,
+        }),
+        isGatsbyImage: (image: ImageGalleryImageType) => {
+            return !!image.childImageSharp;
+        },
     };
 };

@@ -37,7 +37,7 @@ export class InvitationService {
     ) {}
 
     public async invite(item: InviteInputType): Promise<InviteOutputType> {
-        const { email, role } = item;
+        const { email, roles } = item;
 
         // check if already invited
         const invitation = await this.getInvitation(email);
@@ -50,7 +50,7 @@ export class InvitationService {
         const dynamodbItem = {
             email,
             token,
-            role: role ?? '',
+            roles: roles ?? [],
             createdAt: new Date().toISOString(),
         };
 
@@ -63,7 +63,7 @@ export class InvitationService {
 
         await this.sendInvitationMessage(email, token);
 
-        return { data: dynamodbItem };
+        return { data: dynamodbItem, invitationUrl: this.getInvitationLink(email, token) };
     }
 
     public async join(item: JoinInputType): Promise<JoinOutputType> {
@@ -74,7 +74,7 @@ export class InvitationService {
             throw new HttpException('You were not invited', 400);
         }
 
-        const { token: storedToken, role } = invitation?.Item;
+        const { token: storedToken, roles } = invitation?.Item;
 
         let userId = '';
         const user = await this.userService.getByEmail(email);
@@ -89,7 +89,7 @@ export class InvitationService {
             // create and authenticate
             const { data: newUser } = await this.userService.create({
                 email,
-                roles: role ? [role] : [],
+                roles: roles ?? [],
             });
             userId = newUser.id;
         }
@@ -127,12 +127,16 @@ export class InvitationService {
             email,
             'New message from "Архитектурный Архив"',
             compiledFunction({
-                invitationLink: `https://${
-                    process.env.WEBAPP_DOMAIN
-                }/join?token=${encodeURIComponent(
-                    token,
-                )}&email=${encodeURIComponent(email)}`,
+                invitationLink: this.getInvitationLink(email, token),
             }),
         );
+    }
+
+    private getInvitationLink(email: string, token: string) {
+        return `${
+            process.env.WEBAPP_URL
+        }join?token=${encodeURIComponent(
+            token,
+        )}&email=${encodeURIComponent(email)}`;
     }
 }

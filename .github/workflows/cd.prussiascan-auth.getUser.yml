@@ -1,11 +1,11 @@
-name: CD.prussiascan-auth.getUser
+name: CD.prussiascan-auth.getUserByToken
 
 on:
   push:
     branches:
       - master
     paths:
-      - 'apps/prussiascan.auth/src/lambdas/getUser**'
+      - 'apps/prussiascan.auth/src/lambdas/getUserByToken**'
 
 jobs:
   deploy:
@@ -25,5 +25,5 @@ jobs:
         working-directory: ./apps/prussiascan.auth/
 
       - name: Build and Deploy
-        run: make deploy getUser
+        run: make deploy getUserByToken
         working-directory: ./apps/prussiascan.auth/

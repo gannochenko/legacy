@@ -61,3 +61,10 @@ export const HeritageObjectDetailLayoutSide = styled.div`
         flex: 1 auto;
     }
 `;
+
+export const EditorButtonsPlacement = styled.div`
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: ${muiSpacing(10)} ${muiSpacing(3)};
+`;

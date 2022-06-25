@@ -36,6 +36,7 @@ export const query = graphql`
             skip: $skip
         ) {
             nodes {
+                id
                 name
                 slug
                 previewPhotoImage {

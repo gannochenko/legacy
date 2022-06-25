@@ -27,6 +27,7 @@ export const HeritageObjectDetailTemplateQuery = graphql`
     query HeritageObjectDetailQuery($id: String) {
         allHeritageObject(filter: { id: { eq: $id } }) {
             nodes {
+                id
                 name
                 nameDe
                 slug
@@ -55,6 +56,8 @@ export const HeritageObjectDetailTemplateQuery = graphql`
                     source
                     capturedYearStart
                     capturedYearEnd
+                    header
+                    preview
                 }
                 headerPhotoImage {
                     childImageSharp {

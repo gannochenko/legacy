@@ -3,7 +3,7 @@ import { StylePropsType, MarginPropsType } from '@gannochenko/ui.emotion';
 import { IGatsbyImageData } from 'gatsby-plugin-image';
 
 export type ImageGalleryImageType = {
-    childImageSharp: {
+    childImageSharp?: {
         gatsbyImageData: IGatsbyImageData;
     };
     url: string;
@@ -19,6 +19,8 @@ export type ImageGalleryImageType = {
 export type ImageGalleryPropsType = HTMLAttributes<HTMLDivElement> &
     Partial<{
         images: ImageGalleryImageType[];
+        showAddImageButton: boolean;
+        onAddImageButtonClick: () => void;
         // put your custom props here
     }> &
     MarginPropsType;

@@ -89,9 +89,11 @@ export enum MimeType {
     png = 'png',
 }
 
+export type FileQuotaType = Record<MimeType, number>;
+
 export type GetSignedUploadURLInputType = {
     objectId: string;
-    fileMime: MimeType;
+    fileQuota: FileQuotaType;
 };
 
 export type AttachFileInputType = {

@@ -1,37 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { createContainer } from 'unstated-next';
 import { useQuery } from 'react-query';
-import { getUser } from '../services/auth';
-
-type UserType = {
-    id: string;
-    roles: string[];
-};
-
-const TOKEN_LS_KEY = 'prussiascan:token';
-
-export const storeToken = (token: string) => {
-    if (typeof window === 'undefined' || !token) {
-        return;
-    }
-
-    window.localStorage.setItem(TOKEN_LS_KEY, token);
-};
-
-export const getToken = () => {
-    if (typeof window === 'undefined') {
-        return null;
-    }
-
-    return window.localStorage.getItem(TOKEN_LS_KEY);
-};
-
-export const revokeToken = () => {
-    if (typeof window === 'undefined') {
-        return;
-    }
-    window.localStorage.removeItem(TOKEN_LS_KEY);
-};
+import { getUserByToken } from '../services/auth';
+import { UserRoleEnum, UserType } from '../services/user';
+import { getToken, revokeToken, storeToken } from '../util/token';
 
 const noop = () => {};
 
@@ -41,13 +13,10 @@ const useAuth = () => {
     const token = getToken();
     const hasToken = !!token;
 
-    console.log(token);
-    console.log(hasToken);
-
     const { isSuccess, data: userQueryData } = useQuery(
         ['userData', token],
         // @ts-ignore
-        getUser,
+        getUserByToken,
         {
             enabled: hasToken,
             refetchOnMount: false,
@@ -93,6 +62,9 @@ const useAuth = () => {
         signIn: noop,
         setToken,
         isAuthenticated: !!user?.id,
+        isEditor:
+            userRoles.includes(UserRoleEnum.contributor) ||
+            userRoles.includes(UserRoleEnum.admin),
     };
 };
 

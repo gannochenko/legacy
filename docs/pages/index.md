@@ -34,9 +34,10 @@ printf "[legacy]\naws_access_key_id=doesnt-matter\naws_secret_access_key=doesnt-
 1. Run `make run_infra` to launch local infrastructure.
 2. Wait until the infrastructure is ready.
 3. If not done before, in another terminal run `make create_resources` to create the resources in the Localstack.
-4. In another terminal run `make run app=prussiascan` to launch the front-end application.
+4. If not done before, run `make seed_database` to fill the database with some data.
 5. In another terminal run: `make run app=prussiascan.api` to launch the API microservice.
-5. In another terminal run: `make run app=prussiascan.auth` to launch the Auth microservice.
+6. In another terminal run: `make run app=prussiascan.auth` to launch the Auth microservice.
+7. Wait for `prussiascan.api` to finish booting and then in another terminal run `make run app=prussiascan` to launch the front-end application.
 
 ### Seeding data
 
@@ -48,4 +49,27 @@ printf "[legacy]\naws_access_key_id=doesnt-matter\naws_secret_access_key=doesnt-
 
 1. Import the Postman collection from the `postman.json` file in order to be able to call the endpoints from there.
 2. Call `legacy/auth/invite`, providing an email and roles in the body.
-3. The person will receive an email with the link. Navigating to that link should automatically authenticate the user.
+3. The person will receive an email with the link, containing a token. For example: http://localhost:8000/join?token=TOKEN&email=email-dfguvdfajvysadfs%40gmail.com
+4. Navigating to that link should automatically authenticate the user.
+
+## CI/CD
+
+Before running CI/CD make sure that infrastructure was pre-created.
+
+### Secrets
+
+So far we do not use any software like Vault for managing secrets.
+The following secrets should be obtained/generated and then added as [environment variables on GitHub](https://github.com/gannochenko/legacy/settings/environments):
+
+* `AWS_ACCESS_KEY_ID`
+* `AWS_SECRET_ACCESS_KEY`
+* `AWS_REGION`
+* `SENDIN_BLUE_API_KEY`
+* `JWT_SECRET`
+* `CONTRIBUTOR_API_KEY`
+* `CICD_API_KEY`
+* `ADMIN_API_KEY`
+
+The other env vars come from the infrastructure.
+
+`SendinBlue` is used to send email. Either [reuse your previous API key](https://account.sendinblue.com/advanced/api/), or [create a new one](https://account.sendinblue.com/advanced/api/).

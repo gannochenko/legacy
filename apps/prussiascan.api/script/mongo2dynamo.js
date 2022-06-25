@@ -295,6 +295,9 @@ const architects = {
     'Курт Фрик': 'f98d70a6-4a18-4fe3-9839-bf42c16d6000',
 };
 
+// const MAX = 100;
+let count = 0;
+
 async function run() {
     try {
         const db = await client.connect();
@@ -309,6 +312,10 @@ async function run() {
         let itemBatch = [];
 
         for (const oldItem of findResult) {
+            // if (count > MAX) {
+            //     break;
+            // }
+            count += 1;
             const itemId = v4();
             const years = parseYear(oldItem.creationPeriod);
 
@@ -521,8 +528,6 @@ async function run() {
 
             if (itemBatch.length === 25) {
                 try {
-                    console.log(itemBatch);
-
                     await dynamoDB
                         .batchWrite({
                             RequestItems: {

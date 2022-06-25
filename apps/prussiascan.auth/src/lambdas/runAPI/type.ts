@@ -3,7 +3,8 @@ type ServiceResponseErrorType = {
     message?: string;
 };
 
-export type ServiceResponseType<D> = {
+export type ServiceResponseType<D extends {} = {}> = {
+    id?: string;
     data: D;
     errors?: ServiceResponseErrorType[];
 };

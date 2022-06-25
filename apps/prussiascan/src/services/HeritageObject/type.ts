@@ -16,6 +16,8 @@ type HeritageObjectPhotoType = {
     capturedAt?: string;
     capturedYearStart?: number;
     capturedYearEnd?: number;
+    header?: boolean;
+    preview?: boolean;
 };
 
 export type HeritageObjectType = {
@@ -46,3 +48,10 @@ export type HeritageObjectType = {
     architects?: (keyof typeof architectsMap)[];
     version: number;
 };
+
+export type FileUploadQuota = Record<string, number>;
+
+export enum MimeType {
+    jpg = 'jpg',
+    png = 'png',
+}
